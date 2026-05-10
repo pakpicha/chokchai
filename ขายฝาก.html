@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="โชคชัย">
+<meta name="theme-color" content="#1a3a2a">
+<link rel="apple-touch-icon" href="icon.svg">
+<title>เอกสารขายฝาก</title>
+<style>
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px}
+body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;color:#111;-webkit-text-size-adjust:100%}
+
+/* ══ HOME SCREEN ══ */
+#home{max-width:640px;margin:0 auto;padding:16px}
+.home-head{background:#1a3a2a;color:#fff;padding:18px 18px;border-radius:12px;margin-bottom:16px;text-align:center}
+.home-head h1{font-size:18px;font-weight:700;line-height:1.4}
+.home-head p{font-size:12px;opacity:.7;margin-top:4px}
+.menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.menu-card{background:#fff;border:1px solid #deded6;border-radius:12px;padding:18px 14px;cursor:pointer;text-align:center;-webkit-tap-highlight-color:transparent;transition:box-shadow .15s}
+.menu-card:hover,.menu-card:active{box-shadow:0 2px 12px rgba(26,58,42,.15);border-color:#1a3a2a}
+.menu-card .ic{font-size:32px;margin-bottom:8px}
+.menu-card .lbl{font-size:14px;font-weight:700;color:#1a3a2a;line-height:1.3}
+.menu-card .sub{font-size:11px;color:#777;margin-top:4px}
+
+/* ══ SHARED SECTION STYLES ══ */
+.section{display:none}
+.section.active{display:block}
+.ui{max-width:640px;margin:0 auto;padding:12px}
+.ui-head{background:#1a3a2a;color:#fff;padding:14px 16px;border-radius:10px;margin-bottom:12px}
+.ui-head h1{font-size:16px;font-weight:700;line-height:1.3}
+.ui-head p{font-size:12px;opacity:.7;margin-top:3px}
+.card{background:#fff;border-radius:10px;border:1px solid #deded6;padding:14px;margin-bottom:10px}
+.ct{font-size:13px;font-weight:700;color:#1a3a2a;border-bottom:1.5px solid #deeede;padding-bottom:7px;margin-bottom:11px;display:flex;align-items:center;gap:6px}
+.ct .n{background:#1a3a2a;color:#fff;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0}
+.fg{display:flex;flex-direction:column;gap:3px;margin-bottom:9px}
+.fg label{font-size:11px;color:#555;font-weight:600}
+.fg input,.fg select,.fg textarea{padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7;color:#111;width:100%;-webkit-appearance:none}
+.fg input:focus,.fg select:focus,.fg textarea:focus{outline:none;border-color:#1a3a2a;background:#fff}
+.fg textarea{resize:vertical;min-height:64px}
+.fg input.auto{background:#f0faf0;color:#1a6a1a;font-style:italic}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips label{display:flex;align-items:center;gap:6px;font-size:14px;cursor:pointer;background:#f5faf5;border:1px solid #cce0cc;padding:7px 11px;border-radius:8px;-webkit-tap-highlight-color:transparent}
+.chips input{width:16px;height:16px;flex-shrink:0}
+.add-btn{display:flex;align-items:center;justify-content:center;gap:5px;background:none;border:1.5px dashed #1a3a2a;color:#1a3a2a;padding:10px;border-radius:8px;cursor:pointer;font-size:14px;font-family:inherit;width:100%;margin-top:2px}
+.gen-btn{background:#1a3a2a;color:#fff;border:none;padding:15px;border-radius:10px;font-size:16px;cursor:pointer;font-family:inherit;font-weight:700;width:100%;margin-top:12px}
+.back-home{display:flex;align-items:center;gap:6px;background:none;border:none;color:#1a3a2a;font-size:14px;font-family:inherit;cursor:pointer;padding:6px 0;margin-bottom:8px;font-weight:600}
+
+/* Preview */
+#meet-preview,#mort-preview{display:none}
+.pbtns{display:flex;gap:10px;padding:14px 12px;background:#f0f0eb;border-bottom:1px solid #ddd}
+.pbk{flex:1;background:#fff;color:#333;border:1px solid #bbb;padding:13px 8px;border-radius:10px;cursor:pointer;font-size:15px;font-family:inherit;font-weight:600;-webkit-tap-highlight-color:transparent}
+.ppr{flex:2;background:#1a3a2a;color:#fff;border:none;padding:13px 8px;border-radius:10px;cursor:pointer;font-size:15px;font-family:inherit;font-weight:700;-webkit-tap-highlight-color:transparent}
+.doc-tabs{display:flex;gap:6px;padding:10px 12px;background:#f0f0eb;flex-wrap:wrap}
+.doc-tab{padding:7px 14px;font-size:13px;border:1px solid #bbb;border-radius:6px;cursor:pointer;background:#fff;font-family:inherit;-webkit-tap-highlight-color:transparent}
+.doc-tab.active{background:#1a3a2a;color:#fff;border-color:#1a3a2a}
+.doc-wrap{padding:10px}
+
+/* Agenda items */
+.ai{background:#f6faf6;border:1px solid #cce0cc;border-radius:9px;padding:12px;margin-bottom:10px}
+.ah{display:flex;align-items:center;gap:8px;margin-bottom:11px}
+.an{background:#1a3a2a;color:#fff;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.at{flex:1;padding:9px 10px;font-size:14px;border:1px solid #bcd0bc;border-radius:7px;font-family:inherit;background:#fff;-webkit-appearance:none}
+.rb{background:#fff;border:1px solid #dda0a0;color:#b04040;padding:8px 12px;border-radius:7px;cursor:pointer;font-size:13px;font-family:inherit;white-space:nowrap}
+.af-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.af-grid .fw{grid-column:1/-1}
+.af-grid label{font-size:11px;color:#555;font-weight:600;display:block;margin-bottom:3px}
+.af-grid input,.af-grid textarea,.af-grid select{width:100%;padding:9px 10px;font-size:14px;border:1px solid #ccc;border-radius:7px;font-family:inherit;background:#fff;-webkit-appearance:none}
+.af-grid input.auto{background:#f0faf0;color:#1a6a1a;font-style:italic}
+.af-grid textarea{min-height:64px;resize:vertical}
+
+/* Payment rows */
+.pay-row{background:#f6faf6;border:1px solid #cce0cc;border-radius:8px;padding:10px 12px;margin-bottom:8px}
+.pay-row .ph{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.pay-row .ph select{flex:1;padding:8px 9px;font-size:14px;border:1px solid #bcd0bc;border-radius:6px;font-family:inherit;background:#fff;-webkit-appearance:none}
+.pay-row .ph button{background:none;border:1px solid #dda0a0;color:#b04040;padding:6px 10px;border-radius:6px;cursor:pointer;font-size:12px;font-family:inherit}
+.pay-fields label{font-size:11px;color:#555;font-weight:600;display:block;margin-bottom:3px}
+.pay-fields input{width:100%;padding:8px 9px;font-size:13px;border:1px solid #ccc;border-radius:6px;font-family:inherit;background:#fff;margin-bottom:7px}
+.pay-fields input.auto{background:#f0faf0;color:#1a6a1a;font-style:italic}
+
+/* Documents */
+.doc{background:#fff;font-family:'TH Sarabun New','Sarabun',Arial,sans-serif;font-size:14pt;line-height:1.6;color:#000;border:1px solid #ddd;padding:.8cm 1.1cm .9cm 1.2cm;width:100%}
+.doc-center{text-align:center}
+.doc-bold{font-weight:bold}
+.doc-underline{text-decoration:underline}
+.doc-indent{padding-left:1.5cm}
+.doc-mb{margin-bottom:6pt}
+.doc-mb2{margin-bottom:12pt}
+.sign-table{width:100%;border-collapse:collapse;margin-top:1cm}
+.sign-table td{padding:4pt 8pt;text-align:center;vertical-align:bottom;font-size:13pt}
+.sign-line{display:block;border-top:1px solid #000;width:160px;margin:0 auto 3pt}
+.doc-roles{margin-bottom:4pt;width:100%}
+.doc-role-table{width:100%;border-collapse:collapse}
+.doc-role-table td{padding:0;vertical-align:top;font-size:inherit;line-height:inherit}
+.doc-role-table .td-pad{width:3.2cm}
+.doc-role-table .td-name{width:auto;padding-right:.3cm}
+.doc-h1{text-align:center;font-weight:bold;font-size:16pt;margin-bottom:0}
+.doc-h2{text-align:center;font-weight:bold;font-size:15pt;margin-bottom:3pt}
+.doc-meta{margin-bottom:4pt}
+.doc-meta p{margin-bottom:0}
+.doc-start{padding-left:.8cm;margin-bottom:4pt}
+.doc-sec{margin-bottom:2pt}
+.doc-sec-title{font-weight:bold;padding-left:.7cm;margin-bottom:1pt}
+.doc-sec-body{padding-left:1.6cm;text-align:justify;margin-bottom:1pt}
+.doc-sec-short{padding-left:1.6cm;font-weight:bold;margin-bottom:4pt}
+.doc-combined{padding-left:1.6cm;font-weight:bold;text-align:justify;margin-bottom:2pt}
+.doc-list{padding-left:2.2cm;margin-bottom:5pt}
+.doc-list li{list-style:none;text-indent:-.5cm;padding-left:.5cm;margin-bottom:0;text-align:justify}
+.doc-list li::before{content:"- "}
+.doc-close{padding-left:.8cm;margin-top:2pt}
+.doc-sign{margin-top:.5cm;text-align:left}
+.doc-sign p{margin-bottom:0;font-size:13.5pt}
+.memo-parties{margin:8pt 0 6pt}
+.memo-party-row{display:flex;gap:.5cm;margin-bottom:3pt;font-size:13.5pt}
+.memo-party-label{min-width:1.8cm;flex-shrink:0}
+.memo-party-name{flex:1}
+.memo-item{margin-bottom:4pt;text-indent:1.2cm;text-align:justify;font-size:13.5pt}
+.memo-item-num{font-weight:bold}
+.add-center{text-align:center;margin-bottom:4pt}
+.add-parties{text-align:center;margin:8pt 0}
+.add-item{margin-bottom:5pt;padding-left:1.5cm;text-indent:-1.5cm;text-align:justify;font-size:13.5pt}
+.add-sign-section{margin-top:.8cm}
+.add-sign-line{border-top:1px solid #000;margin:0 auto 3pt;width:180px;display:inline-block;vertical-align:bottom}
+.v-table{width:100%;border-collapse:collapse;margin:6pt 0}
+.v-table th,.v-table td{border:1px solid #999;padding:5pt 8pt;font-size:12.5pt;vertical-align:top}
+.v-table th{background:#f5f5f5;text-align:center}
+.v-table .num{text-align:right}
+.v-table .total-row td{font-weight:bold;border-top:2px solid #999}
+
+/* Print */
+@page{size:A4;margin:.8cm .9cm .8cm 1.1cm}
+@media print{
+  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+  html,body{background:#fff!important;margin:0;padding:0}
+  #home{display:none!important}
+  .ui{display:none!important}
+  .pbtns{display:none!important}
+  .doc-tabs{display:none!important}
+  .back-home{display:none!important}
+  .section{display:none!important}
+  .section.active{display:block!important}
+  #meet-preview,#mort-preview,#sb-preview,#dl-preview{display:block!important}
+  .doc-wrap{padding:0!important}
+  .doc{border:none!important;padding:0.5cm 1cm!important;margin:0!important;box-shadow:none!important}
+  .doc-page{page-break-after:always}
+  .doc-page:last-child{page-break-after:auto}
+}
+@page{size:A4;margin:1cm}
+@media screen and (max-width:700px){
+  .doc{font-size:3.6vw;padding:4vw 3vw 5vw 4vw}
+  .doc-role-table .td-pad{width:22vw}
+  .doc-role-table td{font-size:3.6vw;word-break:keep-all}
+  .doc-sec-title{padding-left:4vw}
+  .doc-sec-body{padding-left:7vw}
+  .doc-sec-short{padding-left:7vw}
+  .doc-combined{padding-left:7vw}
+  .doc-list{padding-left:9vw}
+  .doc-start{padding-left:4vw}
+  .doc-close{padding-left:4vw}
+  .sign-line{width:120px}
+}
+
+/* Print tip modal */
+.print-tip{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);z-index:9999;align-items:flex-end;justify-content:center}
+.print-tip.show{display:flex}
+.print-tip-box{background:#fff;border-radius:16px 16px 0 0;padding:20px;width:100%;max-width:640px}
+.print-tip-box h3{font-size:17px;font-weight:700;text-align:center;margin-bottom:12px}
+.print-tip-box .step{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #f0f0f0;font-size:15px}
+.print-tip-box .step:last-child{border-bottom:none}
+.print-tip-box .step-ic{font-size:24px;flex-shrink:0}
+.print-tip-close{width:100%;background:#1a3a2a;color:#fff;border:none;padding:14px;border-radius:10px;font-size:16px;font-family:inherit;font-weight:600;margin-top:14px;cursor:pointer}
+
+.print-tip{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.6);z-index:9999;align-items:flex-end;justify-content:center}
+.print-tip.show{display:flex}
+.print-tip-box{background:#fff;border-radius:16px 16px 0 0;padding:20px;width:100%;max-width:640px}
+.print-tip-box h3{font-size:17px;font-weight:700;text-align:center;margin-bottom:12px}
+.print-tip-box .step{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #f0f0f0;font-size:15px}
+.print-tip-box .step:last-child{border-bottom:none}
+.print-tip-box .step-ic{font-size:22px;flex-shrink:0}
+.print-tip-close{width:100%;background:#1a3a2a;color:#fff;border:none;padding:13px;border-radius:10px;font-size:16px;font-family:inherit;font-weight:600;margin-top:12px;cursor:pointer}
+@media print{
+  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+  html,body{background:#fff!important;margin:0;padding:0}
+  .ui,.pbtns,.doc-tabs,.back-home,.gen-btn,.add-btn,.pbk,.ppr,.print-tip{display:none!important}
+  #meet-preview,#mort-preview,#sb-preview,#dl-preview{display:block!important}
+  .doc-wrap{padding:0!important}
+  .doc{border:none!important;padding:0.5cm 1cm!important;margin:0!important}
+  .doc-page{page-break-after:always}
+  .doc-page:last-child{page-break-after:auto}
+}
+@page{size:A4;margin:1cm}
+</style>
+</head>
+<body>
+<div class="section active" id="section-sellback">
+<div class="ui" id="sb-form">
+  <button class="back-home" onclick="history.length>1?history.back():document.body.innerHTML='<div style=padding:20px><h2>ปิดหน้าต่างนี้แล้วเปิดไฟล์ index.html</h2></div>'">← หน้าหลัก</button>
+  <div class="ui-head">
+    <h1>🏡 เอกสารขายฝาก</h1>
+    <p>กรอกครั้งเดียว ได้ ทด.16 + ใบสำคัญจ่าย</p>
+  </div>
+
+  <!-- ข้อมูลทั่วไป -->
+  <div class="card">
+    <div class="ct"><span class="n">1</span> ข้อมูลทั่วไป</div>
+    <div class="row2">
+      <div class="fg"><label>วันที่ทำเอกสาร</label><input type="date" id="sb_date"></div>
+      <div class="fg"><label>บิลที่ของวัน</label><input type="text" id="sb_bill_seq" placeholder="01" maxlength="2" inputmode="numeric"></div>
+    </div>
+    <div class="fg"><label>วันที่ในรูปแบบไทย (สำหรับ ทด.16) เช่น ๗ กันยายน ๒๕๖๘</label>
+      <input type="text" id="sb_date_th" placeholder="๗ กันยายน ๒๕๖๘">
+    </div>
+  </div>
+
+  <!-- ผู้มีอำนาจ -->
+  <div class="card">
+    <div class="ct"><span class="n">2</span> ผู้มีอำนาจลงนามแทนบริษัท</div>
+    <div class="fg"><label>เลือกกรรมการผู้มีอำนาจ</label>
+      <div class="chips" style="margin-top:6px">
+        <label><input type="radio" name="sb_auth" value="นางสาวภัคฐ์พิชา จรัสบวรพันธ์" checked> นางสาวภัคฐ์พิชา จรัสบวรพันธ์</label>
+        <label><input type="radio" name="sb_auth" value="นางชญาน์นัทช์ จรัสบวรพันธ์"> นางชญาน์นัทช์ จรัสบวรพันธ์</label>
+        <label><input type="radio" name="sb_auth" value="นายชุณนเกียรติ จรัสบวรพันธ์"> นายชุณนเกียรติ จรัสบวรพันธ์</label>
+        <label><input type="radio" name="sb_auth" value="นายกันตพัฒน์ จรัสบวรพันธ์"> นายกันตพัฒน์ จรัสบวรพันธ์</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- ข้อมูลผู้ขายฝาก -->
+  <div class="card">
+    <div class="ct"><span class="n">3</span> ข้อมูลผู้ขายฝาก</div>
+    <div class="fg"><label>ชื่อ-นามสกุลผู้ขายฝาก</label>
+      <input type="text" id="sb_seller" placeholder="นาย/นาง/นางสาว ชื่อ นามสกุล">
+    </div>
+    <div class="fg"><label>ที่อยู่ผู้ขายฝาก</label>
+      <textarea id="sb_seller_addr" placeholder="บ้านเลขที่ หมู่ ตำบล อำเภอ จังหวัด"></textarea>
+    </div>
+    <div class="fg"><label>สัญชาติ</label>
+      <input type="text" id="sb_seller_nation" value="ไทย">
+    </div>
+  </div>
+
+  <!-- รายละเอียดที่ดิน -->
+  <div class="card">
+    <div class="ct"><span class="n">4</span> รายละเอียดที่ดิน</div>
+    <div class="fg"><label>ประเภทเอกสารสิทธิ์</label>
+      <select id="sb_doc_type" style="-webkit-appearance:none;padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7;width:100%">
+        <option value="โฉนดที่ดิน">โฉนดที่ดิน (น.ส.4)</option>
+        <option value="น.ส.3 ก.">น.ส.3 ก.</option>
+        <option value="น.ส.3">น.ส.3</option>
+      </select>
+    </div>
+    <div class="fg"><label>เลขที่โฉนด/เอกสารสิทธิ์ (ถ้าหลายแปลง คั่นด้วยลูกน้ำ)</label>
+      <input type="text" id="sb_title_no" placeholder="เช่น 1234 หรือ 1234, 5678">
+    </div>
+    <div class="fg"><label>หน้าสำรวจ</label>
+      <input type="text" id="sb_survey_no" placeholder="เช่น 329">
+    </div>
+    <div class="fg"><label>เนื้อที่ (ไร่-งาน-วา)</label>
+      <input type="text" id="sb_area" placeholder="เช่น 2-1-50">
+    </div>
+    <div class="row2">
+      <div class="fg"><label>ตำบล</label><input type="text" id="sb_tambon" placeholder="ท่าเยี่ยม"></div>
+      <div class="fg"><label>อำเภอ</label><input type="text" id="sb_amphoe" placeholder="โชคชัย"></div>
+    </div>
+    <div class="fg"><label>จังหวัด</label><input type="text" id="sb_province" value="นครราชสีมา"></div>
+  </div>
+
+  <!-- รายละเอียดขายฝาก -->
+  <div class="card">
+    <div class="ct"><span class="n">5</span> รายละเอียดขายฝาก</div>
+    <div class="row2">
+      <div class="fg"><label>ราคาขายฝาก (ตัวเลข บาท)</label>
+        <input type="text" id="sb_price" inputmode="numeric" placeholder="เช่น 950000" oninput="syncSbBaht('sb_price','sb_price_t')">
+      </div>
+      <div class="fg"><label>ตัวอักษร (อัตโนมัติ)</label>
+        <input type="text" id="sb_price_t" class="auto" readonly>
+      </div>
+    </div>
+    <div class="row2">
+      <div class="fg"><label>ราคาสินไถ่ (ตัวเลข บาท)</label>
+        <input type="text" id="sb_redeem" inputmode="numeric" placeholder="เช่น 950000" oninput="syncSbBaht('sb_redeem','sb_redeem_t')">
+      </div>
+      <div class="fg"><label>ตัวอักษร (อัตโนมัติ)</label>
+        <input type="text" id="sb_redeem_t" class="auto" readonly>
+      </div>
+    </div>
+    <div class="fg"><label>กำหนดขายฝาก</label>
+      <input type="text" id="sb_period" placeholder="เช่น 1 ปี / 6 เดือน">
+    </div>
+  </div>
+
+  <!-- ใบสำคัญจ่าย -->
+  <div class="card">
+    <div class="ct"><span class="n">6</span> ใบสำคัญจ่าย — วิธีชำระเงิน</div>
+    <div id="sb-pay-box"></div>
+    <button class="add-btn" onclick="addSbPay()">+ เพิ่มรายการชำระ</button>
+  </div>
+
+  <!-- เลือกเอกสาร -->
+  <div class="card">
+    <div class="ct"><span class="n">7</span> เลือกเอกสารที่ต้องการสร้าง</div>
+    <div class="chips">
+      <label><input type="checkbox" class="sb-doc-cb" value="td16" checked> ทด.16 บันทึกถ้อยคำ</label>
+      <label><input type="checkbox" class="sb-doc-cb" value="sbvoucher" checked> ใบสำคัญจ่าย</label>
+    </div>
+  </div>
+
+  <button class="gen-btn" onclick="genSellback()">📄 สร้างเอกสารขายฝาก</button>
+</div>
+<div id="sb-preview" style="display:none">
+  <div class="pbtns">
+    <button class="pbk" onclick="showSbForm()">← แก้ไข</button>
+    <button class="ppr" onclick="showPrintTip()">🖨️ พิมพ์</button>
+  </div>
+  <div class="doc-tabs" id="sb-tabs"></div>
+  <div class="doc-wrap" id="sb-doc-out"></div>
+</div>
+</div>
+<div class="print-tip" id="print-modal" onclick="if(event.target===this)closePrintTip()">
+  <div class="print-tip-box">
+    <h3>🖨️ วิธีพิมพ์เอกสาร</h3>
+    <div class="step"><span class="step-ic">1️⃣</span><span>กดปุ่ม <strong>แชร์</strong> ที่แถบล่างของ Safari</span></div>
+    <div class="step"><span class="step-ic">2️⃣</span><span>เลือก <strong>Print / พิมพ์</strong></span></div>
+    <div class="step"><span class="step-ic">3️⃣</span><span>เลือกเครื่องพิมพ์ กด <strong>Print</strong></span></div>
+    <button class="print-tip-close" onclick="closePrintTip()">เข้าใจแล้ว</button>
+  </div>
+</div>
+<script>
+
+// ══ NAVIGATION ══
+function showSection(name){
+  document.getElementById('home').style.display='none';
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.getElementById('section-'+name).classList.add('active');
+  window.scrollTo(0,0);
+}
+function goHome(){
+  document.getElementById('home').style.display='block';
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  window.scrollTo(0,0);
+}
+
+// ══ THAI BAHT ══
+function toBaht(v){
+  const n=parseInt(String(v).replace(/[,\s]/g,''));
+  if(!n||isNaN(n))return'';
+  const o=['','หนึ่ง','สอง','สาม','สี่','ห้า','หก','เจ็ด','แปด','เก้า'];
+  function s(x){if(!x)return'';if(x<10)return o[x];
+    if(x<100){const t=Math.floor(x/10),u=x%10;let r=t===1?'สิบ':t===2?'ยี่สิบ':o[t]+'สิบ';if(u===1&&t>0)r+='เอ็ด';else if(u)r+=o[u];return r}
+    if(x<1e3)return o[Math.floor(x/100)]+'ร้อย'+s(x%100);
+    if(x<1e4)return o[Math.floor(x/1000)]+'พัน'+s(x%1000);
+    if(x<1e5)return s(Math.floor(x/1e4))+'หมื่น'+s(x%1e4);
+    if(x<1e6)return s(Math.floor(x/1e5))+'แสน'+s(x%1e5);
+    return s(Math.floor(x/1e6))+'ล้าน'+s(x%1e6);}
+  return s(n)+'บาทถ้วน';
+}
+function fmtN(v){const n=parseInt(String(v).replace(/[,\s]/g,''));return isNaN(n)?v:n.toLocaleString('th-TH')}
+function gv(id){const e=document.getElementById(id);return e?e.value.trim():''}
+
+// ══ DATE UTILS ══
+function thaiDate(d){
+  if(!d)return'......';
+  const dt=new Date(d);if(isNaN(dt))return d;
+  const m=['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+  return`${dt.getDate()} ${m[dt.getMonth()]} ${dt.getFullYear()+543}`;
+}
+function shortDate(d){
+  if(!d)return'......';
+  const dt=new Date(d);if(isNaN(dt))return d;
+  return`${dt.getDate()}/${dt.getMonth()+1}/${String(dt.getFullYear()+543).slice(-2)}`;
+}
+function meetShortDate(d){
+  if(!d)return'......';
+  const dt=new Date(d);
+  return`${dt.getDate()} / ${dt.getMonth()+1} / ${String(dt.getFullYear()+543).slice(-2)}`;
+}
+function billNo(d,seq){
+  if(!d)return`......-${seq||'01'}`;
+  const dt=new Date(d);
+  const yy=String(dt.getFullYear()+543).slice(-2);
+  const mm=String(dt.getMonth()+1).padStart(2,'0');
+  const dd=String(dt.getDate()).padStart(2,'0');
+  return`${yy}${mm}${dd}-${(seq||'01').padStart(2,'0')}`;
+}
+function fmtTime(t){return t?t.replace(':','.')+' น.':'......'}
+
+
+// ══════════════════════════════
+// SELLBACK LOGIC
+// ══════════════════════════════
+let sbPayC=0;
+
+function syncSbBaht(srcId,tgtId){
+  const el=document.getElementById(tgtId);
+  if(el)el.value=toBaht((gv(srcId)||'').replace(/[,\s]/g,''));
+}
+
+function addSbPay(t='cash'){
+  sbPayC++;const i='sb'+sbPayC;
+  const d=document.createElement('div');
+  d.className='pay-row';d.id='spay-'+i;
+  const opts=Object.entries(PAY_TYPES).map(([k,v])=>'<option value="'+k+'"'+(k===t?' selected':'')+'>'+v+'</option>').join('');
+  d.innerHTML='<div class="ph"><select class="sbts">'+opts+'</select><button class="sbdb">ลบ</button></div><div class="pay-fields" id="spf-'+i+'">'+sbPayFields(i,t)+'</div>';
+  d.querySelector('.sbts').onchange=function(){changeSbPayType(i,this.value);};
+  d.querySelector('.sbdb').onclick=function(){removeSbPay(i);};
+  document.getElementById('sb-pay-box').appendChild(d);
+  const el=document.getElementById('sp'+i+'_amt');
+  if(el)el.oninput=function(){syncSbPayBaht(i);};
+}
+function sbPayFields(i,t){
+  const amtF='<label>จำนวนเงิน (บาท)</label>'
+    +'<input type="text" id="sp'+i+'_amt" inputmode="numeric" placeholder="เช่น 950,000">'
+    +'<label>ตัวอักษร (อัตโนมัติ)</label>'
+    +'<input type="text" id="sp'+i+'_amt_t" class="auto" readonly>';
+  if(t==='cash')return amtF;
+  if(t==='draft')return'<label>เลขที่ดราฟท์</label><input type="text" id="sp'+i+'_dno">'
+    +'<label>ธนาคาร</label><input type="text" id="sp'+i+'_bank">'
+    +'<label>สั่งจ่าย</label><input type="text" id="sp'+i+'_payto">'+amtF;
+  if(t==='transfer')return'<label>ธนาคาร</label><input type="text" id="sp'+i+'_bank">'
+    +'<label>เลขบัญชี</label><input type="text" id="sp'+i+'_accno">'
+    +'<label>ชื่อบัญชี</label><input type="text" id="sp'+i+'_accname">'+amtF;
+  return amtF;
+}
+function syncSbPayBaht(i){
+  const a=document.getElementById('sp'+i+'_amt');
+  const t=document.getElementById('sp'+i+'_amt_t');
+  if(a&&t)t.value=toBaht(a.value.replace(/[,\s]/g,''));
+}
+function changeSbPayType(i,t){document.getElementById('spf-'+i).innerHTML=sbPayFields(i,t)}
+function changeSbPayType(i,t){
+  document.getElementById('spf-'+i).innerHTML=sbPayFields(i,t);
+  const el=document.getElementById('sp'+i+'_amt');
+  if(el)el.oninput=function(){syncSbPayBaht(i);};
+}
+
+function getSbPayRows(){
+  const rows=[];
+  document.querySelectorAll('#sb-pay-box .pay-row').forEach(el=>{
+    const i=el.id.replace('spay-','');
+    const tEl=el.querySelector('select');if(!tEl)return;
+    const t=tEl.value;
+    const amt=gv('sp'+i+'_amt');const amtFmt=fmtN(amt);const amtT=toBaht(amt.replace(/[,\s]/g,''));
+    if(t==='cash')rows.push({type:'cash',label:'เงินสด',amt,amtFmt,amtT});
+    if(t==='draft')rows.push({type:'draft',label:'ดราฟท์ เลขที่ '+gv('sp'+i+'_dno')+' ธนาคาร'+gv('sp'+i+'_bank')+' สั่งจ่าย '+gv('sp'+i+'_payto'),amt,amtFmt,amtT});
+    if(t==='transfer')rows.push({type:'transfer',label:'โอนเข้าบัญชีธนาคาร'+gv('sp'+i+'_bank')+' เลขที่ '+gv('sp'+i+'_accno')+' ชื่อ '+gv('sp'+i+'_accname'),amt,amtFmt,amtT});
+  });
+  return rows;
+}
+
+function buildTD16(d){
+  const authEl=document.querySelector('[name="sb_auth"]:checked');
+  const auth=authEl?authEl.value:'นางสาวภัคฐ์พิชา จรัสบวรพันธ์';
+  // Auth name for display (last name only for short refs)
+  const priceFmt=fmtN(d.sb_price);
+  const priceT=d.sb_price_t||toBaht((d.sb_price||'').replace(/[,\s]/g,''));
+  const redeemFmt=fmtN(d.sb_redeem);
+  const redeemT=d.sb_redeem_t||toBaht((d.sb_redeem||'').replace(/[,\s]/g,''));
+  const dateDisplay=d.sb_date_th||'..........';
+  const titleNo=d.sb_title_no||'..........';
+  const docType=d.sb_doc_type||'โฉนดที่ดิน';
+
+  return`<div class="doc doc-page td16-doc" style="font-family:'TH Sarabun New','Sarabun',Arial,sans-serif;font-size:13pt;line-height:1.7;padding:.6cm 1cm .6cm 1.2cm">
+
+    <!-- ครุฑ -->
+    <div style="text-align:center;margin-bottom:4pt">
+      <svg width="60" height="72" viewBox="0 0 120 144" xmlns="http://www.w3.org/2000/svg">
+        <!-- Garuda silhouette simplified -->
+        <g fill="#8B0000">
+          <!-- Body -->
+          <ellipse cx="60" cy="72" rx="14" ry="20"/>
+          <!-- Head -->
+          <ellipse cx="60" cy="38" rx="10" ry="12"/>
+          <!-- Crown points -->
+          <polygon points="60,20 54,30 60,26 66,30"/>
+          <polygon points="53,22 47,32 53,28"/>
+          <polygon points="67,22 73,32 67,28"/>
+          <!-- Beak -->
+          <polygon points="55,46 65,46 60,54"/>
+          <!-- Wings left -->
+          <path d="M46,58 Q20,50 8,70 Q20,62 46,72 Z"/>
+          <path d="M46,72 Q18,68 6,88 Q22,78 46,84 Z"/>
+          <path d="M46,84 Q22,84 12,102 Q28,92 46,96 Z"/>
+          <!-- Wings right -->
+          <path d="M74,58 Q100,50 112,70 Q100,62 74,72 Z"/>
+          <path d="M74,72 Q102,68 114,88 Q98,78 74,84 Z"/>
+          <path d="M74,84 Q98,84 108,102 Q92,92 74,96 Z"/>
+          <!-- Legs -->
+          <line x1="52" y1="92" x2="44" y2="112" stroke="#8B0000" stroke-width="4"/>
+          <line x1="68" y1="92" x2="76" y2="112" stroke="#8B0000" stroke-width="4"/>
+          <!-- Talons left -->
+          <line x1="44" y1="112" x2="36" y2="118" stroke="#8B0000" stroke-width="3"/>
+          <line x1="44" y1="112" x2="42" y2="120" stroke="#8B0000" stroke-width="3"/>
+          <line x1="44" y1="112" x2="50" y2="120" stroke="#8B0000" stroke-width="3"/>
+          <!-- Talons right -->
+          <line x1="76" y1="112" x2="84" y2="118" stroke="#8B0000" stroke-width="3"/>
+          <line x1="76" y1="112" x2="78" y2="120" stroke="#8B0000" stroke-width="3"/>
+          <line x1="76" y1="112" x2="70" y2="120" stroke="#8B0000" stroke-width="3"/>
+          <!-- Tail feathers -->
+          <path d="M50,92 Q46,108 40,116" stroke="#8B0000" stroke-width="2" fill="none"/>
+          <path d="M55,94 Q54,112 52,120" stroke="#8B0000" stroke-width="2" fill="none"/>
+          <path d="M60,95 Q60,114 60,122" stroke="#8B0000" stroke-width="2" fill="none"/>
+          <path d="M65,94 Q66,112 68,120" stroke="#8B0000" stroke-width="2" fill="none"/>
+          <path d="M70,92 Q74,108 80,116" stroke="#8B0000" stroke-width="2" fill="none"/>
+        </g>
+        <!-- Eyes -->
+        <circle cx="56" cy="38" r="2" fill="white"/>
+        <circle cx="64" cy="38" r="2" fill="white"/>
+      </svg>
+    </div>
+
+    <p style="text-align:center;font-weight:bold;font-size:16pt;margin-bottom:8pt">บันทึกถ้อยคำ</p>
+
+    <!-- Header info -->
+    <table style="width:100%;border-collapse:collapse;font-size:12.5pt;margin-bottom:6pt">
+      <tr>
+        <td style="width:12%">ระหว่าง</td>
+        <td style="width:38%">${titleNo}</td>
+        <td style="width:12%;text-align:right">ตลาด</td>
+        <td style="width:38%">${d.sb_amphoe||'โชคชัย'}</td>
+      </tr>
+      <tr>
+        <td>เลขที่ดิน</td>
+        <td>${d.sb_survey_no||'..........'}</td>
+        <td style="text-align:right">หน้าสำรวจ</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>จังหวัด</td>
+        <td colspan="3">${d.sb_province||'นครราชสีมา'} &nbsp;&nbsp;&nbsp; สำนักงานที่ดินจังหวัด ${d.sb_province||'นครราชสีมา'}</td>
+      </tr>
+    </table>
+
+    <table style="width:100%;border-collapse:collapse;font-size:12.5pt;margin-bottom:8pt">
+      <tr>
+        <td style="width:50%">วันที่ <u>&nbsp;&nbsp;${dateDisplay}&nbsp;&nbsp;</u></td>
+        <td style="width:50%">พ.ศ. <u>&nbsp;&nbsp;${(d.sb_date?(new Date(d.sb_date).getFullYear()+543):2569)}&nbsp;&nbsp;</u></td>
+      </tr>
+    </table>
+
+    <p style="margin-bottom:4pt;font-size:12.5pt">ข้าพเจ้า <strong>บริษัท โชคชัย เงินด่วน จำกัด</strong> โดยมายาน <strong>${auth}</strong> เลขที่ <u>89/28</u> หมู่ <u>9</u></p>
+    <p style="margin-bottom:4pt;font-size:12.5pt">ตำบล <u>ท่าเยี่ยม</u> &nbsp; อำเภอ <u>โชคชัย</u> &nbsp; จังหวัด <u>นครราชสีมา</u></p>
+    <p style="margin-bottom:6pt;font-size:12.5pt">ขอปฏิญาณและให้ถ้อยคำต่อ เจ้าพนักงานที่ดิน <u>จังหวัดนครราชสีมา</u> ด้วยความสัจจริง ดังต่อไปนี้</p>
+    <p style="margin-bottom:6pt;font-size:12.5pt">ด้วยบริษัท <strong>โชคชัย เงินด่วน จำกัด</strong> มีความประสงค์จะ <u>รับซื้อฝากที่ดิน</u> แปลง คือ</p>
+
+    <p style="font-size:12.5pt;margin-bottom:4pt">เครื่องหมายดังกล่าวข้างบนนี้รวม <u>&nbsp;${titleNo.split(',').length}&nbsp;</u> โฉนด จาก <u>&nbsp;${d.sb_seller||'..........'}&nbsp;</u></p>
+    <p style="font-size:12.5pt;margin-bottom:6pt">เป็นเงิน <strong>${priceFmt}</strong> บาท (<u>${priceT}</u>)</p>
+    <p style="font-size:12.5pt;margin-bottom:6pt">ซึ่งขอให้ถ้อยคำไว้เป็นหลักฐานต่อเจ้าพนักงานที่พนักงานที่ดิน ดังต่อไปนี้</p>
+
+    <p style="font-size:12.5pt;margin-bottom:4pt;padding-left:.8cm"><strong>ข้อ 1.</strong> บริษัทมีชื่อตามที่ได้จดทะเบียนใน หอทะเบียนบริษัทบริษัทส่วนจำกัด กรมทะเบียนการค้า กระทรวงพาณิชย์ <u>บริษัท โชคชัย เงินด่วน จำกัด</u> &nbsp; มีสัญชาติ <u>ไทย</u></p>
+    <p style="font-size:12.5pt;margin-bottom:4pt;padding-left:.8cm"><strong>ข้อ 2.</strong> ขณะนี้สำนักงานใหญ่ของบริษัทฯ ตั้งอยู่เลขที่ <u>89/28</u> หมู่ <u>9</u><br>ตำบล <u>ท่าเยี่ยม</u> &nbsp; อำเภอ <u>โชคชัย</u> &nbsp; จังหวัด <u>นครราชสีมา</u></p>
+    <p style="font-size:12.5pt;margin-bottom:4pt;padding-left:.8cm"><strong>ข้อ 3.</strong> บริษัทมีวัตถุประสงค์ตามที่ระบุไว้ในหนังสือบริคณสนธิ และโดยเฉพาะ วัตถุประสงค์ที่เกี่ยวกับการทำนิติกรรมเกี่ยวกับที่ดิน ได้ระบุไว้ในหนังสือบริคณสนธิ ข้อที่ <u>23</u> แล้วมีเป็นเงิน <strong>${'5,000,000'}</strong> บาท (<u>ห้าล้านบาทถ้วน</u>) แบ่งออก <u>50,000</u> หุ้น มีมูลค่าหุ้นละ <u>100</u> บาท (<u>หนึ่งร้อยบาท</u>) บริษัทฯ ได้รับเงินค่าหุ้นชำระแล้ว <u>100%</u></p>
+    <p style="font-size:12.5pt;margin-bottom:4pt;padding-left:.8cm"><strong>ข้อ 4.</strong> บริษัทมีทุนจดทะเบียนทั้งหมดเป็นบุคคลสัจจะ <u>5</u> คน เป็นบุคคลธรรมดา <u>5</u> คน ผู้ถือหุ้นทั้งหมด <u>50,000</u> หุ้น ผู้ถือหุ้นที่เป็นบุคคลธรรมดาถือหุ้น <u>50,000</u> หุ้น เป็นนิติบุคคลสัญชาติไทยถือหุ้น <u>0</u> หุ้น เป็นนิติบุคคลต่างด้าวถือหุ้น <u>0</u> หุ้น บุคคลธรรมดาเป็นคนสัญชาติไทยรวม <u>5</u> คน ถือหุ้นรวม <u>50,000</u> หุ้น บุคคลต่างด้าวรวม <u>0</u> คน ถือหุ้นรวม <u>0</u> หุ้น</p>
+    <p style="font-size:12.5pt;margin-bottom:4pt;padding-left:.8cm"><strong>ข้อ 5.</strong> ผู้ถือหุ้นทั้งหมดเป็นบุคคลธรรมดาสัญชาติไทย <u>5</u> คน ถือหุ้นรวม <u>50,000</u> หุ้น</p>
+
+    <div style="margin-top:10pt;font-size:12.5pt">
+      <table style="width:100%;border-collapse:collapse">
+        <tr>
+          <td style="width:30%">ทั้งหมดที่ให้ถ้อยคำ</td>
+          <td style="width:70%">เป็นความจริงทุกประการ</td>
+        </tr>
+      </table>
+      <p style="margin-top:4pt">อ่านให้ฟังดังกล่าวข้างต้นนี้แล้ว รับว่าถูกต้องเป็นหลักฐาน</p>
+    </div>
+
+    <p style="text-align:center;margin:10pt 0 4pt;font-size:13pt;font-weight:bold">รับซื้อฝาก<br>โชคชัย เงินด่วน จำกัด</p>
+
+    <!-- Sign section bottom -->
+    <table style="width:100%;border-collapse:collapse;margin-top:12pt;font-size:12.5pt">
+      <tr>
+        <td style="width:34%;text-align:center;padding-bottom:4pt">
+          <div style="border-top:1px solid #000;width:150px;margin:0 auto 3pt"></div>
+          (ลงชื่อ)..............................ผู้ให้ถ้อยคำ
+        </td>
+        <td style="width:33%;text-align:center;padding-bottom:4pt">
+          <div style="border-top:1px solid #000;width:150px;margin:0 auto 3pt"></div>
+          (ลงชื่อ)..............................ผู้บันทึก
+        </td>
+        <td style="width:33%;text-align:center;padding-bottom:4pt">
+          <div style="border-top:1px solid #000;width:150px;margin:0 auto 3pt"></div>
+          (ลงชื่อ)..............................เจ้าพนักงานที่ดิน
+        </td>
+      </tr>
+    </table>
+
+    <!-- Additional info box -->
+    <div style="border:1px solid #999;margin-top:10pt;padding:8pt;font-size:12pt">
+      <p style="margin-bottom:4pt">.เรียน เจ้าหน้าที่ <u>ที่ดิน</u></p>
+      <p style="margin-bottom:4pt">บริษัท มีความประสงค์ชื่อที่ดินเพื่อ</p>
+      <p style="margin-bottom:4pt">.....................................................</p>
+      <p style="margin-bottom:4pt">-ตรวจแล้ว บริษัท.....................................................................</p>
+      <p style="margin-bottom:4pt">เป็นนิติบุคคลสัญชาติไทย ผู้ถือหุ้นบุคคลธรรมดา</p>
+      <p style="margin-bottom:4pt">สัญชาติไทย จำนวน.........% จำนวน.........คน</p>
+      <p style="margin-bottom:4pt">เป็นบุคคลต่างด้าว จำนวน.........% จำนวน.........คน</p>
+      <p style="margin-bottom:6pt">-ให้พิจารณาแล้วสามารถเป็นบริษัทฯ ดังกล่าวทำการซื้อที่ดินแปลงนี้ได้</p>
+      <table style="width:100%;border-collapse:collapse">
+        <tr>
+          <td style="width:50%">
+            <div style="border-top:1px solid #000;width:180px;margin:20pt 0 3pt"></div>
+            (ลงชื่อ)...............................
+          </td>
+          <td style="width:50%">
+            <div style="border-top:1px solid #000;width:180px;margin:20pt 0 3pt"></div>
+            (ลงชื่อ)...............................
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- Page 7 section - authorized persons -->
+    <div style="margin-top:10pt;border-top:1.5px solid #333;padding-top:8pt">
+      <p style="font-size:12.5pt;font-weight:bold;margin-bottom:4pt">รับซื้อฝาก</p>
+      <p style="font-size:12pt;margin-bottom:6pt">ข้อ 7. ผู้มีอำนาจทำการในนามบริษัท จำนวน <u>4</u> คนคือ</p>
+      <table style="width:100%;border-collapse:collapse;font-size:12pt">
+        <tr>
+          <td style="width:50%;padding:2pt 0">1. นางชญาน์นัทช์จรัสบวรพันธ์ เป็นบุคคล สัญชาติ ไทย</td>
+          <td style="width:50%;padding:2pt 0">2. นายชุณนเกียรติ จรัสบวรพันธ์ เป็นบุคคล สัญชาติ ไทย</td>
+        </tr>
+        <tr>
+          <td style="padding:2pt 0">3. นายกันตพัฒน์ จรัสบวรพันธ์ เป็นบุคคล สัญชาติ ไทย</td>
+          <td style="padding:2pt 0">4. นางสาวภัคฐ์พิชา จรัสบวรพันธ์ เป็นบุคคล สัญชาติ ไทย</td>
+        </tr>
+      </table>
+      <p style="font-size:12pt;margin-top:6pt">ทั้งหมดที่ให้ถ้อยคำ <u>&nbsp;&nbsp;14/2569&nbsp;&nbsp;</u> เป็นความจริงทุกประการ</p>
+      <table style="width:100%;border-collapse:collapse;margin-top:8pt;font-size:12pt">
+        <tr>
+          <td style="width:50%">
+            <div style="border-top:1px solid #000;width:180px;margin:16pt 0 3pt"></div>
+            ลงชื่อ..............................ผู้ให้ถ้อยคำ
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>`;
+}
+
+function buildSbVoucher(d,payRows){
+  const no=billNo(d.sb_date,d.sb_bill_seq);
+  const totalAmt=payRows.reduce((s,r)=>{const n=parseInt((r.amt||'0').replace(/[,\s]/g,''));return s+(isNaN(n)?0:n)},0);
+  const totalFmt=totalAmt?totalAmt.toLocaleString('th-TH'):'..........';
+  const totalT=totalAmt?toBaht(totalAmt):'..........';
+  const emptyRows='<tr><td>&nbsp;</td><td></td></tr>'.repeat(Math.max(0,4-payRows.length));
+  const payHTML=payRows.map(r=>'<tr><td>'+r.label+'</td><td class="num">'+(r.amtFmt||'..........')+'</td></tr>').join('')+emptyRows;
+  function oneCopy(label){return'<div style="margin-bottom:8pt">'
+    +'<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4pt">'
+    +'<div><p style="font-size:20pt;font-weight:bold">บริษัท &nbsp; โชคชัย เงินด่วน &nbsp; จำกัด</p>'
+    +'<p style="font-size:12pt;margin-top:2pt">No. '+no+'</p>'
+    +'<p style="font-size:12pt">89/28 หมู่ 9 ต.ท่าเยี่ยม อ.โชคชัย จ.นครราชสีมา</p></div>'
+    +'<div style="text-align:right"><p style="font-size:12pt;color:#555">'+label+'</p>'
+    +'<p style="font-size:12pt">วันที่ &nbsp; '+shortDate(d.sb_date)+'</p></div></div>'
+    +'<p style="color:#c00;font-weight:bold;font-size:13pt;text-align:right;margin-bottom:4pt">ใบสำคัญจ่าย</p>'
+    +'<table class="v-table">'
+    +'<tr><td style="width:40%">ชื่อ-นามสกุล ลูกค้า</td><td colspan="2">'+(d.sb_seller||'..........')+'</td></tr>'
+    +'<tr><td>ที่อยู่ ลูกค้า</td><td colspan="2">'+(d.sb_seller_addr||'..........')+'</td></tr>'
+    +'<tr><th style="width:60%">รายละเอียดการจ่ายเงิน</th><th style="width:40%">จำนวนเงิน(บาท)</th></tr>'
+    +payHTML
+    +'<tr class="total-row"><td style="text-align:center">'+totalT+'</td><td class="num">'+totalFmt+'</td></tr>'
+    +'</table>'
+    +'<table style="width:100%;margin-top:.8cm;border-collapse:collapse"><tr>'
+    +'<td style="text-align:center;width:33%"><span style="display:block;border-top:1px solid #000;width:120px;margin:0 auto 3pt"></span>ผู้จ่ายเงิน</td>'
+    +'<td style="text-align:center;width:34%"><span style="display:block;border-top:1px solid #000;width:120px;margin:0 auto 3pt"></span>ผู้มีอำนาจลงนาม</td>'
+    +'<td style="text-align:center;width:33%"><span style="display:block;border-top:1px solid #000;width:120px;margin:0 auto 3pt"></span>ผู้รับเงิน</td>'
+    +'</tr></table></div>';}
+  return'<div class="doc doc-page">'+oneCopy('ต้นฉบับ')
+    +'<hr style="border:none;border-top:2px dashed #aaa;margin:14pt 0">'+oneCopy('สำเนา')+'</div>';
+}
+
+function genSellback(){
+  const d={
+    sb_date:gv('sb_date'), sb_bill_seq:gv('sb_bill_seq')||'01',
+    sb_date_th:gv('sb_date_th'), sb_doc_type:gv('sb_doc_type'),
+    sb_title_no:gv('sb_title_no')||'..........', sb_survey_no:gv('sb_survey_no'),
+    sb_area:gv('sb_area'), sb_tambon:gv('sb_tambon'),
+    sb_amphoe:gv('sb_amphoe'), sb_province:gv('sb_province')||'นครราชสีมา',
+    sb_seller:gv('sb_seller')||'..........', sb_seller_addr:gv('sb_seller_addr'),
+    sb_seller_nation:gv('sb_seller_nation')||'ไทย',
+    sb_price:gv('sb_price'), sb_price_t:gv('sb_price_t'),
+    sb_redeem:gv('sb_redeem'), sb_redeem_t:gv('sb_redeem_t'),
+    sb_period:gv('sb_period'),
+  };
+  const payRows=getSbPayRows();
+  const wanted=[...document.querySelectorAll('.sb-doc-cb:checked')].map(c=>c.value);
+  const docs={};
+  if(wanted.includes('td16'))docs.td16={label:'ทด.16 บันทึกถ้อยคำ',html:buildTD16(d)};
+  if(wanted.includes('sbvoucher'))docs.sbvoucher={label:'ใบสำคัญจ่าย',html:buildSbVoucher(d,payRows)};
+  const keys=Object.keys(docs);
+  if(!keys.length){alert('กรุณาเลือกเอกสารอย่างน้อย 1 รายการ');return;}
+  const tabsEl=document.getElementById('sb-tabs');
+  tabsEl.innerHTML='';keys.forEach((k,i)=>{const btn=document.createElement('button');btn.className='doc-tab'+(i===0?' active':'');btn.textContent=docs[k].label;btn.onclick=function(){showSbDoc(k);};tabsEl.appendChild(btn);});
+  const outEl=document.getElementById('sb-doc-out');
+  outEl.innerHTML=keys.map((k,i)=>'<div id="sbdoc-'+k+'" style="'+(i!==0?'display:none':'')+'">'+docs[k].html+'</div>').join('');
+  window._sbDocs=docs;
+  document.getElementById('sb-form').style.display='none';
+  document.getElementById('sb-preview').style.display='block';
+  window.scrollTo(0,0);
+}
+function showSbDoc(key){
+  Object.keys(window._sbDocs||{}).forEach(k=>{const el=document.getElementById('sbdoc-'+k);if(el)el.style.display=k===key?'':'none';});
+  document.querySelectorAll('#sb-tabs .doc-tab').forEach(t=>{t.classList.toggle('active',t.textContent===((window._sbDocs[key]&&window._sbDocs[key].label)));});
+}
+function showSbForm(){
+  document.getElementById('sb-form').style.display='block';
+  document.getElementById('sb-preview').style.display='none';
+  window.scrollTo(0,0);
+}
+
+// Init sellback pay
+document.addEventListener('DOMContentLoaded',function(){addSbPay('cash');});
+
+
+function showPrintTip(){
+  document.querySelectorAll('[id^="mdoc-"],[id^="sbdoc-"],[id^="dldoc-"]').forEach(function(el){el.setAttribute('data-h',el.style.display==='none'?'1':'0');el.style.display='';});
+  document.getElementById('print-modal').classList.add('show');
+  try{window.print();}catch(e){}
+}
+function closePrintTip(){
+  document.getElementById('print-modal').classList.remove('show');
+  document.querySelectorAll('[id^="mdoc-"],[id^="sbdoc-"],[id^="dldoc-"]').forEach(function(el){if(el.getAttribute('data-h')==='1')el.style.display='none';});
+}
+document.addEventListener('DOMContentLoaded',function(){addSbPay('cash');});
+</script>
+</body>
+</html>

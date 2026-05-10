@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="โชคชัย">
+<meta name="theme-color" content="#1a3a2a">
+<link rel="apple-touch-icon" href="icon.svg">
+<title>รายงานการประชุม</title>
+<style>
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px}
+body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;color:#111;-webkit-text-size-adjust:100%}
+
+/* ══ HOME SCREEN ══ */
+#home{max-width:640px;margin:0 auto;padding:16px}
+.home-head{background:#1a3a2a;color:#fff;padding:18px 18px;border-radius:12px;margin-bottom:16px;text-align:center}
+.home-head h1{font-size:18px;font-weight:700;line-height:1.4}
+.home-head p{font-size:12px;opacity:.7;margin-top:4px}
+.menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.menu-card{background:#fff;border:1px solid #deded6;border-radius:12px;padding:18px 14px;cursor:pointer;text-align:center;-webkit-tap-highlight-color:transparent;transition:box-shadow .15s}
+.menu-card:hover,.menu-card:active{box-shadow:0 2px 12px rgba(26,58,42,.15);border-color:#1a3a2a}
+.menu-card .ic{font-size:32px;margin-bottom:8px}
+.menu-card .lbl{font-size:14px;font-weight:700;color:#1a3a2a;line-height:1.3}
+.menu-card .sub{font-size:11px;color:#777;margin-top:4px}
+
+/* ══ SHARED SECTION STYLES ══ */
+.section{display:none}
+.section.active{display:block}
+.ui{max-width:640px;margin:0 auto;padding:12px}
+.ui-head{background:#1a3a2a;color:#fff;padding:14px 16px;border-radius:10px;margin-bottom:12px}
+.ui-head h1{font-size:16px;font-weight:700;line-height:1.3}
+.ui-head p{font-size:12px;opacity:.7;margin-top:3px}
+.card{background:#fff;border-radius:10px;border:1px solid #deded6;padding:14px;margin-bottom:10px}
+.ct{font-size:13px;font-weight:700;color:#1a3a2a;border-bottom:1.5px solid #deeede;padding-bottom:7px;margin-bottom:11px;display:flex;align-items:center;gap:6px}
+.ct .n{background:#1a3a2a;color:#fff;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0}
+.fg{display:flex;flex-direction:column;gap:3px;margin-bottom:9px}
+.fg label{font-size:11px;color:#555;font-weight:600}
+.fg input,.fg select,.fg textarea{padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7;color:#111;width:100%;-webkit-appearance:none}
+.fg input:focus,.fg select:focus,.fg textarea:focus{outline:none;border-color:#1a3a2a;background:#fff}
+.fg textarea{resize:vertical;min-height:64px}
+.fg input.auto{background:#f0faf0;color:#1a6a1a;font-style:italic}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips label{display:flex;align-items:center;gap:6px;font-size:14px;cursor:pointer;background:#f5faf5;border:1px solid #cce0cc;padding:7px 11px;border-radius:8px;-webkit-tap-highlight-color:transparent}
+.chips input{width:16px;height:16px;flex-shrink:0}
+.add-btn{display:flex;align-items:center;justify-content:center;gap:5px;background:none;border:1.5px dashed #1a3a2a;color:#1a3a2a;padding:10px;border-radius:8px;cursor:pointer;font-size:14px;font-family:inherit;width:100%;margin-top:2px}
+.gen-btn{background:#1a3a2a;color:#fff;border:none;padding:15px;border-radius:10px;font-size:16px;cursor:pointer;font-family:inherit;font-weight:700;width:100%;margin-top:12px}
+.back-home{display:flex;align-items:center;gap:6px;background:none;border:none;color:#1a3a2a;font-size:14px;font-family:inherit;cursor:pointer;padding:6px 0;margin-bottom:8px;font-weight:600}
+
+/* Preview */
+#meet-preview,#mort-preview{display:none}
+.pbtns{display:flex;gap:10px;padding:14px 12px;background:#f0f0eb;border-bottom:1px solid #ddd}
+.pbk{flex:1;background:#fff;color:#333;border:1px solid #bbb;padding:13px 8px;border-radius:10px;cursor:pointer;font-size:15px;font-family:inherit;font-weight:600;-webkit-tap-highlight-color:transparent}
+.ppr{flex:2;background:#1a3a2a;color:#fff;border:none;padding:13px 8px;border-radius:10px;cursor:pointer;font-size:15px;font-family:inherit;font-weight:700;-webkit-tap-highlight-color:transparent}
+.doc-tabs{display:flex;gap:6px;padding:10px 12px;background:#f0f0eb;flex-wrap:wrap}
+.doc-tab{padding:7px 14px;font-size:13px;border:1px solid #bbb;border-radius:6px;cursor:pointer;background:#fff;font-family:inherit;-webkit-tap-highlight-color:transparent}
+.doc-tab.active{background:#1a3a2a;color:#fff;border-color:#1a3a2a}
+.doc-wrap{padding:10px}
+
+/* Agenda items */
+.ai{background:#f6faf6;border:1px solid #cce0cc;border-radius:9px;padding:12px;margin-bottom:10px}
+.ah{display:flex;align-items:center;gap:8px;margin-bottom:11px}
+.an{background:#1a3a2a;color:#fff;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
+.at{flex:1;padding:9px 10px;font-size:14px;border:1px solid #bcd0bc;border-radius:7px;font-family:inherit;background:#fff;-webkit-appearance:none}
+.rb{background:#fff;border:1px solid #dda0a0;color:#b04040;padding:8px 12px;border-radius:7px;cursor:pointer;font-size:13px;font-family:inherit;white-space:nowrap}
+.af-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.af-grid .fw{grid-column:1/-1}
+.af-grid label{font-size:11px;color:#555;font-weight:600;display:block;margin-bottom:3px}
+.af-grid input,.af-grid textarea,.af-grid select{width:100%;padding:9px 10px;font-size:14px;border:1px solid #ccc;border-radius:7px;font-family:inherit;background:#fff;-webkit-appearance:none}
+.af-grid input.auto{background:#f0faf0;color:#1a6a1a;font-style:italic}
+.af-grid textarea{min-height:64px;resize:vertical}
+
+/* Payment rows */
+.pay-row{background:#f6faf6;border:1px solid #cce0cc;border-radius:8px;padding:10px 12px;margin-bottom:8px}
+.pay-row .ph{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.pay-row .ph select{flex:1;padding:8px 9px;font-size:14px;border:1px solid #bcd0bc;border-radius:6px;font-family:inherit;background:#fff;-webkit-appearance:none}
+.pay-row .ph button{background:none;border:1px solid #dda0a0;color:#b04040;padding:6px 10px;border-radius:6px;cursor:pointer;font-size:12px;font-family:inherit}
+.pay-fields label{font-size:11px;color:#555;font-weight:600;display:block;margin-bottom:3px}
+.pay-fields input{width:100%;padding:8px 9px;font-size:13px;border:1px solid #ccc;border-radius:6px;font-family:inherit;background:#fff;margin-bottom:7px}
+.pay-fields input.auto{background:#f0faf0;color:#1a6a1a;font-style:italic}
+
+/* Documents */
+.doc{background:#fff;font-family:'TH Sarabun New','Sarabun',Arial,sans-serif;font-size:14pt;line-height:1.6;color:#000;border:1px solid #ddd;padding:.8cm 1.1cm .9cm 1.2cm;width:100%}
+.doc-center{text-align:center}
+.doc-bold{font-weight:bold}
+.doc-underline{text-decoration:underline}
+.doc-indent{padding-left:1.5cm}
+.doc-mb{margin-bottom:6pt}
+.doc-mb2{margin-bottom:12pt}
+.sign-table{width:100%;border-collapse:collapse;margin-top:1cm}
+.sign-table td{padding:4pt 8pt;text-align:center;vertical-align:bottom;font-size:13pt}
+.sign-line{display:block;border-top:1px solid #000;width:160px;margin:0 auto 3pt}
+.doc-roles{margin-bottom:4pt;width:100%}
+.doc-role-table{width:100%;border-collapse:collapse}
+.doc-role-table td{padding:0;vertical-align:top;font-size:inherit;line-height:inherit}
+.doc-role-table .td-pad{width:3.2cm}
+.doc-role-table .td-name{width:auto;padding-right:.3cm}
+.doc-h1{text-align:center;font-weight:bold;font-size:16pt;margin-bottom:0}
+.doc-h2{text-align:center;font-weight:bold;font-size:15pt;margin-bottom:3pt}
+.doc-meta{margin-bottom:4pt}
+.doc-meta p{margin-bottom:0}
+.doc-start{padding-left:.8cm;margin-bottom:4pt}
+.doc-sec{margin-bottom:2pt}
+.doc-sec-title{font-weight:bold;padding-left:.7cm;margin-bottom:1pt}
+.doc-sec-body{padding-left:1.6cm;text-align:justify;margin-bottom:1pt}
+.doc-sec-short{padding-left:1.6cm;font-weight:bold;margin-bottom:4pt}
+.doc-combined{padding-left:1.6cm;font-weight:bold;text-align:justify;margin-bottom:2pt}
+.doc-list{padding-left:2.2cm;margin-bottom:5pt}
+.doc-list li{list-style:none;text-indent:-.5cm;padding-left:.5cm;margin-bottom:0;text-align:justify}
+.doc-list li::before{content:"- "}
+.doc-close{padding-left:.8cm;margin-top:2pt}
+.doc-sign{margin-top:.5cm;text-align:left}
+.doc-sign p{margin-bottom:0;font-size:13.5pt}
+.memo-parties{margin:8pt 0 6pt}
+.memo-party-row{display:flex;gap:.5cm;margin-bottom:3pt;font-size:13.5pt}
+.memo-party-label{min-width:1.8cm;flex-shrink:0}
+.memo-party-name{flex:1}
+.memo-item{margin-bottom:4pt;text-indent:1.2cm;text-align:justify;font-size:13.5pt}
+.memo-item-num{font-weight:bold}
+.add-center{text-align:center;margin-bottom:4pt}
+.add-parties{text-align:center;margin:8pt 0}
+.add-item{margin-bottom:5pt;padding-left:1.5cm;text-indent:-1.5cm;text-align:justify;font-size:13.5pt}
+.add-sign-section{margin-top:.8cm}
+.add-sign-line{border-top:1px solid #000;margin:0 auto 3pt;width:180px;display:inline-block;vertical-align:bottom}
+.v-table{width:100%;border-collapse:collapse;margin:6pt 0}
+.v-table th,.v-table td{border:1px solid #999;padding:5pt 8pt;font-size:12.5pt;vertical-align:top}
+.v-table th{background:#f5f5f5;text-align:center}
+.v-table .num{text-align:right}
+.v-table .total-row td{font-weight:bold;border-top:2px solid #999}
+
+/* Print */
+@page{size:A4;margin:.8cm .9cm .8cm 1.1cm}
+@media print{
+  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+  html,body{background:#fff!important;margin:0;padding:0}
+  #home{display:none!important}
+  .ui{display:none!important}
+  .pbtns{display:none!important}
+  .doc-tabs{display:none!important}
+  .back-home{display:none!important}
+  .section{display:none!important}
+  .section.active{display:block!important}
+  #meet-preview,#mort-preview,#sb-preview,#dl-preview{display:block!important}
+  .doc-wrap{padding:0!important}
+  .doc{border:none!important;padding:0.5cm 1cm!important;margin:0!important;box-shadow:none!important}
+  .doc-page{page-break-after:always}
+  .doc-page:last-child{page-break-after:auto}
+}
+@page{size:A4;margin:1cm}
+@media screen and (max-width:700px){
+  .doc{font-size:3.6vw;padding:4vw 3vw 5vw 4vw}
+  .doc-role-table .td-pad{width:22vw}
+  .doc-role-table td{font-size:3.6vw;word-break:keep-all}
+  .doc-sec-title{padding-left:4vw}
+  .doc-sec-body{padding-left:7vw}
+  .doc-sec-short{padding-left:7vw}
+  .doc-combined{padding-left:7vw}
+  .doc-list{padding-left:9vw}
+  .doc-start{padding-left:4vw}
+  .doc-close{padding-left:4vw}
+  .sign-line{width:120px}
+}
+
+/* Print tip modal */
+.print-tip{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);z-index:9999;align-items:flex-end;justify-content:center}
+.print-tip.show{display:flex}
+.print-tip-box{background:#fff;border-radius:16px 16px 0 0;padding:20px;width:100%;max-width:640px}
+.print-tip-box h3{font-size:17px;font-weight:700;text-align:center;margin-bottom:12px}
+.print-tip-box .step{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #f0f0f0;font-size:15px}
+.print-tip-box .step:last-child{border-bottom:none}
+.print-tip-box .step-ic{font-size:24px;flex-shrink:0}
+.print-tip-close{width:100%;background:#1a3a2a;color:#fff;border:none;padding:14px;border-radius:10px;font-size:16px;font-family:inherit;font-weight:600;margin-top:14px;cursor:pointer}
+
+.print-tip{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.6);z-index:9999;align-items:flex-end;justify-content:center}
+.print-tip.show{display:flex}
+.print-tip-box{background:#fff;border-radius:16px 16px 0 0;padding:20px;width:100%;max-width:640px}
+.print-tip-box h3{font-size:17px;font-weight:700;text-align:center;margin-bottom:12px}
+.print-tip-box .step{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #f0f0f0;font-size:15px}
+.print-tip-box .step:last-child{border-bottom:none}
+.print-tip-box .step-ic{font-size:22px;flex-shrink:0}
+.print-tip-close{width:100%;background:#1a3a2a;color:#fff;border:none;padding:13px;border-radius:10px;font-size:16px;font-family:inherit;font-weight:600;margin-top:12px;cursor:pointer}
+@media print{
+  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+  html,body{background:#fff!important;margin:0;padding:0}
+  .ui,.pbtns,.doc-tabs,.back-home,.gen-btn,.add-btn,.pbk,.ppr,.print-tip{display:none!important}
+  #meet-preview,#mort-preview,#sb-preview,#dl-preview{display:block!important}
+  .doc-wrap{padding:0!important}
+  .doc{border:none!important;padding:0.5cm 1cm!important;margin:0!important}
+  .doc-page{page-break-after:always}
+  .doc-page:last-child{page-break-after:auto}
+}
+@page{size:A4;margin:1cm}
+</style>
+</head>
+<body>
+<div class="section active" id="section-meeting">
+<div class="ui" id="meet-form">
+  <button class="back-home" onclick="history.length>1?history.back():document.body.innerHTML='<div style=padding:20px><h2>ปิดหน้าต่างนี้แล้วเปิดไฟล์ index.html</h2></div>'">← หน้าหลัก</button>
+  <div class="ui-head">
+    <h1>📋 รายงานการประชุม</h1>
+    <p>พิมจำนวนเงินตัวเลข → ตัวอักษรขึ้นอัตโนมัติ</p>
+  </div>
+  <div class="card">
+    <div class="ct"><span class="n">1</span> ข้อมูลการประชุม</div>
+    <div class="row2">
+      <div class="fg"><label>ครั้งที่</label><input type="text" id="mno" placeholder="เช่น 25" inputmode="numeric"></div>
+      <div class="fg"><label>ปี พ.ศ.</label><input type="text" id="myr" value="2569"></div>
+    </div>
+    <div class="fg"><label>วันที่ประชุม</label><input type="date" id="mdt"></div>
+    <div class="row2">
+      <div class="fg"><label>เวลาเริ่ม</label><input type="time" id="ts" value="08:00"></div>
+      <div class="fg"><label>เวลาสิ้นสุด</label><input type="time" id="te" value="10:00"></div>
+    </div>
+    <div class="fg"><label>สถานที่ประชุม</label>
+      <input type="text" id="loc" value="สำนักงานบริษัทเลขที่ 89/28 หมู่ 9 ตำบล ท่าเยี่ยม อำเภอ โชคชัย จังหวัด นครราชสีมา">
+    </div>
+  </div>
+  <div class="card">
+    <div class="ct"><span class="n">2</span> ผู้เข้าร่วมประชุม</div>
+    <div class="fg"><label>ประธานการประชุม</label>
+      <select id="chairman" onchange="toggleOther()">
+        <option value="นาย ชุณนเกียรติ จรัสบวรพันธ์">นาย ชุณนเกียรติ จรัสบวรพันธ์</option>
+        <option value="นาง ชญาน์นัทช์ จรัสบวรพันธ์">นาง ชญาน์นัทช์ จรัสบวรพันธ์</option>
+        <option value="นาย กันตพัฒน์ จรัสบวรพันธ์">นาย กันตพัฒน์ จรัสบวรพันธ์</option>
+        <option value="นางสาว ภัคฐ์พิชา จรัสบวรพันธ์">นางสาว ภัคฐ์พิชา จรัสบวรพันธ์</option>
+        <option value="other">อื่นๆ (ระบุด้านล่าง)</option>
+      </select>
+    </div>
+    <div id="other-wrap" style="display:none">
+      <div class="fg"><label>ระบุชื่อประธาน</label><input type="text" id="chairman-other" placeholder="ชื่อ-นามสกุล"></div>
+    </div>
+    <div class="fg"><label>ผู้เข้าร่วมประชุม (รวมประธาน)</label>
+      <div class="chips" style="margin-top:6px">
+        <label><input type="checkbox" class="acb" value="นาย ชุณนเกียรติ จรัสบวรพันธ์" checked> นาย ชุณนเกียรติ จรัสบวรพันธ์</label>
+        <label><input type="checkbox" class="acb" value="นาง ชญาน์นัทช์ จรัสบวรพันธ์" checked> นาง ชญาน์นัทช์ จรัสบวรพันธ์</label>
+        <label><input type="checkbox" class="acb" value="นาย กันตพัฒน์ จรัสบวรพันธ์" checked> นาย กันตพัฒน์ จรัสบวรพันธ์</label>
+        <label><input type="checkbox" class="acb" value="นางสาว ภัคฐ์พิชา จรัสบวรพันธ์" checked> นางสาว ภัคฐ์พิชา จรัสบวรพันธ์</label>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="ct"><span class="n">3</span> วาระการประชุม</div>
+    <div id="agenda-box"></div>
+    <button class="add-btn" onclick="addAg()">+ เพิ่มวาระการประชุม</button>
+  </div>
+  <button class="gen-btn" onclick="genMeeting()">📄 สร้างรายงานการประชุม</button>
+</div>
+<div id="meet-preview">
+  <div class="pbtns">
+    <button class="pbk" onclick="showMeetForm()">← แก้ไข</button>
+    <button class="ppr" onclick="showPrintTip()">🖨️ พิมพ์</button>
+  </div>
+  <div class="doc-wrap" id="meet-doc-out"></div>
+</div>
+</div>
+<div class="print-tip" id="print-modal" onclick="if(event.target===this)closePrintTip()">
+  <div class="print-tip-box">
+    <h3>🖨️ วิธีพิมพ์เอกสาร</h3>
+    <div class="step"><span class="step-ic">1️⃣</span><span>กดปุ่ม <strong>แชร์</strong> ที่แถบล่างของ Safari</span></div>
+    <div class="step"><span class="step-ic">2️⃣</span><span>เลือก <strong>Print / พิมพ์</strong></span></div>
+    <div class="step"><span class="step-ic">3️⃣</span><span>เลือกเครื่องพิมพ์ กด <strong>Print</strong></span></div>
+    <button class="print-tip-close" onclick="closePrintTip()">เข้าใจแล้ว</button>
+  </div>
+</div>
+<script>
+
+// ══ NAVIGATION ══
+function showSection(name){
+  document.getElementById('home').style.display='none';
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.getElementById('section-'+name).classList.add('active');
+  window.scrollTo(0,0);
+}
+function goHome(){
+  document.getElementById('home').style.display='block';
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  window.scrollTo(0,0);
+}
+
+// ══ THAI BAHT ══
+function toBaht(v){
+  const n=parseInt(String(v).replace(/[,\s]/g,''));
+  if(!n||isNaN(n))return'';
+  const o=['','หนึ่ง','สอง','สาม','สี่','ห้า','หก','เจ็ด','แปด','เก้า'];
+  function s(x){if(!x)return'';if(x<10)return o[x];
+    if(x<100){const t=Math.floor(x/10),u=x%10;let r=t===1?'สิบ':t===2?'ยี่สิบ':o[t]+'สิบ';if(u===1&&t>0)r+='เอ็ด';else if(u)r+=o[u];return r}
+    if(x<1e3)return o[Math.floor(x/100)]+'ร้อย'+s(x%100);
+    if(x<1e4)return o[Math.floor(x/1000)]+'พัน'+s(x%1000);
+    if(x<1e5)return s(Math.floor(x/1e4))+'หมื่น'+s(x%1e4);
+    if(x<1e6)return s(Math.floor(x/1e5))+'แสน'+s(x%1e5);
+    return s(Math.floor(x/1e6))+'ล้าน'+s(x%1e6);}
+  return s(n)+'บาทถ้วน';
+}
+function fmtN(v){const n=parseInt(String(v).replace(/[,\s]/g,''));return isNaN(n)?v:n.toLocaleString('th-TH')}
+function gv(id){const e=document.getElementById(id);return e?e.value.trim():''}
+
+// ══ DATE UTILS ══
+function thaiDate(d){
+  if(!d)return'......';
+  const dt=new Date(d);if(isNaN(dt))return d;
+  const m=['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+  return`${dt.getDate()} ${m[dt.getMonth()]} ${dt.getFullYear()+543}`;
+}
+function shortDate(d){
+  if(!d)return'......';
+  const dt=new Date(d);if(isNaN(dt))return d;
+  return`${dt.getDate()}/${dt.getMonth()+1}/${String(dt.getFullYear()+543).slice(-2)}`;
+}
+function meetShortDate(d){
+  if(!d)return'......';
+  const dt=new Date(d);
+  return`${dt.getDate()} / ${dt.getMonth()+1} / ${String(dt.getFullYear()+543).slice(-2)}`;
+}
+function billNo(d,seq){
+  if(!d)return`......-${seq||'01'}`;
+  const dt=new Date(d);
+  const yy=String(dt.getFullYear()+543).slice(-2);
+  const mm=String(dt.getMonth()+1).padStart(2,'0');
+  const dd=String(dt.getDate()).padStart(2,'0');
+  return`${yy}${mm}${dd}-${(seq||'01').padStart(2,'0')}`;
+}
+function fmtTime(t){return t?t.replace(':','.')+' น.':'......'}
+
+
+// ══════════════════════════════
+// MEETING LOGIC
+// ══════════════════════════════
+const M_TYPES={
+  mortgage:'🏠 จดจำนองที่ดิน',sellback:'📋 รับซื้อฝากที่ดิน',
+  extend:'⏳ ขยายระยะเวลาขายฝาก',rdm_mortgage:'✅ ไถ่ถอนจำนอง',
+  rdm_sellback:'✅ ไถ่ถอนขายฝาก',dirloan:'💼 กู้ยืมเงินกรรมการ',other:'📝 เรื่องอื่นๆ'
+};
+let agC=0;
+const COL_TYPES=[{v:'โฉนด',l:'โฉนดที่ดิน (น.ส.4)'},{v:'นส3ก',l:'น.ส.3 ก.'},{v:'นส3',l:'น.ส.3'},{v:'ห้องชุด',l:'ห้องชุด (คอนโด)'}];
+function typeOpts(c){return Object.entries(M_TYPES).map(([k,v])=>'<option value="'+k+'"'+(k===c?' selected':'')+'>'+v+'</option>').join('');}
+function colOpts(){return COL_TYPES.map(c=>`<option value="${c.v}">${c.l}</option>`).join('')}
+
+function colFieldsHTML(i,px,ct){
+  const f=(id,lb,ph='')=>`<div><label>${lb}</label><input type="text" id="ag${i}_${px}${id}" placeholder="${ph}"></div>`;
+  if(ct==='ห้องชุด')return`<div class="af-grid">
+    ${f('cno','เลขที่ห้องชุด','เช่น 541/20')}${f('cfl','ชั้นที่','')}${f('cbn','อาคารเลขที่','')}
+    <div class="fw"><label>ชื่ออาคารชุด</label><input type="text" id="ag${i}_${px}cname" placeholder="เช่น ธาดาคอนโด บี"></div>
+    ${f('creg','ทะเบียนอาคารชุดเลขที่','')}${f('tb','ตำบล','')}${f('ap','อำเภอ','')}${f('pv','จังหวัด','')}
+    <div class="fw" style="font-size:11px;color:#888">โฉนดที่ดินที่ตั้ง</div>
+    ${f('tno','เลขที่โฉนด','')}${f('tb2','ตำบล','')}${f('ap2','อำเภอ','')}${f('pv2','จังหวัด','')}
+  </div>`;
+  const lb=ct==='โฉนด'?'เลขที่โฉนด':ct==='นส3ก'?'เลขที่ น.ส.3 ก.':'เลขที่ น.ส.3';
+  return`<div class="af-grid">
+    ${f('tno',lb,'')}${f('lno','เลขที่ดิน','')}
+    ${f('tb','ตำบล','')}${f('ap','อำเภอ','')}${f('pv','จังหวัด','')}
+  </div>`;
+}
+function colBlock(i,px){
+  return`<div class="fw"><label>ประเภทหลักทรัพย์</label>
+    <select id="ag${i}_${px}ct" onchange="refreshCol(${i},'${px}',this.value)"
+      style="width:100%;padding:9px 10px;font-size:14px;border:1px solid #ccc;border-radius:7px;font-family:inherit;-webkit-appearance:none;background:#fff">${colOpts()}</select></div>
+  <div class="fw" id="ag${i}_${px}cf">${colFieldsHTML(i,px,'โฉนด')}</div>`;
+}
+function refreshCol(i,px,ct){document.getElementById('ag'+i+'_'+px+'cf').innerHTML=colFieldsHTML(i,px,ct)}
+function getCol(i,px){
+  const ct=gv('ag'+i+'_'+px+'ct')||'โฉนด';
+  const g=(id)=>gv('ag'+i+'_'+px+id)||'..........';
+  if(ct==='ห้องชุด')return{type:'ห้องชุด',short:'ห้องชุด',
+    long:`ห้องชุด เลขที่ ${g('cno')} ชั้นที่ ${g('cfl')} อาคารเลขที่ ${g('cbn')} ชื่ออาคารชุด ${g('cname')} ทะเบียนอาคารชุดเลขที่ ${g('creg')} ตำบล ${g('tb')} อำเภอ ${g('ap')} จังหวัด ${g('pv')} ตั้งอยู่บนโฉนดเลขที่ ${g('tno')} ตำบล ${g('tb2')} อำเภอ ${g('ap2')} จังหวัด ${g('pv2')}`};
+  const full=ct==='โฉนด'?'โฉนดที่ดิน':ct==='นส3ก'?'หนังสือรับรองการทำประโยชน์ (น.ส.3 ก.)':'หนังสือรับรองการทำประโยชน์ (น.ส.3)';
+  const short=ct==='โฉนด'?'โฉนดที่ดิน':ct==='นส3ก'?'น.ส.3 ก.':'น.ส.3';
+  return{type:ct,short,long:`${full} เลขที่ ${g('tno')} เลขที่ดิน ${g('lno')} ตำบล ${g('tb')} อำเภอ ${g('ap')} จังหวัด ${g('pv')}`};
+}
+
+function amtPair(i,id,lb){return`
+  <div class="fw" style="margin-top:4px"><label>${lb} (ตัวเลข บาท)</label>
+    <input type="text" id="ag${i}_${id}" inputmode="numeric" placeholder="เช่น 1,000,000" oninput="syncAgAmt(${i},'${id}',this.value)">
+  </div>
+  <div class="fw"><label>ตัวอักษร (อัตโนมัติ)</label>
+    <input type="text" id="ag${i}_${id}_t" class="auto" readonly placeholder="— อัตโนมัติ —">
+  </div>`}
+function syncAgAmt(i,id,v){const el=document.getElementById('ag'+i+'_'+id+'_t');if(el)el.value=toBaht(v.replace(/[,\s]/g,''))}
+function fld(i,id,lb,fw,ph=''){return`<div class="${fw?'fw':''}""><label>${lb}</label><input type="text" id="ag${i}_${id}" placeholder="${ph}"></div>`}
+function ta(i,id,lb,fw,ph=''){return`<div class="${fw?'fw':''}""><label>${lb}</label><textarea id="ag${i}_${id}" placeholder="${ph}"></textarea></div>`}
+const DIRS=['นาย ชุณนเกียรติ จรัสบวรพันธ์','นาง ชญาน์นัทช์ จรัสบวรพันธ์','นาย กันตพัฒน์ จรัสบวรพันธ์','นางสาว ภัคฐ์พิชา จรัสบวรพันธ์'];
+
+function agFields(i,t){
+  if(t==='mortgage'){
+    const cOpts=COL_TYPES.map(c=>`<option value="${c.v}">${c.l}</option>`).join('');
+    return`<div class="af-grid">
+      <div class="fw"><label>ประเภทหลักทรัพย์</label>
+        <select id="ag${i}_mct" onchange="refreshMortCol(${i},this.value)"
+          style="width:100%;padding:9px 10px;font-size:14px;border:1px solid #ccc;border-radius:7px;font-family:inherit;-webkit-appearance:none;background:#fff">${cOpts}</select></div>
+      <div class="fw" id="ag${i}_mcf">${colFieldsHTML(i,'m_','โฉนด')}</div>
+      ${fld(i,'cust','ชื่อ-นามสกุลลูกค้า (ผู้จำนอง)',true,'นาย/นาง/นางสาว...')}
+      ${ta(i,'bld','สิ่งปลูกสร้าง (ถ้ามี ข้ามได้)',true,'')}
+      ${amtPair(i,'amt','วงเงิน')}
+      ${fld(i,'rate','ดอกเบี้ย % ต่อปี',false,'เช่น 15')}
+    </div>`;
+  }
+  if(t==='sellback')return`<div class="af-grid">
+    ${fld(i,'cust','ชื่อ-นามสกุลลูกค้า (ผู้ขายฝาก)',true,'')}${fld(i,'period','กำหนด',false,'เช่น 1 ปี')}
+    ${colBlock(i,'s_')}${ta(i,'bld','สิ่งปลูกสร้าง (ถ้ามี)',true,'')}
+    ${amtPair(i,'amt','วงเงิน')}${amtPair(i,'rdm','ราคาสินไถ่')}
+  </div>`;
+  if(t==='extend')return`<div class="af-grid">
+    ${fld(i,'cust','ชื่อ-นามสกุลลูกค้า',true,'')}${fld(i,'extno','ครั้งที่ขยาย',false,'เช่น 1')}${fld(i,'period','ขยายอีก',false,'เช่น 1 ปี')}
+    ${colBlock(i,'e_')}${fld(i,'origdt','วันที่สัญญาเดิม',true,'')}
+  </div>`;
+  if(t==='rdm_mortgage')return`<div class="af-grid">
+    ${fld(i,'cust','ชื่อ-นามสกุลลูกค้า',true,'')}${colBlock(i,'rm_')}${fld(i,'origdt','วันที่สัญญาจำนองเดิม',true,'')}
+  </div>`;
+  if(t==='rdm_sellback')return`<div class="af-grid">
+    ${fld(i,'cust','ชื่อ-นามสกุลลูกค้า',true,'')}${colBlock(i,'rs_')}${fld(i,'origdt','วันที่สัญญาขายฝากเดิม',true,'')}
+  </div>`;
+  if(t==='dirloan'){
+    const cbs=DIRS.map((d,x)=>`<label style="display:flex;align-items:center;gap:6px;font-size:14px;cursor:pointer;background:#f5faf5;border:1px solid #cce0cc;padding:8px 11px;border-radius:8px"><input type="radio" name="ag${i}_dr" value="${d}" ${x===0?'checked':''}> ${d}</label>`).join('');
+    return`<div class="af-grid">
+      <div class="fw"><label>กรรมการผู้ให้กู้</label><div class="chips" style="margin-top:6px">${cbs}</div></div>
+      ${amtPair(i,'amt','จำนวนเงิน')}${fld(i,'rate','ดอกเบี้ย % ต่อปี',false,'เช่น 7.5')}
+      ${ta(i,'pur','วัตถุประสงค์',true,'')}
+    </div>`;
+  }
+  if(t==='other')return`<div class="af-grid">${fld(i,'ttl','หัวข้อวาระ',true,'')}${ta(i,'dtl','รายละเอียด',true,'')}</div>`;
+  return'';
+}
+function refreshMortCol(i,ct){document.getElementById('ag'+i+'_mcf').innerHTML=colFieldsHTML(i,'m_',ct)}
+function addAg(t='mortgage'){
+  agC++;const i=agC;
+  const d=document.createElement('div');d.className='ai';d.id='agi-'+i;
+  d.innerHTML=`<div class="ah">
+    <div class="an">${i}</div>
+    <select class="at" onchange="changeAg(${i},this.value)">${typeOpts(t)}</select>
+    <button class="rb" onclick="removeAg(${i})">ลบ</button>
+  </div><div id="agf-${i}">${agFields(i,t)}</div>`;
+  document.getElementById('agenda-box').appendChild(d);
+}
+function changeAg(i,t){document.getElementById('agf-'+i).innerHTML=agFields(i,t)}
+function removeAg(i){const e=document.getElementById('agi-'+i);if(e)e.remove()}
+function toggleOther(){document.getElementById('other-wrap').style.display=document.getElementById('chairman').value==='other'?'':'none'}
+function ch(){const v=gv('chairman');return v==='other'?gv('chairman-other'):v}
+function atts(){return[...document.querySelectorAll('.acb:checked')].map(c=>c.value)}
+
+function gfm(i,f){return gv('ag'+i+'_'+f)||'..........'}
+function moneyAg(i,id){const n=parseInt((gv('ag'+i+'_'+id)||'').replace(/[,\s]/g,''));if(!n||isNaN(n))return{num:'..........',txt:'..........'};return{num:n.toLocaleString('th-TH'),txt:toBaht(n)}}
+
+function buildAgContent(i){
+  const el=document.querySelector('#agi-'+i+' .at');if(!el)return null;
+  const t=el.value;const res=[];let title='',body='';
+  if(t==='mortgage'){
+    const bld=gv('ag'+i+'_bld');const m=moneyAg(i,'amt');const ct=gv('ag'+i+'_mct')||'โฉนด';
+    const bldSfx=bld?` พร้อมสิ่งปลูกสร้าง ${bld} และสิ่งปลูกสร้างที่จะเกิดขึ้นในอนาคต`:' พร้อมสิ่งปลูกสร้างที่มีอยู่และที่จะเกิดขึ้นในอนาคต';
+    const g2=(id)=>gv('ag'+i+'_m_'+id)||'..........';
+    let asset='',docShort='';
+    if(ct==='ห้องชุด'){asset=`ห้องชุด เลขที่ ${g2('cno')} ชั้นที่ ${g2('cfl')} อาคารเลขที่ ${g2('cbn')} ชื่ออาคารชุด ${g2('cname')} ทะเบียนอาคารชุดเลขที่ ${g2('creg')} ตำบล ${g2('tb')} อำเภอ ${g2('ap')} จังหวัด ${g2('pv')} ตั้งอยู่บนโฉนดเลขที่ ${g2('tno')} ตำบล ${g2('tb2')} อำเภอ ${g2('ap2')} จังหวัด ${g2('pv2')}`;docShort='ห้องชุด';title=bld?`เรื่องการจดทะเบียนและทำนิติกรรมรับจำนองห้องชุดพร้อมสิ่งปลูกสร้าง ของบริษัท โชคชัย เงินด่วน จำกัด`:`เรื่องการจดทะเบียนและทำนิติกรรมรับจำนองห้องชุด ของบริษัท โชคชัย เงินด่วน จำกัด`;}
+    else{const full=ct==='โฉนด'?'โฉนดที่ดิน':ct==='นส3ก'?'หนังสือรับรองการทำประโยชน์ (น.ส.3 ก.)':'หนังสือรับรองการทำประโยชน์ (น.ส.3)';docShort=ct==='โฉนด'?'โฉนดที่ดิน':ct==='นส3ก'?'น.ส.3 ก.':'น.ส.3';asset=`${full} เลขที่ ${g2('tno')} เลขที่ดิน ${g2('lno')} ตำบล ${g2('tb')} อำเภอ ${g2('ap')} จังหวัด ${g2('pv')}`;title=bld?`เรื่องการจดทะเบียนและทำนิติกรรมรับจำนองที่ดินพร้อมสิ่งปลูกสร้าง ของบริษัท โชคชัย เงินด่วน จำกัด`:`เรื่องการจดทะเบียนและทำนิติกรรมรับจำนองที่ดิน ของบริษัท โชคชัย เงินด่วน จำกัด`;}
+    body=`ประธาน ได้กล่าวแถลงต่อที่ประชุมว่า การที่เชิญประชุมครั้งนี้ก็เพื่อให้ที่ประชุม พิจารณาเรื่อง การรับจำนอง${asset}${bldSfx} กับ ${gfm(i,'cust')} ในวงเงิน ${m.num} บาท (${m.txt}) ตกลงดอกเบี้ยร้อยละ ${gfm(i,'rate')} ต่อปี ชำระดอกเบี้ยเดือนละครั้งเสมอไป`;
+    res.push(`จดทะเบียนรับจำนอง${docShort} เป็นเงิน ${m.num} บาท (${m.txt}) ตกลงดอกเบี้ยร้อยละ ${gfm(i,'rate')} ต่อปี ชำระดอกเบี้ยเดือนละครั้งเสมอไป`);
+    res.push('ให้ถือสัญญาจำนองเป็นหลักฐานแห่งการกู้ยืมเงิน');
+    res.push('ให้เงื่อนไขและข้อตกลงอื่นๆ ให้เป็นไปตามข้อตกลงต่อท้ายสัญญาจำนอง และให้ถือข้อตกลงต่อท้ายสัญญาจำนองเป็นส่วนหนึ่งของสัญญาจำนองด้วย');
+  }else if(t==='sellback'){
+    const bld=gv('ag'+i+'_bld');const m=moneyAg(i,'amt');const r=moneyAg(i,'rdm');const sc=getCol(i,'s_');const aw=sc.type==='ห้องชุด'?'ห้องชุด':'ที่ดิน';
+    const bldSfx=bld?` พร้อมสิ่งปลูกสร้าง ${bld} และสิ่งปลูกสร้างที่จะเกิดขึ้นในอนาคต`:' พร้อมสิ่งปลูกสร้างที่มีอยู่และที่จะเกิดขึ้นในอนาคต';
+    title=bld?`พิจารณาเรื่องอนุมัติรับซื้อฝาก${aw}พร้อมสิ่งปลูกสร้าง`:`พิจารณาเรื่องอนุมัติรับซื้อฝาก${aw}`;
+    body=`ประธานได้กล่าวแถลงต่อที่ประชุมว่า การที่เชิญประชุมครั้งนี้ก็เพื่อให้ที่ประชุมพิจารณาเรื่องอนุมัติรับซื้อฝาก${aw} มีกำหนด ${gfm(i,'period')} ให้แก่ ${gfm(i,'cust')} ในวงเงิน ${m.num} บาท (${m.txt}) กำหนดสินไถ่ในราคา ${r.num} บาท (${r.txt}) โดยรับซื้อฝาก${sc.long}${bldSfx} กับ ${gfm(i,'cust')}`;
+    res.push(`ขอจดทะเบียนรับซื้อฝาก${sc.short} มีกำหนด ${gfm(i,'period')} กับ ${gfm(i,'cust')} จำนวนวงเงิน ${m.num} บาท (${m.txt}) กำหนดสินไถ่ในราคา ${r.num} บาท (${r.txt})`);
+  }else if(t==='extend'){
+    const ec=getCol(i,'e_');const aw=ec.type==='ห้องชุด'?'ห้องชุด':'ที่ดิน';
+    title=`พิจารณาเรื่องอนุมัติขยายระยะเวลาไถ่จากขายฝาก${aw}`;
+    body=`ประธานได้กล่าวแถลงต่อที่ประชุมว่า การที่เชิญประชุมครั้งนี้ก็เพื่อให้ที่ประชุมพิจารณาเรื่องอนุมัติขยายระยะเวลาไถ่จากขายฝาก${aw}ครั้งที่ ${gfm(i,'extno')} ให้แก่ ${gfm(i,'cust')} กำหนดเพิ่มอีก ${gfm(i,'period')} ตามหนังสือสัญญาขายฝาก${aw} ฉบับลงวันที่ ${gfm(i,'origdt')} โดยขยายระยะเวลาไถ่จากขายฝาก${ec.long} ให้กับ ${gfm(i,'cust')}`;
+    res.push(`ขอจดทะเบียนขยายระยะเวลาไถ่จากการขายฝาก${aw}ครั้งที่ ${gfm(i,'extno')} มีกำหนด ${gfm(i,'period')} ให้แก่ ${gfm(i,'cust')}`);
+  }else if(t==='rdm_mortgage'){
+    const rc=getCol(i,'rm_');const aw=rc.type==='ห้องชุด'?'ห้องชุด':'ที่ดิน';
+    title=`พิจารณาเรื่องอนุมัติการไถ่ถอนจำนอง${aw}`;
+    body=`ประธานได้กล่าวแถลงต่อที่ประชุมว่า การที่เชิญประชุมครั้งนี้ก็เพื่อให้ที่ประชุมพิจารณาเรื่องอนุมัติการไถ่ถอนจำนองให้แก่ ${gfm(i,'cust')} ตามสัญญาจำนอง${aw} ฉบับลงวันที่ ${gfm(i,'origdt')} เนื่องจากได้รับชำระหนี้เต็มจำนวนแล้ว โดยให้ไถ่ถอนจำนอง${rc.long} ของ ${gfm(i,'cust')} ได้`;
+    res.push('ให้รับชำระเงินตามจำนวนหนี้ดังกล่าวและยินยอมให้ไถ่ถอนจำนองได้');
+  }else if(t==='rdm_sellback'){
+    const rc=getCol(i,'rs_');const aw=rc.type==='ห้องชุด'?'ห้องชุด':'ที่ดิน';
+    title=`พิจารณาเรื่องอนุมัติการไถ่ถอนขายฝาก${aw}`;
+    body=`ประธานได้กล่าวแถลงต่อที่ประชุมว่า การที่เชิญประชุมครั้งนี้ก็เพื่อให้ที่ประชุมพิจารณาเรื่องอนุมัติการไถ่ถอนขายฝากให้แก่ ${gfm(i,'cust')} ตามสัญญาขายฝาก${aw} ฉบับลงวันที่ ${gfm(i,'origdt')} เนื่องจากได้รับชำระหนี้เต็มจำนวนแล้ว โดยให้ไถ่ถอนขายฝาก${rc.long} ของ ${gfm(i,'cust')} ได้`;
+    res.push('ให้รับชำระเงินตามจำนวนสินไถ่และยินยอมให้ไถ่ถอนขายฝากได้');
+  }else if(t==='dirloan'){
+    const m=moneyAg(i,'amt');const pur=gv('ag'+i+'_pur')||'การดำเนินการใช้จ่ายอื่นๆ ในบริษัท';
+    const dr=document.querySelector(`[name='ag${i}_dr']:checked`);const dn=dr?dr.value:'กรรมการบริษัท';
+    title='เรื่องการกู้ยืมเงินจากกรรมการ';
+    body=`ประธานเสนอให้มีการกู้ยืมเงินจาก กรรมการบริษัท ${dn} จำนวนเงิน ${m.num} บาท (${m.txt}) โดยมีการคิดดอกเบี้ย ${gfm(i,'rate')} % เพื่อนำไปใช้ใน${pur}`;
+    res.push(`กู้ยืมเงินจาก ${dn} จำนวน ${m.num} บาท (${m.txt}) ดอกเบี้ยร้อยละ ${gfm(i,'rate')} ต่อปี`);
+  }else if(t==='other'){title=gfm(i,'ttl');body=gv('ag'+i+'_dtl')||'';}
+  return{title,body,res,t};
+}
+
+function genMeeting(){
+  const chairman=ch();const all=atts();const others=all.filter(a=>a!==chairman);
+  const no=gv('mno')||'......',yr=gv('myr')||'......';
+  const sd=meetShortDate(gv('mdt'));const ts=fmtTime(gv('ts')),te=fmtTime(gv('te'));const loc=gv('loc')||'..........';
+  const items=[];
+  document.querySelectorAll('.ai').forEach(el=>{const i=el.id.replace('agi-','');const c=buildAgContent(i);if(c)items.push(c);});
+  const fullList=[chairman,...others];
+  const topLine=fullList.map((n,i)=>`${i+1}.&nbsp;${n}`).join('&nbsp;&nbsp;&nbsp;&nbsp;');
+  const roleRows=[
+    `<tr><td class="td-pad">โดยมี</td><td class="td-name">${chairman}</td><td>เป็นประธานการประชุม</td></tr>`,
+    ...others.map(a=>`<tr><td class="td-pad"></td><td class="td-name">${a}</td><td>ผู้เข้าร่วมประชุม</td></tr>`)
+  ].join('');
+  const roleLines=`<table class="doc-role-table">${roleRows}</table>`;
+  let agHTML='';const allRes=[];
+  items.forEach((ag,i)=>{
+    agHTML+=`<div class="doc-sec">
+      <p class="doc-sec-title">ระเบียบวาระที่&nbsp;&nbsp;${i+1}.&nbsp;&nbsp;&nbsp;${ag.title}</p>
+      <p class="doc-sec-body">${ag.body}</p>
+      <p class="doc-sec-short">ที่ประชุมได้พิจารณาแล้วลงมติเป็นเอกฉันท์ให้ บริษัท ดำเนินการได้ตามที่ประธานเสนอ</p>
+    </div>`;
+    ag.res.forEach(r=>allRes.push(r));
+  });
+  if(allRes.length>0){agHTML+=`<p class="doc-combined">ที่ประชุมได้พิจารณาแล้วลงมติเป็นเอกฉันท์ให้บริษัทดำเนินการได้ตามที่ประธานเสนอและเลือกกรรมการของ บริษัท โชคชัย เงินด่วน จำกัด คือ กรรมการผู้มีอำนาจลงนามคนใดคนหนึ่ง เป็นผู้ทำการแทนบริษัทในครั้งนี้ มีอำนาจลงนามในเอกสารต่าง ๆ แทนบริษัท ดังต่อไปนี้</p>
+    <ul class="doc-list">${allRes.map(r=>`<li>${r}</li>`).join('')}</ul>`;}
+  const lastN=items.length+1;
+  agHTML+=`<div class="doc-sec"><p class="doc-sec-title">ระเบียบวาระที่&nbsp;&nbsp;${lastN}.&nbsp;&nbsp;&nbsp;เรื่องอื่น ๆ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ไม่มี</p></div>`;
+  document.getElementById('meet-doc-out').innerHTML=`<div class="doc doc-page">
+    <p class="doc-h1">รายงานการประชุม</p>
+    <p class="doc-h2">บริษัท &nbsp;&nbsp; โชคชัย เงินด่วน &nbsp;&nbsp; จำกัด</p>
+    <div class="doc-meta">
+      <p style="text-align:center">ประชุมครั้งที่ &nbsp;&nbsp; ${no} &nbsp; / &nbsp; ${yr} &nbsp;&nbsp; เมื่อวันที่ &nbsp;&nbsp; ${sd} &nbsp;&nbsp; เวลา &nbsp; ${ts.replace(' น.','')} – ${te}</p>
+      <p style="text-align:center">ประชุม ณ &nbsp;&nbsp; ${loc}</p>
+      <p>มีผู้เป็นหุ้นส่วนมาเข้าร่วมประชุมดังนี้</p>
+      <p style="font-size:13pt">${topLine}</p>
+    </div>
+    <div class="doc-roles">${roleLines}</div>
+    <p class="doc-start">เริ่มการประชุม &nbsp;&nbsp;&nbsp; เวลา &nbsp;&nbsp; ${ts}</p>
+    ${agHTML}
+    <p class="doc-close">ปิดประชุม &nbsp;&nbsp;&nbsp; เวลา &nbsp;&nbsp; ${te}</p>
+    <div class="doc-sign">
+      <p style="margin-bottom:.5cm">&nbsp;</p>
+      <p>............................................</p>
+      <p>(${chairman})</p>
+      <p>ประธานที่ประชุม, กรรมการบริษัท</p>
+    </div>
+  </div>`;
+  document.getElementById('meet-form').style.display='none';
+  document.getElementById('meet-preview').style.display='block';
+  window.scrollTo(0,0);
+}
+function showMeetForm(){document.getElementById('meet-form').style.display='block';document.getElementById('meet-preview').style.display='none';window.scrollTo(0,0);}
+
+
+function showPrintTip(){
+  document.querySelectorAll('[id^="mdoc-"],[id^="sbdoc-"],[id^="dldoc-"]').forEach(function(el){el.setAttribute('data-h',el.style.display==='none'?'1':'0');el.style.display='';});
+  document.getElementById('print-modal').classList.add('show');
+  try{window.print();}catch(e){}
+}
+function closePrintTip(){
+  document.getElementById('print-modal').classList.remove('show');
+  document.querySelectorAll('[id^="mdoc-"],[id^="sbdoc-"],[id^="dldoc-"]').forEach(function(el){if(el.getAttribute('data-h')==='1')el.style.display='none';});
+}
+addAg('mortgage');
+</script>
+</body>
+</html>

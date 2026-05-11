@@ -243,7 +243,7 @@ body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;
 <body>
 <div class="section active" id="section-meeting">
 <div class="ui" id="meet-form">
-  <button class="back-home" onclick="history.length>1?history.back():document.body.innerHTML='<div style=padding:20px><h2>ปิดหน้าต่างนี้แล้วเปิดไฟล์ index.html</h2></div>'">← หน้าหลัก</button>
+  <button class="back-home" onclick="goBack()">← หน้าหลัก</button>
   <div class="ui-head">
     <h1>📋 รายงานการประชุม</h1>
     <p>พิมจำนวนเงินตัวเลข → ตัวอักษรขึ้นอัตโนมัติ</p>
@@ -584,6 +584,8 @@ function genMeeting(){
 }
 function showMeetForm(){document.getElementById('meet-form').style.display='block';document.getElementById('meet-preview').style.display='none';window.scrollTo(0,0);}
 
+
+function goBack(){if(history.length>1){history.back();}else{document.body.innerHTML="<div style='padding:20px'><h2>กลับไปหน้าหลัก</h2><a href='index.html'>คลิกที่นี่</a></div>";}}
 
 function showPrintTip(){
   document.querySelectorAll('[id^="mdoc-"],[id^="sbdoc-"],[id^="dldoc-"]').forEach(function(el){el.setAttribute('data-h',el.style.display==='none'?'1':'0');el.style.display='';});

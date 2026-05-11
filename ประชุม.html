@@ -53,7 +53,6 @@ body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;
 .back-home{display:flex;align-items:center;gap:6px;background:none;border:none;color:#1a3a2a;font-size:14px;font-family:inherit;cursor:pointer;padding:6px 0;margin-bottom:8px;font-weight:600}
 
 /* Preview */
-#meet-preview,#mort-preview{display:none}
 .pbtns{display:flex;gap:10px;padding:14px 12px;background:#f0f0eb;border-bottom:1px solid #ddd}
 .pbk{flex:1;background:#fff;color:#333;border:1px solid #bbb;padding:13px 8px;border-radius:10px;cursor:pointer;font-size:15px;font-family:inherit;font-weight:600;-webkit-tap-highlight-color:transparent}
 .ppr{flex:2;background:#1a3a2a;color:#fff;border:none;padding:13px 8px;border-radius:10px;cursor:pointer;font-size:15px;font-family:inherit;font-weight:700;-webkit-tap-highlight-color:transparent}
@@ -139,8 +138,7 @@ body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;
   *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
   html,body{background:#fff!important;margin:0!important;padding:0!important}
   .ui,.pbtns,.doc-tabs,.back-home,.gen-btn,.add-btn,.pbk,.ppr,.print-tip{display:none!important}
-  #meet-preview{display:block!important}
-  .doc-wrap{padding:0!important}
+    .doc-wrap{padding:0!important}
   .doc{border:none!important;padding:0!important;margin:0!important;font-size:10pt!important;line-height:1.35!important;width:100%!important}
   .doc-h1{font-size:13pt!important;margin-bottom:0!important}
   .doc-h2{font-size:12pt!important;margin-bottom:1pt!important}
@@ -166,9 +164,7 @@ body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;
 @page{size:A4;margin:0.5cm 0.6cm 0.5cm 0.6cm}
   /* Hide all UI */
   .ui,.pbtns,.doc-tabs,.back-home,.gen-btn,.add-btn,.pbk,.ppr,.print-tip{display:none!important}
-  /* Show preview */
-  #meet-preview{display:block!important}
-  .doc-wrap{padding:0!important}
+      .doc-wrap{padding:0!important}
   /* Document styling - compact to fit A4 */
   .doc{
     border:none!important;
@@ -236,8 +232,7 @@ body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;
   *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
   html,body{background:#fff!important;margin:0;padding:0}
   .ui,.pbtns,.doc-tabs,.back-home,.gen-btn,.add-btn,.pbk,.ppr,.print-tip{display:none!important}
-  #meet-preview,#mort-preview,#sb-preview,#dl-preview{display:block!important}
-  .doc-wrap{padding:0!important}
+    .doc-wrap{padding:0!important}
   .doc{border:none!important;padding:0.5cm 1cm!important;margin:0!important}
   .doc-page{page-break-after:always}
   .doc-page:last-child{page-break-after:auto}
@@ -298,7 +293,7 @@ body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;
   </div>
   <button class="gen-btn" onclick="genMeeting()">📄 สร้างรายงานการประชุม</button>
 </div>
-<div id="meet-preview">
+<div id="meet-preview" style="display:none">
   <div class="pbtns">
     <button class="pbk" onclick="showMeetForm()">← แก้ไข</button>
     <button class="ppr" onclick="showPrintTip()">🖨️ พิมพ์</button>

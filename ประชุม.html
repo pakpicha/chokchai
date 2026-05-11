@@ -29,8 +29,8 @@ body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;
 .menu-card .sub{font-size:11px;color:#777;margin-top:4px}
 
 /* ══ SHARED SECTION STYLES ══ */
-.section{display:none}
-.section.active{display:block}
+.section{display:block}
+
 .ui{max-width:640px;margin:0 auto;padding:12px}
 .ui-head{background:#1a3a2a;color:#fff;padding:14px 16px;border-radius:10px;margin-bottom:12px}
 .ui-head h1{font-size:16px;font-weight:700;line-height:1.3}
@@ -487,7 +487,7 @@ function changeAg(i,t){document.getElementById('agf-'+i).innerHTML=agFields(i,t)
 function removeAg(i){const e=document.getElementById('agi-'+i);if(e)e.remove()}
 function toggleOther(){document.getElementById('other-wrap').style.display=document.getElementById('chairman').value==='other'?'':'none'}
 function ch(){const v=gv('chairman');return v==='other'?gv('chairman-other'):v}
-function atts(){return[...document.querySelectorAll('.acb:checked')].map(c=>c.value)}
+function atts(){returnArray.prototype.slice.call(document.querySelectorAll('.acb:checked')).map(c=>c.value)}
 
 function gfm(i,f){return gv('ag'+i+'_'+f)||'..........'}
 function moneyAg(i,id){const n=parseInt((gv('ag'+i+'_'+id)||'').replace(/[,\s]/g,''));if(!n||isNaN(n))return{num:'..........',txt:'..........'};return{num:n.toLocaleString('th-TH'),txt:toBaht(n)}}

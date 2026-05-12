@@ -3,34 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>เอกสารจดจำนอง — โชคชัย เงินด่วน</title>
 <link rel="manifest" href="manifest.json">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="โชคชัย">
 <meta name="theme-color" content="#1a3a2a">
-<link rel="apple-touch-icon" href="icon.svg">
-<title>เอกสารจดจำนอง</title>
 <style>
-
 *{box-sizing:border-box;margin:0;padding:0}
-html{font-size:16px}
 body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;color:#111;-webkit-text-size-adjust:100%}
-
-/* ══ HOME SCREEN ══ */
-#home{max-width:640px;margin:0 auto;padding:16px}
-.home-head{background:#1a3a2a;color:#fff;padding:18px 18px;border-radius:12px;margin-bottom:16px;text-align:center}
-.home-head h1{font-size:18px;font-weight:700;line-height:1.4}
-.home-head p{font-size:12px;opacity:.7;margin-top:4px}
-.menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
-.menu-card{background:#fff;border:1px solid #deded6;border-radius:12px;padding:18px 14px;cursor:pointer;text-align:center;-webkit-tap-highlight-color:transparent;transition:box-shadow .15s}
-.menu-card:hover,.menu-card:active{box-shadow:0 2px 12px rgba(26,58,42,.15);border-color:#1a3a2a}
-.menu-card .ic{font-size:32px;margin-bottom:8px}
-.menu-card .lbl{font-size:14px;font-weight:700;color:#1a3a2a;line-height:1.3}
-.menu-card .sub{font-size:11px;color:#777;margin-top:4px}
-
-/* ══ SHARED SECTION STYLES ══ */
-.section{display:none}
-.section.active{display:block}
 .ui{max-width:640px;margin:0 auto;padding:12px}
 .ui-head{background:#1a3a2a;color:#fff;padding:14px 16px;border-radius:10px;margin-bottom:12px}
 .ui-head h1{font-size:16px;font-weight:700;line-height:1.3}
@@ -42,40 +22,12 @@ body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;
 .fg label{font-size:11px;color:#555;font-weight:600}
 .fg input,.fg select,.fg textarea{padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7;color:#111;width:100%;-webkit-appearance:none}
 .fg input:focus,.fg select:focus,.fg textarea:focus{outline:none;border-color:#1a3a2a;background:#fff}
-.fg textarea{resize:vertical;min-height:64px}
+.fg textarea{resize:vertical;min-height:60px}
 .fg input.auto{background:#f0faf0;color:#1a6a1a;font-style:italic}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .chips{display:flex;flex-wrap:wrap;gap:6px}
 .chips label{display:flex;align-items:center;gap:6px;font-size:14px;cursor:pointer;background:#f5faf5;border:1px solid #cce0cc;padding:7px 11px;border-radius:8px;-webkit-tap-highlight-color:transparent}
 .chips input{width:16px;height:16px;flex-shrink:0}
-.add-btn{display:flex;align-items:center;justify-content:center;gap:5px;background:none;border:1.5px dashed #1a3a2a;color:#1a3a2a;padding:10px;border-radius:8px;cursor:pointer;font-size:14px;font-family:inherit;width:100%;margin-top:2px}
-.gen-btn{background:#1a3a2a;color:#fff;border:none;padding:15px;border-radius:10px;font-size:16px;cursor:pointer;font-family:inherit;font-weight:700;width:100%;margin-top:12px}
-.back-home{display:flex;align-items:center;gap:6px;background:none;border:none;color:#1a3a2a;font-size:14px;font-family:inherit;cursor:pointer;padding:6px 0;margin-bottom:8px;font-weight:600}
-
-/* Preview */
-#meet-preview,#mort-preview{display:none}
-.pbtns{display:flex;gap:10px;padding:14px 12px;background:#f0f0eb;border-bottom:1px solid #ddd}
-.pbk{flex:1;background:#fff;color:#333;border:1px solid #bbb;padding:13px 8px;border-radius:10px;cursor:pointer;font-size:15px;font-family:inherit;font-weight:600;-webkit-tap-highlight-color:transparent}
-.ppr{flex:2;background:#1a3a2a;color:#fff;border:none;padding:13px 8px;border-radius:10px;cursor:pointer;font-size:15px;font-family:inherit;font-weight:700;-webkit-tap-highlight-color:transparent}
-.doc-tabs{display:flex;gap:6px;padding:10px 12px;background:#f0f0eb;flex-wrap:wrap}
-.doc-tab{padding:7px 14px;font-size:13px;border:1px solid #bbb;border-radius:6px;cursor:pointer;background:#fff;font-family:inherit;-webkit-tap-highlight-color:transparent}
-.doc-tab.active{background:#1a3a2a;color:#fff;border-color:#1a3a2a}
-.doc-wrap{padding:10px}
-
-/* Agenda items */
-.ai{background:#f6faf6;border:1px solid #cce0cc;border-radius:9px;padding:12px;margin-bottom:10px}
-.ah{display:flex;align-items:center;gap:8px;margin-bottom:11px}
-.an{background:#1a3a2a;color:#fff;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
-.at{flex:1;padding:9px 10px;font-size:14px;border:1px solid #bcd0bc;border-radius:7px;font-family:inherit;background:#fff;-webkit-appearance:none}
-.rb{background:#fff;border:1px solid #dda0a0;color:#b04040;padding:8px 12px;border-radius:7px;cursor:pointer;font-size:13px;font-family:inherit;white-space:nowrap}
-.af-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.af-grid .fw{grid-column:1/-1}
-.af-grid label{font-size:11px;color:#555;font-weight:600;display:block;margin-bottom:3px}
-.af-grid input,.af-grid textarea,.af-grid select{width:100%;padding:9px 10px;font-size:14px;border:1px solid #ccc;border-radius:7px;font-family:inherit;background:#fff;-webkit-appearance:none}
-.af-grid input.auto{background:#f0faf0;color:#1a6a1a;font-style:italic}
-.af-grid textarea{min-height:64px;resize:vertical}
-
-/* Payment rows */
 .pay-row{background:#f6faf6;border:1px solid #cce0cc;border-radius:8px;padding:10px 12px;margin-bottom:8px}
 .pay-row .ph{display:flex;align-items:center;gap:8px;margin-bottom:8px}
 .pay-row .ph select{flex:1;padding:8px 9px;font-size:14px;border:1px solid #bcd0bc;border-radius:6px;font-family:inherit;background:#fff;-webkit-appearance:none}
@@ -83,99 +35,16 @@ body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;
 .pay-fields label{font-size:11px;color:#555;font-weight:600;display:block;margin-bottom:3px}
 .pay-fields input{width:100%;padding:8px 9px;font-size:13px;border:1px solid #ccc;border-radius:6px;font-family:inherit;background:#fff;margin-bottom:7px}
 .pay-fields input.auto{background:#f0faf0;color:#1a6a1a;font-style:italic}
-
-/* Documents */
-.doc{background:#fff;font-family:'TH Sarabun New','Sarabun',Arial,sans-serif;font-size:14pt;line-height:1.6;color:#000;border:1px solid #ddd;padding:.8cm 1.1cm .9cm 1.2cm;width:100%}
-.doc-center{text-align:center}
-.doc-bold{font-weight:bold}
-.doc-underline{text-decoration:underline}
-.doc-indent{padding-left:1.5cm}
-.doc-mb{margin-bottom:6pt}
-.doc-mb2{margin-bottom:12pt}
-.sign-table{width:100%;border-collapse:collapse;margin-top:1cm}
-.sign-table td{padding:4pt 8pt;text-align:center;vertical-align:bottom;font-size:13pt}
-.sign-line{display:block;border-top:1px solid #000;width:160px;margin:0 auto 3pt}
-.doc-roles{margin-bottom:4pt;width:100%}
-.doc-role-table{width:100%;border-collapse:collapse}
-.doc-role-table td{padding:0;vertical-align:top;font-size:inherit;line-height:inherit}
-.doc-role-table .td-pad{width:3.2cm}
-.doc-role-table .td-name{width:auto;padding-right:.3cm}
-.doc-h1{text-align:center;font-weight:bold;font-size:16pt;margin-bottom:0}
-.doc-h2{text-align:center;font-weight:bold;font-size:15pt;margin-bottom:3pt}
-.doc-meta{margin-bottom:4pt}
-.doc-meta p{margin-bottom:0}
-.doc-start{padding-left:.8cm;margin-bottom:4pt}
-.doc-sec{margin-bottom:2pt}
-.doc-sec-title{font-weight:bold;padding-left:.7cm;margin-bottom:1pt}
-.doc-sec-body{padding-left:1.6cm;text-align:justify;margin-bottom:1pt}
-.doc-sec-short{padding-left:1.6cm;font-weight:bold;margin-bottom:4pt}
-.doc-combined{padding-left:1.6cm;font-weight:bold;text-align:justify;margin-bottom:2pt}
-.doc-list{padding-left:2.2cm;margin-bottom:5pt}
-.doc-list li{list-style:none;text-indent:-.5cm;padding-left:.5cm;margin-bottom:0;text-align:justify}
-.doc-list li::before{content:"- "}
-.doc-close{padding-left:.8cm;margin-top:2pt}
-.doc-sign{margin-top:.5cm;text-align:left}
-.doc-sign p{margin-bottom:0;font-size:13.5pt}
-.memo-parties{margin:8pt 0 6pt}
-.memo-party-row{display:flex;gap:.5cm;margin-bottom:3pt;font-size:13.5pt}
-.memo-party-label{min-width:1.8cm;flex-shrink:0}
-.memo-party-name{flex:1}
-.memo-item{margin-bottom:4pt;text-indent:1.2cm;text-align:justify;font-size:13.5pt}
-.memo-item-num{font-weight:bold}
-.add-center{text-align:center;margin-bottom:4pt}
-.add-parties{text-align:center;margin:8pt 0}
-.add-item{margin-bottom:5pt;padding-left:1.5cm;text-indent:-1.5cm;text-align:justify;font-size:13.5pt}
-.add-sign-section{margin-top:.8cm}
-.add-sign-line{border-top:1px solid #000;margin:0 auto 3pt;width:180px;display:inline-block;vertical-align:bottom}
-.v-table{width:100%;border-collapse:collapse;margin:6pt 0}
-.v-table th,.v-table td{border:1px solid #999;padding:5pt 8pt;font-size:12.5pt;vertical-align:top}
-.v-table th{background:#f5f5f5;text-align:center}
-.v-table .num{text-align:right}
-.v-table .total-row td{font-weight:bold;border-top:2px solid #999}
-
-/* Print */
-@page{size:A4;margin:.8cm .9cm .8cm 1.1cm}
-@media print{
-  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
-  html,body{background:#fff!important;margin:0;padding:0}
-  #home{display:none!important}
-  .ui{display:none!important}
-  .pbtns{display:none!important}
-  .doc-tabs{display:none!important}
-  .back-home{display:none!important}
-  .section{display:none!important}
-  .section.active{display:block!important}
-  #meet-preview,#mort-preview,#sb-preview,#dl-preview{display:block!important}
-  .doc-wrap{padding:0!important}
-  .doc{border:none!important;padding:0.5cm 1cm!important;margin:0!important;box-shadow:none!important}
-  .doc-page{page-break-after:always}
-  .doc-page:last-child{page-break-after:auto}
-}
-@page{size:A4;margin:1cm}
-@media screen and (max-width:700px){
-  .doc{font-size:3.6vw;padding:4vw 3vw 5vw 4vw}
-  .doc-role-table .td-pad{width:22vw}
-  .doc-role-table td{font-size:3.6vw;word-break:keep-all}
-  .doc-sec-title{padding-left:4vw}
-  .doc-sec-body{padding-left:7vw}
-  .doc-sec-short{padding-left:7vw}
-  .doc-combined{padding-left:7vw}
-  .doc-list{padding-left:9vw}
-  .doc-start{padding-left:4vw}
-  .doc-close{padding-left:4vw}
-  .sign-line{width:120px}
-}
-
-/* Print tip modal */
-.print-tip{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);z-index:9999;align-items:flex-end;justify-content:center}
-.print-tip.show{display:flex}
-.print-tip-box{background:#fff;border-radius:16px 16px 0 0;padding:20px;width:100%;max-width:640px}
-.print-tip-box h3{font-size:17px;font-weight:700;text-align:center;margin-bottom:12px}
-.print-tip-box .step{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #f0f0f0;font-size:15px}
-.print-tip-box .step:last-child{border-bottom:none}
-.print-tip-box .step-ic{font-size:24px;flex-shrink:0}
-.print-tip-close{width:100%;background:#1a3a2a;color:#fff;border:none;padding:14px;border-radius:10px;font-size:16px;font-family:inherit;font-weight:600;margin-top:14px;cursor:pointer}
-
+.add-btn{display:flex;align-items:center;justify-content:center;gap:5px;background:none;border:1.5px dashed #1a3a2a;color:#1a3a2a;padding:10px;border-radius:8px;cursor:pointer;font-size:14px;font-family:inherit;width:100%;margin-top:2px}
+.gen-btn{background:#1a3a2a;color:#fff;border:none;padding:15px;border-radius:10px;font-size:16px;cursor:pointer;font-family:inherit;font-weight:700;width:100%;margin-top:12px}
+.back-home{display:flex;align-items:center;gap:6px;background:none;border:none;color:#1a3a2a;font-size:14px;font-family:inherit;cursor:pointer;padding:6px 0;margin-bottom:8px;font-weight:600}
+.pbtns{display:flex;gap:10px;padding:14px 12px;background:#f0f0eb;border-bottom:1px solid #ddd}
+.pbk{flex:1;background:#fff;color:#333;border:1px solid #bbb;padding:13px 8px;border-radius:10px;cursor:pointer;font-size:15px;font-family:inherit;font-weight:600}
+.ppr{flex:2;background:#1a3a2a;color:#fff;border:none;padding:13px 8px;border-radius:10px;cursor:pointer;font-size:15px;font-family:inherit;font-weight:700}
+.doc-tabs{display:flex;gap:6px;padding:10px 12px;background:#f0f0eb;flex-wrap:wrap}
+.doc-tab{padding:7px 14px;font-size:13px;border:1px solid #bbb;border-radius:6px;cursor:pointer;background:#fff;font-family:inherit}
+.doc-tab.active{background:#1a3a2a;color:#fff;border-color:#1a3a2a}
+.doc-wrap{padding:10px}
 .print-tip{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.6);z-index:9999;align-items:flex-end;justify-content:center}
 .print-tip.show{display:flex}
 .print-tip-box{background:#fff;border-radius:16px 16px 0 0;padding:20px;width:100%;max-width:640px}
@@ -184,85 +53,159 @@ body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;
 .print-tip-box .step:last-child{border-bottom:none}
 .print-tip-box .step-ic{font-size:22px;flex-shrink:0}
 .print-tip-close{width:100%;background:#1a3a2a;color:#fff;border:none;padding:13px;border-radius:10px;font-size:16px;font-family:inherit;font-weight:600;margin-top:12px;cursor:pointer}
+/* Document styles */
+.doc{background:#fff;font-family:'TH Sarabun New','Sarabun',Arial,sans-serif;font-size:14pt;line-height:1.65;color:#000;border:1px solid #ddd;padding:.8cm 1.2cm;width:100%}
+.v-table{width:100%;border-collapse:collapse;margin:6pt 0}
+.v-table th,.v-table td{border:1px solid #999;padding:5pt 8pt;font-size:13pt;vertical-align:top}
+.v-table th{background:#f5f5f5;text-align:center}
+.v-table .num{text-align:right}
+.v-table .total-row td{font-weight:bold;border-top:2px solid #999}
+@media screen and (max-width:700px){.doc{font-size:3.6vw;padding:4vw 3vw}}
 @media print{
   *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
-  html,body{background:#fff!important;margin:0;padding:0}
-  .ui,.pbtns,.doc-tabs,.back-home,.gen-btn,.add-btn,.pbk,.ppr,.print-tip{display:none!important}
-  #meet-preview,#mort-preview,#sb-preview,#dl-preview{display:block!important}
+  html,body{background:#fff!important;margin:0!important;padding:0!important}
+  .ui,.pbtns,.doc-tabs,.back-home,.print-tip,.gen-btn,.add-btn{display:none!important}
+  #mort-preview{display:block!important}
   .doc-wrap{padding:0!important}
-  .doc{border:none!important;padding:0.5cm 1cm!important;margin:0!important}
+  .doc{border:none!important;padding:0!important;margin:0!important;font-size:13.5pt!important;line-height:1.65!important}
   .doc-page{page-break-after:always}
   .doc-page:last-child{page-break-after:auto}
 }
-@page{size:A4;margin:1cm}
+@page{size:A4;margin:1.25cm}
 </style>
 </head>
 <body>
-<div class="section active" id="section-mortgage">
+
 <div class="ui" id="mort-form">
-  <button class="back-home" onclick="history.length>1?history.back():document.body.innerHTML='<div style=padding:20px><h2>ปิดหน้าต่างนี้แล้วเปิดไฟล์ index.html</h2></div>'">← หน้าหลัก</button>
+  <button class="back-home" onclick="goBack()">← หน้าหลัก</button>
   <div class="ui-head">
     <h1>📄 เอกสารจดจำนอง</h1>
     <p>กรอกครั้งเดียว ได้ 3 เอกสาร</p>
   </div>
+
+  <!-- 1. ข้อมูลทั่วไป -->
   <div class="card">
     <div class="ct"><span class="n">1</span> ข้อมูลทั่วไป</div>
     <div class="row2">
       <div class="fg"><label>วันที่ทำเอกสาร</label><input type="date" id="doc_date"></div>
       <div class="fg"><label>บิลที่ของวัน</label><input type="text" id="bill_seq" placeholder="01" maxlength="2" inputmode="numeric"></div>
     </div>
-    <div class="fg"><label>สาขาสำนักงานที่ดิน (จังหวัด)</label>
+    <div class="fg"><label>สำนักงานที่ดิน จังหวัด</label>
       <input type="text" id="land_branch" placeholder="เช่น นครราชสีมา">
     </div>
+    <div class="fg"><label>สาขา (ถ้ามี ถ้าไม่มีปล่อยว่าง)</label>
+      <input type="text" id="land_branch_sub" placeholder="เช่น อำเภอโชคชัย">
+    </div>
   </div>
+
+  <!-- 2. ข้อมูลลูกค้า -->
   <div class="card">
     <div class="ct"><span class="n">2</span> ข้อมูลลูกค้า (ผู้จำนอง)</div>
     <div class="fg"><label>ชื่อ-นามสกุลลูกค้า</label>
       <input type="text" id="cust_name" placeholder="นาย/นาง/นางสาว ชื่อ นามสกุล">
     </div>
-    <div class="fg"><label>ที่อยู่ลูกค้า</label>
-      <textarea id="cust_addr" placeholder="บ้านเลขที่ หมู่ ตำบล อำเภอ จังหวัด"></textarea>
+    <div class="fg"><label>ที่อยู่ (บ้านเลขที่ หมู่ ถนน)</label>
+      <input type="text" id="cust_addr1" placeholder="เช่น 123/4 หมู่ 5 ถ.มิตรภาพ">
+    </div>
+    <div class="fg"><label>จังหวัด</label>
+      <select id="cust_province" onchange="onProvChange(this.value)" style="-webkit-appearance:none;padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7;width:100%">
+        <option value="">-- เลือกจังหวัด --</option>
+        <option value="กรุงเทพมหานคร">กรุงเทพมหานคร</option>
+        <option value="กาญจนบุรี">กาญจนบุรี</option>
+        <option value="ขอนแก่น">ขอนแก่น</option>
+        <option value="ชลบุรี">ชลบุรี</option>
+        <option value="นครราชสีมา"  selected>นครราชสีมา</option>
+        <option value="นครศรีธรรมราช">นครศรีธรรมราช</option>
+        <option value="บุรีรัมย์">บุรีรัมย์</option>
+        <option value="ภูเก็ต">ภูเก็ต</option>
+        <option value="ระยอง">ระยอง</option>
+        <option value="สงขลา">สงขลา</option>
+        <option value="สุราษฎร์ธานี">สุราษฎร์ธานี</option>
+        <option value="สุรินทร์">สุรินทร์</option>
+        <option value="อุดรธานี">อุดรธานี</option>
+        <option value="เชียงใหม่">เชียงใหม่</option>
+      </select>
+    </div>
+    <div class="fg"><label>อำเภอ/เขต</label>
+      <select id="cust_amphoe" onchange="onAmphoeChange(this.value)" style="-webkit-appearance:none;padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7;width:100%">
+        <option value="">-- เลือกอำเภอ --</option>
+      </select>
+    </div>
+    <div class="fg"><label>ตำบล/แขวง</label>
+      <select id="cust_tambon" style="-webkit-appearance:none;padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7;width:100%">
+        <option value="">-- เลือกตำบล --</option>
+      </select>
     </div>
   </div>
+
+  <!-- 3. รายละเอียดจำนอง -->
   <div class="card">
     <div class="ct"><span class="n">3</span> รายละเอียดจำนอง</div>
     <div class="row2">
-      <div class="fg"><label>วงเงินจำนอง (ตัวเลข)</label>
-        <input type="text" id="m_amt" inputmode="numeric" placeholder="เช่น 2000000" oninput="syncMortBaht()">
+      <div class="fg"><label>วงเงิน (ตัวเลข บาท)</label>
+        <input type="text" id="m_amt" inputmode="numeric" placeholder="เช่น 2000000" oninput="syncBaht('m_amt','m_amt_t')">
       </div>
-      <div class="fg"><label>ตัวอักษร (อัตโนมัติ)</label>
+      <div class="fg"><label>ตัวอักษร</label>
         <input type="text" id="m_amt_t" class="auto" readonly>
       </div>
     </div>
-    <div class="fg"><label>ดอกเบี้ย % ต่อปี</label><input type="text" id="m_rate" placeholder="เช่น 15" inputmode="decimal"></div>
-    <div class="fg"><label>วันที่สัญญาจำนอง</label><input type="date" id="contract_date"></div>
-  </div>
-  <div class="card">
-    <div class="ct"><span class="n">4</span> บันทึกข้อตกลง — ข้อที่ต้องการปริ้น</div>
-    <div class="chips">
-      <label><input type="checkbox" class="memo-cb" value="1" checked> ข้อ 1</label>
-      <label><input type="checkbox" class="memo-cb" value="2" checked> ข้อ 2</label>
-      <label><input type="checkbox" class="memo-cb" value="3"> ข้อ 3</label>
-      <label><input type="checkbox" class="memo-cb" value="4"> ข้อ 4</label>
+    <div class="fg"><label>ดอกเบี้ย % ต่อปี</label>
+      <input type="text" id="m_rate" placeholder="เช่น 15" inputmode="decimal">
     </div>
-    <p style="font-size:11px;color:#888;margin-top:8px">ปริ้น 1-2 ก่อน แล้วค่อยปริ้น 3-4 ทีหลัง — เนียนต่อกันเป็นเอกสารเดียว</p>
+    <div class="fg"><label>วันที่สัญญาจำนอง</label>
+      <input type="date" id="contract_date">
+    </div>
   </div>
+
+  <!-- 4. บันทึกข้อตกลง -->
+  <div class="card">
+    <div class="ct"><span class="n">4</span> บันทึกข้อตกลง</div>
+    <div class="fg"><label>ประเภทหลักทรัพย์ในข้อ 1</label>
+      <select id="col_type" style="-webkit-appearance:none;padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7;width:100%">
+        <option value="โฉนดที่ดิน">โฉนดที่ดิน</option>
+        <option value="น.ส.3ก.">น.ส.3ก.</option>
+        <option value="น.ส.3">น.ส.3</option>
+        <option value="น.ส.3ข.">น.ส.3ข.</option>
+        <option value="ห้องชุด">ห้องชุด</option>
+      </select>
+    </div>
+    <div class="fg">
+      <label>ข้อ 5 (ถ้ามี — ปล่อยว่างถ้าไม่มี)</label>
+      <textarea id="memo_item5" placeholder="เช่น ผู้จำนองยินยอมให้..." rows="2" style="padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7;width:100%;resize:vertical"></textarea>
+    </div>
+    <div class="fg"><label>เลือกข้อที่ต้องการปริ้น</label>
+      <div class="chips" style="margin-top:6px;flex-direction:column;gap:8px">
+        <label><input type="radio" name="memo_mode" value="12" checked> ข้อ 1-2 (พิมพ์ 1-2 เว้นที่ 3-4-5)</label>
+        <label><input type="radio" name="memo_mode" value="34"> ข้อ 3-4 (พิมพ์เฉพาะ 3-4 เว้นที่อื่น)</label>
+        <label><input type="radio" name="memo_mode" value="5"> ข้อ 5 เท่านั้น (ต้องกรอกข้อ 5 ด้านบน)</label>
+        <label><input type="radio" name="memo_mode" value="1234"> ข้อ 1-4 ทั้งหมด</label>
+        <label><input type="radio" name="memo_mode" value="12345"> ข้อ 1-5 ทั้งหมด</label>
+      </div>
+    </div>
+    <p style="font-size:11px;color:#888;margin-top:6px">💡 แต่ละข้อล็อกตำแหน่ง — ปริ้นซ้ำกระดาษเดิมได้</p>
+  </div>
+
+  <!-- 5. ใบสำคัญจ่าย -->
   <div class="card">
     <div class="ct"><span class="n">5</span> ใบสำคัญจ่าย — วิธีชำระเงิน</div>
     <div id="pay-box"></div>
     <button class="add-btn" onclick="addPay()">+ เพิ่มรายการชำระ</button>
   </div>
+
+  <!-- 6. เลือกเอกสาร -->
   <div class="card">
     <div class="ct"><span class="n">6</span> เลือกเอกสารที่ต้องการสร้าง</div>
     <div class="chips">
       <label><input type="checkbox" class="doc-cb" value="memo" checked> บันทึกข้อตกลง</label>
-      <label><input type="checkbox" class="doc-cb" value="addendum" checked> ข้อตกลงต่อท้าย</label>
       <label><input type="checkbox" class="doc-cb" value="voucher" checked> ใบสำคัญจ่าย</label>
+      <label><input type="checkbox" class="doc-cb" value="addendum" checked> ข้อตกลงต่อท้าย</label>
     </div>
   </div>
+
   <button class="gen-btn" onclick="genMortgage()">📄 สร้างเอกสารจำนอง</button>
 </div>
-<div id="mort-preview">
+
+<div id="mort-preview" style="display:none">
   <div class="pbtns">
     <button class="pbk" onclick="showMortForm()">← แก้ไข</button>
     <button class="ppr" onclick="showPrintTip()">🖨️ พิมพ์</button>
@@ -270,38 +213,30 @@ body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;
   <div class="doc-tabs" id="mort-tabs"></div>
   <div class="doc-wrap" id="mort-doc-out"></div>
 </div>
-</div>
+
 <div class="print-tip" id="print-modal" onclick="if(event.target===this)closePrintTip()">
   <div class="print-tip-box">
     <h3>🖨️ วิธีพิมพ์เอกสาร</h3>
-    <div class="step"><span class="step-ic">1️⃣</span><span>กดปุ่ม <strong>แชร์</strong> ที่แถบล่างของ Safari</span></div>
-    <div class="step"><span class="step-ic">2️⃣</span><span>เลือก <strong>Print / พิมพ์</strong></span></div>
-    <div class="step"><span class="step-ic">3️⃣</span><span>เลือกเครื่องพิมพ์ กด <strong>Print</strong></span></div>
+    <div class="step"><span class="step-ic">1️⃣</span><span>กดปุ่ม <b>แชร์</b> ที่แถบล่าง Safari</span></div>
+    <div class="step"><span class="step-ic">2️⃣</span><span>เลือก <b>Print / พิมพ์</b></span></div>
+    <div class="step"><span class="step-ic">3️⃣</span><span>ปิด Headers and Footers → Print</span></div>
     <button class="print-tip-close" onclick="closePrintTip()">เข้าใจแล้ว</button>
   </div>
 </div>
+
 <script>
+function goBack(){if(history.length>1){history.back();}else{location.href='index.html';}}
+function showPrintTip(){document.getElementById('print-modal').classList.add('show');try{window.print();}catch(e){}}
+function closePrintTip(){document.getElementById('print-modal').classList.remove('show');}
+function showMortForm(){document.getElementById('mort-form').style.display='block';document.getElementById('mort-preview').style.display='none';window.scrollTo(0,0);}
 
-// ══ NAVIGATION ══
-function showSection(name){
-  document.getElementById('home').style.display='none';
-  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-  document.getElementById('section-'+name).classList.add('active');
-  window.scrollTo(0,0);
-}
-function goHome(){
-  document.getElementById('home').style.display='block';
-  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-  window.scrollTo(0,0);
-}
-
-// ══ THAI BAHT ══
+// ── THAI BAHT ──
 function toBaht(v){
-  const n=parseInt(String(v).replace(/[,\s]/g,''));
+  var n=parseInt(String(v).replace(/[,\s]/g,''));
   if(!n||isNaN(n))return'';
-  const o=['','หนึ่ง','สอง','สาม','สี่','ห้า','หก','เจ็ด','แปด','เก้า'];
+  var o=['','หนึ่ง','สอง','สาม','สี่','ห้า','หก','เจ็ด','แปด','เก้า'];
   function s(x){if(!x)return'';if(x<10)return o[x];
-    if(x<100){const t=Math.floor(x/10),u=x%10;let r=t===1?'สิบ':t===2?'ยี่สิบ':o[t]+'สิบ';if(u===1&&t>0)r+='เอ็ด';else if(u)r+=o[u];return r}
+    if(x<100){var t=Math.floor(x/10),u=x%10;var r=t===1?'สิบ':t===2?'ยี่สิบ':o[t]+'สิบ';if(u===1&&t>0)r+='เอ็ด';else if(u)r+=o[u];return r;}
     if(x<1e3)return o[Math.floor(x/100)]+'ร้อย'+s(x%100);
     if(x<1e4)return o[Math.floor(x/1000)]+'พัน'+s(x%1000);
     if(x<1e5)return s(Math.floor(x/1e4))+'หมื่น'+s(x%1e4);
@@ -309,280 +244,413 @@ function toBaht(v){
     return s(Math.floor(x/1e6))+'ล้าน'+s(x%1e6);}
   return s(n)+'บาทถ้วน';
 }
-function fmtN(v){const n=parseInt(String(v).replace(/[,\s]/g,''));return isNaN(n)?v:n.toLocaleString('th-TH')}
-function gv(id){const e=document.getElementById(id);return e?e.value.trim():''}
+function fmtN(v){var n=parseInt(String(v).replace(/[,\s]/g,''));return isNaN(n)?v||'..........':n.toLocaleString('th-TH');}
+function gv(id){var e=document.getElementById(id);return e?e.value.trim():'';}
+function syncBaht(src,tgt){var el=document.getElementById(tgt);if(el)el.value=toBaht(gv(src).replace(/[,\s]/g,''));}
+function getSelText(id){var el=document.getElementById(id);if(!el)return'';if(el.tagName==='SELECT'){return el.options[el.selectedIndex]?el.options[el.selectedIndex].text:'';}return el.value;}
 
-// ══ DATE UTILS ══
+// ── DATE ──
 function thaiDate(d){
   if(!d)return'......';
-  const dt=new Date(d);if(isNaN(dt))return d;
-  const m=['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
-  return`${dt.getDate()} ${m[dt.getMonth()]} ${dt.getFullYear()+543}`;
+  var dt=new Date(d);if(isNaN(dt))return d;
+  var m=['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+  return dt.getDate()+' '+m[dt.getMonth()]+' '+(dt.getFullYear()+543);
 }
 function shortDate(d){
   if(!d)return'......';
-  const dt=new Date(d);if(isNaN(dt))return d;
-  return`${dt.getDate()}/${dt.getMonth()+1}/${String(dt.getFullYear()+543).slice(-2)}`;
-}
-function meetShortDate(d){
-  if(!d)return'......';
-  const dt=new Date(d);
-  return`${dt.getDate()} / ${dt.getMonth()+1} / ${String(dt.getFullYear()+543).slice(-2)}`;
+  var dt=new Date(d);if(isNaN(dt))return d;
+  return dt.getDate()+'/'+(dt.getMonth()+1)+'/'+String(dt.getFullYear()+543).slice(-2);
 }
 function billNo(d,seq){
-  if(!d)return`......-${seq||'01'}`;
-  const dt=new Date(d);
-  const yy=String(dt.getFullYear()+543).slice(-2);
-  const mm=String(dt.getMonth()+1).padStart(2,'0');
-  const dd=String(dt.getDate()).padStart(2,'0');
-  return`${yy}${mm}${dd}-${(seq||'01').padStart(2,'0')}`;
+  if(!d)return'......-'+(seq||'01');
+  var dt=new Date(d);
+  var yy=String(dt.getFullYear()+543).slice(-2);
+  var mm=String(dt.getMonth()+1).padStart(2,'0');
+  var dd=String(dt.getDate()).padStart(2,'0');
+  return yy+mm+dd+'-'+(seq||'01').padStart(2,'0');
 }
-function fmtTime(t){return t?t.replace(':','.')+' น.':'......'}
 
+// ── ADDRESS DATA EMBEDDED ──
+var ADDR={"นครราชสีมา": {"เมืองนครราชสีมา": ["ในเมือง", "โพธิ์กลาง", "หัวทะเล", "บ้านเกาะ", "บ้านใหม่", "พลกรัง", "ท่าช้าง", "จอหอ", "โคกกรวด", "ไชยมงคล", "หนองจะบก", "หนองระเวียง", "พะเนา", "หนองไผ่ล้อม", "หมื่นไวย", "พุดซา", "สุรนารี", "สีมุม", "ตลาด", "พระพุทธ", "หนองบัวศาลา", "บึงเสนาท", "มะเริง", "หนองกระทุ่ม"], "โชคชัย": ["กระโทก", "พลับพลา", "ท่าอ่าง", "ทุ่งอรุณ", "ท่าลาดขาว", "ท่าจะหลุง", "ท่าเยี่ยม", "โชคชัย", "ละลมใหม่พัฒนา", "ดอนมัน"], "ครบุรี": ["แชะ", "ครบุรี", "โคกกระชาย", "จระเข้หิน", "มาบตะโกเอน", "อรพิมพ์", "บ้านใหม่", "ลำเพียก", "ครบุรีใต้", "ตะเคียน", "บึงพะไล", "สระว่านพระยา", "บึงสำโรง"], "เสิงสาง": ["เสิงสาง", "สระตะเคียน", "โนนสมบูรณ์", "กุดโบสถ์", "สุขไพบูลย์", "บ้านราษฎร์"], "คง": ["เมืองคง", "คูขาด", "เทพาลัย", "ตาจั่น", "บ้านปรางค์", "หนองมะนาว", "หนองบัว", "โนนเต็ง", "ดอนใหญ่", "โนนสำราญ", "ขามสมบูรณ์"], "บ้านเหลื่อม": ["บ้านเหลื่อม", "วังโพธิ์", "โคกกระเบื้อง", "ช่อระกา"], "จักราช": ["จักราช", "ท่าช้าง", "ทองหลาง", "สีสุก", "หินโคน", "หนองขาม", "หนองพลวง", "หนองงูเหลือม", "คลองเมือง", "ช้างทอง", "หนองยาง"], "ด่านขุนทด": ["กุดพิมาน", "ด่านขุนทด", "ด่านนอก", "ด่านใน", "ตะเคียน", "บ้านเก่า", "บึงอ้อ", "โนนเมืองพัฒนา", "หนองกราด", "หนองสรวง", "หินดาด", "ห้วยบง", "หนองบัวตะเกียด"], "โนนไทย": ["โนนไทย", "ด่านจาก", "กำปัง", "สำโรง", "ค้างพลู", "บ้านวัง", "บัลลังก์", "สายออ", "ถนนโพธิ์", "มะค่า"], "โนนสูง": ["โนนสูง", "ใหม่", "โตนด", "ธารปราสาท", "หลุมข้าว", "นากระโทก", "พลสงคราม", "ดอนชมพู", "ขามเฒ่า", "ดอนหวาย", "ลำคอหงษ์", "คำผง", "โนน", "ระแงะ", "หนองหว้า"], "ขามสะแกแสง": ["ขามสะแกแสง", "โนนเมือง", "เมืองนาท", "ชีวึก", "พะงาด", "หนองสัง", "บึงพัฒนา"], "บัวใหญ่": ["บัวใหญ่", "ห้วยยาง", "เสมาใหญ่", "ดอนตะหนิน", "หนองบัวสะอาด", "วังหิน", "โนนทองหลาง", "สีดา", "ด่านช้าง", "ขุนทอง", "หินตะก้อง", "บัวสะอาด"], "ประทาย": ["ประทาย", "กระทุ่มราย", "วังไม้แดง", "ตลาดไทร", "หนองพลวง", "หนองค่าย", "หันห้วยทราย", "ดอนมัน", "นางรำ", "โนนเพ็ด", "ทุ่งสว่าง", "โคกกลาง", "เมืองโดน"], "ปักธงชัย": ["เมืองปัก", "ตะขบ", "โคกไทย", "สำโรง", "ตูม", "นกออก", "ดอน", "ตะคุ", "กบินทร์", "สะแกราช", "ลำนางแก้ว", "ภูหลวง", "ธงชัยเหนือ", "สุขเกษม", "เกษตรทรัพย์", "บ่อปลาทอง"], "พิมาย": ["ในเมือง", "สัมฤทธิ์", "โบสถ์", "กระเบื้องใหญ่", "ท่าหลวง", "รังกาใหญ่", "ชีวาน", "นิคมสร้างตนเอง", "ดงใหญ่", "ธารละหลอด", "หนองระเวียง"], "ห้วยแถลง": ["ห้วยแถลง", "ทับสวาย", "เมืองพะไล", "โนนอุดม", "หลุ่งประดู่", "หลุ่งตะเคียน", "งิ้ว", "กงรถ", "หินดาด", "บึงทวาย"], "ชุมพวง": ["ชุมพวง", "ประสุข", "หนองหลัก", "ไพล", "โนนรัง", "หนองแวง", "เมืองยาง", "สาหร่าย", "ตลาดไทร", "โนนตูม", "โนนยอ"], "สูงเนิน": ["สูงเนิน", "เสมา", "โคราช", "บุ่งขี้เหล็ก", "นากลาง", "หนองตะไก้", "โนนค่า", "โค้งยาง", "มะเกลือเก่า", "มะเกลือใหม่", "น้ำซับ", "หนองม่วงไข่"], "ขามทะเลสอ": ["ขามทะเลสอ", "โป่งแดง", "หนองสรวง", "เมืองเกษตร", "บึงอ้อ"], "สีคิ้ว": ["สีคิ้ว", "บ้านหัน", "กฤษณา", "ลาดบัวขาว", "หนองหญ้าขาว", "กุดน้ำใส", "หนองน้ำใส", "ซับผาปูน", "คลองไผ่", "วังโรงใหญ่", "มิตรภาพ", "คลองศาลา"], "ปากช่อง": ["กลางดง", "จันทึก", "วังกะทะ", "หมูสี", "หนองสาหร่าย", "ขนงพระ", "โป่งตาลอง", "คลองม่วง", "หนองน้ำแดง", "วังไทร", "พญาเย็น"], "หนองบุญมาก": ["หนองบุญมาก", "สารภี", "ไทยเจริญ", "หนองหัวแรต", "แหลมทอง", "หนองตะไก้", "บ้านใหม่", "ลุงเขว้า"], "แก้งสนามนาง": ["แก้งสนามนาง", "โนนสำราญ", "บึงพะไล", "สีสุก", "บึงสำโรง"], "โนนแดง": ["โนนแดง", "โนนตาเถร", "สำพะเนียง", "วังหิน", "ดอนยาวใหญ่"], "วังน้ำเขียว": ["วังน้ำเขียว", "วังหมี", "ระเริง", "อุดมทรัพย์", "ไทยสามัคคี"], "เทพารักษ์": ["เมืองยาง", "สระพระ", "ทุ่งอรุณ", "วังยายทอง"], "เมืองยาง": ["เมืองยาง", "กระเบื้อง", "ละหานปลาค้าว", "บุ่งเลิศ"], "พระทองคำ": ["พระทองคำ", "ทัพรั้ง", "หนองหอย", "มาบกราด", "พังเทียม"], "ลำทะเมนชัย": ["ลำทะเมนชัย", "ช่องแมว", "ไพล", "บ้านยาง"], "บัวลาย": ["บัวลาย", "เมืองพะไล", "โนนจาน", "หนองหว้า"], "สีดา": ["สีดา", "โพนทอง", "โนนประดู่", "สามเมือง", "หนองตาดใหญ่"], "เฉลิมพระเกียรติ": ["เฉลิมพระเกียรติ", "พระพุทธ", "ท่าช้าง", "หนองงูเหลือม", "หนองยาง"]}, "กรุงเทพมหานคร": {"พระนคร": ["พระบรมมหาราชวัง", "วังบูรพาภิรมย์", "วัดราชบพิธ", "สำราญราษฎร์", "ศาลเจ้าพ่อเสือ", "เสาชิงช้า", "บวรนิเวศ", "ตลาดยอด", "บางขุนพรหม", "บ้านพานถม"], "ดุสิต": ["ดุสิต", "วชิรพยาบาล", "สวนจิตรลดา", "สี่แยกมหานาค", "ถนนนครไชยศรี"], "บางรัก": ["มหาพฤฒาราม", "สีลม", "สุริยวงศ์", "บางรัก", "สี่พระยา"], "สาทร": ["ทุ่งมหาเมฆ", "ทุ่งวัดดอน", "ยานนาวา", "สาทร", "บางโพงพาง"], "บึงกุ่ม": ["คลองกุ่ม", "นวมินทร์", "นวลจันทร์"], "ลาดพร้าว": ["ลาดพร้าว", "จรเข้บัว"], "จตุจักร": ["จตุจักร", "เสนานิคม", "จันทรเกษม", "ลาดยาว", "ตลาดบางเขน"], "ห้วยขวาง": ["ห้วยขวาง", "บางกะปิ", "สามเสนนอก"], "ปทุมวัน": ["ปทุมวัน", "รองเมือง", "วังใหม่", "ลุมพินี"], "บางนา": ["บางนา"], "มีนบุรี": ["มีนบุรี", "แสนแสบ"], "ลาดกระบัง": ["ลาดกระบัง", "คลองสาม", "คลองสองต้นนุ่น", "คลองสามประเวศ", "ลำปลาทิว", "ทับยาว", "ขุมทอง"], "คลองสาน": ["สมเด็จเจ้าพระยา", "คลองสาน", "บางลำภูล่าง", "บางลำภูล่าง"], "ธนบุรี": ["ตลาดพลู", "วัดท่าพระ", "บุคคโล", "ทวีวัฒนา", "ท่าเสา", "บางหว้า", "บางไผ่"], "บางกอกใหญ่": ["วัดอรุณ", "วัดท่าพระ"], "บางกอกน้อย": ["ศิริราช", "บ้านช่างหล่อ", "บางขุนนนท์", "บางขุนศรี", "อรุณอมรินทร์"], "ตลิ่งชัน": ["คลองชักพระ", "ตลิ่งชัน", "ฉิมพลี", "บางพรม", "บางระมาด", "บางเชือกหนัง"]}, "เชียงใหม่": {"เมืองเชียงใหม่": ["ศรีภูมิ", "พระสิงห์", "หายยา", "ช้างม่อย", "ช้างคลาน", "วัดเกต", "ช้างเผือก", "สุเทพ", "แม่เหียะ", "ป่าแดด", "หนองหอย", "ท่าศาลา", "หนองป่าครั่ง", "ฟ้าฮ่าม", "ป่าตัน", "สันผีเสื้อ"], "จอมทอง": ["บ้านหลวง", "ข่วงเปา", "สบเตี๊ยะ", "บ้านแปะ", "ดอยแก้ว", "แม่สอย"], "สันกำแพง": ["สันกำแพง", "ทรายมูล", "ร้องวัวแดง", "บวกค้าง", "แช่ช้าง", "ออนใต้", "แม่ปูคา", "ห้วยทราย", "ต้นเปา", "สันกลาง"], "หางดง": ["หางดง", "หนองแก๋ว", "บ้านปง", "น้ำแพร่", "ขุนคง", "สบแม่ข่า", "บ้านดง", "ฝายแก้ว", "หนองควาย", "บ้านแหวน", "สองแคว"], "สันทราย": ["สันทรายหลวง", "สันทรายน้อย", "สันพระเนตร", "แม่แฝก", "แม่แฝกใหม่", "สันนาเม็ง", "หนองแหย่ง", "ป่าไผ่", "หนองจ๊อม", "เมืองเล็น"], "ดอยสะเก็ด": ["เชิงดอย", "สันปูเลย", "ลวงเหนือ", "ป้านกี้", "เทพเสด็จ", "แม่คือ", "ตลาดขวัญ", "สำราญราษฎร์", "แม่ฮ้อยเงิน", "แม่โป่ง", "ป่าป้อง", "สง่าบ้าน", "ป่าเมี่ยง"], "สารภี": ["ยางเนิ้ง", "สารภี", "ชมภู", "ไชยสถาน", "ขัวมุง", "หนองแฝก", "หนองผึ้ง", "ท่ากว้าง", "ดอนแก้ว", "ท่าวังตาล", "สันทราย", "ป่าบง"], "ฝาง": ["เวียง", "ม่อนปิ่น", "บ้านหลวง", "สันทราย", "แม่งอน", "แม่สูน", "โป่งน้ำร้อน"], "แม่อาย": ["แม่อาย", "แม่สาว", "สันต้นหมื้อ", "แม่นาวาง", "ท่าตอน", "บ้านหลวง"], "พร้าว": ["เวียง", "ทุ่งหลวง", "ป่าตุ้ม", "ป่าไหน่", "สันทราย", "บ้านโป่ง", "น้ำแพร่", "เขื่อนผาก", "แม่แวน", "แม่ปั๋ง", "โหล่งขอด"]}, "ขอนแก่น": {"เมืองขอนแก่น": ["ในเมือง", "สาวะถี", "บ้านทุ่ม", "เมืองเก่า", "พระลับ", "บึงเนียม", "โนนท่อน", "สาวะถี"], "น้ำพอง": ["น้ำพอง", "วังชัย", "หนองกุง", "บัวใหญ่", "สะอาด", "ม่วงหวาน", "บ้านขาม", "พังทุย", "กุดน้ำใส", "หนองโก", "ทรายมูล", "ท่ากระเสริม", "พระธาตุ", "วังม่วง"], "บ้านไผ่": ["บ้านไผ่", "ในเมือง", "เมืองเพีย", "บ้านลาน", "แคนเหนือ", "ภูเหล็ก", "ป่าปอ", "หินตั้ง", "หนองน้ำใส", "หัวหนอง"], "ชุมแพ": ["ชุมแพ", "โนนหัน", "นาหนองทุ่ม", "หนองไผ่", "ไชยสอ", "วังหินลาด", "นาเพียง", "หนองเขียด", "หนองเสาเล้า", "โนนอุดม"], "พล": ["เมืองพล", "โจดหนองแก", "เก่างิ้ว", "หนองมะเขือ", "หนองแวงโสกพระ", "เพ็กใหญ่", "โนนข่า", "สาวะถี", "หัวทุ่ง"], "กระนวน": ["หนองโก", "หนองกุงใหญ่", "ห้วยโจด", "ห้วยยาง", "บ้านฝาง", "ดูนสาด", "หนองโน", "น้ำอ้อม", "หัวนาคำ"], "หนองเรือ": ["หนองเรือ", "บ้านเม็ง", "บ้านกง", "ยางคำ", "จระเข้", "โนนทอง", "กุดกว้าง", "โนนทัน", "โนนสะอาด", "บ้านผือ"]}, "อุดรธานี": {"เมืองอุดรธานี": ["หมากแข้ง", "นิคมสงเคราะห์", "บ้านขาว", "หนองบัว", "บ้านตาด", "นาข่า", "บ้านจั่น", "หนองนาคำ", "กุดสระ", "นาดี", "สามพร้าว", "หนองไฮ", "หนองขอนกว้าง", "หมูม่น", "เชียงพิณ", "สาวะถี", "หนองบัวบาน", "โนนสูง", "หนองไผ่"], "กุมภวาปี": ["ตูมใต้", "พันดอน", "เวียงคำ", "แชแล", "หนองหว้า", "ผาสุก", "ท่าลี่", "กุมภวาปี", "เชียงแหว", "ห้วยเกิ้ง", "เสอเพลอ", "สีออ", "ปะโค", "แม่นาเรือ", "บ้านฝาง"], "หนองหาน": ["หนองหาน", "หนองเม็ก", "พังงู", "หนองไผ่", "สะแบง", "น้ำแคน", "โพนงาม", "เสอเพลอ", "สร้างก้อง", "บ้านเชียง", "ผักตบ", "หนองสระปลา"], "บ้านผือ": ["บ้านผือ", "หายโศก", "เขือน้ำ", "คำบง", "ไชยวาน", "เมืองพาน", "คำด้วง", "บ้านค้อ", "หนองหัวคู", "ข้าวสาร", "จำปาโมง", "กลางใหญ่", "เมืองพาน", "โนนทอง"]}, "สุรินทร์": {"เมืองสุรินทร์": ["ในเมือง", "ตั้งใจ", "เพี้ยราม", "นาดี", "ท่าสว่าง", "สลักได", "ตาอ็อง", "สำโรง", "แกน้อย", "สวาย", "ราม", "บุฤๅษี", "ตระแสง", "แสลงพัน", "คอโค", "สะอาดสมบูรณ์"], "ปราสาท": ["กังแอน", "ทมอ", "ไพล", "ปรือ", "ทุ่งมน", "บ้านไทร", "โยนก", "โชคนาสาม", "เชื้อเพลิง", "ปราสาททนง", "ตานี", "บ้านพลวง", "กันตวจระมวล", "สมุด", "ประทัดบุ"], "กาบเชิง": ["กาบเชิง", "คูตัน", "โคกตะเคียน", "ตะเคียน", "แนงมุด", "โนนแท่น", "ทุ่งทอง"], "สังขะ": ["สังขะ", "ขอนแตก", "ดม", "พระแก้ว", "บ้านจารย์", "กระเทียม", "สะกาด", "ตาคง", "บ้านชบ", "เทพรักษา"], "ลำดวน": ["ลำดวน", "โชคเหนือ", "อู่โลก", "ตรำดม", "ตระเปียงเตีย"]}, "บุรีรัมย์": {"เมืองบุรีรัมย์": ["ในเมือง", "อิสาณ", "เสม็ด", "บ้านบัว", "สะแกโพรง", "สะแกซำ", "กลันทา", "กระสัง", "เมืองฝาง", "ถลุงเหล็ก", "หนองตาด", "ลุมปุ๊ก", "สองห้อง", "บัวทอง", "ชุมเห็ด", "หลักเขต", "สวายจีก", "บ้านยาง", "พระครู", "ถนนโพธิ์", "ร่อนทอง"], "นางรอง": ["นางรอง", "สะเดา", "ชุมแสง", "หนองโบสถ์", "หนองกง", "ถนนหัก", "หนองไทร", "ก้านเหลือง", "บ้านสิงห์", "ลำไทรโยง", "ทรัพย์พระยา", "หนองยายพิมพ์", "หัวถนน", "ทุ่งแสงทอง", "หนองโสน"], "กระสัง": ["กระสัง", "ลำดวน", "สองชั้น", "สูงเนิน", "หนองเต็ง", "เมืองไผ่", "ชุมแสง", "บ้านปรือ", "ห้วยสำราญ", "กันทรารมย์", "ศิลา"], "ประโคนชัย": ["ประโคนชัย", "แสลงโทน", "บ้านไทร", "ละลวด", "โคกม้า", "โคกตูม", "ปังกู", "โคกย่าง", "เขาดินเหนือ", "ไพศาล", "ตะโกตาพิ", "จรเข้มาก", "โคกเพชร", "บ้านระดู"], "ลำปลายมาศ": ["ลำปลายมาศ", "หนองคู", "แสลงพัน", "ทะเมนชัย", "ตลาดโพธิ์", "หนองกะทิง", "โคกกลาง", "โคกสะอาด", "เมืองแฝก", "บ้านยาง", "ผไทรวิมาน", "หินโคน", "บ้านด่าน", "ชุมแสง", "โคกล่าม"]}, "ชลบุรี": {"เมืองชลบุรี": ["บางปลาสร้อย", "มะขามหย่ง", "บ้านโขด", "แสนสุข", "บ้านสวน", "หนองรี", "นาป่า", "บ้านปึก", "ห้วยกะปิ", "เสม็ด", "อ่างศิลา", "สุรศักดิ์", "หนองข้างคอก", "ดอนหัวฬ่อ", "บางทราย", "คลองตำหรุ", "บึง", "โพธิ์แก้ว"], "บางละมุง": ["บางละมุง", "หนองปรือ", "หนองปลาไหล", "โป่ง", "เขาไม้แก้ว", "บึง", "หนองชาก", "นาเกลือ", "เกาะลอย", "บางลึก"], "ศรีราชา": ["ศรีราชา", "สุรศักดิ์", "ทุ่งสุขลา", "บึง", "บาง", "หนองขาม", "เจ็ดเนิน"], "พานทอง": ["พานทอง", "หนองตำลึง", "มาบโป่ง", "หนองกะขะ", "หนองหงษ์", "โคกขี้หนอน", "บ้านเก่า", "หน้าประดู่", "บางนาง", "เกาะลอย", "บ้านช้าง"], "พนัสนิคม": ["พนัสนิคม", "หน้าพระธาตุ", "วัดหลวง", "บ้านเซิด", "หนองปรือ", "หนองขยาด", "ทุ่งขวาง", "หนองเหียง", "นาวังหิน", "บ้านช้าง", "กุฎโง้ง", "หนองไม้แดง", "บึงสนั่น", "นามะตูม", "หมอนนาง", "สระสี่เหลี่ยม", "วัดโบสถ์", "หนองยาว", "บ้านนา"], "สัตหีบ": ["สัตหีบ", "นาจอมเทียน", "พลูตาหลวง", "บางเสร่", "แสมสาร"]}, "ระยอง": {"เมืองระยอง": ["ท่าประดู่", "เชิงเนิน", "ตะพง", "ปากน้ำ", "เนินพระ", "กะเฉด", "ทับมา", "น้ำคอก", "หนองละลอก", "หนองตะพาน", "มาบตาพุด", "สำนักทอง"], "แกลง": ["ทางเกวียน", "วังหว้า", "ชากโดน", "เนินฆ้อ", "กร่ำ", "ชากพงศ์", "แกลง", "บ้านนา", "ทุ่งควายกิน", "กองดิน", "อ่าวกระแจะ", "สองสลึง", "ห้วยยาง", "มะขามน้อย"], "ปลวกแดง": ["ปลวกแดง", "มาบยางพร", "หนองไร่", "ตาสิทธิ์", "ละหาร", "แม่น้ำคู้"], "บ้านค่าย": ["บ้านค่าย", "หนองละลอก", "หนองตะพาน", "ตาขัน", "บางบุตร", "หนองบัว", "ชากบก"]}, "สงขลา": {"เมืองสงขลา": ["บ่อยาง", "เขารูปช้าง", "เกาะแต้ว", "พะวง", "ทุ่งหวัง", "เกาะยอ"], "หาดใหญ่": ["หาดใหญ่", "ควนลัง", "คลองอู่ตะเภา", "บ้านพรุ", "พะตง", "ทุ่งใหญ่", "คูเต่า", "คลองแห", "คอหงส์", "น้ำน้อย"], "สะเดา": ["สะเดา", "ปริก", "พังลา", "สำนักแต้ว", "ท่าโพธิ์", "สำนักขาม"], "นาทวี": ["นาทวี", "นาหมอศรี", "คลองทราย", "ฉาง", "นาทับ", "สะท้อน", "ทับช้าง", "ประกอบ", "คลองกวาง"], "จะนะ": ["จะนะ", "สะพานไม้แก่น", "นาหว้า", "นาทับ", "น้ำขาว", "ขุนตัดหวาย", "ท่าหมอไทร", "คลองเปียะ", "ตลิ่งชัน", "แค", "คู", "รัตภูมิ"]}, "ภูเก็ต": {"เมืองภูเก็ต": ["ตลาดใหญ่", "ตลาดเหนือ", "รัษฎา", "วิชิต", "ฉลอง", "ราไวย์", "กะรน"], "กะทู้": ["กะทู้", "ป่าตอง", "กมลา"], "ถลาง": ["เทพกษัตรี", "ศรีสุนทร", "เชิงทะเล", "ป่าคลอก", "ไม้ขาว", "สาคู"]}, "สุราษฎร์ธานี": {"เมืองสุราษฎร์ธานี": ["ตลาด", "มะขามเตี้ย", "วัดประดู่", "ขุนทะเล", "บางชนะ", "คลองน้อย", "บางใบไม้", "บางลึก", "บางไทร", "บางโพธิ์", "บางกุ้ง", "คลองฉนาก"], "เกาะสมุย": ["อ่างทอง", "ลิปะน้อย", "หน้าเมือง", "มะเร็ต", "บ่อผุด", "แม่น้ำ"], "เกาะพะงัน": ["เกาะพะงัน", "บ้านใต้", "เกาะเต่า"], "ไชยา": ["ตลาดไชยา", "พุมเรียง", "เลม็ด", "โมถ่าย", "ปากหมาก", "ปากฉลุย", "ทุ่ง", "เวียง", "ดอน"], "ท่าฉาง": ["ท่าฉาง", "ท่าเคย", "คลองไทย", "เขาถ่าน", "เสวียด", "ปากฉลุย"], "พุนพิน": ["ท่าข้าม", "ย่านยาว", "ท่าสะท้อน", "ลีเล็ด", "บางมะเดื่อ", "บางเดือน", "ท่าโรงช้าง", "กรูด", "พุนพิน", "บางงอน", "ศรีวิชัย", "น้ำรอบ", "มะลวน", "หัวเตย", "หนองไทร", "เขาหัวควาย", "ตะปาน"]}, "นครศรีธรรมราช": {"เมืองนครศรีธรรมราช": ["ในเมือง", "ท่าวัง", "คลัง", "ท่าไร่", "ปากนคร", "น้ำตก", "ไชยมนตรี", "มะม่วงสองต้น", "นาเคียน", "ท่างิ้ว", "โพธิ์เสด็จ", "บางจาก", "ปากพูน", "ท่าซัก", "ท่าเรือ"], "ทุ่งสง": ["ปากแพรก", "ชะมาย", "หนองหงส์", "ควนกรด", "นาโพธิ์", "นาไม้ไผ่", "กะปาง", "ที่วัง", "น้ำตก", "ถ้ำใหญ่", "นาหลวงเสน", "เขาโร", "ท่าส้ม", "สระแก้ว", "น้ำตก"], "ปากพนัง": ["ปากพนัง", "คลองน้อย", "ป่าระกำ", "ชะเมา", "คลองกระบือ", "เกาะทวด", "บ้านใหม่", "หูล่อง", "แหลมตะลุมพุก", "ปากแพรก", "ท่าพยา", "บางศาลา", "บางพระ"], "สิชล": ["สิชล", "ทุ่งปรัง", "ฉลอง", "เสาเภา", "เปลี่ยน", "สี่ขีด", "เทพราช", "ท่าตะเภา", "สิชล", "ทุ่งใส"]}, "กาญจนบุรี": {"เมืองกาญจนบุรี": ["บ้านเหนือ", "บ้านใต้", "ปากแพรก", "ท่ามะขาม", "แก่งเสี้ยน", "หนองบัว", "ลาดหญ้า", "วังด้ง", "ช่องสะเดา", "หนองหญ้า", "เกาะสำโรง", "บ้านเก่า", "หนองโสน"], "ท่าม่วง": ["ท่าม่วง", "วังขนาย", "วังศาลา", "ท่าล้อ", "หนองขาว", "ทุ่งทอง", "เขาน้อย", "ม่วงชุม", "บ้านใหม่", "พระแท่น", "หนองตากยา", "ท่าตะคร้อ"], "ท่ามะกา": ["ท่ามะกา", "ท่าไม้", "กรับใหญ่", "พงตึก", "ยางม่วง", "ดอนชะเอม", "ท่าเรือ", "โคกตะบอง", "ดอนขมิ้น", "อุโลกสี่หมื่น", "ดอนสังข์", "หวายเหนียว", "แสนตอ", "สนามแย้", "ท่าเสา", "หนองลาน"], "ไทรโยค": ["ลุ่มสุ่ม", "ท่าเสา", "สิงห์", "ไทรโยค", "วังกระแจะ", "ศรีมงคล", "บ้องตี้"]}};
 
-// ══════════════════════════════
-// MORTGAGE LOGIC
-// ══════════════════════════════
-let payC=0;
-const PAY_TYPES={cash:'เงินสด',draft:'ดราฟท์',transfer:'เงินโอน'};
-function addPay(t='cash'){
-  payC++;const i=payC;const d=document.createElement('div');
+function onProvChange(prov){
+  var ampSel=document.getElementById('cust_amphoe');
+  var tamSel=document.getElementById('cust_tambon');
+  ampSel.innerHTML='<option value="">-- เลือกอำเภอ --</option>';
+  tamSel.innerHTML='<option value="">-- เลือกตำบล --</option>';
+  if(!prov||!ADDR[prov])return;
+  Object.keys(ADDR[prov]).sort().forEach(function(a){
+    var opt=document.createElement('option');opt.value=a;opt.textContent=a;
+    ampSel.appendChild(opt);
+  });
+}
+
+function onAmphoeChange(amp){
+  var tamSel=document.getElementById('cust_tambon');
+  tamSel.innerHTML='<option value="">-- เลือกตำบล --</option>';
+  var prov=document.getElementById('cust_province').value;
+  if(!prov||!amp||!ADDR[prov]||!ADDR[prov][amp])return;
+  ADDR[prov][amp].forEach(function(t){
+    var opt=document.createElement('option');opt.value=t;opt.textContent=t;
+    tamSel.appendChild(opt);
+  });
+}
+
+function loadProvinces(){
+  onProvChange('นครราชสีมา');
+}
+function loadAmphoe(v){onProvChange(v);}
+function loadTambon(v){onAmphoeChange(v);}
+function loadZip(){}
+
+function getCustAddr(){
+  var addr1=gv('cust_addr1');
+  var prov=document.getElementById('cust_province').value;
+  var amp=document.getElementById('cust_amphoe').value;
+  var tam=document.getElementById('cust_tambon').value;
+  var parts=[];
+  if(addr1)parts.push(addr1);
+  if(tam)parts.push('ต.'+tam);
+  if(amp)parts.push('อ.'+amp);
+  if(prov)parts.push('จ.'+prov);
+  return parts.join(' ')||'..........';
+}
+
+// ── PAYMENT ──
+var payC=0;
+var PAY_TYPES={cash:'เงินสด',draft:'ดราฟท์',transfer:'เงินโอน'};
+function addPay(t){
+  t=t||'cash';payC++;var i=payC;
+  var d=document.createElement('div');
   d.className='pay-row';d.id='pay-'+i;
-  d.innerHTML=`<div class="ph">
-    <select onchange="changePayType(${i},this.value)">${Object.entries(PAY_TYPES).map(([k,v])=>'<option value="'+k+'"'+(k===t?' selected':'')+'>'+v+'</option>').join('')}</select>
-    <button onclick="removePay(${i})">ลบ</button>
-  </div><div class="pay-fields" id="pf-${i}">${payFields(i,t)}</div>`;
+  var opts=Object.entries(PAY_TYPES).map(function(kv){return'<option value="'+kv[0]+'"'+(kv[0]===t?' selected':'')+'>'+kv[1]+'</option>';}).join('');
+  d.innerHTML='<div class="ph"><select class="pay-type-sel">'+opts+'</select><button onclick="removePay('+i+')">ลบ</button></div><div class="pay-fields" id="pf-'+i+'">'+payFields(i,t)+'</div>';
+  d.querySelector('.pay-type-sel').onchange=function(){changePay(i,this.value);};
   document.getElementById('pay-box').appendChild(d);
+  var amtEl=document.getElementById('p'+i+'_amt');
+  if(amtEl)amtEl.oninput=function(){syncPayBaht(i);};
 }
 function payFields(i,t){
-  const amtF=`<label>จำนวนเงิน (บาท)</label>
-    <input type="text" id="p${i}_amt" inputmode="numeric" placeholder="เช่น 2,000,000" oninput="syncPayBaht(${i})">
-    <label>ตัวอักษร (อัตโนมัติ)</label>
-    <input type="text" id="p${i}_amt_t" class="auto" readonly>`;
+  var amtF='<label>จำนวนเงิน (บาท)</label><input type="text" id="p'+i+'_amt" inputmode="numeric" placeholder="เช่น 2,000,000"><label>ตัวอักษร</label><input type="text" id="p'+i+'_amt_t" class="auto" readonly>';
   if(t==='cash')return amtF;
-  if(t==='draft')return`<label>เลขที่ดราฟท์</label><input type="text" id="p${i}_dno">
-    <label>ธนาคาร</label><input type="text" id="p${i}_bank">
-    <label>สั่งจ่าย</label><input type="text" id="p${i}_payto">${amtF}`;
-  if(t==='transfer')return`<label>ธนาคาร</label><input type="text" id="p${i}_bank">
-    <label>เลขบัญชี</label><input type="text" id="p${i}_accno">
-    <label>ชื่อบัญชี</label><input type="text" id="p${i}_accname">${amtF}`;
+  if(t==='draft')return'<label>เลขที่ดราฟท์</label><input type="text" id="p'+i+'_dno"><label>ธนาคาร</label><input type="text" id="p'+i+'_bank"><label>สั่งจ่าย</label><input type="text" id="p'+i+'_payto">'+amtF;
+  if(t==='transfer')return'<label>ธนาคาร</label><input type="text" id="p'+i+'_bank"><label>เลขบัญชี</label><input type="text" id="p'+i+'_accno"><label>ชื่อบัญชี</label><input type="text" id="p'+i+'_accname">'+amtF;
   return amtF;
 }
-function syncPayBaht(i){const a=document.getElementById('p'+i+'_amt');const t=document.getElementById('p'+i+'_amt_t');if(a&&t)t.value=toBaht(a.value.replace(/[,\s]/g,''))}
-function changePayType(i,t){document.getElementById('pf-'+i).innerHTML=payFields(i,t)}
-function removePay(i){const e=document.getElementById('pay-'+i);if(e)e.remove()}
-function syncMortBaht(){const el=document.getElementById('m_amt_t');if(el)el.value=toBaht(gv('m_amt').replace(/[,\s]/g,''))}
+function syncPayBaht(i){var a=document.getElementById('p'+i+'_amt');var t=document.getElementById('p'+i+'_amt_t');if(a&&t)t.value=toBaht(a.value.replace(/[,\s]/g,''));}
+function changePay(i,t){document.getElementById('pf-'+i).innerHTML=payFields(i,t);var el=document.getElementById('p'+i+'_amt');if(el)el.oninput=function(){syncPayBaht(i);};}
+function removePay(i){var e=document.getElementById('pay-'+i);if(e)e.remove();}
 function getPayRows(){
-  const rows=[];
-  document.querySelectorAll('.pay-row').forEach(el=>{
-    const i=el.id.replace('pay-','');const tEl=el.querySelector('select');if(!tEl)return;
-    const t=tEl.value;const amt=gv('p'+i+'_amt');const amtFmt=fmtN(amt);const amtT=toBaht(amt.replace(/[,\s]/g,''));
-    if(t==='cash')rows.push({type:'cash',label:'เงินสด',amt,amtFmt,amtT});
-    if(t==='draft')rows.push({type:'draft',label:`ดราฟท์ เลขที่ ${gv('p'+i+'_dno')} ธนาคาร${gv('p'+i+'_bank')} สั่งจ่าย ${gv('p'+i+'_payto')}`,amt,amtFmt,amtT});
-    if(t==='transfer')rows.push({type:'transfer',label:`โอนเข้าบัญชีธนาคาร${gv('p'+i+'_bank')} เลขที่ ${gv('p'+i+'_accno')} ชื่อ ${gv('p'+i+'_accname')}`,amt,amtFmt,amtT});
+  var rows=[];
+  document.querySelectorAll('.pay-row').forEach(function(el){
+    var i=el.id.replace('pay-','');
+    var tEl=el.querySelector('.pay-type-sel');if(!tEl)return;
+    var t=tEl.value,amt=gv('p'+i+'_amt'),amtFmt=fmtN(amt),amtT=toBaht(amt.replace(/[,\s]/g,''));
+    if(t==='cash')rows.push({label:'เงินสด',amt:amt,amtFmt:amtFmt,amtT:amtT});
+    if(t==='draft')rows.push({label:'ดราฟท์ เลขที่ '+gv('p'+i+'_dno')+' ธนาคาร'+gv('p'+i+'_bank')+' สั่งจ่าย '+gv('p'+i+'_payto'),amt:amt,amtFmt:amtFmt,amtT:amtT});
+    if(t==='transfer')rows.push({label:'โอนเข้าบัญชีธนาคาร'+gv('p'+i+'_bank')+' เลขที่ '+gv('p'+i+'_accno')+' ชื่อ '+gv('p'+i+'_accname'),amt:amt,amtFmt:amtFmt,amtT:amtT});
   });
   return rows;
 }
 
-function buildMemo(data){
-  const sel=[...document.querySelectorAll('.memo-cb:checked')].map(c=>parseInt(c.value));
-  const items={
-    1:`<p class="memo-item"><span class="memo-item-num">1) </span>รับจำนอง โฉนดที่ดิน เป็นเงิน &nbsp;&nbsp;&nbsp; <strong>${data.amtFmt}</strong> &nbsp;&nbsp; บาท &nbsp;&nbsp; <strong>${data.amtT}</strong><br>โดยคิดอัตราดอกเบี้ยร้อยละ ${data.rate} ต่อปี</p>`,
-    2:`<p class="memo-item"><span class="memo-item-num">2) </span>ผู้จำนองได้รับเงินจำนองครบเต็มจำนวนแล้ว</p>`,
-    3:`<p class="memo-item"><span class="memo-item-num">3) </span>ค่าธรรมเนียมการจดจำนอง ให้ผู้รับจำนอง เป็นผู้ออกค่าใช้จ่าย</p>`,
-    4:`<p class="memo-item"><span class="memo-item-num">4) </span>ค่าธรรมเนียมอื่น ๆ เกี่ยวข้องให้ผู้รับจำนองเป็นผู้ออกค่าใช้จ่าย</p>`,
-  };
+// ── BUILD MEMO ──
+function buildMemo(d){
+  var mode=document.querySelector('[name="memo_mode"]:checked');
+  mode=mode?mode.value:'12';
+  var col=gv('col_type')||'โฉนดที่ดิน';
+  var item5=gv('memo_item5')||'';
+  var hasItem5=item5.trim()!=='';
 
-  const signBlock=`
-    <table class="sign-table">
-      <tr>
-        <td><span class="sign-line"></span>ลงลายมือชื่อ<br>( &nbsp;บริษัท โชคชัย เงินด่วน จำกัด&nbsp; )<br>( ผู้รับจำนอง )</td>
-        <td><span class="sign-line"></span>ลงลายมือชื่อ<br>( &nbsp;${data.custName}&nbsp; )<br>( ผู้จำนอง )</td>
-      </tr>
-      <tr>
-        <td style="padding-top:.4cm"><span class="sign-line"></span>ลงลายมือชื่อ<br>( &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; )<br>( พยาน )</td>
-        <td style="padding-top:.4cm"><span class="sign-line"></span>ลงลายมือชื่อ<br>( &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; )<br>( พยาน )</td>
-      </tr>
-    </table>`;
+  // ขนาดฟ้อนต์และความสูงแต่ละข้อ — ล็อกตำแหน่ง
+  var FS='15pt';
+  var LH='1.8';
+  var H_ITEM='2.2cm';   // ความสูงแต่ละข้อ (1)
+  var H_ITEM2='1.2cm';  // ข้อ 2,3,4 สั้นกว่า
+  var H_ITEM5='1.8cm';  // ข้อ 5
 
-  const headerBlock=`
-    <p class="doc-center doc-bold" style="font-size:16pt;margin-bottom:4pt">บันทึกข้อตกลง</p>
-    <p class="doc-center doc-mb2" style="font-size:14pt">${thaiDate(data.docDate)}</p>
-    <div class="memo-parties">
-      <div class="memo-party-row"><span class="memo-party-label">ระหว่าง</span><span class="memo-party-name">บริษัท โชคชัย เงินด่วน จำกัด</span><span>&nbsp;( ผู้รับจำนอง )</span></div>
-      <div class="memo-party-row"><span class="memo-party-label">และ</span><span class="memo-party-name">${data.custName}</span><span>&nbsp;( ผู้จำนอง )</span></div>
-    </div>
-    <p class="doc-indent doc-mb" style="font-size:13.5pt">ทั้งสองฝ่าย ได้ตกลงทำสัญญากันดังต่อไปนี้</p>`;
-
-  // Determine which groups are selected
-  const grp1 = sel.filter(n=>n<=2); // ข้อ 1-2
-  const grp2 = sel.filter(n=>n>=3); // ข้อ 3-4
-  const hasGrp1 = grp1.length>0;
-  const hasGrp2 = grp2.length>0;
-
-  if(hasGrp1 && hasGrp2){
-    // Both groups: page 1 = header+1-2+signature, page 2 = 3-4 only (no header, no signature)
-    return`<div class="doc doc-page">
-      ${headerBlock}
-      ${grp1.map(n=>items[n]||'').join('')}
-      ${signBlock}
-    </div>
-    <div class="doc doc-page" style="padding-top:3cm">
-      ${grp2.map(n=>items[n]||'').join('')}
-    </div>`;
-  } else if(hasGrp1){
-    // Only 1-2: header + items + signature
-    return`<div class="doc doc-page">
-      ${headerBlock}
-      ${grp1.map(n=>items[n]||'').join('')}
-      ${signBlock}
-    </div>`;
-  } else if(hasGrp2){
-    // Only 3-4: just items, no header, no signature (continuation page)
-    return`<div class="doc doc-page" style="padding-top:3cm">
-      ${grp2.map(n=>items[n]||'').join('')}
-    </div>`;
+  // helper: row ที่ล็อกความสูง — ถ้า visible=false จะ invisible แต่ยังกินพื้นที่
+  function row(content, h, visible){
+    var vis = visible ? '' : 'visibility:hidden;';
+    return '<div style="height:'+h+';'+vis+'font-size:'+FS+';line-height:'+LH+';overflow:hidden">'+content+'</div>';
   }
-  return'';
+
+  var i1='<strong>1)</strong> รับจำนอง '+col+' เป็นเงิน &nbsp;<strong>'+d.amtFmt+'</strong>&nbsp; บาท &nbsp;<strong>'+d.amtT+'</strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;โดยคิดอัตราดอกเบี้ยร้อยละ <strong>'+d.rate+'</strong> ต่อปี';
+  var i2='<strong>2)</strong> ผู้จำนองได้รับเงินจำนองครบเต็มจำนวนแล้ว';
+  var i3='<strong>3)</strong> ค่าธรรมเนียมการจดจำนอง ให้ผู้รับจำนอง เป็นผู้ออกค่าใช้จ่าย';
+  var i4='<strong>4)</strong> ค่าธรรมเนียมอื่น ๆ เกี่ยวข้องให้ผู้รับจำนองเป็นผู้ออกค่าใช้จ่าย';
+  var i5=hasItem5?('<strong>5)</strong> '+item5):'<strong>5)</strong>';
+
+  // Header + parties (ล็อก)
+  var HEADER='<div style="font-size:'+FS+';line-height:'+LH+';padding:1.2cm 1.8cm">'
+    +'<p style="text-align:center;font-weight:bold;font-size:18pt;margin-bottom:0.4cm">บันทึกข้อตกลง</p>'
+    +'<p style="text-align:center;font-size:'+FS+';margin-bottom:0.5cm">'+thaiDate(d.docDate)+'</p>'
+    +'<table style="width:100%;border-collapse:collapse;font-size:'+FS+';margin-bottom:0.2cm">'
+    +'<tr><td style="width:14%;white-space:nowrap">ระหว่าง</td>'
+    +'<td>บริษัท โชคชัย เงินด่วน จำกัด</td>'
+    +'<td style="text-align:right;white-space:nowrap">( ผู้รับจำนอง )</td></tr>'
+    +'<tr><td>และ</td>'
+    +'<td>'+d.custName+'</td>'
+    +'<td style="text-align:right;white-space:nowrap">( ผู้จำนอง )</td></tr>'
+    +'</table>'
+    +'<p style="font-size:'+FS+';margin-bottom:0.3cm">ทั้งสองฝ่าย ได้ตกลงทำสัญญากันดังต่อไปนี้</p>';
+
+  var SIGN='<table style="width:100%;border-collapse:collapse;margin-top:0.6cm">'
+    +'<tr>'
+    +'<td style="width:50%;text-align:center;padding-top:0.3cm">'
+    +'<div style="border-top:1px solid #000;width:200px;margin:0 auto 3pt"></div>'
+    +'<span style="font-size:'+FS+'">ลงลายมือชื่อ</span><br>'
+    +'<span style="font-size:'+FS+'">&nbsp;( บริษัท โชคชัย เงินด่วน จำกัด )&nbsp;</span><br>'
+    +'<span style="font-size:'+FS+'">( ผู้รับจำนอง )</span></td>'
+    +'<td style="width:50%;text-align:center;padding-top:0.3cm">'
+    +'<div style="border-top:1px solid #000;width:200px;margin:0 auto 3pt"></div>'
+    +'<span style="font-size:'+FS+'">ลงลายมือชื่อ</span><br>'
+    +'<span style="font-size:'+FS+'">&nbsp;( '+d.custName+' )&nbsp;</span><br>'
+    +'<span style="font-size:'+FS+'">( ผู้จำนอง )</span></td>'
+    +'</tr>'
+    +'<tr>'
+    +'<td style="text-align:center;padding-top:0.5cm">'
+    +'<div style="border-top:1px solid #000;width:200px;margin:0 auto 3pt"></div>'
+    +'<span style="font-size:'+FS+'">ลงลายมือชื่อ</span><br>'
+    +'<span style="font-size:'+FS+'">&nbsp;(&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)&nbsp;</span><br>'
+    +'<span style="font-size:'+FS+'">( พยาน )</span></td>'
+    +'<td style="text-align:center;padding-top:0.5cm">'
+    +'<div style="border-top:1px solid #000;width:200px;margin:0 auto 3pt"></div>'
+    +'<span style="font-size:'+FS+'">ลงลายมือชื่อ</span><br>'
+    +'<span style="font-size:'+FS+'">&nbsp;(&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)&nbsp;</span><br>'
+    +'<span style="font-size:'+FS+'">( พยาน )</span></td>'
+    +'</tr></table>';
+
+  var CLOSE='</div>';
+
+  // ล็อกทุกข้อ — visible/hidden ตามโหมด
+  function buildContent(show12, show34, show5){
+    return row(i1, H_ITEM, show12)
+      +row(i2, H_ITEM2, show12)
+      +row(i3, H_ITEM2, show34)
+      +row(i4, H_ITEM2, show34)
+      +(hasItem5?row(i5, H_ITEM5, show5):'');
+  }
+
+  if(mode==='12'){
+    // พิมพ์ 1-2 + หัว + ลายเซ็น เว้นที่ 3-4-5
+    return '<div class="doc doc-page">'+HEADER
+      +buildContent(true,false,false)
+      +SIGN+CLOSE+'</div>';
+  }
+  if(mode==='34'){
+    // พิมพ์เฉพาะ 3-4 เว้นที่อื่น (ไม่มีหัว ไม่มีลายเซ็น)
+    return '<div class="doc doc-page">'
+      +'<div style="padding:1.2cm 1.8cm">'
+      // เว้นที่หัว+parties
+      +'<div style="visibility:hidden">'
+      +'<p style="font-size:18pt;margin-bottom:0.4cm">บันทึกข้อตกลง</p>'
+      +'<p style="font-size:'+FS+';margin-bottom:0.5cm">วันที่</p>'
+      +'<table style="width:100%;font-size:'+FS+';margin-bottom:0.2cm"><tr><td>ระหว่าง</td><td>บริษัท โชคชัย เงินด่วน จำกัด</td><td>( ผู้รับจำนอง )</td></tr>'
+      +'<tr><td>และ</td><td>'+d.custName+'</td><td>( ผู้จำนอง )</td></tr></table>'
+      +'<p style="font-size:'+FS+';margin-bottom:0.3cm">ทั้งสองฝ่าย ได้ตกลงทำสัญญากันดังต่อไปนี้</p>'
+      +'</div>'
+      +buildContent(false,true,false)
+      +'</div></div>';
+  }
+  if(mode==='5'){
+    // พิมพ์เฉพาะข้อ 5
+    return '<div class="doc doc-page">'
+      +'<div style="padding:1.2cm 1.8cm">'
+      +'<div style="visibility:hidden">'
+      +'<p style="font-size:18pt;margin-bottom:0.4cm">บันทึกข้อตกลง</p>'
+      +'<p style="font-size:'+FS+';margin-bottom:0.5cm">วันที่</p>'
+      +'<table style="width:100%;font-size:'+FS+';margin-bottom:0.2cm"><tr><td>ระหว่าง</td><td>บริษัท</td><td></td></tr>'
+      +'<tr><td>และ</td><td></td><td></td></tr></table>'
+      +'<p style="font-size:'+FS+';margin-bottom:0.3cm">ทั้งสองฝ่าย</p>'
+      +'</div>'
+      +row(i1,H_ITEM,false)+row(i2,H_ITEM2,false)
+      +row(i3,H_ITEM2,false)+row(i4,H_ITEM2,false)
+      +(hasItem5?row(i5,H_ITEM5,true):'')
+      +'</div></div>';
+  }
+  if(mode==='12345'&&hasItem5){
+    return '<div class="doc doc-page">'+HEADER
+      +buildContent(true,true,true)
+      +SIGN+CLOSE+'</div>';
+  }
+  // 1-4 ทั้งหมด
+  return '<div class="doc doc-page">'+HEADER
+    +buildContent(true,true,false)
+    +SIGN+CLOSE+'</div>';
 }
 
-function buildAddendum(data){
-  return`<div class="doc doc-page">
-    <p class="add-center doc-bold doc-underline" style="font-size:16pt">ข้อตกลงต่อท้ายหนังสือสัญญาจำนอง</p>
-    <p class="add-center doc-mb" style="font-size:13.5pt">ทำที่ 89/28 หมู่ 9 ต.ท่าเยี่ยม อ.โชคชัย จ.นครราชสีมา</p>
-    <p class="add-center doc-mb2" style="font-size:14pt;font-weight:bold">${thaiDate(data.docDate)}</p>
-    <div class="add-parties">
-      <p style="font-size:13.5pt">ระหว่าง &nbsp;&nbsp; ${data.custName} &nbsp;&nbsp; ผู้จำนอง</p>
-      <p style="font-size:13.5pt">กับ &nbsp;&nbsp; บริษัท โชคชัย เงินด่วน จำกัด &nbsp;&nbsp; ผู้รับจำนอง</p>
-      <p style="font-size:13pt;color:#555">( สัญญาจำนองลงวันที่ ${thaiDate(data.contractDate)} )</p>
-      <p style="font-size:13pt">ทำ ณ สำนักงานที่ดิน &nbsp;&nbsp; จังหวัด ${data.landBranch} &nbsp;&nbsp; สาขา</p>
-    </div>
-    <p class="add-item"><strong>ข้อ 1.</strong> ผู้จำนองเป็นเจ้าของทรัพย์สินซึ่งจำนองเป็นประกันการชำระหนี้เงินกู้ทั้งหลายซึ่ง ผู้รับจำนอง เป็นหนี้ผู้รับจำนองอยู่เป็นจำนวนเงิน ${data.amtFmt} บาท (${data.amtT}) ตลอดจนประกันการชำระหนี้อุปกรณ์แห่งหนี้คือดอกเบี้ยสินไหมทดแทนในการไม่ชำระหนี้ และค่าฤชาธรรมเนียมในการบังคับจำนองด้วย</p>
-    <p class="add-item"><strong>ข้อ 2.</strong> เมื่อผู้รับจำนองบังคับจำนอง เอาทรัพย์สินจำนองรายนี้ออกขายทอดตลาดได้เงินจำนวนสุทธิน้อยกว่าจำนวนเงินที่ค้างชำระ และค่าอุปกรณ์หรือเอาทรัพย์สินที่หลุดจำนองเป็นสิทธิและทรัพย์สินนั้นมีราคาต่ำกว่าจำนวนเงินที่ค้างชำระและค่าอุปกรณ์ เงินยังขาดจำนวนอยู่เท่าใด ผู้จำนองและหรือลูกหนี้ของผู้รับจำนองยอมรับใช้เงินที่ขาดจำนวนนั้นให้แก่ผู้รับจำนองจนครบ</p>
-    <p class="add-item"><strong>ข้อ 3.</strong> ถึงแม้จะมีการกระทำอย่างใดของผู้รับจำนอง เป็นเหตุให้ผู้จำนองไม่อาจจะรับช่วงได้ทั้งหมดหรือแต่บางส่วนในสิทธิใดๆ อันได้ให้แก่ผู้รับจำนองแต่ก่อน หรือในขณะหรือภายหลังที่ผู้จำนองเองจะทำหนังสือสัญญาจำนองรายนี้ ผู้จำนองก็ไม่หลุดพ้นจากความรับผิดในการจำนองรายนี้แต่อย่างประการใด</p>
-    <p class="add-item"><strong>ข้อ 4.</strong> ในกรณีที่ผู้รับจำนองยอมผ่อนผันเวลาให้แก่ลูกหนี้สำหรับการชำระหนี้เงินกู้รายใดก็ตาม ผู้จำนองขอยืนยันไว้ล่วงหน้าว่า ผู้จำนองเป็นอันตกลงด้วยในการผ่อนเวลาทุกคราว จึงไม่เป็นเหตุให้ผู้จำนองหลุดพ้นจากความรับผิดในการจำนองรายนี้</p>
-    <p class="add-item"><strong>ข้อ 5.</strong> การจดจำนองจะกระทำได้ต่อเมื่อผู้รับจำนองได้รับชำระหนี้เงินกู้รายลูกหนี้ครบถ้วนแล้ว ข้อตกลงต่อท้ายหนังสือสัญญาจำนองนี้ทำไว้เป็นสัญบัตรมีข้อความตรงกัน สำหรับ ผู้จำนอง, ผู้รับจำนอง, สำนักงานที่ดินและสรรหาการถือไว้ฝ่ายละหนึ่งฉบับ</p>
-    <p style="font-size:13pt;text-align:justify;margin-top:8pt;font-weight:bold">ทุกฝ่ายได้ตรวจสอบข้อตกลงต่อท้ายหนังสือสัญญาจำนองนี้และเข้าใจข้อความตลอดแล้ว จึงได้ลงลายมือชื่อหรือพิมพ์ลายนิ้วมือไว้เป็นสำคัญต่อหน้าพยาน</p>
-    <div class="add-sign-section">
-      <p style="margin-top:.5cm">ลงชื่อ <span class="add-sign-line"></span> &nbsp;&nbsp; ผู้จำนอง/ลูกหนี้</p>
-      <p style="margin-top:.4cm">ลงชื่อ <span class="add-sign-line"></span> &nbsp;&nbsp; ผู้รับจำนอง</p>
-      <p style="margin-top:.4cm">ลงชื่อ <span class="add-sign-line"></span> &nbsp;&nbsp; พยาน</p>
-      <p style="margin-top:.4cm">ลงชื่อ <span class="add-sign-line"></span> &nbsp;&nbsp; พยาน</p>
-    </div>
-  </div>`;
+
+// ── BUILD VOUCHER ──
+function buildVoucher(d,payRows){
+  var no=billNo(d.docDate,d.billSeq);
+  var total=payRows.reduce(function(s,r){
+    var n=parseInt((r.amt||'0').replace(/[,\s]/g,''));
+    return s+(isNaN(n)?0:n);
+  },0);
+  var totalFmt=total?total.toLocaleString('th-TH'):'';
+  var totalT=total?toBaht(total):'';
+
+  var rows=payRows.slice();
+  while(rows.length<3)rows.push({label:'',amtFmt:''});
+
+  // A4 = 297mm, margin 0.5cm top+bottom = 28mm used, net = 269mm
+  // Each copy = 269/2 = ~134mm = 13.4cm height
+  // Use height on wrapper to force exact half-page
+  var COPY_H='13.4cm';
+  var CELL='padding:3pt 6pt;font-size:12.5pt;';
+  var ROW_H='1.0cm'; // (13.4 - header~4.5 - labels~1.8 - thead~0.7 - total~0.7 - sign~1cm) / 3rows ≈ 1.55cm but tight
+
+  function copy(lbl){
+    var rowsHTML=rows.map(function(r){
+      return '<tr>'
+        +'<td style="border:1px solid #999;'+CELL+'height:'+ROW_H+'">'+r.label+'</td>'
+        +'<td style="border:1px solid #999;'+CELL+'text-align:right;white-space:nowrap;width:28%">'+r.amtFmt+'</td>'
+        +'</tr>';
+    }).join('');
+
+    return '<div style="height:'+COPY_H+';padding:0.3cm 0.6cm;font-family:Sarabun,Arial,sans-serif;box-sizing:border-box;overflow:hidden">'
+      // หัว
+      +'<table style="width:100%;border-collapse:collapse;margin-bottom:1pt"><tr>'
+      +'<td><span style="font-size:21pt;font-weight:bold">บริษัท &nbsp; โชคชัย เงินด่วน &nbsp; จำกัด</span></td>'
+      +'<td style="text-align:right;vertical-align:top;white-space:nowrap;font-size:11pt">'
+      +'<span style="display:block">'+lbl+'</span>'
+      +'<span style="display:block">วันที่ &nbsp;'+shortDate(d.docDate)+'</span>'
+      +'</td></tr></table>'
+      +'<p style="font-size:10pt;margin:0">No. '+no+'</p>'
+      +'<p style="font-size:10pt;margin:0">89/28 หมู่ 9 ต.ท่าเยี่ยม อ.โชคชัย จ.นครราชสีมา</p>'
+      +'<p style="font-size:10pt;margin:0 0 1pt">เลขประจำตัวผู้เสียภาษี 0305568001941 (สำนักงานใหญ่)</p>'
+      +'<p style="color:#c00;font-weight:bold;font-size:12pt;text-align:right;margin:1pt 0 2pt">ใบสำคัญจ่าย</p>'
+
+      // แถว 1-2: ชื่อ/ที่อยู่ col1 แคบ col2 กว้าง
+      +'<table style="width:100%;border-collapse:collapse;border-bottom:none">'
+      +'<tr>'
+      +'<td style="border:1px solid #999;border-bottom:none;'+CELL+'white-space:nowrap;font-weight:bold">ชื่อ-นามสกุล ลูกค้า</td>'
+      +'<td style="border:1px solid #999;border-left:none;border-bottom:none;'+CELL+'width:100%">'+d.custName+'</td>'
+      +'</tr>'
+      +'<tr>'
+      +'<td style="border:1px solid #999;border-top:none;'+CELL+'white-space:nowrap;font-weight:bold">ที่อยู่ ลูกค้า</td>'
+      +'<td style="border:1px solid #999;border-left:none;border-top:none;'+CELL+'width:100%">'+d.custAddr+'</td>'
+      +'</tr>'
+      +'</table>'
+
+      // แถว 3+: รายละเอียด col1 กว้าง col2 แคบ
+      +'<table style="width:100%;border-collapse:collapse;margin-top:-1px">'
+      +'<tr style="background:#eee">'
+      +'<th style="border:1px solid #999;'+CELL+'text-align:center">รายละเอียดการจ่ายเงิน</th>'
+      +'<th style="border:1px solid #999;'+CELL+'text-align:center;white-space:nowrap;width:28%">จำนวนเงิน(บาท)</th>'
+      +'</tr>'
+      +rowsHTML
+      +'<tr style="background:#ddd">'
+      +'<td style="border:1px solid #999;'+CELL+'font-weight:bold">รวมเงินที่จ่าย &nbsp;&nbsp; '+totalT+'</td>'
+      +'<td style="border:1px solid #999;'+CELL+'font-weight:bold;text-align:right;white-space:nowrap">'+totalFmt+'</td>'
+      +'</tr>'
+      +'</table>'
+
+      // ลายเซ็น
+      +'<table style="width:100%;border-collapse:collapse;margin-top:1.2cm"><tr>'
+      +'<td style="text-align:center;width:33%"><div style="border-top:1px solid #000;width:120px;margin:0 auto 2pt"></div><span style="font-size:11pt">ผู้จ่ายเงิน</span></td>'
+      +'<td style="text-align:center;width:34%"><div style="border-top:1px solid #000;width:120px;margin:0 auto 2pt"></div><span style="font-size:11pt">ผู้มีอำนาจลงนาม</span></td>'
+      +'<td style="text-align:center;width:33%"><div style="border-top:1px solid #000;width:120px;margin:0 auto 2pt"></div><span style="font-size:11pt">ผู้รับเงิน</span></td>'
+      +'</tr></table>'
+      +'</div>';
+  }
+
+  return '<div class="doc doc-page">'
+    +copy('ต้นฉบับ')
+    +'<div style="border-top:2px dashed #aaa;margin:0"></div>'
+    +copy('สำเนา')
+    +'</div>';
 }
 
-function buildVoucherCopy(data,payRows,copyLabel){
-  const no=billNo(data.docDate,data.billSeq);
-  const totalAmt=payRows.reduce((s,r)=>{const n=parseInt((r.amt||'0').replace(/[,\s]/g,''));return s+(isNaN(n)?0:n)},0);
-  const totalFmt=totalAmt?totalAmt.toLocaleString('th-TH'):'..........';
-  const totalT=totalAmt?toBaht(totalAmt):'..........';
-  const emptyRows='<tr><td>&nbsp;</td><td></td></tr>'.repeat(Math.max(0,4-payRows.length));
-  const payHTML=payRows.map(r=>`<tr><td>${r.label}</td><td class="num">${r.amtFmt||'..........'}</td></tr>`).join('')+emptyRows;
-  return`<div style="margin-bottom:8pt">
-    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4pt">
-      <div>
-        <p style="font-size:20pt;font-weight:bold">บริษัท &nbsp; โชคชัย เงินด่วน &nbsp; จำกัด</p>
-        <p style="font-size:12pt;margin-top:2pt">No. ${no}</p>
-        <p style="font-size:12pt">89/28 หมู่ 9 ต.ท่าเยี่ยม อ.โชคชัย จ.นครราชสีมา</p>
-      </div>
-      <div style="text-align:right">
-        <p style="font-size:12pt;color:#555">${copyLabel}</p>
-        <p style="font-size:12pt">วันที่ &nbsp; ${shortDate(data.docDate)}</p>
-      </div>
-    </div>
-    <p style="color:#c00;font-weight:bold;font-size:13pt;text-align:right;margin-bottom:4pt">ใบสำคัญจ่าย</p>
-    <table class="v-table">
-      <tr><td style="width:40%">ชื่อ-นามสกุล ลูกค้า</td><td colspan="2">${data.custName}</td></tr>
-      <tr><td>ที่อยู่ ลูกค้า</td><td colspan="2">${data.custAddr}</td></tr>
-      <tr><th style="width:60%">รายละเอียดการจ่ายเงิน</th><th style="width:40%">จำนวนเงิน(บาท)</th></tr>
-      ${payHTML}
-      <tr class="total-row"><td style="text-align:center">${totalT}</td><td class="num">${totalFmt}</td></tr>
-    </table>
-    <table style="width:100%;margin-top:.8cm;border-collapse:collapse">
-      <tr>
-        <td style="text-align:center;width:33%"><span style="display:block;border-top:1px solid #000;width:120px;margin:0 auto 3pt"></span>ผู้จ่ายเงิน</td>
-        <td style="text-align:center;width:34%"><span style="display:block;border-top:1px solid #000;width:120px;margin:0 auto 3pt"></span>ผู้มีอำนาจลงนาม</td>
-        <td style="text-align:center;width:33%"><span style="display:block;border-top:1px solid #000;width:120px;margin:0 auto 3pt"></span>ผู้รับเงิน</td>
-      </tr>
-    </table>
-  </div>`;
+
+// ── BUILD ADDENDUM ──
+function buildAddendum(d){
+  var lb=d.landBranch||'......';
+  var lbSub=d.landBranchSub?(' สาขา '+d.landBranchSub):'';
+  return'<div class="doc doc-page" style="font-size:14pt;line-height:1.7;padding:1.25cm">'
+    +'<p style="text-align:center;font-weight:bold;text-decoration:underline;font-size:16pt;margin-bottom:8pt">ข้อตกลงต่อท้ายหนังสือสัญญาจำนอง</p>'
+    +'<p style="text-align:center;margin-bottom:4pt">89/28 หมู่ 9 ต.ท่าเยี่ยม อ.โชคชัย จ.นครราชสีมา</p>'
+    +'<p style="text-align:center;font-weight:bold;margin-bottom:10pt;font-size:15pt">'+thaiDate(d.docDate)+'</p>'
+    +'<p style="text-align:center;margin-bottom:4pt">ระหว่าง &nbsp;&nbsp; '+d.custName+' &nbsp;&nbsp; ผู้จำนอง</p>'
+    +'<p style="text-align:center;margin-bottom:4pt">กับ &nbsp;&nbsp; บริษัท โชคชัย เงินด่วน จำกัด &nbsp;&nbsp; ผู้รับจำนอง</p>'
+    +'<p style="text-align:center;font-size:13pt;color:#333;margin-bottom:4pt">( สัญญาจำนองลงวันที่ '+thaiDate(d.contractDate)+' )</p>'
+    +'<p style="text-align:center;margin-bottom:14pt">ทำ ณ สำนักงานที่ดิน &nbsp; จังหวัด '+lb+lbSub+'</p>'
+    +'<p style="margin-bottom:6pt;padding-left:1.5cm;text-indent:-1.5cm;text-align:justify"><strong>ข้อ 1.</strong> ผู้จำนองเป็นเจ้าของทรัพย์สินซึ่งจำนองเป็นประกันการชำระหนี้เงินกู้ทั้งหลายซึ่ง ผู้รับจำนอง เป็นหนี้ผู้รับจำนองอยู่เป็นจำนวนเงิน '+d.amtFmt+' บาท ('+d.amtT+') ตลอดจนประกันการชำระหนี้อุปกรณ์แห่งหนี้คือดอกเบี้ยสินไหมทดแทนในการไม่ชำระหนี้ และค่าฤชาธรรมเนียมในการบังคับจำนองด้วย</p>'
+    +'<p style="margin-bottom:6pt;padding-left:1.5cm;text-indent:-1.5cm;text-align:justify"><strong>ข้อ 2.</strong> เมื่อผู้รับจำนองบังคับจำนอง เอาทรัพย์สินจำนองรายนี้ออกขายทอดตลาดได้เงินจำนวนสุทธิน้อยกว่าจำนวนเงินที่ค้างชำระ และค่าอุปกรณ์หรือเอาทรัพย์สินที่หลุดจำนองเป็นสิทธิ เงินยังขาดจำนวนอยู่เท่าใด ผู้จำนองยอมรับใช้เงินที่ขาดจำนวนนั้นให้แก่ผู้รับจำนองจนครบ</p>'
+    +'<p style="margin-bottom:6pt;padding-left:1.5cm;text-indent:-1.5cm;text-align:justify"><strong>ข้อ 3.</strong> ถึงแม้จะมีการกระทำอย่างใดของผู้รับจำนอง เป็นเหตุให้ผู้จำนองไม่อาจจะรับช่วงได้ทั้งหมดหรือแต่บางส่วนในสิทธิใดๆ ผู้จำนองก็ไม่หลุดพ้นจากความรับผิดในการจำนองรายนี้แต่อย่างประการใด</p>'
+    +'<p style="margin-bottom:6pt;padding-left:1.5cm;text-indent:-1.5cm;text-align:justify"><strong>ข้อ 4.</strong> ในกรณีที่ผู้รับจำนองยอมผ่อนผันเวลาให้แก่ลูกหนี้สำหรับการชำระหนี้เงินกู้รายใดก็ตาม ผู้จำนองขอยืนยันไว้ล่วงหน้าว่าเป็นอันตกลงด้วยในการผ่อนเวลาทุกคราว จึงไม่เป็นเหตุให้ผู้จำนองหลุดพ้นจากความรับผิด</p>'
+    +'<p style="margin-bottom:6pt;padding-left:1.5cm;text-indent:-1.5cm;text-align:justify"><strong>ข้อ 5.</strong> การจดจำนองจะกระทำได้ต่อเมื่อผู้รับจำนองได้รับชำระหนี้เงินกู้รายลูกหนี้ครบถ้วนแล้ว ข้อตกลงต่อท้ายนี้ทำไว้เป็นสัญบัตรมีข้อความตรงกัน สำหรับ ผู้จำนอง, ผู้รับจำนอง, สำนักงานที่ดิน ถือไว้ฝ่ายละหนึ่งฉบับ</p>'
+    +'<p style="text-align:justify;margin-top:8pt;font-weight:bold">ทุกฝ่ายได้ตรวจสอบข้อตกลงต่อท้ายหนังสือสัญญาจำนองนี้และเข้าใจข้อความตลอดแล้ว จึงได้ลงลายมือชื่อหรือพิมพ์ลายนิ้วมือไว้เป็นสำคัญต่อหน้าพยาน</p>'
+    +'<table style="width:100%;border-collapse:collapse;margin-top:2cm">'
+    +'<tr>'
+    +'<td style="width:50%;text-align:center">'
+    +'<div style="border-top:1px solid #000;width:230px;margin:0 auto 4pt"></div>'
+    +'ลงชื่อ..............................<br>ผู้จำนอง/ลูกหนี้</td>'
+    +'<td style="width:50%;text-align:center">'
+    +'<div style="border-top:1px solid #000;width:230px;margin:0 auto 4pt"></div>'
+    +'ลงชื่อ..............................<br>ผู้รับจำนอง</td>'
+    +'</tr>'
+    +'<tr>'
+    +'<td style="text-align:center;padding-top:1.8cm">'
+    +'<div style="border-top:1px solid #000;width:230px;margin:0 auto 4pt"></div>'
+    +'ลงชื่อ..............................<br>พยาน</td>'
+    +'<td style="text-align:center;padding-top:1.8cm">'
+    +'<div style="border-top:1px solid #000;width:230px;margin:0 auto 4pt"></div>'
+    +'ลงชื่อ..............................<br>พยาน</td>'
+    +'</tr>'
+    +'</table>'
+    +'</div>';
 }
 
+
+// ── GENERATE ──
 function genMortgage(){
-  const data={
-    docDate:gv('doc_date'),billSeq:gv('bill_seq')||'01',landBranch:gv('land_branch')||'......',
-    custName:gv('cust_name')||'..........',custAddr:gv('cust_addr')||'..........',
-    amt:gv('m_amt'),amtFmt:fmtN(gv('m_amt')),amtT:gv('m_amt_t')||toBaht(gv('m_amt').replace(/[,\s]/g,'')),
-    rate:gv('m_rate')||'......',contractDate:gv('contract_date'),
+  var d={
+    docDate:gv('doc_date'),billSeq:gv('bill_seq')||'01',
+    landBranch:gv('land_branch')||'......',
+    landBranchSub:gv('land_branch_sub')||'',
+    custName:gv('cust_name')||'..........',
+    custAddr:getCustAddr(),
+    amt:gv('m_amt'),amtFmt:fmtN(gv('m_amt')),
+    amtT:gv('m_amt_t')||toBaht(gv('m_amt').replace(/[,\s]/g,'')),
+    rate:gv('m_rate')||'......',
+    item5:gv('memo_item5')||'',
+    contractDate:gv('contract_date'),
   };
-  const payRows=getPayRows();
-  const wanted=[...document.querySelectorAll('.doc-cb:checked')].map(c=>c.value);
-  const docs={};
-  if(wanted.includes('memo'))docs.memo={label:'บันทึกข้อตกลง',html:buildMemo(data)};
-  if(wanted.includes('addendum'))docs.addendum={label:'ข้อตกลงต่อท้าย',html:buildAddendum(data)};
-  if(wanted.includes('voucher'))docs.voucher={label:'ใบสำคัญจ่าย',html:`<div class="doc doc-page">${buildVoucherCopy(data,payRows,'ต้นฉบับ')}<hr style="border:none;border-top:2px dashed #aaa;margin:14pt 0">${buildVoucherCopy(data,payRows,'สำเนา')}</div>`};
-  const keys=Object.keys(docs);if(!keys.length){alert('กรุณาเลือกเอกสารอย่างน้อย 1 รายการ');return}
-  const tabsEl=document.getElementById('mort-tabs');
-  tabsEl.innerHTML='';keys.forEach((k,i)=>{const btn=document.createElement('button');btn.className='doc-tab'+(i===0?' active':'');btn.textContent=docs[k].label;btn.onclick=function(){showMortDoc(k);};tabsEl.appendChild(btn);});
-  const outEl=document.getElementById('mort-doc-out');
-  outEl.innerHTML=keys.map((k,i)=>`<div id="mdoc-${k}" style="${i!==0?'display:none':''}">${docs[k].html}</div>`).join('');
+  var payRows=getPayRows();
+  var wanted=Array.prototype.slice.call(document.querySelectorAll('.doc-cb:checked')).map(function(c){return c.value;});
+  var docs={};
+  if(wanted.indexOf('memo')>=0)docs.memo={label:'บันทึกข้อตกลง',html:buildMemo(d)};
+  if(wanted.indexOf('voucher')>=0)docs.voucher={label:'ใบสำคัญจ่าย',html:buildVoucher(d,payRows)};
+  if(wanted.indexOf('addendum')>=0)docs.addendum={label:'ข้อตกลงต่อท้าย',html:buildAddendum(d)};
+  var keys=Object.keys(docs);
+  if(!keys.length){alert('กรุณาเลือกเอกสารอย่างน้อย 1 รายการ');return;}
+  var tabsEl=document.getElementById('mort-tabs');
+  tabsEl.innerHTML='';
+  keys.forEach(function(k,i){
+    var btn=document.createElement('button');
+    btn.className='doc-tab'+(i===0?' active':'');
+    btn.textContent=docs[k].label;
+    btn.onclick=(function(key){return function(){showDoc(key,docs);};})(k);
+    tabsEl.appendChild(btn);
+  });
+  var outEl=document.getElementById('mort-doc-out');
+  outEl.innerHTML=keys.map(function(k,i){return'<div id="mdoc-'+k+'" style="'+(i!==0?'display:none':'')+'">'+docs[k].html+'</div>';}).join('');
   window._mortDocs=docs;
   document.getElementById('mort-form').style.display='none';
   document.getElementById('mort-preview').style.display='block';
   window.scrollTo(0,0);
 }
-function showMortDoc(key){
-  Object.keys(window._mortDocs||{}).forEach(k=>{const el=document.getElementById('mdoc-'+k);if(el)el.style.display=k===key?'':'none';});
-  document.querySelectorAll('.doc-tab').forEach(t=>{t.classList.toggle('active',t.textContent===(window._mortDocs[key]&&window._mortDocs[key].label));});
-}
-function showMortForm(){document.getElementById('mort-form').style.display='block';document.getElementById('mort-preview').style.display='none';window.scrollTo(0,0);}
-
-
-// iOS-compatible print
-function showPrintTip(){
-  document.getElementById('print-modal').classList.add('show');
-  // Also try print in case it works (real Safari)
-  document.querySelectorAll('[id^="mdoc-"],[id^="sbdoc-"],[id^="dldoc-"]').forEach(function(el){
-    el.setAttribute('data-hidden',el.style.display==='none'?'1':'0');
-    el.style.display='';
-  });
-  try{window.print();}catch(e){}
-}
-function closePrintTip(){
-  document.getElementById('print-modal').classList.remove('show');
-  document.querySelectorAll('[id^="mdoc-"],[id^="sbdoc-"],[id^="dldoc-"]').forEach(function(el){
-    if(el.getAttribute('data-hidden')==='1')el.style.display='none';
-  });
-}
-function doPrint(){
-  // Show all hidden docs so everything prints
-  document.querySelectorAll('[id^="mdoc-"],[id^="sbdoc-"],[id^="dldoc-"]').forEach(function(el){
-    el.setAttribute('data-hidden', el.style.display==='none'?'1':'0');
-    el.style.display='';
-  });
-  window.print();
-  // Restore after print
-  document.querySelectorAll('[id^="mdoc-"],[id^="sbdoc-"],[id^="dldoc-"]').forEach(function(el){
-    if(el.getAttribute('data-hidden')==='1')el.style.display='none';
-  });
+function showDoc(key,docs){
+  Object.keys(docs||window._mortDocs||{}).forEach(function(k){var el=document.getElementById('mdoc-'+k);if(el)el.style.display=k===key?'':'none';});
+  document.querySelectorAll('.doc-tab').forEach(function(t){t.classList.toggle('active',t.textContent===((docs||window._mortDocs||{})[key]&&(docs||window._mortDocs||{})[key].label));});
 }
 
 // Init
-addAg('mortgage');
-addPay('cash');
-
-
-function showPrintTip(){
-  document.querySelectorAll('[id^="mdoc-"],[id^="sbdoc-"],[id^="dldoc-"]').forEach(function(el){el.setAttribute('data-h',el.style.display==='none'?'1':'0');el.style.display='';});
-  document.getElementById('print-modal').classList.add('show');
-  try{window.print();}catch(e){}
-}
-function closePrintTip(){
-  document.getElementById('print-modal').classList.remove('show');
-  document.querySelectorAll('[id^="mdoc-"],[id^="sbdoc-"],[id^="dldoc-"]').forEach(function(el){if(el.getAttribute('data-h')==='1')el.style.display='none';});
-}
-addPay('cash');
+document.addEventListener('DOMContentLoaded',function(){
+  onProvChange(document.getElementById('cust_province').value);
+  addPay('cash');
+});
 </script>
 </body>
 </html>

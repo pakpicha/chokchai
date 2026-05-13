@@ -458,6 +458,7 @@ function syncSbBaht(srcId,tgtId){
   if(el)el.value=toBaht((gv(srcId)||'').replace(/[,\s]/g,''));
 }
 
+var PAY_TYPES={cash:'เงินสด',draft:'ดราฟท์',transfer:'เงินโอน'};
 function addSbPay(t){
   if(!t)t='cash';
   sbPayC++;const i='sb'+sbPayC;

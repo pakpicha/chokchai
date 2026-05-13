@@ -237,8 +237,39 @@ body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;
     <div class="fg"><label>ชื่อ-นามสกุลผู้ขายฝาก</label>
       <input type="text" id="sb_seller" placeholder="นาย/นาง/นางสาว ชื่อ นามสกุล">
     </div>
-    <div class="fg"><label>ที่อยู่ผู้ขายฝาก</label>
-      <textarea id="sb_seller_addr" placeholder="บ้านเลขที่ หมู่ ตำบล อำเภอ จังหวัด"></textarea>
+        <div class="fg"><label>ที่อยู่ (บ้านเลขที่ หมู่)</label>
+      <input type="text" id="sb_seller_addr1" placeholder="เช่น 123/4 หมู่ 5">
+    </div>
+    <div class="fg"><label>จังหวัด (ผู้ขายฝาก)</label>
+      <select id="sb_seller_province" onchange="sbProv1(this.value)" style="-webkit-appearance:none;padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7;width:100%">
+
+        <option value="">-- เลือกจังหวัด --</option>
+        <option value="กรุงเทพมหานคร">กรุงเทพมหานคร</option>
+        <option value="กาญจนบุรี">กาญจนบุรี</option>
+        <option value="ขอนแก่น">ขอนแก่น</option>
+        <option value="ชลบุรี">ชลบุรี</option>
+        <option value="นครราชสีมา"  selected>นครราชสีมา</option>
+        <option value="นครศรีธรรมราช">นครศรีธรรมราช</option>
+        <option value="บุรีรัมย์">บุรีรัมย์</option>
+        <option value="ภูเก็ต">ภูเก็ต</option>
+        <option value="ระยอง">ระยอง</option>
+        <option value="สงขลา">สงขลา</option>
+        <option value="สุราษฎร์ธานี">สุราษฎร์ธานี</option>
+        <option value="สุรินทร์">สุรินทร์</option>
+        <option value="อุดรธานี">อุดรธานี</option>
+        <option value="เชียงใหม่">เชียงใหม่</option>
+      
+      </select>
+    </div>
+    <div class="fg"><label>อำเภอ (ผู้ขายฝาก)</label>
+      <select id="sb_seller_amphoe" onchange="sbAmp1(this.value)" style="-webkit-appearance:none;padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7;width:100%">
+        <option value="">-- เลือกอำเภอ --</option>
+      </select>
+    </div>
+    <div class="fg"><label>ตำบล (ผู้ขายฝาก)</label>
+      <select id="sb_seller_tambon" style="-webkit-appearance:none;padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7;width:100%">
+        <option value="">-- เลือกตำบล --</option>
+      </select>
     </div>
     <div class="fg"><label>สัญชาติ</label>
       <input type="text" id="sb_seller_nation" value="ไทย">
@@ -264,11 +295,37 @@ body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;
     <div class="fg"><label>เนื้อที่ (ไร่-งาน-วา)</label>
       <input type="text" id="sb_area" placeholder="เช่น 2-1-50">
     </div>
-    <div class="row2">
-      <div class="fg"><label>ตำบล</label><input type="text" id="sb_tambon" placeholder="ท่าเยี่ยม"></div>
-      <div class="fg"><label>อำเภอ</label><input type="text" id="sb_amphoe" placeholder="โชคชัย"></div>
+        <div class="fg"><label>จังหวัด (ที่ดิน)</label>
+      <select id="sb_province" onchange="sbProv2(this.value)" style="-webkit-appearance:none;padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7;width:100%">
+
+        <option value="">-- เลือกจังหวัด --</option>
+        <option value="กรุงเทพมหานคร">กรุงเทพมหานคร</option>
+        <option value="กาญจนบุรี">กาญจนบุรี</option>
+        <option value="ขอนแก่น">ขอนแก่น</option>
+        <option value="ชลบุรี">ชลบุรี</option>
+        <option value="นครราชสีมา"  selected>นครราชสีมา</option>
+        <option value="นครศรีธรรมราช">นครศรีธรรมราช</option>
+        <option value="บุรีรัมย์">บุรีรัมย์</option>
+        <option value="ภูเก็ต">ภูเก็ต</option>
+        <option value="ระยอง">ระยอง</option>
+        <option value="สงขลา">สงขลา</option>
+        <option value="สุราษฎร์ธานี">สุราษฎร์ธานี</option>
+        <option value="สุรินทร์">สุรินทร์</option>
+        <option value="อุดรธานี">อุดรธานี</option>
+        <option value="เชียงใหม่">เชียงใหม่</option>
+      
+      </select>
     </div>
-    <div class="fg"><label>จังหวัด</label><input type="text" id="sb_province" value="นครราชสีมา"></div>
+    <div class="fg"><label>อำเภอ (ที่ดิน)</label>
+      <select id="sb_amphoe" onchange="sbAmp2(this.value)" style="-webkit-appearance:none;padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7;width:100%">
+        <option value="">-- เลือกอำเภอ --</option>
+      </select>
+    </div>
+    <div class="fg"><label>ตำบล (ที่ดิน)</label>
+      <select id="sb_tambon" style="-webkit-appearance:none;padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7;width:100%">
+        <option value="">-- เลือกตำบล --</option>
+      </select>
+    </div>
   </div>
 
   <!-- รายละเอียดขายฝาก -->
@@ -401,11 +458,12 @@ function syncSbBaht(srcId,tgtId){
   if(el)el.value=toBaht((gv(srcId)||'').replace(/[,\s]/g,''));
 }
 
-function addSbPay(t='cash'){
+function addSbPay(t){
+  if(!t)t='cash';
   sbPayC++;const i='sb'+sbPayC;
   const d=document.createElement('div');
   d.className='pay-row';d.id='spay-'+i;
-  const opts=Object.entries(PAY_TYPES).map(([k,v])=>'<option value="'+k+'"'+(k===t?' selected':'')+'>'+v+'</option>').join('');
+  var opts='';var _keys=Object.keys(PAY_TYPES);for(var _ki=0;_ki<_keys.length;_ki++){var k=_keys[_ki];var v=PAY_TYPES[k];opts+='<option value="'+k+'"'+(k===t?' selected':'')+'>'+v+'</option>';}
   d.innerHTML='<div class="ph"><select class="sbts">'+opts+'</select><button class="sbdb">ลบ</button></div><div class="pay-fields" id="spf-'+i+'">'+sbPayFields(i,t)+'</div>';
   d.querySelector('.sbts').onchange=function(){changeSbPayType(i,this.value);};
   d.querySelector('.sbdb').onclick=function(){removeSbPay(i);};
@@ -441,7 +499,7 @@ function changeSbPayType(i,t){
 
 function getSbPayRows(){
   const rows=[];
-  document.querySelectorAll('#sb-pay-box .pay-row').forEach(el=>{
+  document.querySelectorAll('#sb-pay-box .pay-row').forEach(function(el){
     const i=el.id.replace('spay-','');
     const tEl=el.querySelector('select');if(!tEl)return;
     const t=tEl.value;
@@ -639,36 +697,88 @@ function buildTD16(d){
   </div>`;
 }
 
+// ── BUILD VOUCHER ──
 function buildSbVoucher(d,payRows){
-  const no=billNo(d.sb_date,d.sb_bill_seq);
-  const totalAmt=payRows.reduce((s,r)=>{const n=parseInt((r.amt||'0').replace(/[,\s]/g,''));return s+(isNaN(n)?0:n)},0);
-  const totalFmt=totalAmt?totalAmt.toLocaleString('th-TH'):'..........';
-  const totalT=totalAmt?toBaht(totalAmt):'..........';
-  const emptyRows='<tr><td>&nbsp;</td><td></td></tr>'.repeat(Math.max(0,4-payRows.length));
-  const payHTML=payRows.map(r=>'<tr><td>'+r.label+'</td><td class="num">'+(r.amtFmt||'..........')+'</td></tr>').join('')+emptyRows;
-  function oneCopy(label){return'<div style="margin-bottom:8pt">'
-    +'<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4pt">'
-    +'<div><p style="font-size:20pt;font-weight:bold">บริษัท &nbsp; โชคชัย เงินด่วน &nbsp; จำกัด</p>'
-    +'<p style="font-size:12pt;margin-top:2pt">No. '+no+'</p>'
-    +'<p style="font-size:12pt">89/28 หมู่ 9 ต.ท่าเยี่ยม อ.โชคชัย จ.นครราชสีมา</p></div>'
-    +'<div style="text-align:right"><p style="font-size:12pt;color:#555">'+label+'</p>'
-    +'<p style="font-size:12pt">วันที่ &nbsp; '+shortDate(d.sb_date)+'</p></div></div>'
-    +'<p style="color:#c00;font-weight:bold;font-size:13pt;text-align:right;margin-bottom:4pt">ใบสำคัญจ่าย</p>'
-    +'<table class="v-table">'
-    +'<tr><td style="width:40%">ชื่อ-นามสกุล ลูกค้า</td><td colspan="2">'+(d.sb_seller||'..........')+'</td></tr>'
-    +'<tr><td>ที่อยู่ ลูกค้า</td><td colspan="2">'+(d.sb_seller_addr||'..........')+'</td></tr>'
-    +'<tr><th style="width:60%">รายละเอียดการจ่ายเงิน</th><th style="width:40%">จำนวนเงิน(บาท)</th></tr>'
-    +payHTML
-    +'<tr class="total-row"><td style="text-align:center">'+totalT+'</td><td class="num">'+totalFmt+'</td></tr>'
-    +'</table>'
-    +'<table style="width:100%;margin-top:.8cm;border-collapse:collapse"><tr>'
-    +'<td style="text-align:center;width:33%"><span style="display:block;border-top:1px solid #000;width:120px;margin:0 auto 3pt"></span>ผู้จ่ายเงิน</td>'
-    +'<td style="text-align:center;width:34%"><span style="display:block;border-top:1px solid #000;width:120px;margin:0 auto 3pt"></span>ผู้มีอำนาจลงนาม</td>'
-    +'<td style="text-align:center;width:33%"><span style="display:block;border-top:1px solid #000;width:120px;margin:0 auto 3pt"></span>ผู้รับเงิน</td>'
-    +'</tr></table></div>';}
-  return'<div class="doc doc-page">'+oneCopy('ต้นฉบับ')
-    +'<hr style="border:none;border-top:2px dashed #aaa;margin:14pt 0">'+oneCopy('สำเนา')+'</div>';
+  var no=billNo(d.sb_date,d.sb_bill_seq);
+  var total=payRows.reduce(function(s,r){
+    var n=parseInt((r.amt||'0').replace(/[,\s]/g,''));
+    return s+(isNaN(n)?0:n);
+  },0);
+  var totalFmt=total?total.toLocaleString('th-TH'):'';
+  var totalT=total?toBaht(total):'';
+
+  var rows=payRows.slice();
+  while(rows.length<3)rows.push({label:'',amtFmt:''});
+
+  // A4 = 297mm, margin 0.5cm top+bottom = 28mm used, net = 269mm
+  // Each copy = 269/2 = ~134mm = 13.4cm height
+  // Use height on wrapper to force exact half-page
+  var COPY_H='13.4cm';
+  var CELL='padding:3pt 6pt;font-size:12.5pt;';
+  var ROW_H='1.0cm'; // (13.4 - header~4.5 - labels~1.8 - thead~0.7 - total~0.7 - sign~1cm) / 3rows ≈ 1.55cm but tight
+
+  function copy(lbl){
+    var rowsHTML=rows.map(function(r){
+      return '<tr>'
+        +'<td style="border:1px solid #999;'+CELL+'height:'+ROW_H+'">'+r.label+'</td>'
+        +'<td style="border:1px solid #999;'+CELL+'text-align:right;white-space:nowrap;width:28%">'+r.amtFmt+'</td>'
+        +'</tr>';
+    }).join('');
+
+    return '<div style="height:'+COPY_H+';padding:0.3cm 0.6cm;font-family:Sarabun,Arial,sans-serif;box-sizing:border-box;overflow:hidden">'
+      // หัว
+      +'<table style="width:100%;border-collapse:collapse;margin-bottom:1pt"><tr>'
+      +'<td><span style="font-size:21pt;font-weight:bold">บริษัท &nbsp; โชคชัย เงินด่วน &nbsp; จำกัด</span></td>'
+      +'<td style="text-align:right;vertical-align:top;white-space:nowrap;font-size:11pt">'
+      +'<span style="display:block">'+lbl+'</span>'
+      +'<span style="display:block">วันที่ &nbsp;'+shortDate(d.sb_date)+'</span>'
+      +'</td></tr></table>'
+      +'<p style="font-size:10pt;margin:0">No. '+no+'</p>'
+      +'<p style="font-size:10pt;margin:0">89/28 หมู่ 9 ต.ท่าเยี่ยม อ.โชคชัย จ.นครราชสีมา</p>'
+      +'<p style="font-size:10pt;margin:0 0 1pt">เลขประจำตัวผู้เสียภาษี 0305568001941 (สำนักงานใหญ่)</p>'
+      +'<p style="color:#c00;font-weight:bold;font-size:12pt;text-align:right;margin:1pt 0 2pt">ใบสำคัญจ่าย</p>'
+
+      // แถว 1-2: ชื่อ/ที่อยู่ col1 แคบ col2 กว้าง
+      +'<table style="width:100%;border-collapse:collapse;border-bottom:none">'
+      +'<tr>'
+      +'<td style="border:1px solid #999;border-bottom:none;'+CELL+'white-space:nowrap;font-weight:bold">ชื่อ-นามสกุล ลูกค้า</td>'
+      +'<td style="border:1px solid #999;border-left:none;border-bottom:none;'+CELL+'width:100%">'+(d.sb_seller||'')+'</td>'
+      +'</tr>'
+      +'<tr>'
+      +'<td style="border:1px solid #999;border-top:none;'+CELL+'white-space:nowrap;font-weight:bold">ที่อยู่ ลูกค้า</td>'
+      +'<td style="border:1px solid #999;border-left:none;border-top:none;'+CELL+'width:100%">'+(d.sb_seller_addr||'')+'</td>'
+      +'</tr>'
+      +'</table>'
+
+      // แถว 3+: รายละเอียด col1 กว้าง col2 แคบ
+      +'<table style="width:100%;border-collapse:collapse;margin-top:-1px">'
+      +'<tr style="background:#eee">'
+      +'<th style="border:1px solid #999;'+CELL+'text-align:center">รายละเอียดการจ่ายเงิน</th>'
+      +'<th style="border:1px solid #999;'+CELL+'text-align:center;white-space:nowrap;width:28%">จำนวนเงิน(บาท)</th>'
+      +'</tr>'
+      +rowsHTML
+      +'<tr style="background:#ddd">'
+      +'<td style="border:1px solid #999;'+CELL+'font-weight:bold">รวมเงินที่จ่าย &nbsp;&nbsp; '+totalT+'</td>'
+      +'<td style="border:1px solid #999;'+CELL+'font-weight:bold;text-align:right;white-space:nowrap">'+totalFmt+'</td>'
+      +'</tr>'
+      +'</table>'
+
+      // ลายเซ็น
+      +'<table style="width:100%;border-collapse:collapse;margin-top:1.2cm"><tr>'
+      +'<td style="text-align:center;width:33%"><div style="border-top:1px solid #000;width:120px;margin:0 auto 2pt"></div><span style="font-size:11pt">ผู้จ่ายเงิน</span></td>'
+      +'<td style="text-align:center;width:34%"><div style="border-top:1px solid #000;width:120px;margin:0 auto 2pt"></div><span style="font-size:11pt">ผู้มีอำนาจลงนาม</span></td>'
+      +'<td style="text-align:center;width:33%"><div style="border-top:1px solid #000;width:120px;margin:0 auto 2pt"></div><span style="font-size:11pt">ผู้รับเงิน</span></td>'
+      +'</tr></table>'
+      +'</div>';
+  }
+
+  return '<div class="doc doc-page">'
+    +copy('ต้นฉบับ')
+    +'<div style="border-top:2px dashed #aaa;margin:0"></div>'
+    +copy('สำเนา')
+    +'</div>';
 }
+
 
 function genSellback(){
   const d={
@@ -677,21 +787,21 @@ function genSellback(){
     sb_title_no:gv('sb_title_no')||'..........', sb_survey_no:gv('sb_survey_no'),
     sb_area:gv('sb_area'), sb_tambon:gv('sb_tambon'),
     sb_amphoe:gv('sb_amphoe'), sb_province:gv('sb_province')||'นครราชสีมา',
-    sb_seller:gv('sb_seller')||'..........', sb_seller_addr:gv('sb_seller_addr'),
+    sb_seller:gv('sb_seller')||'..........', sb_seller_addr:getSbSellerAddr(),
     sb_seller_nation:gv('sb_seller_nation')||'ไทย',
     sb_price:gv('sb_price'), sb_price_t:gv('sb_price_t'),
     sb_redeem:gv('sb_redeem'), sb_redeem_t:gv('sb_redeem_t'),
     sb_period:gv('sb_period'),
   };
   const payRows=getSbPayRows();
-  const wanted=[...document.querySelectorAll('.sb-doc-cb:checked')].map(c=>c.value);
+  const wanted=Array.prototype.slice.call(document.querySelectorAll('.sb-doc-cb:checked')).map(function(c){return c.value;});
   const docs={};
   if(wanted.includes('td16'))docs.td16={label:'ทด.16 บันทึกถ้อยคำ',html:buildTD16(d)};
   if(wanted.includes('sbvoucher'))docs.sbvoucher={label:'ใบสำคัญจ่าย',html:buildSbVoucher(d,payRows)};
   const keys=Object.keys(docs);
   if(!keys.length){alert('กรุณาเลือกเอกสารอย่างน้อย 1 รายการ');return;}
   const tabsEl=document.getElementById('sb-tabs');
-  tabsEl.innerHTML='';keys.forEach((k,i)=>{const btn=document.createElement('button');btn.className='doc-tab'+(i===0?' active':'');btn.textContent=docs[k].label;btn.onclick=function(){showSbDoc(k);};tabsEl.appendChild(btn);});
+  tabsEl.innerHTML='';keys.forEach(function(k,i){const btn=document.createElement('button');btn.className='doc-tab'+(i===0?' active':'');btn.textContent=docs[k].label;btn.onclick=function(){showSbDoc(k);};tabsEl.appendChild(btn);});
   const outEl=document.getElementById('sb-doc-out');
   outEl.innerHTML=keys.map((k,i)=>'<div id="sbdoc-'+k+'" style="'+(i!==0?'display:none':'')+'">'+docs[k].html+'</div>').join('');
   window._sbDocs=docs;
@@ -700,8 +810,8 @@ function genSellback(){
   window.scrollTo(0,0);
 }
 function showSbDoc(key){
-  Object.keys(window._sbDocs||{}).forEach(k=>{const el=document.getElementById('sbdoc-'+k);if(el)el.style.display=k===key?'':'none';});
-  document.querySelectorAll('#sb-tabs .doc-tab').forEach(t=>{t.classList.toggle('active',t.textContent===((window._sbDocs[key]&&window._sbDocs[key].label)));});
+  Object.keys(window._sbDocs||{}).forEach(function(k){const el=document.getElementById('sbdoc-'+k);if(el)el.style.display=k===key?'':'none';});
+  document.querySelectorAll('#sb-tabs .doc-tab').forEach(function(t){t.classList.toggle('active',t.textContent===((window._sbDocs[key]&&window._sbDocs[key].label)));});
 }
 function showSbForm(){
   document.getElementById('sb-form').style.display='block';
@@ -710,17 +820,94 @@ function showSbForm(){
 }
 
 // Init sellback pay
-document.addEventListener('DOMContentLoaded',function(){addSbPay('cash');});
 
 
 function showPrintTip(){
-  document.querySelectorAll('[id^="mdoc-"],[id^="sbdoc-"],[id^="dldoc-"]').forEach(function(el){el.setAttribute('data-h',el.style.display==='none'?'1':'0');el.style.display='';});
+  // เฉพาะ doc ที่กำลังดูอยู่เท่านั้น ไม่แสดง doc อื่น
   document.getElementById('print-modal').classList.add('show');
   try{window.print();}catch(e){}
 }
 function closePrintTip(){
   document.getElementById('print-modal').classList.remove('show');
-  document.querySelectorAll('[id^="mdoc-"],[id^="sbdoc-"],[id^="dldoc-"]').forEach(function(el){if(el.getAttribute('data-h')==='1')el.style.display='none';});
+}
+
+
+
+
+
+
+
+// ── SB ADDR (using same ADDR from จำนอง) ──
+var ADDR={"นครราชสีมา": {"เมืองนครราชสีมา": ["ในเมือง", "โพธิ์กลาง", "หัวทะเล", "บ้านเกาะ", "บ้านใหม่", "พลกรัง", "ท่าช้าง", "จอหอ", "โคกกรวด", "ไชยมงคล", "หนองจะบก", "หนองระเวียง", "พะเนา", "หนองไผ่ล้อม", "หมื่นไวย", "พุดซา", "สุรนารี", "สีมุม", "ตลาด", "พระพุทธ", "หนองบัวศาลา", "บึงเสนาท", "มะเริง", "หนองกระทุ่ม"], "โชคชัย": ["กระโทก", "พลับพลา", "ท่าอ่าง", "ทุ่งอรุณ", "ท่าลาดขาว", "ท่าจะหลุง", "ท่าเยี่ยม", "โชคชัย", "ละลมใหม่พัฒนา", "ดอนมัน"], "ครบุรี": ["แชะ", "ครบุรี", "โคกกระชาย", "จระเข้หิน", "มาบตะโกเอน", "อรพิมพ์", "บ้านใหม่", "ลำเพียก", "ครบุรีใต้", "ตะเคียน", "บึงพะไล", "สระว่านพระยา", "บึงสำโรง"], "เสิงสาง": ["เสิงสาง", "สระตะเคียน", "โนนสมบูรณ์", "กุดโบสถ์", "สุขไพบูลย์", "บ้านราษฎร์"], "คง": ["เมืองคง", "คูขาด", "เทพาลัย", "ตาจั่น", "บ้านปรางค์", "หนองมะนาว", "หนองบัว", "โนนเต็ง", "ดอนใหญ่", "โนนสำราญ", "ขามสมบูรณ์"], "บ้านเหลื่อม": ["บ้านเหลื่อม", "วังโพธิ์", "โคกกระเบื้อง", "ช่อระกา"], "จักราช": ["จักราช", "ท่าช้าง", "ทองหลาง", "สีสุก", "หินโคน", "หนองขาม", "หนองพลวง", "หนองงูเหลือม", "คลองเมือง", "ช้างทอง", "หนองยาง"], "ด่านขุนทด": ["กุดพิมาน", "ด่านขุนทด", "ด่านนอก", "ด่านใน", "ตะเคียน", "บ้านเก่า", "บึงอ้อ", "โนนเมืองพัฒนา", "หนองกราด", "หนองสรวง", "หินดาด", "ห้วยบง", "หนองบัวตะเกียด"], "โนนไทย": ["โนนไทย", "ด่านจาก", "กำปัง", "สำโรง", "ค้างพลู", "บ้านวัง", "บัลลังก์", "สายออ", "ถนนโพธิ์", "มะค่า"], "โนนสูง": ["โนนสูง", "ใหม่", "โตนด", "ธารปราสาท", "หลุมข้าว", "นากระโทก", "พลสงคราม", "ดอนชมพู", "ขามเฒ่า", "ดอนหวาย", "ลำคอหงษ์", "คำผง", "โนน", "ระแงะ", "หนองหว้า"], "ขามสะแกแสง": ["ขามสะแกแสง", "โนนเมือง", "เมืองนาท", "ชีวึก", "พะงาด", "หนองสัง", "บึงพัฒนา"], "บัวใหญ่": ["บัวใหญ่", "ห้วยยาง", "เสมาใหญ่", "ดอนตะหนิน", "หนองบัวสะอาด", "วังหิน", "โนนทองหลาง", "สีดา", "ด่านช้าง", "ขุนทอง", "หินตะก้อง", "บัวสะอาด"], "ประทาย": ["ประทาย", "กระทุ่มราย", "วังไม้แดง", "ตลาดไทร", "หนองพลวง", "หนองค่าย", "หันห้วยทราย", "ดอนมัน", "นางรำ", "โนนเพ็ด", "ทุ่งสว่าง", "โคกกลาง", "เมืองโดน"], "ปักธงชัย": ["เมืองปัก", "ตะขบ", "โคกไทย", "สำโรง", "ตูม", "นกออก", "ดอน", "ตะคุ", "กบินทร์", "สะแกราช", "ลำนางแก้ว", "ภูหลวง", "ธงชัยเหนือ", "สุขเกษม", "เกษตรทรัพย์", "บ่อปลาทอง"], "พิมาย": ["ในเมือง", "สัมฤทธิ์", "โบสถ์", "กระเบื้องใหญ่", "ท่าหลวง", "รังกาใหญ่", "ชีวาน", "นิคมสร้างตนเอง", "ดงใหญ่", "ธารละหลอด", "หนองระเวียง"], "ห้วยแถลง": ["ห้วยแถลง", "ทับสวาย", "เมืองพะไล", "โนนอุดม", "หลุ่งประดู่", "หลุ่งตะเคียน", "งิ้ว", "กงรถ", "หินดาด", "บึงทวาย"], "ชุมพวง": ["ชุมพวง", "ประสุข", "หนองหลัก", "ไพล", "โนนรัง", "หนองแวง", "เมืองยาง", "สาหร่าย", "ตลาดไทร", "โนนตูม", "โนนยอ"], "สูงเนิน": ["สูงเนิน", "เสมา", "โคราช", "บุ่งขี้เหล็ก", "นากลาง", "หนองตะไก้", "โนนค่า", "โค้งยาง", "มะเกลือเก่า", "มะเกลือใหม่", "น้ำซับ", "หนองม่วงไข่"], "ขามทะเลสอ": ["ขามทะเลสอ", "โป่งแดง", "หนองสรวง", "เมืองเกษตร", "บึงอ้อ"], "สีคิ้ว": ["สีคิ้ว", "บ้านหัน", "กฤษณา", "ลาดบัวขาว", "หนองหญ้าขาว", "กุดน้ำใส", "หนองน้ำใส", "ซับผาปูน", "คลองไผ่", "วังโรงใหญ่", "มิตรภาพ", "คลองศาลา"], "ปากช่อง": ["กลางดง", "จันทึก", "วังกะทะ", "หมูสี", "หนองสาหร่าย", "ขนงพระ", "โป่งตาลอง", "คลองม่วง", "หนองน้ำแดง", "วังไทร", "พญาเย็น"], "หนองบุญมาก": ["หนองบุญมาก", "สารภี", "ไทยเจริญ", "หนองหัวแรต", "แหลมทอง", "หนองตะไก้", "บ้านใหม่", "ลุงเขว้า"], "แก้งสนามนาง": ["แก้งสนามนาง", "โนนสำราญ", "บึงพะไล", "สีสุก", "บึงสำโรง"], "โนนแดง": ["โนนแดง", "โนนตาเถร", "สำพะเนียง", "วังหิน", "ดอนยาวใหญ่"], "วังน้ำเขียว": ["วังน้ำเขียว", "วังหมี", "ระเริง", "อุดมทรัพย์", "ไทยสามัคคี"], "เทพารักษ์": ["เมืองยาง", "สระพระ", "ทุ่งอรุณ", "วังยายทอง"], "เมืองยาง": ["เมืองยาง", "กระเบื้อง", "ละหานปลาค้าว", "บุ่งเลิศ"], "พระทองคำ": ["พระทองคำ", "ทัพรั้ง", "หนองหอย", "มาบกราด", "พังเทียม"], "ลำทะเมนชัย": ["ลำทะเมนชัย", "ช่องแมว", "ไพล", "บ้านยาง"], "บัวลาย": ["บัวลาย", "เมืองพะไล", "โนนจาน", "หนองหว้า"], "สีดา": ["สีดา", "โพนทอง", "โนนประดู่", "สามเมือง", "หนองตาดใหญ่"], "เฉลิมพระเกียรติ": ["เฉลิมพระเกียรติ", "พระพุทธ", "ท่าช้าง", "หนองงูเหลือม", "หนองยาง"]}, "กรุงเทพมหานคร": {"พระนคร": ["พระบรมมหาราชวัง", "วังบูรพาภิรมย์", "วัดราชบพิธ", "สำราญราษฎร์", "ศาลเจ้าพ่อเสือ", "เสาชิงช้า", "บวรนิเวศ", "ตลาดยอด", "บางขุนพรหม", "บ้านพานถม"], "ดุสิต": ["ดุสิต", "วชิรพยาบาล", "สวนจิตรลดา", "สี่แยกมหานาค", "ถนนนครไชยศรี"], "บางรัก": ["มหาพฤฒาราม", "สีลม", "สุริยวงศ์", "บางรัก", "สี่พระยา"], "สาทร": ["ทุ่งมหาเมฆ", "ทุ่งวัดดอน", "ยานนาวา", "สาทร", "บางโพงพาง"], "บึงกุ่ม": ["คลองกุ่ม", "นวมินทร์", "นวลจันทร์"], "ลาดพร้าว": ["ลาดพร้าว", "จรเข้บัว"], "จตุจักร": ["จตุจักร", "เสนานิคม", "จันทรเกษม", "ลาดยาว", "ตลาดบางเขน"], "ห้วยขวาง": ["ห้วยขวาง", "บางกะปิ", "สามเสนนอก"], "ปทุมวัน": ["ปทุมวัน", "รองเมือง", "วังใหม่", "ลุมพินี"], "บางนา": ["บางนา"], "มีนบุรี": ["มีนบุรี", "แสนแสบ"], "ลาดกระบัง": ["ลาดกระบัง", "คลองสาม", "คลองสองต้นนุ่น", "คลองสามประเวศ", "ลำปลาทิว", "ทับยาว", "ขุมทอง"], "คลองสาน": ["สมเด็จเจ้าพระยา", "คลองสาน", "บางลำภูล่าง", "บางลำภูล่าง"], "ธนบุรี": ["ตลาดพลู", "วัดท่าพระ", "บุคคโล", "ทวีวัฒนา", "ท่าเสา", "บางหว้า", "บางไผ่"], "บางกอกใหญ่": ["วัดอรุณ", "วัดท่าพระ"], "บางกอกน้อย": ["ศิริราช", "บ้านช่างหล่อ", "บางขุนนนท์", "บางขุนศรี", "อรุณอมรินทร์"], "ตลิ่งชัน": ["คลองชักพระ", "ตลิ่งชัน", "ฉิมพลี", "บางพรม", "บางระมาด", "บางเชือกหนัง"]}, "เชียงใหม่": {"เมืองเชียงใหม่": ["ศรีภูมิ", "พระสิงห์", "หายยา", "ช้างม่อย", "ช้างคลาน", "วัดเกต", "ช้างเผือก", "สุเทพ", "แม่เหียะ", "ป่าแดด", "หนองหอย", "ท่าศาลา", "หนองป่าครั่ง", "ฟ้าฮ่าม", "ป่าตัน", "สันผีเสื้อ"], "จอมทอง": ["บ้านหลวง", "ข่วงเปา", "สบเตี๊ยะ", "บ้านแปะ", "ดอยแก้ว", "แม่สอย"], "สันกำแพง": ["สันกำแพง", "ทรายมูล", "ร้องวัวแดง", "บวกค้าง", "แช่ช้าง", "ออนใต้", "แม่ปูคา", "ห้วยทราย", "ต้นเปา", "สันกลาง"], "หางดง": ["หางดง", "หนองแก๋ว", "บ้านปง", "น้ำแพร่", "ขุนคง", "สบแม่ข่า", "บ้านดง", "ฝายแก้ว", "หนองควาย", "บ้านแหวน", "สองแคว"], "สันทราย": ["สันทรายหลวง", "สันทรายน้อย", "สันพระเนตร", "แม่แฝก", "แม่แฝกใหม่", "สันนาเม็ง", "หนองแหย่ง", "ป่าไผ่", "หนองจ๊อม", "เมืองเล็น"], "ดอยสะเก็ด": ["เชิงดอย", "สันปูเลย", "ลวงเหนือ", "ป้านกี้", "เทพเสด็จ", "แม่คือ", "ตลาดขวัญ", "สำราญราษฎร์", "แม่ฮ้อยเงิน", "แม่โป่ง", "ป่าป้อง", "สง่าบ้าน", "ป่าเมี่ยง"], "สารภี": ["ยางเนิ้ง", "สารภี", "ชมภู", "ไชยสถาน", "ขัวมุง", "หนองแฝก", "หนองผึ้ง", "ท่ากว้าง", "ดอนแก้ว", "ท่าวังตาล", "สันทราย", "ป่าบง"], "ฝาง": ["เวียง", "ม่อนปิ่น", "บ้านหลวง", "สันทราย", "แม่งอน", "แม่สูน", "โป่งน้ำร้อน"], "แม่อาย": ["แม่อาย", "แม่สาว", "สันต้นหมื้อ", "แม่นาวาง", "ท่าตอน", "บ้านหลวง"], "พร้าว": ["เวียง", "ทุ่งหลวง", "ป่าตุ้ม", "ป่าไหน่", "สันทราย", "บ้านโป่ง", "น้ำแพร่", "เขื่อนผาก", "แม่แวน", "แม่ปั๋ง", "โหล่งขอด"]}, "ขอนแก่น": {"เมืองขอนแก่น": ["ในเมือง", "สาวะถี", "บ้านทุ่ม", "เมืองเก่า", "พระลับ", "บึงเนียม", "โนนท่อน", "สาวะถี"], "น้ำพอง": ["น้ำพอง", "วังชัย", "หนองกุง", "บัวใหญ่", "สะอาด", "ม่วงหวาน", "บ้านขาม", "พังทุย", "กุดน้ำใส", "หนองโก", "ทรายมูล", "ท่ากระเสริม", "พระธาตุ", "วังม่วง"], "บ้านไผ่": ["บ้านไผ่", "ในเมือง", "เมืองเพีย", "บ้านลาน", "แคนเหนือ", "ภูเหล็ก", "ป่าปอ", "หินตั้ง", "หนองน้ำใส", "หัวหนอง"], "ชุมแพ": ["ชุมแพ", "โนนหัน", "นาหนองทุ่ม", "หนองไผ่", "ไชยสอ", "วังหินลาด", "นาเพียง", "หนองเขียด", "หนองเสาเล้า", "โนนอุดม"], "พล": ["เมืองพล", "โจดหนองแก", "เก่างิ้ว", "หนองมะเขือ", "หนองแวงโสกพระ", "เพ็กใหญ่", "โนนข่า", "สาวะถี", "หัวทุ่ง"], "กระนวน": ["หนองโก", "หนองกุงใหญ่", "ห้วยโจด", "ห้วยยาง", "บ้านฝาง", "ดูนสาด", "หนองโน", "น้ำอ้อม", "หัวนาคำ"], "หนองเรือ": ["หนองเรือ", "บ้านเม็ง", "บ้านกง", "ยางคำ", "จระเข้", "โนนทอง", "กุดกว้าง", "โนนทัน", "โนนสะอาด", "บ้านผือ"]}, "อุดรธานี": {"เมืองอุดรธานี": ["หมากแข้ง", "นิคมสงเคราะห์", "บ้านขาว", "หนองบัว", "บ้านตาด", "นาข่า", "บ้านจั่น", "หนองนาคำ", "กุดสระ", "นาดี", "สามพร้าว", "หนองไฮ", "หนองขอนกว้าง", "หมูม่น", "เชียงพิณ", "สาวะถี", "หนองบัวบาน", "โนนสูง", "หนองไผ่"], "กุมภวาปี": ["ตูมใต้", "พันดอน", "เวียงคำ", "แชแล", "หนองหว้า", "ผาสุก", "ท่าลี่", "กุมภวาปี", "เชียงแหว", "ห้วยเกิ้ง", "เสอเพลอ", "สีออ", "ปะโค", "แม่นาเรือ", "บ้านฝาง"], "หนองหาน": ["หนองหาน", "หนองเม็ก", "พังงู", "หนองไผ่", "สะแบง", "น้ำแคน", "โพนงาม", "เสอเพลอ", "สร้างก้อง", "บ้านเชียง", "ผักตบ", "หนองสระปลา"], "บ้านผือ": ["บ้านผือ", "หายโศก", "เขือน้ำ", "คำบง", "ไชยวาน", "เมืองพาน", "คำด้วง", "บ้านค้อ", "หนองหัวคู", "ข้าวสาร", "จำปาโมง", "กลางใหญ่", "เมืองพาน", "โนนทอง"]}, "สุรินทร์": {"เมืองสุรินทร์": ["ในเมือง", "ตั้งใจ", "เพี้ยราม", "นาดี", "ท่าสว่าง", "สลักได", "ตาอ็อง", "สำโรง", "แกน้อย", "สวาย", "ราม", "บุฤๅษี", "ตระแสง", "แสลงพัน", "คอโค", "สะอาดสมบูรณ์"], "ปราสาท": ["กังแอน", "ทมอ", "ไพล", "ปรือ", "ทุ่งมน", "บ้านไทร", "โยนก", "โชคนาสาม", "เชื้อเพลิง", "ปราสาททนง", "ตานี", "บ้านพลวง", "กันตวจระมวล", "สมุด", "ประทัดบุ"], "กาบเชิง": ["กาบเชิง", "คูตัน", "โคกตะเคียน", "ตะเคียน", "แนงมุด", "โนนแท่น", "ทุ่งทอง"], "สังขะ": ["สังขะ", "ขอนแตก", "ดม", "พระแก้ว", "บ้านจารย์", "กระเทียม", "สะกาด", "ตาคง", "บ้านชบ", "เทพรักษา"], "ลำดวน": ["ลำดวน", "โชคเหนือ", "อู่โลก", "ตรำดม", "ตระเปียงเตีย"]}, "บุรีรัมย์": {"เมืองบุรีรัมย์": ["ในเมือง", "อิสาณ", "เสม็ด", "บ้านบัว", "สะแกโพรง", "สะแกซำ", "กลันทา", "กระสัง", "เมืองฝาง", "ถลุงเหล็ก", "หนองตาด", "ลุมปุ๊ก", "สองห้อง", "บัวทอง", "ชุมเห็ด", "หลักเขต", "สวายจีก", "บ้านยาง", "พระครู", "ถนนโพธิ์", "ร่อนทอง"], "นางรอง": ["นางรอง", "สะเดา", "ชุมแสง", "หนองโบสถ์", "หนองกง", "ถนนหัก", "หนองไทร", "ก้านเหลือง", "บ้านสิงห์", "ลำไทรโยง", "ทรัพย์พระยา", "หนองยายพิมพ์", "หัวถนน", "ทุ่งแสงทอง", "หนองโสน"], "กระสัง": ["กระสัง", "ลำดวน", "สองชั้น", "สูงเนิน", "หนองเต็ง", "เมืองไผ่", "ชุมแสง", "บ้านปรือ", "ห้วยสำราญ", "กันทรารมย์", "ศิลา"], "ประโคนชัย": ["ประโคนชัย", "แสลงโทน", "บ้านไทร", "ละลวด", "โคกม้า", "โคกตูม", "ปังกู", "โคกย่าง", "เขาดินเหนือ", "ไพศาล", "ตะโกตาพิ", "จรเข้มาก", "โคกเพชร", "บ้านระดู"], "ลำปลายมาศ": ["ลำปลายมาศ", "หนองคู", "แสลงพัน", "ทะเมนชัย", "ตลาดโพธิ์", "หนองกะทิง", "โคกกลาง", "โคกสะอาด", "เมืองแฝก", "บ้านยาง", "ผไทรวิมาน", "หินโคน", "บ้านด่าน", "ชุมแสง", "โคกล่าม"]}, "ชลบุรี": {"เมืองชลบุรี": ["บางปลาสร้อย", "มะขามหย่ง", "บ้านโขด", "แสนสุข", "บ้านสวน", "หนองรี", "นาป่า", "บ้านปึก", "ห้วยกะปิ", "เสม็ด", "อ่างศิลา", "สุรศักดิ์", "หนองข้างคอก", "ดอนหัวฬ่อ", "บางทราย", "คลองตำหรุ", "บึง", "โพธิ์แก้ว"], "บางละมุง": ["บางละมุง", "หนองปรือ", "หนองปลาไหล", "โป่ง", "เขาไม้แก้ว", "บึง", "หนองชาก", "นาเกลือ", "เกาะลอย", "บางลึก"], "ศรีราชา": ["ศรีราชา", "สุรศักดิ์", "ทุ่งสุขลา", "บึง", "บาง", "หนองขาม", "เจ็ดเนิน"], "พานทอง": ["พานทอง", "หนองตำลึง", "มาบโป่ง", "หนองกะขะ", "หนองหงษ์", "โคกขี้หนอน", "บ้านเก่า", "หน้าประดู่", "บางนาง", "เกาะลอย", "บ้านช้าง"], "พนัสนิคม": ["พนัสนิคม", "หน้าพระธาตุ", "วัดหลวง", "บ้านเซิด", "หนองปรือ", "หนองขยาด", "ทุ่งขวาง", "หนองเหียง", "นาวังหิน", "บ้านช้าง", "กุฎโง้ง", "หนองไม้แดง", "บึงสนั่น", "นามะตูม", "หมอนนาง", "สระสี่เหลี่ยม", "วัดโบสถ์", "หนองยาว", "บ้านนา"], "สัตหีบ": ["สัตหีบ", "นาจอมเทียน", "พลูตาหลวง", "บางเสร่", "แสมสาร"]}, "ระยอง": {"เมืองระยอง": ["ท่าประดู่", "เชิงเนิน", "ตะพง", "ปากน้ำ", "เนินพระ", "กะเฉด", "ทับมา", "น้ำคอก", "หนองละลอก", "หนองตะพาน", "มาบตาพุด", "สำนักทอง"], "แกลง": ["ทางเกวียน", "วังหว้า", "ชากโดน", "เนินฆ้อ", "กร่ำ", "ชากพงศ์", "แกลง", "บ้านนา", "ทุ่งควายกิน", "กองดิน", "อ่าวกระแจะ", "สองสลึง", "ห้วยยาง", "มะขามน้อย"], "ปลวกแดง": ["ปลวกแดง", "มาบยางพร", "หนองไร่", "ตาสิทธิ์", "ละหาร", "แม่น้ำคู้"], "บ้านค่าย": ["บ้านค่าย", "หนองละลอก", "หนองตะพาน", "ตาขัน", "บางบุตร", "หนองบัว", "ชากบก"]}, "สงขลา": {"เมืองสงขลา": ["บ่อยาง", "เขารูปช้าง", "เกาะแต้ว", "พะวง", "ทุ่งหวัง", "เกาะยอ"], "หาดใหญ่": ["หาดใหญ่", "ควนลัง", "คลองอู่ตะเภา", "บ้านพรุ", "พะตง", "ทุ่งใหญ่", "คูเต่า", "คลองแห", "คอหงส์", "น้ำน้อย"], "สะเดา": ["สะเดา", "ปริก", "พังลา", "สำนักแต้ว", "ท่าโพธิ์", "สำนักขาม"], "นาทวี": ["นาทวี", "นาหมอศรี", "คลองทราย", "ฉาง", "นาทับ", "สะท้อน", "ทับช้าง", "ประกอบ", "คลองกวาง"], "จะนะ": ["จะนะ", "สะพานไม้แก่น", "นาหว้า", "นาทับ", "น้ำขาว", "ขุนตัดหวาย", "ท่าหมอไทร", "คลองเปียะ", "ตลิ่งชัน", "แค", "คู", "รัตภูมิ"]}, "ภูเก็ต": {"เมืองภูเก็ต": ["ตลาดใหญ่", "ตลาดเหนือ", "รัษฎา", "วิชิต", "ฉลอง", "ราไวย์", "กะรน"], "กะทู้": ["กะทู้", "ป่าตอง", "กมลา"], "ถลาง": ["เทพกษัตรี", "ศรีสุนทร", "เชิงทะเล", "ป่าคลอก", "ไม้ขาว", "สาคู"]}, "สุราษฎร์ธานี": {"เมืองสุราษฎร์ธานี": ["ตลาด", "มะขามเตี้ย", "วัดประดู่", "ขุนทะเล", "บางชนะ", "คลองน้อย", "บางใบไม้", "บางลึก", "บางไทร", "บางโพธิ์", "บางกุ้ง", "คลองฉนาก"], "เกาะสมุย": ["อ่างทอง", "ลิปะน้อย", "หน้าเมือง", "มะเร็ต", "บ่อผุด", "แม่น้ำ"], "เกาะพะงัน": ["เกาะพะงัน", "บ้านใต้", "เกาะเต่า"], "ไชยา": ["ตลาดไชยา", "พุมเรียง", "เลม็ด", "โมถ่าย", "ปากหมาก", "ปากฉลุย", "ทุ่ง", "เวียง", "ดอน"], "ท่าฉาง": ["ท่าฉาง", "ท่าเคย", "คลองไทย", "เขาถ่าน", "เสวียด", "ปากฉลุย"], "พุนพิน": ["ท่าข้าม", "ย่านยาว", "ท่าสะท้อน", "ลีเล็ด", "บางมะเดื่อ", "บางเดือน", "ท่าโรงช้าง", "กรูด", "พุนพิน", "บางงอน", "ศรีวิชัย", "น้ำรอบ", "มะลวน", "หัวเตย", "หนองไทร", "เขาหัวควาย", "ตะปาน"]}, "นครศรีธรรมราช": {"เมืองนครศรีธรรมราช": ["ในเมือง", "ท่าวัง", "คลัง", "ท่าไร่", "ปากนคร", "น้ำตก", "ไชยมนตรี", "มะม่วงสองต้น", "นาเคียน", "ท่างิ้ว", "โพธิ์เสด็จ", "บางจาก", "ปากพูน", "ท่าซัก", "ท่าเรือ"], "ทุ่งสง": ["ปากแพรก", "ชะมาย", "หนองหงส์", "ควนกรด", "นาโพธิ์", "นาไม้ไผ่", "กะปาง", "ที่วัง", "น้ำตก", "ถ้ำใหญ่", "นาหลวงเสน", "เขาโร", "ท่าส้ม", "สระแก้ว", "น้ำตก"], "ปากพนัง": ["ปากพนัง", "คลองน้อย", "ป่าระกำ", "ชะเมา", "คลองกระบือ", "เกาะทวด", "บ้านใหม่", "หูล่อง", "แหลมตะลุมพุก", "ปากแพรก", "ท่าพยา", "บางศาลา", "บางพระ"], "สิชล": ["สิชล", "ทุ่งปรัง", "ฉลอง", "เสาเภา", "เปลี่ยน", "สี่ขีด", "เทพราช", "ท่าตะเภา", "สิชล", "ทุ่งใส"]}, "กาญจนบุรี": {"เมืองกาญจนบุรี": ["บ้านเหนือ", "บ้านใต้", "ปากแพรก", "ท่ามะขาม", "แก่งเสี้ยน", "หนองบัว", "ลาดหญ้า", "วังด้ง", "ช่องสะเดา", "หนองหญ้า", "เกาะสำโรง", "บ้านเก่า", "หนองโสน"], "ท่าม่วง": ["ท่าม่วง", "วังขนาย", "วังศาลา", "ท่าล้อ", "หนองขาว", "ทุ่งทอง", "เขาน้อย", "ม่วงชุม", "บ้านใหม่", "พระแท่น", "หนองตากยา", "ท่าตะคร้อ"], "ท่ามะกา": ["ท่ามะกา", "ท่าไม้", "กรับใหญ่", "พงตึก", "ยางม่วง", "ดอนชะเอม", "ท่าเรือ", "โคกตะบอง", "ดอนขมิ้น", "อุโลกสี่หมื่น", "ดอนสังข์", "หวายเหนียว", "แสนตอ", "สนามแย้", "ท่าเสา", "หนองลาน"], "ไทรโยค": ["ลุ่มสุ่ม", "ท่าเสา", "สิงห์", "ไทรโยค", "วังกระแจะ", "ศรีมงคล", "บ้องตี้"]}};
+
+function onProvChange(prov){
+  var ampSel=document.getElementById('cust_amphoe');
+  var tamSel=document.getElementById('cust_tambon');
+  ampSel.innerHTML='<option value="">-- เลือกอำเภอ --</option>';
+  tamSel.innerHTML='<option value="">-- เลือกตำบล --</option>';
+  if(!prov||!ADDR[prov])return;
+  Object.keys(ADDR[prov]).sort().forEach(function(a){
+    var opt=document.createElement('option');opt.value=a;opt.textContent=a;
+    ampSel.appendChild(opt);
+  });
+}
+
+function onAmphoeChange(amp){
+  var tamSel=document.getElementById('cust_tambon');
+  tamSel.innerHTML='<option value="">-- เลือกตำบล --</option>';
+  var prov=document.getElementById('cust_province').value;
+  if(!prov||!amp||!ADDR[prov]||!ADDR[prov][amp])return;
+  ADDR[prov][amp].forEach(function(t){
+    var opt=document.createElement('option');opt.value=t;opt.textContent=t;
+    tamSel.appendChild(opt);
+  });
+}
+
+function loadProvinces(){
+  onProvChange('นครราชสีมา');
+}
+function loadAmphoe(v){onProvChange(v);}
+function loadTambon(v){onAmphoeChange(v);}
+function loadZip(){}
+
+
+function sbProv1(prov){
+  var a=document.getElementById('sb_seller_amphoe');
+  var t=document.getElementById('sb_seller_tambon');
+  a.innerHTML='<option value="">-- เลือกอำเภอ --</option>';
+  t.innerHTML='<option value="">-- เลือกตำบล --</option>';
+  if(!prov||!ADDR[prov])return;
+  Object.keys(ADDR[prov]).sort().forEach(function(x){var o=document.createElement('option');o.value=x;o.textContent=x;a.appendChild(o);});
+}
+function sbAmp1(amp){
+  var prov=document.getElementById('sb_seller_province').value;
+  var t=document.getElementById('sb_seller_tambon');
+  t.innerHTML='<option value="">-- เลือกตำบล --</option>';
+  if(!prov||!amp||!ADDR[prov]||!ADDR[prov][amp])return;
+  ADDR[prov][amp].forEach(function(x){var o=document.createElement('option');o.value=x;o.textContent=x;t.appendChild(o);});
+}
+function sbProv2(prov){
+  var a=document.getElementById('sb_amphoe');
+  var t=document.getElementById('sb_tambon');
+  a.innerHTML='<option value="">-- เลือกอำเภอ --</option>';
+  t.innerHTML='<option value="">-- เลือกตำบล --</option>';
+  if(!prov||!ADDR[prov])return;
+  Object.keys(ADDR[prov]).sort().forEach(function(x){var o=document.createElement('option');o.value=x;o.textContent=x;a.appendChild(o);});
+}
+function sbAmp2(amp){
+  var prov=document.getElementById('sb_province').value;
+  var t=document.getElementById('sb_tambon');
+  t.innerHTML='<option value="">-- เลือกตำบล --</option>';
+  if(!prov||!amp||!ADDR[prov]||!ADDR[prov][amp])return;
+  ADDR[prov][amp].forEach(function(x){var o=document.createElement('option');o.value=x;o.textContent=x;t.appendChild(o);});
+}
+function getSbSellerAddr(){
+  var a1=gv('sb_seller_addr1');
+  var prov=document.getElementById('sb_seller_province').value;
+  var amp=document.getElementById('sb_seller_amphoe').value;
+  var tam=document.getElementById('sb_seller_tambon').value;
+  var p=[];if(a1)p.push(a1);if(tam)p.push('ต.'+tam);if(amp)p.push('อ.'+amp);if(prov)p.push('จ.'+prov);
+  return p.join(' ')||'';
 }
 document.addEventListener('DOMContentLoaded',function(){addSbPay('cash');});
 </script>

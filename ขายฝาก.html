@@ -216,6 +216,14 @@ body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;
     <div class="fg"><label>วันที่ในรูปแบบไทย (สำหรับ ทด.16) เช่น ๗ กันยายน ๒๕๖๘</label>
       <input type="text" id="sb_date_th" placeholder="๗ กันยายน ๒๕๖๘">
     </div>
+    <div class="row2">
+      <div class="fg"><label>สำนักงานที่ดิน สาขา</label>
+        <input type="text" id="sb_office_branch" placeholder="สาขา... (ถ้าไม่มีเว้นว่าง)">
+      </div>
+      <div class="fg"><label>อายุผู้ให้ถ้อยคำ (ปี)</label>
+        <input type="text" id="sb_auth_age" placeholder="เช่น 35" inputmode="numeric">
+      </div>
+    </div>
   </div>
 
   <!-- ผู้มีอำนาจ -->
@@ -291,6 +299,9 @@ body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;
     </div>
     <div class="fg"><label>หน้าสำรวจ</label>
       <input type="text" id="sb_survey_no" placeholder="เช่น 329">
+    </div>
+    <div class="fg"><label>ระวาง</label>
+      <input type="text" id="sb_rawang" placeholder="เช่น 5339II">
     </div>
     <div class="fg"><label>เนื้อที่ (ไร่-งาน-วา)</label>
       <input type="text" id="sb_area" placeholder="เช่น 2-1-50">
@@ -799,24 +810,7 @@ function genSellback(){
   const docs={};
   if(wanted.includes('td16')){
     // Build data to send to td16-overlay.html
-    var td16Data = {
-      date_th: d.sb_date_th,
-      person_name: d.sb_seller,
-      addr_no: (d.sb_seller_addr||'').split(' ')[0]||'',
-      province_addr: document.getElementById('sb_seller_province')?document.getElementById('sb_seller_province').value:'',
-      amphoe_addr: document.getElementById('sb_seller_amphoe')?document.getElementById('sb_seller_amphoe').value:'',
-      tambon_addr: document.getElementById('sb_seller_tambon')?document.getElementById('sb_seller_tambon').value:'',
-      nation: d.sb_seller_nation||'ไทย',
-      chanote: d.sb_title_no,
-      chanote_from: d.sb_title_no,
-      survey: d.sb_survey_no,
-      province_land: d.sb_province,
-      amphoe_land: document.getElementById('sb_amphoe')?document.getElementById('sb_amphoe').value:'',
-      tambon_land: document.getElementById('sb_tambon')?document.getElementById('sb_tambon').value:'',
-      amount: d.sb_price,
-      amount_text: d.sb_price_t,
-      office_province: d.sb_province||'นครราชสีมา',
-    };
+    // ข้อมูลจะดึงตรงจากฟอร์มโดย launchTD16()
     var td16LaunchHtml = '<div style="padding:30px 20px;text-align:center">'
       +'<div style="font-size:48px;margin-bottom:16px">🗂️</div>'
       +'<div style="font-size:17px;font-weight:700;color:#1a3a2a;margin-bottom:8px">ทด.16 บันทึกถ้อยคำ</div>'
@@ -824,7 +818,7 @@ function genSellback(){
       +'<button onclick="launchTD16()" style="background:#1a3a2a;color:#fff;border:none;padding:14px 28px;border-radius:10px;font-size:16px;font-family:inherit;font-weight:700;cursor:pointer;width:100%;max-width:280px">📋 เปิด ทด.16 Overlay</button>'
       +'<div style="font-size:11px;color:#aaa;margin-top:12px">ข้อมูลโฉนด, ชื่อ, วันที่, จำนวนเงินจะเด้งเข้าอัตโนมัติ</div>'
       +'</div>';
-    window._td16Data = td16Data;
+
     docs.td16={label:'ทด.16 บันทึกถ้อยคำ', html:td16LaunchHtml};
   }
   if(wanted.includes('sbvoucher'))docs.sbvoucher={label:'ใบสำคัญจ่าย',html:buildSbVoucher(d,payRows)};
@@ -840,8 +834,59 @@ function genSellback(){
   window.scrollTo(0,0);
 }
 function launchTD16(){
+  // ดึงวันที่แยกส่วน
+  var rawDate = document.getElementById('sb_date') ? document.getElementById('sb_date').value : '';
+  var dayTh='', monthTh='', yearTh='', fullDateTh='';
+  if(rawDate){
+    var dt = new Date(rawDate);
+    var thMonths = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+    dayTh   = String(dt.getDate());
+    monthTh = thMonths[dt.getMonth()];
+    yearTh  = String(dt.getFullYear()+543);
+    fullDateTh = dayTh+' '+monthTh+' '+yearTh;
+  }
+  var dateThInput = document.getElementById('sb_date_th') ? document.getElementById('sb_date_th').value : '';
+  if(dateThInput) fullDateTh = dateThInput;
+
+  // ผู้มีอำนาจ
+  var authEl = document.querySelector('[name="sb_auth"]:checked');
+  var auth = authEl ? authEl.value : 'นางสาวภัคฐ์พิชา จรัสบวรพันธ์';
+
+  var data = {
+    // วันที่
+    date:           dayTh,
+    month:          monthTh,
+    year:           yearTh,
+    date_th:        fullDateTh,
+    // ผู้ให้ถ้อยคำ = ผู้มีอำนาจลงนาม
+    person_name:    auth,
+    age:            gv('sb_auth_age'),
+    nation:         'ไทย',
+    // ที่อยู่บริษัท (ตายตัว)
+    addr_no:        '89/28',
+    moo:            '9',
+    tambon_addr:    'ท่าเยี่ยม',
+    amphoe_addr:    'โชคชัย',
+    province_addr:  'นครราชสีมา',
+    // ที่ดิน
+    rawang:         gv('sb_rawang'),
+    chanote:        gv('sb_title_no'),
+    land_no:        gv('sb_title_no'),
+    survey:         gv('sb_survey_no'),
+    province_land:  document.getElementById('sb_province') ? document.getElementById('sb_province').value : '',
+    amphoe_land:    document.getElementById('sb_amphoe') ? document.getElementById('sb_amphoe').value : '',
+    tambon_land:    document.getElementById('sb_tambon') ? document.getElementById('sb_tambon').value : '',
+    // โฉนดจาก = ชื่อผู้ขายฝาก
+    chanote_from:   gv('sb_seller'),
+    // เงิน
+    amount:         gv('sb_price'),
+    amount_text:    gv('sb_price_t'),
+    // สำนักงานที่ดิน
+    office_province: document.getElementById('sb_province') ? document.getElementById('sb_province').value : 'นครราชสีมา',
+    office_branch:  gv('sb_office_branch'),
+  };
   try{
-    localStorage.setItem('td16_from_khaifak', JSON.stringify(window._td16Data||{}));
+    localStorage.setItem('td16_from_khaifak', JSON.stringify(data));
   }catch(e){}
   window.location.href='td16-overlay.html';
 }

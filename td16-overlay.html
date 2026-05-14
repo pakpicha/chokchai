@@ -371,13 +371,24 @@ window.addEventListener('DOMContentLoaded', function(){
     if(kf){
       lsSet('td16_from_khaifak', null);
       var MAP = {
-        date_th:'date', person_name:'person_name',
-        addr_no:'addr_no', province_addr:'province_addr',
-        amphoe_addr:'amphoe_addr', tambon_addr:'tambon_addr',
-        nation:'nation', chanote:'chanote', survey:'survey',
-        province_land:'province_land', amphoe_land:'amphoe_land',
-        tambon_land:'tambon_land', amount:'amount',
-        amount_text:'amount_text', office_province:'office_province',
+        // วันที่
+        date:'date', month:'month', year:'year',
+        date_th:'date',
+        // ผู้ให้ถ้อยคำ
+        person_name:'person_name', age:'age', nation:'nation',
+        // ที่อยู่บริษัท
+        addr_no:'addr_no', moo:'moo',
+        tambon_addr:'tambon_addr', amphoe_addr:'amphoe_addr', province_addr:'province_addr',
+        // ที่ดิน
+        rawang:'rawang', chanote:'chanote', land_no:'land_no',
+        survey:'survey', province_land:'province_land',
+        amphoe_land:'amphoe_land', tambon_land:'tambon_land',
+        // โฉนดจาก
+        chanote_from:'chanote_from',
+        // เงิน
+        amount:'amount', amount_text:'amount_text',
+        // สำนักงานที่ดิน
+        office_province:'office_province', office_branch:'office_branch',
       };
       Object.keys(MAP).forEach(function(src){
         var tgt=MAP[src];

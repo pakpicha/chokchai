@@ -195,6 +195,18 @@ body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;
   .doc-page:last-child{page-break-after:auto}
 }
 @page{size:A4;margin:1cm}
+
+/* ── COMBOBOX (searchable + freetext) ── */
+.combo-wrap{position:relative;width:100%}
+.combo-input{width:100%;padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7;color:#111;-webkit-appearance:none;box-sizing:border-box}
+.combo-input:focus{outline:none;border-color:#1a3a2a;background:#fff}
+.combo-drop{display:none;position:absolute;top:100%;left:0;right:0;background:#fff;border:1px solid #ccc;border-top:none;border-radius:0 0 8px 8px;max-height:200px;overflow-y:auto;z-index:500;box-shadow:0 4px 12px rgba(0,0,0,.15)}
+.combo-drop.open{display:block}
+.combo-opt{padding:10px 12px;font-size:14px;cursor:pointer;border-bottom:1px solid #f0f0f0}
+.combo-opt:hover,.combo-opt.active{background:#e8f5e8}
+.combo-opt:last-child{border-bottom:none}
+.combo-no{padding:10px 12px;font-size:13px;color:#888;font-style:italic}
+
 </style>
 </head>
 <body>
@@ -249,35 +261,13 @@ body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;
       <input type="text" id="sb_seller_addr1" placeholder="เช่น 123/4 หมู่ 5">
     </div>
     <div class="fg"><label>จังหวัด (ผู้ขายฝาก)</label>
-      <select id="sb_seller_province" onchange="sbProv1(this.value)" style="-webkit-appearance:none;padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7;width:100%">
-
-        <option value="">-- เลือกจังหวัด --</option>
-        <option value="กรุงเทพมหานคร">กรุงเทพมหานคร</option>
-        <option value="กาญจนบุรี">กาญจนบุรี</option>
-        <option value="ขอนแก่น">ขอนแก่น</option>
-        <option value="ชลบุรี">ชลบุรี</option>
-        <option value="นครราชสีมา"  selected>นครราชสีมา</option>
-        <option value="นครศรีธรรมราช">นครศรีธรรมราช</option>
-        <option value="บุรีรัมย์">บุรีรัมย์</option>
-        <option value="ภูเก็ต">ภูเก็ต</option>
-        <option value="ระยอง">ระยอง</option>
-        <option value="สงขลา">สงขลา</option>
-        <option value="สุราษฎร์ธานี">สุราษฎร์ธานี</option>
-        <option value="สุรินทร์">สุรินทร์</option>
-        <option value="อุดรธานี">อุดรธานี</option>
-        <option value="เชียงใหม่">เชียงใหม่</option>
-      
-      </select>
+      <input type="text" id="sb_seller_province" placeholder="พิมพ์หรือเลือกจังหวัด..." style="-webkit-appearance:none;padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7;width:100%">
     </div>
     <div class="fg"><label>อำเภอ (ผู้ขายฝาก)</label>
-      <select id="sb_seller_amphoe" onchange="sbAmp1(this.value)" style="-webkit-appearance:none;padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7;width:100%">
-        <option value="">-- เลือกอำเภอ --</option>
-      </select>
+      <input type="text" id="sb_seller_amphoe" placeholder="พิมพ์หรือเลือกอำเภอ..." style="-webkit-appearance:none;padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7;width:100%">
     </div>
     <div class="fg"><label>ตำบล (ผู้ขายฝาก)</label>
-      <select id="sb_seller_tambon" style="-webkit-appearance:none;padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7;width:100%">
-        <option value="">-- เลือกตำบล --</option>
-      </select>
+      <input type="text" id="sb_seller_tambon" placeholder="พิมพ์หรือเลือกตำบล..." style="-webkit-appearance:none;padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7;width:100%">
     </div>
     <div class="fg"><label>สัญชาติ</label>
       <input type="text" id="sb_seller_nation" value="ไทย">
@@ -307,35 +297,13 @@ body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;
       <input type="text" id="sb_area" placeholder="เช่น 2-1-50">
     </div>
         <div class="fg"><label>จังหวัด (ที่ดิน)</label>
-      <select id="sb_province" onchange="sbProv2(this.value)" style="-webkit-appearance:none;padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7;width:100%">
-
-        <option value="">-- เลือกจังหวัด --</option>
-        <option value="กรุงเทพมหานคร">กรุงเทพมหานคร</option>
-        <option value="กาญจนบุรี">กาญจนบุรี</option>
-        <option value="ขอนแก่น">ขอนแก่น</option>
-        <option value="ชลบุรี">ชลบุรี</option>
-        <option value="นครราชสีมา"  selected>นครราชสีมา</option>
-        <option value="นครศรีธรรมราช">นครศรีธรรมราช</option>
-        <option value="บุรีรัมย์">บุรีรัมย์</option>
-        <option value="ภูเก็ต">ภูเก็ต</option>
-        <option value="ระยอง">ระยอง</option>
-        <option value="สงขลา">สงขลา</option>
-        <option value="สุราษฎร์ธานี">สุราษฎร์ธานี</option>
-        <option value="สุรินทร์">สุรินทร์</option>
-        <option value="อุดรธานี">อุดรธานี</option>
-        <option value="เชียงใหม่">เชียงใหม่</option>
-      
-      </select>
+      <input type="text" id="sb_province" placeholder="พิมพ์หรือเลือกจังหวัด..." style="-webkit-appearance:none;padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7;width:100%">
     </div>
     <div class="fg"><label>อำเภอ (ที่ดิน)</label>
-      <select id="sb_amphoe" onchange="sbAmp2(this.value)" style="-webkit-appearance:none;padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7;width:100%">
-        <option value="">-- เลือกอำเภอ --</option>
-      </select>
+      <input type="text" id="sb_amphoe" placeholder="พิมพ์หรือเลือกอำเภอ..." style="-webkit-appearance:none;padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7;width:100%">
     </div>
     <div class="fg"><label>ตำบล (ที่ดิน)</label>
-      <select id="sb_tambon" style="-webkit-appearance:none;padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7;width:100%">
-        <option value="">-- เลือกตำบล --</option>
-      </select>
+      <input type="text" id="sb_tambon" placeholder="พิมพ์หรือเลือกตำบล..." style="-webkit-appearance:none;padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7;width:100%">
     </div>
   </div>
 
@@ -995,7 +963,90 @@ function getSbSellerAddr(){
   var p=[];if(a1)p.push(a1);if(tam)p.push('ต.'+tam);if(amp)p.push('อ.'+amp);if(prov)p.push('จ.'+prov);
   return p.join(' ')||'';
 }
-document.addEventListener('DOMContentLoaded',function(){addSbPay('cash');});
+document.addEventListener('DOMContentLoaded',function(){
+  addSbPay('cash');
+
+// ── COMBOBOX HELPER ──
+function makeCombo(inputId, allOptions, onChange){
+  var inp = document.getElementById(inputId);
+  if(!inp) return;
+  // wrap
+  var wrap = document.createElement('div');
+  wrap.className = 'combo-wrap';
+  inp.parentNode.insertBefore(wrap, inp);
+  wrap.appendChild(inp);
+  inp.className = (inp.className||'') + ' combo-input';
+  inp.autocomplete = 'off';
+  // dropdown
+  var drop = document.createElement('div');
+  drop.className = 'combo-drop';
+  drop.id = inputId + '_drop';
+  wrap.appendChild(drop);
+
+  function renderOpts(filter){
+    var f = (filter||'').toLowerCase().trim();
+    var matched = f ? allOptions.filter(function(o){ return o.toLowerCase().indexOf(f) >= 0; }) : allOptions;
+    if(!matched.length){
+      drop.innerHTML = '<div class="combo-no">ไม่พบ "'+filter+'" — พิมพ์ตามต้องการได้เลย</div>';
+    } else {
+      drop.innerHTML = matched.slice(0,80).map(function(o){
+        return '<div class="combo-opt" data-val="'+o+'">'+o+'</div>';
+      }).join('');
+    }
+    drop.querySelectorAll('.combo-opt').forEach(function(el){
+      el.addEventListener('mousedown', function(e){
+        e.preventDefault();
+        inp.value = el.dataset.val;
+        drop.classList.remove('open');
+        if(onChange) onChange(el.dataset.val);
+      });
+    });
+  }
+
+  inp.addEventListener('input', function(){
+    renderOpts(this.value);
+    drop.classList.add('open');
+  });
+  inp.addEventListener('focus', function(){
+    renderOpts(this.value);
+    drop.classList.add('open');
+  });
+  inp.addEventListener('blur', function(){
+    setTimeout(function(){ drop.classList.remove('open'); }, 200);
+    if(onChange) onChange(inp.value);
+  });
+}
+
+var PROVS=['กระบี่','กาญจนบุรี','กาฬสินธุ์','กำแพงเพชร','ขอนแก่น','จันทบุรี','ฉะเชิงเทรา','ชลบุรี','ชัยนาท','ชัยภูมิ','ชุมพร','เชียงราย','เชียงใหม่','ตรัง','ตราด','ตาก','นครนายก','นครปฐม','นครพนม','นครราชสีมา','นครศรีธรรมราช','นครสวรรค์','นนทบุรี','นราธิวาส','น่าน','บึงกาฬ','บุรีรัมย์','ปทุมธานี','ประจวบคีรีขันธ์','ปราจีนบุรี','ปัตตานี','พระนครศรีอยุธยา','พะเยา','พังงา','พัทลุง','พิจิตร','พิษณุโลก','เพชรบุรี','เพชรบูรณ์','แพร่','ภูเก็ต','มหาสารคาม','มุกดาหาร','แม่ฮ่องสอน','ยโสธร','ยะลา','ร้อยเอ็ด','ระนอง','ระยอง','ราชบุรี','ลพบุรี','ลำปาง','ลำพูน','เลย','ศรีสะเกษ','สกลนคร','สงขลา','สตูล','สมุทรปราการ','สมุทรสงคราม','สมุทรสาคร','สระแก้ว','สระบุรี','สิงห์บุรี','สุโขทัย','สุพรรณบุรี','สุราษฎร์ธานี','สุรินทร์','หนองคาย','หนองบัวลำภู','อ่างทอง','อำนาจเจริญ','อุดรธานี','อุตรดิตถ์','อุทัยธานี','อุบลราชธานี'];
+  makeCombo('sb_seller_province', PROVS, function(v){ sbProv1(v); });
+  makeCombo('sb_seller_amphoe', [], null);
+  makeCombo('sb_seller_tambon', [], null);
+  makeCombo('sb_province', PROVS, function(v){ sbProv2(v); });
+  makeCombo('sb_amphoe', [], null);
+  makeCombo('sb_tambon', [], null);
+
+  // patch sbProv1/2 to update combo options
+  var _op1=sbProv1; sbProv1=function(p){ _op1(p);
+    setTimeout(function(){
+      if(typeof ADDR!=='undefined'&&ADDR[p]){
+        var amps=Object.keys(ADDR[p]);
+        makeCombo('sb_seller_amphoe',amps,function(a){
+          if(ADDR[p]&&ADDR[p][a]) makeCombo('sb_seller_tambon',ADDR[p][a],null);
+        });
+      }
+    },100);
+  };
+  var _op2=sbProv2; sbProv2=function(p){ _op2(p);
+    setTimeout(function(){
+      if(typeof ADDR!=='undefined'&&ADDR[p]){
+        var amps=Object.keys(ADDR[p]);
+        makeCombo('sb_amphoe',amps,function(a){
+          if(ADDR[p]&&ADDR[p][a]) makeCombo('sb_tambon',ADDR[p][a],null);
+        });
+      }
+    },100);
+  };
+});
 </script>
 </body>
 </html>

@@ -224,6 +224,14 @@ body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;
         <input type="text" id="sb_auth_age" placeholder="เช่น 35" inputmode="numeric">
       </div>
     </div>
+    <div class="row2">
+      <div class="fg"><label>รายงานการประชุมครั้งที่</label>
+        <input type="text" id="sb_meeting_no" placeholder="เช่น 1/2568">
+      </div>
+      <div class="fg"><label>จำนวนโฉนด</label>
+        <input type="text" id="sb_chanote_count" placeholder="เช่น 1" inputmode="numeric">
+      </div>
+    </div>
   </div>
 
   <!-- ผู้มีอำนาจ -->
@@ -883,7 +891,9 @@ function launchTD16(){
     amount_text:    gv('sb_price_t'),
     // สำนักงานที่ดิน
     office_province: document.getElementById('sb_province') ? document.getElementById('sb_province').value : 'นครราชสีมา',
-    office_branch:  gv('sb_office_branch'),
+    office_branch:   gv('sb_office_branch'),
+    meeting_no:      gv('sb_meeting_no'),
+    chanote_count:   gv('sb_chanote_count') || (gv('sb_title_no') ? String(gv('sb_title_no').split(',').length) : '1'),
   };
   try{
     localStorage.setItem('td16_from_khaifak', JSON.stringify(data));

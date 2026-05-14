@@ -222,6 +222,8 @@ const BF = [
   {k:'office_province',l:'สำนักงานที่ดินจังหวัด'},
   {k:'office_branch',  l:'สาขา'},
   {k:'rawang',         l:'ระวาง'},
+  {k:'meeting_no',     l:'รายงานประชุมครั้งที่'},
+  {k:'chanote_count',  l:'จำนวนโฉนด'},
   {k:'tambon_land',    l:'ตำบล (ที่ดิน)'},
   {k:'land_no',        l:'เลขที่ดิน'},
   {k:'survey',         l:'หน้าสำรวจ'},
@@ -389,6 +391,8 @@ window.addEventListener('DOMContentLoaded', function(){
         amount:'amount', amount_text:'amount_text',
         // สำนักงานที่ดิน
         office_province:'office_province', office_branch:'office_branch',
+        // ประชุม / โฉนด
+        meeting_no:'meeting_no', chanote_count:'chanote_count',
       };
       Object.keys(MAP).forEach(function(src){
         var tgt=MAP[src];

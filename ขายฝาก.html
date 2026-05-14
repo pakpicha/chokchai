@@ -213,16 +213,8 @@ body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;
       <div class="fg"><label>วันที่ทำเอกสาร</label><input type="date" id="sb_date"></div>
       <div class="fg"><label>บิลที่ของวัน</label><input type="text" id="sb_bill_seq" placeholder="01" maxlength="2" inputmode="numeric"></div>
     </div>
-    <div class="fg"><label>วันที่ในรูปแบบไทย (สำหรับ ทด.16) เช่น ๗ กันยายน ๒๕๖๘</label>
-      <input type="text" id="sb_date_th" placeholder="๗ กันยายน ๒๕๖๘">
-    </div>
-    <div class="row2">
-      <div class="fg"><label>สำนักงานที่ดิน สาขา</label>
-        <input type="text" id="sb_office_branch" placeholder="สาขา... (ถ้าไม่มีเว้นว่าง)">
-      </div>
-      <div class="fg"><label>อายุผู้ให้ถ้อยคำ (ปี)</label>
-        <input type="text" id="sb_auth_age" placeholder="เช่น 35" inputmode="numeric">
-      </div>
+    <div class="fg"><label>สำนักงานที่ดิน สาขา</label>
+      <input type="text" id="sb_office_branch" placeholder="สาขา... (ถ้าไม่มีเว้นว่าง)">
     </div>
     <div class="row2">
       <div class="fg"><label>รายงานการประชุมครั้งที่</label>
@@ -894,6 +886,8 @@ function launchTD16(){
     office_branch:   gv('sb_office_branch'),
     meeting_no:      gv('sb_meeting_no'),
     chanote_count:   gv('sb_chanote_count') || (gv('sb_title_no') ? String(gv('sb_title_no').split(',').length) : '1'),
+    // ส่ง raw date เพื่อให้ td16 แยก วัน/เดือน/ปี เอง
+    raw_date:        gv('sb_date'),
   };
   try{
     localStorage.setItem('td16_from_khaifak', JSON.stringify(data));

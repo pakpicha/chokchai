@@ -17,13 +17,25 @@ body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;
 .head h1{font-size:20px;font-weight:700}
 .head p{font-size:13px;opacity:.7;margin-top:4px}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.card{background:#fff;border-radius:14px;padding:20px 14px;text-align:center;text-decoration:none;color:inherit;display:block;border:1px solid #e0e0d8;-webkit-tap-highlight-color:transparent}
+.card{background:#fff;border-radius:14px;padding:20px 14px;text-align:center;color:inherit;display:block;border:1px solid #e0e0d8;-webkit-tap-highlight-color:transparent;cursor:pointer;text-decoration:none}
 .card:active{background:#e8f5e8;transform:scale(.97)}
 .ic{font-size:36px;margin-bottom:10px}
 .lbl{font-size:15px;font-weight:700;color:#1a3a2a}
 .sub{font-size:11px;color:#888;margin-top:5px;line-height:1.4}
 .tip{background:#fff8e1;border-radius:10px;padding:14px;margin-top:14px;font-size:13px;color:#555;border:1px solid #ffe082}
 .tip strong{color:#e65100}
+.backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:100}
+.backdrop.show{display:block}
+.sheet{position:fixed;bottom:0;left:0;right:0;z-index:101;background:#f0f0eb;border-radius:22px 22px 0 0;padding:0 16px 44px;transform:translateY(100%);transition:transform .28s cubic-bezier(.4,0,.2,1)}
+.sheet.open{transform:translateY(0)}
+.sheet-handle{width:40px;height:4px;background:#ccc;border-radius:2px;margin:12px auto 16px}
+.sheet-title{font-size:18px;font-weight:800;color:#1a3a2a;margin-bottom:14px}
+.mi{background:#fff;border-radius:13px;padding:15px 14px;display:flex;align-items:center;gap:14px;text-decoration:none;color:inherit;margin-bottom:10px;border:1px solid #e0e0d8;-webkit-tap-highlight-color:transparent}
+.mi:active{background:#e8f5e8;transform:scale(.98)}
+.mi-ic{font-size:26px;flex-shrink:0;width:34px;text-align:center}
+.mi-lbl{font-size:15px;font-weight:700;color:#1a3a2a}
+.mi-sub{font-size:11px;color:#888;margin-top:3px;line-height:1.4}
+.mi-arr{color:#bbb;font-size:20px;margin-left:auto;flex-shrink:0}
 </style>
 </head>
 <body>
@@ -37,24 +49,78 @@ body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;
     <div class="lbl">รายงานการประชุม</div>
     <div class="sub">สร้างเอกสารประชุมพิจารณาสินเชื่อ</div>
   </a>
-  <a class="card" href="จำนอง.html">
+  <div class="card" onclick="open_('จำนอง')">
     <div class="ic">📄</div>
-    <div class="lbl">เอกสารจดจำนอง</div>
+    <div class="lbl">จดจำนอง</div>
     <div class="sub">บันทึกข้อตกลง • ต่อท้าย • ใบจ่าย</div>
-  </a>
-  <a class="card" href="ขายฝาก.html">
+  </div>
+  <div class="card" onclick="open_('ขายฝาก')">
     <div class="ic">🏡</div>
-    <div class="lbl">เอกสารขายฝาก</div>
-    <div class="sub">ทด.16 บันทึกถ้อยคำ • ใบสำคัญจ่าย</div>
-  </a>
-  <a class="card" href="กรรมการ.html">
+    <div class="lbl">ขายฝาก</div>
+    <div class="sub">ทด.16 • ใบสำคัญจ่าย</div>
+  </div>
+  <div class="card" onclick="open_('กรรมการ')">
     <div class="ic">💼</div>
     <div class="lbl">กู้เงินกรรมการ</div>
     <div class="sub">ตั๋วจะใช้เงิน • ใบสำคัญจ่าย</div>
-  </a>
+  </div>
 </div>
 <div class="tip">
-  <strong>วิธีปริ้น:</strong> เปิดไฟล์ใน Safari → กรอกข้อมูล → กดปุ่ม "สร้างเอกสาร" → กด <strong>แชร์ (□↑) → Print</strong>
+  <strong>วิธีปริ้น:</strong> เปิดหน้าเอกสาร → กรอกข้อมูล → กด <strong>แชร์ (□↑) → Print</strong>
 </div>
+<div class="backdrop" id="bd" onclick="close_()"></div>
+<div class="sheet" id="sh">
+  <div class="sheet-handle"></div>
+  <div class="sheet-title" id="sh-title"></div>
+  <div id="sh-body"></div>
+</div>
+<script>
+var M={
+  'จำนอง':{
+    t:'📄 จดจำนอง',
+    items:[
+      {ic:'📝',url:'จำนอง.html',l:'บันทึกข้อตกลง',s:'สัญญาจดจำนองที่ดิน'},
+      {ic:'📋',url:'จำนอง.html',l:'บันทึกข้อตกลงต่อท้ายสัญญา',s:'เอกสารต่อท้ายสัญญาจำนอง'},
+      {ic:'💰',url:'จำนอง.html',l:'ใบสำคัญจ่าย',s:'หลักฐานการรับเงินจากการจดจำนอง'},
+    ]
+  },
+  'ขายฝาก':{
+    t:'🏡 ขายฝาก',
+    items:[
+      {ic:'🗂️',url:'td16-overlay.html',l:'ทด.16 — บันทึกถ้อยคำ',s:'แบบฟอร์มบันทึกถ้อยคำสำนักงานที่ดิน'},
+      {ic:'💰',url:'ขายฝาก.html',l:'ใบสำคัญจ่าย',s:'หลักฐานการรับเงินจากการขายฝาก'},
+    ]
+  },
+  'กรรมการ':{
+    t:'💼 กู้เงินกรรมการ',
+    items:[
+      {ic:'📃',url:'กรรมการ.html',l:'ตั๋วจะใช้เงิน',s:'ตั๋วสัญญาใช้เงินสำหรับกรรมการ'},
+      {ic:'💰',url:'กรรมการ.html',l:'ใบสำคัญจ่ายกรรมการ',s:'หลักฐานการรับเงินของกรรมการ'},
+    ]
+  }
+};
+function open_(k){
+  var m=M[k]; if(!m) return;
+  document.getElementById('sh-title').textContent=m.t;
+  var h='';
+  m.items.forEach(function(x){
+    h+='<a class="mi" href="'+x.url+'">';
+    h+='<div class="mi-ic">'+x.ic+'</div>';
+    h+='<div style="flex:1"><div class="mi-lbl">'+x.l+'</div><div class="mi-sub">'+x.s+'</div></div>';
+    h+='<div class="mi-arr">›</div></a>';
+  });
+  document.getElementById('sh-body').innerHTML=h;
+  document.getElementById('bd').classList.add('show');
+  requestAnimationFrame(function(){
+    requestAnimationFrame(function(){
+      document.getElementById('sh').classList.add('open');
+    });
+  });
+}
+function close_(){
+  document.getElementById('sh').classList.remove('open');
+  document.getElementById('bd').classList.remove('show');
+}
+</script>
 </body>
 </html>

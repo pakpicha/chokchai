@@ -368,7 +368,10 @@ body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;
     </div>
   </div>
 
-  <button class="gen-btn" onclick="genSellback()">📄 สร้างเอกสารขายฝาก</button>
+  <div style="display:flex;gap:10px;margin-top:12px">
+  <button class="gen-btn" style="flex:1;font-size:14px;padding:13px 8px" onclick="openTD16()">📋 ทด.16 (Overlay)</button>
+  <button class="gen-btn" style="flex:1;font-size:14px;padding:13px 8px;background:#2d6a4f" onclick="genSellback()">📄 ใบสำคัญจ่าย</button>
+</div>
 </div>
 <div id="sb-preview" style="display:none">
   <div class="pbtns">
@@ -911,6 +914,41 @@ function getSbSellerAddr(){
   return p.join(' ')||'';
 }
 document.addEventListener('DOMContentLoaded',function(){addSbPay('cash');});
+
+function openTD16(){
+  // รวบรวมข้อมูลจากฟอร์ม
+  var prov = document.getElementById('sb_seller_province') ? document.getElementById('sb_seller_province').value : '';
+  var amp  = document.getElementById('sb_seller_amphoe')  ? document.getElementById('sb_seller_amphoe').value  : '';
+  var tam  = document.getElementById('sb_seller_tambon')  ? document.getElementById('sb_seller_tambon').value  : '';
+  var lprov= document.getElementById('sb_province') ? document.getElementById('sb_province').value : '';
+  var lamp = document.getElementById('sb_amphoe')   ? document.getElementById('sb_amphoe').value   : '';
+  var ltam = document.getElementById('sb_tambon')   ? document.getElementById('sb_tambon').value   : '';
+  var authEl = document.querySelector('[name="sb_auth"]:checked');
+
+  var data = {
+    date:           gv('sb_date'),
+    date_th:        gv('sb_date_th'),
+    person_name:    gv('sb_seller'),
+    addr_no:        gv('sb_seller_addr1'),
+    province_addr:  prov,
+    amphoe_addr:    amp,
+    tambon_addr:    tam,
+    nation:         gv('sb_seller_nation')||'ไทย',
+    chanote:        gv('sb_title_no'),
+    survey:         gv('sb_survey_no'),
+    province_land:  lprov,
+    amphoe_land:    lamp,
+    tambon_land:    ltam,
+    amount:         gv('sb_price'),
+    amount_text:    gv('sb_price_t'),
+    office_province: lprov||'นครราชสีมา',
+  };
+
+  // บันทึกใน localStorage เพื่อให้ td16-overlay.html อ่าน
+  localStorage.setItem('td16_from_khaifak', JSON.stringify(data));
+  // เปิด td16-overlay.html
+  window.location.href = 'td16-overlay.html';
+}
 </script>
 </body>
 </html>

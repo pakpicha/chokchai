@@ -345,11 +345,38 @@ function agFields(i,t){
     ${fld(i,'cust','ชื่อ-นามสกุลลูกค้า',true,'')}${colBlock(i,'rs_')}${fld(i,'origdt','วันที่สัญญาขายฝากเดิม',true,'')}
   </div>`;
   if(t==='dirloan'){
-    const cbs=DIRS.map((d,x)=>`<label style="display:flex;align-items:center;gap:6px;font-size:14px;cursor:pointer;background:#f5faf5;border:1px solid #cce0cc;padding:8px 11px;border-radius:8px"><input type="radio" name="ag${i}_dr" value="${d}" ${x===0?'checked':''}> ${d}</label>`).join('');
+    // checkbox ให้เลือกหลายคน + จำนวนเงินแยกต่อคน
+    const dirRows=DIRS.map((d,x)=>`
+      <div class="fw" style="background:#f5faf5;border:1px solid #cce0cc;border-radius:8px;padding:10px;margin-bottom:6px">
+        <label style="display:flex;align-items:center;gap:8px;font-size:14px;cursor:pointer;margin-bottom:8px">
+          <input type="checkbox" class="dl-cb-${i}" value="${d}" style="width:16px;height:16px"> ${d}
+        </label>
+        <div class="af-grid" id="dl-amt-wrap-${i}-${x}" style="display:none">
+          <div><label>จำนวนเงิน (บาท)</label><input type="text" id="ag${i}_amt${x}" inputmode="numeric" placeholder="เช่น 5,000,000" oninput="syncAgAmt(${i},'amt${x}',this.value)"></div>
+          <div><label>ตัวอักษร</label><input type="text" id="ag${i}_amt${x}_t" class="auto" readonly></div>
+        </div>
+      </div>`).join('');
+    // js inline เพื่อ toggle amount fields
+    setTimeout(function(){
+      document.querySelectorAll('.dl-cb-'+i).forEach(function(cb,idx){
+        cb.addEventListener('change',function(){
+          document.getElementById('dl-amt-wrap-'+i+'-'+idx).style.display=this.checked?'':'none';
+        });
+      });
+    },100);
     return`<div class="af-grid">
-      <div class="fw"><label>กรรมการผู้ให้กู้</label><div class="chips" style="margin-top:6px">${cbs}</div></div>
-      ${amtPair(i,'amt','จำนวนเงิน')}${fld(i,'rate','ดอกเบี้ย % ต่อปี',false,'เช่น 7.5')}
-      ${ta(i,'pur','วัตถุประสงค์',true,'')}
+      <div class="fw"><label>กรรมการผู้ให้กู้ (เลือกได้หลายคน)</label><div style="margin-top:6px">${dirRows}</div></div>
+      ${fld(i,'rate','ดอกเบี้ย % ต่อปี',false,'เช่น 6.5')}
+      ${ta(i,'pur','วัตถุประสงค์',true,'เช่น การรับจำนองที่ดินกับ...')}
+      ${fld(i,'agref','จากวาระที่',false,'เช่น 1')}
+      <div class="fw"><label>ผู้แทนบริษัทในการทำสัญญากู้</label>
+        <select id="ag${i}_rep" style="width:100%;padding:9px 10px;font-size:14px;border:1px solid #ccc;border-radius:7px;font-family:inherit;-webkit-appearance:none;background:#fff">
+          <option value="นางสาวภัคฐ์พิชา จรัสบวรพันธ์">นางสาวภัคฐ์พิชา จรัสบวรพันธ์</option>
+          <option value="นายชุณนเกียรติ จรัสบวรพันธ์">นายชุณนเกียรติ จรัสบวรพันธ์</option>
+          <option value="นางชญาน์นัทช์ จรัสบวรพันธ์">นางชญาน์นัทช์ จรัสบวรพันธ์</option>
+          <option value="นายกันตพัฒน์ จรัสบวรพันธ์">นายกันตพัฒน์ จรัสบวรพันธ์</option>
+        </select>
+      </div>
     </div>`;
   }
   if(t==='other')return`<div class="af-grid">${fld(i,'ttl','หัวข้อวาระ',true,'')}${ta(i,'dtl','รายละเอียด',true,'')}</div>`;
@@ -411,11 +438,42 @@ function buildAgContent(i){
     body=`ประธานได้กล่าวแถลงต่อที่ประชุมว่า การที่เชิญประชุมครั้งนี้ก็เพื่อให้ที่ประชุมพิจารณาเรื่องอนุมัติการไถ่ถอนขายฝากให้แก่ ${gfm(i,'cust')} ตามสัญญาขายฝาก${aw} ฉบับลงวันที่ ${gfm(i,'origdt')} เนื่องจากได้รับชำระหนี้เต็มจำนวนแล้ว โดยให้ไถ่ถอนขายฝาก${rc.long} ของ ${gfm(i,'cust')} ได้`;
     res.push('ให้รับชำระเงินตามจำนวนสินไถ่และยินยอมให้ไถ่ถอนขายฝากได้');
   }else if(t==='dirloan'){
-    const m=moneyAg(i,'amt');const pur=gv('ag'+i+'_pur')||'การดำเนินการใช้จ่ายอื่นๆ ในบริษัท';
-    const dr=document.querySelector(`[name='ag${i}_dr']:checked`);const dn=dr?dr.value:'กรรมการบริษัท';
+    const pur=gv('ag'+i+'_pur')||'การดำเนินการใช้จ่ายอื่นๆ ในบริษัท';
+    const rate=gfm(i,'rate');
+    const agref=gv('ag'+i+'_agref')||'';
+    // หากรรมการที่เลือก
+    const checkedCbs=Array.prototype.slice.call(document.querySelectorAll('.dl-cb-'+i+':checked'));
+    const dirLoans=checkedCbs.map(function(cb,idx){
+      // หา index จริงของ checkbox นี้ใน DIRS
+      const realIdx=DIRS.indexOf(cb.value);
+      const m=moneyAg(i,'amt'+(realIdx>=0?realIdx:idx));
+      return{name:cb.value, num:m.num, txt:m.txt};
+    });
+    if(dirLoans.length===0){
+      // fallback ถ้าไม่ได้เลือก
+      dirLoans.push({name:'กรรมการบริษัท', num:'..........', txt:'..........'});
+    }
     title='เรื่องการกู้ยืมเงินจากกรรมการ';
-    body=`ประธานเสนอให้มีการกู้ยืมเงินจาก กรรมการบริษัท ${dn} จำนวนเงิน ${m.num} บาท (${m.txt}) โดยมีการคิดดอกเบี้ย ${gfm(i,'rate')} % เพื่อนำไปใช้ใน${pur}`;
-    res.push(`กู้ยืมเงินจาก ${dn} จำนวน ${m.num} บาท (${m.txt}) ดอกเบี้ยร้อยละ ${gfm(i,'rate')} ต่อปี`);
+    const rep=gv('ag'+i+'_rep')||'นางสาวภัคฐ์พิชา จรัสบวรพันธ์';
+    // คำนวณรวม
+    var totalLoan=0;
+    dirLoans.forEach(function(dl){ totalLoan+=parseInt((dl.num||'0').replace(/[,]/g,''))||0; });
+    var totalFmt=totalLoan>0?totalLoan.toLocaleString('th-TH'):'..........';
+    var totalTxt=totalLoan>0?toBaht(totalLoan):'..........';
+    // body: แต่ละคน + รวม
+    const loanParts=dirLoans.map(function(dl){
+      return dl.name+' เป็นจำนวนเงิน '+dl.num+' บาท ('+dl.txt+')';
+    }).join(' และ ');
+    body='ประธานเสนอให้มีการกู้ยืมเงินจาก '+loanParts
+      +' รวมเป็นเงินกู้ยืม '+totalFmt+' บาท ('+totalTxt+')'
+      +' โดยมีการคิดดอกเบี้ย '+rate+' % เพื่อไปใช้ใน'+pur+(agref?' จากวาระที่ '+agref:'');
+    // สรุป bullet เดียว (รวมทุกคน + ผู้แทน)
+    const loanPartsRes=dirLoans.map(function(dl){
+      return dl.name+' เป็นจำนวนเงิน '+dl.num+' บาท ('+dl.txt+')';
+    }).join(' และ ');
+    res.push('กู้ยืมเงินจาก '+loanPartsRes
+      +' ดอกเบี้ยร้อยละ '+rate+' ต่อปี รวมเป็นเงินกู้ยืม '+totalFmt+' บาท ('+totalTxt+')'
+      +' ให้ '+rep+' เป็นผู้ทำการแทนบริษัทในครั้งนี้ มีอำนาจลงนามในเอกสารต่าง ๆ แทนบริษัท ในการทำหนังสือสัญญาการกู้ยืมเงิน');
   }else if(t==='other'){title=gfm(i,'ttl');body=gv('ag'+i+'_dtl')||'';}
   return{title,body,res,t};
 }
@@ -475,7 +533,7 @@ function genMeeting(){
 function showMeetForm(){document.getElementById('meet-form').style.display='block';document.getElementById('meet-preview').style.display='none';window.scrollTo(0,0);}
 
 
-function goBack(){if(history.length>1){history.back();}else{document.body.innerHTML="<div style='padding:20px'><h2>กลับไปหน้าหลัก</h2><a href='index.html'>คลิกที่นี่</a></div>";}}
+function goBack(){ location.href='index.html'; }
 
 function showPrintTip(){
   document.querySelectorAll('[id^="mdoc-"],[id^="sbdoc-"],[id^="dldoc-"]').forEach(function(el){el.setAttribute('data-h',el.style.display==='none'?'1':'0');el.style.display='';});

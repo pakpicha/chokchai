@@ -109,11 +109,11 @@ body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;
   @page{margin:0mm}
   .nav,.left{display:none!important}
   .app{height:auto;display:block}
-  .pages{background:#fff;padding:0;gap:0}
-  .pg-wrap{box-shadow:none;page-break-after:always;width:100%}
+  .pages{background:#fff;padding:0;gap:0;align-items:flex-start}
+  .pg-wrap{box-shadow:none;page-break-after:always;width:100%;position:relative}
   .pg-wrap img{width:100%;height:auto;display:block}
   .pbox-del,.pbox-lbl,.pbox-res,.overlay{display:none!important}
-  .pbox-txt{border:none!important;background:transparent!important;padding:0!important}
+  .pbox-txt{border:none!important;background:transparent!important;padding:0!important;color:#000!important}
   body,html{background:#fff;margin:0;padding:0}
 }
 
@@ -184,6 +184,7 @@ body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;
       </div>
       <div id="trash-section"></div>
       <button class="save-btn" onclick="saveAll2()">💾 บันทึก Layout</button>
+      <button onclick="exportLayout()" style="background:#2d6a4f;color:#fff;border:none;padding:11px;border-radius:8px;font-size:13px;font-family:inherit;font-weight:700;width:100%;cursor:pointer;margin-top:6px">📤 Export Layout (ส่งให้ Claude)</button>
       <button class="reset-btn" onclick="resetAll()">🔄 รีเซ็ต Layout ทั้งหมด</button>
     </div>
   </div>
@@ -363,6 +364,11 @@ function applyGlobalSize(delta){
 
 // ── INIT ──
 window.addEventListener('DOMContentLoaded', function(){
+window.addEventListener('beforeprint', function(){
+  // recalculate positions จาก current rendered size
+  renderBoxes();
+});
+
   document.getElementById('img1').src = 'data:image/jpeg;base64,'+I1;
   document.getElementById('img2').src = 'data:image/jpeg;base64,'+I2;
   load();
@@ -684,12 +690,36 @@ function saveAll2(){
   saveAll();
   alert('✅ บันทึก Layout เรียบร้อย!');
 }
+function exportLayout(){
+  var data = {
+    layout:  JSON.parse(localStorage.getItem('td16_v7_layout') ||'{}'),
+    fixed:   JSON.parse(localStorage.getItem('td16_v7_fixed')  ||'{}'),
+    deleted: JSON.parse(localStorage.getItem('td16_v7_deleted')||'{}'),
+    order:   JSON.parse(localStorage.getItem('td16_v7_order')  ||'[]'),
+    custom:  JSON.parse(localStorage.getItem('td16_v7_custom') ||'[]'),
+  };
+  var json = JSON.stringify(data, null, 2);
+  var blob = new Blob([json], {type:'application/json'});
+  var url  = URL.createObjectURL(blob);
+  var a    = document.createElement('a');
+  a.href = url; a.download = 'td16_layout.json';
+  a.click();
+  URL.revokeObjectURL(url);
+}
 function resetAll(){
   if(!confirm('รีเซ็ต Layout ทั้งหมด?')) return;
   layout={}; autoSave(); renderBoxes(); renderList();
 }
 function doClear(){ if(!confirm('ล้างข้อมูลที่กรอก?')) return; values={}; lsSet(LS.values,values); renderFill(); renderBoxes(); }
-function doPrint(){ setMode('fill'); setTimeout(function(){ window.print(); },300); }
+function doPrint(){
+  setMode('fill');
+  // recalc box positions using print image size (natural)
+  setTimeout(function(){
+    // force re-render with current clientWidth ก่อน print
+    renderBoxes();
+    window.print();
+  }, 400);
+}
 
 </script>
 </body>

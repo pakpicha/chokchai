@@ -53,6 +53,18 @@ body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;
 .print-tip-box .step:last-child{border-bottom:none}
 .print-tip-box .step-ic{font-size:22px;flex-shrink:0}
 .print-tip-close{width:100%;background:#1a3a2a;color:#fff;border:none;padding:13px;border-radius:10px;font-size:16px;font-family:inherit;font-weight:600;margin-top:12px;cursor:pointer}
+
+/* ── COMBOBOX (searchable + freetext) ── */
+.combo-wrap{position:relative;width:100%}
+.combo-input{width:100%;padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7;color:#111;-webkit-appearance:none;box-sizing:border-box}
+.combo-input:focus{outline:none;border-color:#1a3a2a;background:#fff}
+.combo-drop{display:none;position:absolute;top:100%;left:0;right:0;background:#fff;border:1px solid #ccc;border-top:none;border-radius:0 0 8px 8px;max-height:200px;overflow-y:auto;z-index:500;box-shadow:0 4px 12px rgba(0,0,0,.15)}
+.combo-drop.open{display:block}
+.combo-opt{padding:10px 12px;font-size:14px;cursor:pointer;border-bottom:1px solid #f0f0f0}
+.combo-opt:hover,.combo-opt.active{background:#e8f5e8}
+.combo-opt:last-child{border-bottom:none}
+.combo-no{padding:10px 12px;font-size:13px;color:#888;font-style:italic}
+
 /* Document styles */
 .doc{background:#fff;font-family:'TH Sarabun New','Sarabun',Arial,sans-serif;font-size:14pt;line-height:1.65;color:#000;border:1px solid #ddd;padding:.8cm 1.2cm;width:100%}
 .v-table{width:100%;border-collapse:collapse;margin:6pt 0}
@@ -108,33 +120,13 @@ body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;
       <input type="text" id="cust_addr1" placeholder="เช่น 123/4 หมู่ 5 ถ.มิตรภาพ">
     </div>
     <div class="fg"><label>จังหวัด</label>
-      <select id="cust_province" onchange="onProvChange(this.value)" style="-webkit-appearance:none;padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7;width:100%">
-        <option value="">-- เลือกจังหวัด --</option>
-        <option value="กรุงเทพมหานคร">กรุงเทพมหานคร</option>
-        <option value="กาญจนบุรี">กาญจนบุรี</option>
-        <option value="ขอนแก่น">ขอนแก่น</option>
-        <option value="ชลบุรี">ชลบุรี</option>
-        <option value="นครราชสีมา"  selected>นครราชสีมา</option>
-        <option value="นครศรีธรรมราช">นครศรีธรรมราช</option>
-        <option value="บุรีรัมย์">บุรีรัมย์</option>
-        <option value="ภูเก็ต">ภูเก็ต</option>
-        <option value="ระยอง">ระยอง</option>
-        <option value="สงขลา">สงขลา</option>
-        <option value="สุราษฎร์ธานี">สุราษฎร์ธานี</option>
-        <option value="สุรินทร์">สุรินทร์</option>
-        <option value="อุดรธานี">อุดรธานี</option>
-        <option value="เชียงใหม่">เชียงใหม่</option>
-      </select>
+      <input type="text" id="cust_province" placeholder="พิมพ์หรือเลือกจังหวัด..." style="padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7;width:100%">
     </div>
     <div class="fg"><label>อำเภอ/เขต</label>
-      <select id="cust_amphoe" onchange="onAmphoeChange(this.value)" style="-webkit-appearance:none;padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7;width:100%">
-        <option value="">-- เลือกอำเภอ --</option>
-      </select>
+      <input type="text" id="cust_amphoe" placeholder="พิมพ์หรือเลือกอำเภอ..." style="padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7;width:100%">
     </div>
     <div class="fg"><label>ตำบล/แขวง</label>
-      <select id="cust_tambon" style="-webkit-appearance:none;padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7;width:100%">
-        <option value="">-- เลือกตำบล --</option>
-      </select>
+      <input type="text" id="cust_tambon" placeholder="พิมพ์หรือเลือกตำบล..." style="padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7;width:100%">
     </div>
   </div>
 
@@ -394,31 +386,32 @@ function buildMemo(d){
     +'</table>'
     +'<p style="font-size:'+FS+';margin-bottom:0.3cm">ทั้งสองฝ่าย ได้ตกลงทำสัญญากันดังต่อไปนี้</p>';
 
-  var SIGN='<table style="width:100%;border-collapse:collapse;margin-top:0.6cm">'
+  var SL='border-top:1px solid #000;display:inline-block;width:160px;vertical-align:middle';
+  var SW='border-top:1px solid #000;display:inline-block;width:160px;vertical-align:middle';
+  var SIGN='<table style="width:100%;border-collapse:collapse;margin-top:1cm;font-size:'+FS+'">'
+    // แถวที่ 1: ผู้รับจำนอง | ผู้จำนอง
     +'<tr>'
-    +'<td style="width:50%;text-align:center;padding-top:0.3cm">'
-    +'<div style="border-top:1px solid #000;width:200px;margin:0 auto 3pt"></div>'
-    +'<span style="font-size:'+FS+'">ลงลายมือชื่อ</span><br>'
-    +'<span style="font-size:'+FS+'">&nbsp;( บริษัท โชคชัย เงินด่วน จำกัด )&nbsp;</span><br>'
-    +'<span style="font-size:'+FS+'">( ผู้รับจำนอง )</span></td>'
-    +'<td style="width:50%;text-align:center;padding-top:0.3cm">'
-    +'<div style="border-top:1px solid #000;width:200px;margin:0 auto 3pt"></div>'
-    +'<span style="font-size:'+FS+'">ลงลายมือชื่อ</span><br>'
-    +'<span style="font-size:'+FS+'">&nbsp;( '+d.custName+' )&nbsp;</span><br>'
-    +'<span style="font-size:'+FS+'">( ผู้จำนอง )</span></td>'
+    +'<td style="width:50%;text-align:center;vertical-align:top;padding-bottom:0.3cm">'
+    +'<p style="white-space:nowrap">ลงชื่อ&nbsp;<span style="'+SL+'"></span>&nbsp; ผู้รับจำนอง</p>'
+    +'<p>( บริษัท โชคชัย เงินด่วน จำกัด )</p>'
+    +'</td>'
+    +'<td style="width:50%;text-align:center;vertical-align:top;padding-bottom:0.3cm">'
+    +'<p style="white-space:nowrap">ลงชื่อ&nbsp;<span style="'+SL+'"></span>&nbsp; ผู้จำนอง</p>'
+    +'<p>( '+d.custName+' )</p>'
+    +'</td>'
     +'</tr>'
+    // แถวที่ 2: พยาน | พยาน (กึ่งกลาง)
     +'<tr>'
-    +'<td style="text-align:center;padding-top:0.5cm">'
-    +'<div style="border-top:1px solid #000;width:200px;margin:0 auto 3pt"></div>'
-    +'<span style="font-size:'+FS+'">ลงลายมือชื่อ</span><br>'
-    +'<span style="font-size:'+FS+'">&nbsp;(&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)&nbsp;</span><br>'
-    +'<span style="font-size:'+FS+'">( พยาน )</span></td>'
-    +'<td style="text-align:center;padding-top:0.5cm">'
-    +'<div style="border-top:1px solid #000;width:200px;margin:0 auto 3pt"></div>'
-    +'<span style="font-size:'+FS+'">ลงลายมือชื่อ</span><br>'
-    +'<span style="font-size:'+FS+'">&nbsp;(&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)&nbsp;</span><br>'
-    +'<span style="font-size:'+FS+'">( พยาน )</span></td>'
-    +'</tr></table>';
+    +'<td style="padding:0.9cm 0 0 0;text-align:center;vertical-align:top">'
+    +'<p style="white-space:nowrap">ลงชื่อ&nbsp;<span style="'+SW+'"></span>&nbsp; พยาน</p>'
+    +'<p>(&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)</p>'
+    +'</td>'
+    +'<td style="padding:0.9cm 0 0 0;text-align:center;vertical-align:top">'
+    +'<p style="white-space:nowrap">ลงชื่อ&nbsp;<span style="'+SW+'"></span>&nbsp; พยาน</p>'
+    +'<p>(&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)</p>'
+    +'</td>'
+    +'</tr>'
+    +'</table>';
 
   var CLOSE='</div>';
 
@@ -583,20 +576,24 @@ function buildAddendum(d){
     +'<p style="text-align:justify;margin-top:8pt;font-weight:bold">ทุกฝ่ายได้ตรวจสอบข้อตกลงต่อท้ายหนังสือสัญญาจำนองนี้และเข้าใจข้อความตลอดแล้ว จึงได้ลงลายมือชื่อหรือพิมพ์ลายนิ้วมือไว้เป็นสำคัญต่อหน้าพยาน</p>'
     +'<table style="width:100%;border-collapse:collapse;margin-top:2cm">'
     +'<tr>'
-    +'<td style="width:50%;text-align:center">'
-    +'<div style="border-top:1px solid #000;width:230px;margin:0 auto 4pt"></div>'
-    +'ลงชื่อ..............................<br>ผู้จำนอง/ลูกหนี้</td>'
-    +'<td style="width:50%;text-align:center">'
-    +'<div style="border-top:1px solid #000;width:230px;margin:0 auto 4pt"></div>'
-    +'ลงชื่อ..............................<br>ผู้รับจำนอง</td>'
+    +'<td style="width:50%;text-align:center;vertical-align:top;padding-bottom:0.3cm">'
+    +'<p style="white-space:nowrap">ลงชื่อ&nbsp;<span style="border-top:1px solid #000;display:inline-block;width:160px;vertical-align:middle"></span>&nbsp; ผู้จำนอง/ลูกหนี้</p>'
+    +'<p>( '+d.custName+' )</p>'
+    +'</td>'
+    +'<td style="width:50%;text-align:center;vertical-align:top;padding-bottom:0.3cm">'
+    +'<p style="white-space:nowrap">ลงชื่อ&nbsp;<span style="border-top:1px solid #000;display:inline-block;width:160px;vertical-align:middle"></span>&nbsp; ผู้รับจำนอง</p>'
+    +'<p>( บริษัท โชคชัย เงินด่วน จำกัด )</p>'
+    +'</td>'
     +'</tr>'
     +'<tr>'
-    +'<td style="text-align:center;padding-top:1.8cm">'
-    +'<div style="border-top:1px solid #000;width:230px;margin:0 auto 4pt"></div>'
-    +'ลงชื่อ..............................<br>พยาน</td>'
-    +'<td style="text-align:center;padding-top:1.8cm">'
-    +'<div style="border-top:1px solid #000;width:230px;margin:0 auto 4pt"></div>'
-    +'ลงชื่อ..............................<br>พยาน</td>'
+    +'<td style="padding:0.9cm 0 0 0;text-align:center;vertical-align:top">'
+    +'<p style="white-space:nowrap">ลงชื่อ&nbsp;<span style="border-top:1px solid #000;display:inline-block;width:160px;vertical-align:middle"></span>&nbsp; พยาน</p>'
+    +'<p>(&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)</p>'
+    +'</td>'
+    +'<td style="padding:0.9cm 0 0 0;text-align:center;vertical-align:top">'
+    +'<p style="white-space:nowrap">ลงชื่อ&nbsp;<span style="border-top:1px solid #000;display:inline-block;width:160px;vertical-align:middle"></span>&nbsp; พยาน</p>'
+    +'<p>(&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)</p>'
+    +'</td>'
     +'</tr>'
     +'</table>'
     +'</div>';
@@ -648,7 +645,88 @@ function showDoc(key,docs){
 
 // Init
 document.addEventListener('DOMContentLoaded',function(){
-  onProvChange(document.getElementById('cust_province').value);
+  // ไม่ต้อง onProvChange auto เพราะเป็น input แล้ว
+// เพิ่ม combobox
+
+// ── COMBOBOX HELPER ──
+function makeCombo(inputId, allOptions, onChange){
+  var inp = document.getElementById(inputId);
+  if(!inp) return;
+  // wrap
+  var wrap = document.createElement('div');
+  wrap.className = 'combo-wrap';
+  inp.parentNode.insertBefore(wrap, inp);
+  wrap.appendChild(inp);
+  inp.className = (inp.className||'') + ' combo-input';
+  inp.autocomplete = 'off';
+  // dropdown
+  var drop = document.createElement('div');
+  drop.className = 'combo-drop';
+  drop.id = inputId + '_drop';
+  wrap.appendChild(drop);
+
+  function renderOpts(filter){
+    var f = (filter||'').toLowerCase().trim();
+    var matched = f ? allOptions.filter(function(o){ return o.toLowerCase().indexOf(f) >= 0; }) : allOptions;
+    if(!matched.length){
+      drop.innerHTML = '<div class="combo-no">ไม่พบ "'+filter+'" — พิมพ์ตามต้องการได้เลย</div>';
+    } else {
+      drop.innerHTML = matched.slice(0,80).map(function(o){
+        return '<div class="combo-opt" data-val="'+o+'">'+o+'</div>';
+      }).join('');
+    }
+    drop.querySelectorAll('.combo-opt').forEach(function(el){
+      el.addEventListener('mousedown', function(e){
+        e.preventDefault();
+        inp.value = el.dataset.val;
+        drop.classList.remove('open');
+        if(onChange) onChange(el.dataset.val);
+      });
+    });
+  }
+
+  inp.addEventListener('input', function(){
+    renderOpts(this.value);
+    drop.classList.add('open');
+  });
+  inp.addEventListener('focus', function(){
+    renderOpts(this.value);
+    drop.classList.add('open');
+  });
+  inp.addEventListener('blur', function(){
+    setTimeout(function(){ drop.classList.remove('open'); }, 200);
+    if(onChange) onChange(inp.value);
+  });
+}
+
+// Province data (ย่อ — รายชื่อจังหวัดไทย)
+var PROVS=['กระบี่','กาญจนบุรี','กาฬสินธุ์','กำแพงเพชร','ขอนแก่น','จันทบุรี','ฉะเชิงเทรา','ชลบุรี','ชัยนาท','ชัยภูมิ','ชุมพร','เชียงราย','เชียงใหม่','ตรัง','ตราด','ตาก','นครนายก','นครปฐม','นครพนม','นครราชสีมา','นครศรีธรรมราช','นครสวรรค์','นนทบุรี','นราธิวาส','น่าน','บึงกาฬ','บุรีรัมย์','ปทุมธานี','ประจวบคีรีขันธ์','ปราจีนบุรี','ปัตตานี','พระนครศรีอยุธยา','พะเยา','พังงา','พัทลุง','พิจิตร','พิษณุโลก','เพชรบุรี','เพชรบูรณ์','แพร่','ภูเก็ต','มหาสารคาม','มุกดาหาร','แม่ฮ่องสอน','ยโสธร','ยะลา','ร้อยเอ็ด','ระนอง','ระยอง','ราชบุรี','ลพบุรี','ลำปาง','ลำพูน','เลย','ศรีสะเกษ','สกลนคร','สงขลา','สตูล','สมุทรปราการ','สมุทรสงคราม','สมุทรสาคร','สระแก้ว','สระบุรี','สิงห์บุรี','สุโขทัย','สุพรรณบุรี','สุราษฎร์ธานี','สุรินทร์','หนองคาย','หนองบัวลำภู','อ่างทอง','อำนาจเจริญ','อุดรธานี','อุตรดิตถ์','อุทัยธานี','อุบลราชธานี'];
+
+// init combobox — province triggers amphoe/tambon load via onProvChange
+makeCombo('cust_province', PROVS, function(v){ onProvChange(v); });
+makeCombo('cust_amphoe', [], null);
+makeCombo('cust_tambon', [], null);
+
+// patch onProvChange to also update combo options
+var _origProv = onProvChange;
+onProvChange = function(prov){
+  _origProv(prov);
+  // update amphoe options after load
+  setTimeout(function(){
+    var ampEl = document.getElementById('cust_amphoe');
+    var drop = document.getElementById('cust_amphoe_drop');
+    if(ampEl) ampEl.value = '';
+    // rebuild combo options from ADDR data
+    if(typeof ADDR !== 'undefined' && ADDR[prov]){
+      var amps = Object.keys(ADDR[prov]);
+      makeCombo('cust_amphoe', amps, function(amp){
+        if(typeof ADDR !== 'undefined' && ADDR[prov] && ADDR[prov][amp]){
+          makeCombo('cust_tambon', ADDR[prov][amp], null);
+        }
+      });
+    }
+  }, 100);
+};
   addPay('cash');
 });
 </script>

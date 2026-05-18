@@ -514,14 +514,13 @@ function genMeeting(){
   items.forEach((ag,i)=>{
     agHTML+=`<div class="doc-sec">
       <p class="doc-sec-title">ระเบียบวาระที่&nbsp;&nbsp;${i+1}.&nbsp;&nbsp;&nbsp;${ag.title}</p>
-      <p class="doc-sec-body">${ag.body}</p>
-      <p class="doc-sec-short">ที่ประชุมได้พิจารณาแล้วลงมติเป็นเอกฉันท์ให้ บริษัท ดำเนินการได้ตามที่ประธานเสนอ</p>
+      <p class="doc-sec-body" style="text-indent:2.5em">${ag.body}</p>
+      <p class="doc-sec-short" style="text-indent:2.5em">ที่ประชุมได้พิจารณาแล้วลงมติเป็นเอกฉันท์ให้ บริษัท ดำเนินการได้ตามที่ประธานเสนอ</p>
     </div>`;
     ag.res.forEach(r=>allRes.push(r));
   });
-  if(allRes.length>0){agHTML+=`<p class="doc-combined">ที่ประชุมได้พิจารณาแล้วลงมติเป็นเอกฉันท์ให้บริษัทดำเนินการได้ตามที่ประธานเสนอและเลือกกรรมการของ บริษัท โชคชัย เงินด่วน จำกัด คือ กรรมการผู้มีอำนาจลงนามคนใดคนหนึ่ง เป็นผู้ทำการแทนบริษัทในครั้งนี้ มีอำนาจลงนามในเอกสารต่าง ๆ แทนบริษัท ดังต่อไปนี้</p>
-    <ul class="doc-list">${allRes.map(r=>`<li>${r}</li>`).join('')}</ul>`;}
-  const lastN=items.length+1;
+  if(allRes.length>0){agHTML+=`<p class="doc-combined" style="text-indent:2.5em">ที่ประชุมได้พิจารณาแล้วลงมติเป็นเอกฉันท์ให้บริษัทดำเนินการได้ตามที่ประธานเสนอและเลือกกรรมการของ บริษัท โชคชัย เงินด่วน จำกัด คือ กรรมการผู้มีอำนาจลงนามคนใดคนหนึ่ง เป็นผู้ทำการแทนบริษัทในครั้งนี้ มีอำนาจลงนามในเอกสารต่าง ๆ แทนบริษัท ดังต่อไปนี้</p>
+    <ul class="doc-list" style="padding-left:3em">${allRes.map(r=>`<li style="text-align:justify;margin-bottom:4pt">${r}</li>`).join('')}</ul>`;}  const lastN=items.length+1;
   agHTML+=`<div class="doc-sec"><p class="doc-sec-title">ระเบียบวาระที่&nbsp;&nbsp;${lastN}.&nbsp;&nbsp;&nbsp;เรื่องอื่น ๆ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ไม่มี</p></div>`;
   document.getElementById('meet-doc-out').innerHTML=`<div class="doc doc-page">
     <p class="doc-h1">รายงานการประชุม</p>

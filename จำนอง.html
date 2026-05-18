@@ -631,23 +631,44 @@ function buildAddendum(d){
     +'<p style="text-align:center;margin-bottom:14pt">ทำ ณ สำนักงานที่ดิน &nbsp; จังหวัด '+lb+lbSub+'</p>'
     +'<p style="margin-bottom:6pt;padding-left:1.5cm;text-indent:-1.5cm;text-align:justify"><strong>ข้อ 1.</strong> ผู้จำนองเป็นเจ้าของทรัพย์สินซึ่งจำนองเป็นประกันการชำระหนี้เงินกู้ทั้งหลายซึ่ง ผู้จำนอง เป็นหนี้ผู้รับจำนองอยู่เป็นจำนวนเงิน '+d.amtFmt+' บาท ('+d.amtT+') ตลอดจนประกันการชำระหนี้อุปกรณ์แห่งหนี้คือดอกเบี้ยค่าสินไหมทดแทนในการไม่ชำระหนี้ และค่าฤชาธรรมเนียมในการบังคับจำนองด้วย</p>'
     +'<p style="margin-bottom:6pt;padding-left:1.5cm;text-indent:-1.5cm;text-align:justify"><strong>ข้อ 2.</strong> เมื่อผู้รับจำนองบังคับจำนอง เอาทรัพย์สินจำนองรายนี้ออกขายทอดตลาดได้เงินจำนวนสุทธิน้อยกว่าจำนวนเงินที่ค้างชำระ และค่าอุปกรณ์หรือเอาทรัพย์สินที่หลุดจำนองหลุดเป็นสิทธิและทรัพย์สินนั้นมีราคาต่ำกว่าจำนวนเงินที่ค้างชำระและค่าอุปกรณ์ เงินยังขาดจำนวนอยู่เท่าใด ผู้จำนองและหรือลูกหนี้ของผู้รับจำนองยอมรับใช้เงินที่ขาดจำนวนนั้นให้แก่ผู้รับจำนองจนครบ</p>'
-    +'<p style="margin-bottom:6pt;padding-left:1.5cm;text-indent:-1.5cm;text-align:justify"><strong>ข้อ 3.</strong> ถึงแม้จะมีการกระทำอย่างใดอย่างหนึ่งของผู้รับจำนอง เป็นเหตุให้ผู้จำนองไม่อาจเข้ารับช่วงได้ทั้งหมดหรือแต่บางส่วนในสิทธิใดๆ อันได้ให้ไว้แก่ผู้รับจำนองแต่ก่อน หรือในขณะหรือภายหลังที่ผู้จำนองเข้าทำหนังสือสัญญาจำนองรายนี้ ผู้จำนองก็ไม่หลุดพ้นจากความรับผิดในการจำนองรายนี้แต่อย่างประการใด</p>'
+    +'<p style="margin-bottom:6pt;padding-left:1.5cm;text-indent:-1.5cm;text-align:justify"><strong>ข้อ 3.</strong> ถึงแม้จะมีการกระทำอย่างใดอย่างหนึ่งของผู้รับจำนอง เป็นเหตุให้ผู้จำนองไม่อาจเข้ารับช่วงได้ทั้งหมดหรือแต่บางส่วนในสิทธิใดๆ อันได้ให้ไว้แก่ผู้รับจำนองแต่ก่อน หรือในขณะหรือภายหลังที่ผู้จำนองเข้าทำหนังสือสัญญาจำนองรายนี้ ผู้จำนองก็ไม่หลุดพ้นจากความรับผิดในการจำนองรายนี้แต่ประการใด</p>'
     +'<p style="margin-bottom:6pt;padding-left:1.5cm;text-indent:-1.5cm;text-align:justify"><strong>ข้อ 4.</strong> ในกรณีที่ผู้รับจำนองยอมผ่อนผันเวลาให้แก่ลูกหนี้สำหรับการชำระหนี้เงินกู้รายใดก็ตาม ผู้จำนองขอยืนยันไว้ล่วงหน้าว่าผู้จำนองเป็นอันตกลงด้วยในการผ่อนเวลาทุกคราว จึงไม่เป็นเหตุให้ผู้จำนองหลุดพ้นจากความรับผิดในการจำนองรายนี้</p>'
     +'<p style="margin-bottom:6pt;padding-left:1.5cm;text-indent:-1.5cm;text-align:justify"><strong>ข้อ 5.</strong> การถอนจำนองจะกระทำได้ต่อเมื่อผู้รับจำนองได้รับชำระหนี้เงินกู้ทุกรายของลูกหนี้ครบถ้วนแล้ว</p>'
-    +'<p style="margin-bottom:6pt;text-align:justify">ข้อตกลงต่อท้ายหนังสือสัญญาจำนองนี้ทำไว้เป็นสี่ฉบับมีข้อความตรงกัน สำหรับ ผู้จำนอง, ผู้รับจำนอง, สำนักงานที่ดิน และสรรพากรถือไว้ฝ่ายละหนึ่งฉบับ</p>'
-    +'<p style="text-align:justify;margin-top:8pt;font-weight:bold">ทุกฝ่ายได้ตรวจสอบข้อตกลงต่อท้ายหนังสือสัญญาจำนองนี้และเข้าใจข้อความตลอดแล้ว จึงได้ลงลายมือชื่อหรือพิมพ์ลายนิ้วมือไว้เป็นสำคัญต่อหน้าพยาน</p>'
+    +'<p style="margin-bottom:6pt;text-align:justify;text-indent:2.5em">ข้อตกลงต่อท้ายหนังสือสัญญาจำนองนี้ทำไว้เป็นสี่ฉบับมีข้อความตรงกัน สำหรับ ผู้จำนอง, ผู้รับจำนอง, สำนักงานที่ดิน และสรรพากรถือไว้ฝ่ายละหนึ่งฉบับ</p>'
+    +'<p style="text-align:justify;margin-top:8pt;font-weight:bold;text-indent:2.5em">ทุกฝ่ายได้ตรวจสอบข้อตกลงต่อท้ายหนังสือสัญญาจำนองนี้และเข้าใจข้อความตลอดแล้ว จึงได้ลงลายมือชื่อหรือพิมพ์ลายนิ้วมือไว้เป็นสำคัญต่อหน้าพยาน</p>'
     +'<table style="width:100%;border-collapse:collapse;margin-top:2cm">'
     // แถว 1: ผู้จำนอง/ลูกหนี้ | ผู้รับจำนอง
     +'<tr>'
-    +'<td style="width:50%;text-align:center;vertical-align:top;padding-bottom:0.3cm">'
-    +'<p style="white-space:nowrap">ลงชื่อ&nbsp;<span style="border-top:1px solid #000;display:inline-block;width:160px;vertical-align:middle"></span>&nbsp; ผู้จำนอง/ลูกหนี้</p>'
-    +'<p>( '+d.custName+' )</p>'
-    +(d.custName2?'<p style="margin-top:0.8cm;white-space:nowrap">ลงชื่อ&nbsp;<span style="border-top:1px solid #000;display:inline-block;width:160px;vertical-align:middle"></span>&nbsp; ผู้จำนอง/ลูกหนี้</p><p>( '+d.custName2+' )</p>':'')
-    +'</td>'
-    +'<td style="width:50%;text-align:center;vertical-align:top;padding-bottom:0.3cm">'
-    +'<p style="white-space:nowrap">ลงชื่อ&nbsp;<span style="border-top:1px solid #000;display:inline-block;width:160px;vertical-align:middle"></span>&nbsp; ผู้รับจำนอง</p>'
-    +'<p>( บริษัท โชคชัย เงินด่วน จำกัด )</p>'
-    +'</td>'
+    +(d.custName2
+      // 2 คน: แสดง 2 คอลัมน์ซ้าย | คอลัมน์ขวาบริษัท
+      ?'<td style="width:50%;text-align:center;vertical-align:top;padding-bottom:0.3cm">'
+       +'<p style="white-space:nowrap">ลงชื่อ&nbsp;<span style="border-top:1px solid #000;display:inline-block;width:150px;vertical-align:middle"></span>&nbsp; ผู้จำนอง/ลูกหนี้</p>'
+       +'<p>( '+d.custName+' )</p>'
+       +'</td>'
+       +'<td style="width:50%;text-align:center;vertical-align:top;padding-bottom:0.3cm">'
+       +'<p style="white-space:nowrap">ลงชื่อ&nbsp;<span style="border-top:1px solid #000;display:inline-block;width:150px;vertical-align:middle"></span>&nbsp; ผู้จำนอง/ลูกหนี้</p>'
+       +'<p>( '+d.custName2+' )</p>'
+       +'</td>'
+      // 1 คน: คอลัมน์เดิม
+      :'<td style="width:50%;text-align:center;vertical-align:top;padding-bottom:0.3cm">'
+       +'<p style="white-space:nowrap">ลงชื่อ&nbsp;<span style="border-top:1px solid #000;display:inline-block;width:160px;vertical-align:middle"></span>&nbsp; ผู้จำนอง/ลูกหนี้</p>'
+       +'<p>( '+d.custName+' )</p>'
+       +'</td>'
+    )
+    +(d.custName2?''
+      :'<td style="width:50%;text-align:center;vertical-align:top;padding-bottom:0.3cm">'
+       +'<p style="white-space:nowrap">ลงชื่อ&nbsp;<span style="border-top:1px solid #000;display:inline-block;width:160px;vertical-align:middle"></span>&nbsp; ผู้รับจำนอง</p>'
+       +'<p>( บริษัท โชคชัย เงินด่วน จำกัด )</p>'
+       +'</td>'
+    )
+    // แถว 2 ถ้ามี 2 คน: ผู้จำนองซ้าย | ผู้รับจำนองขวา
+    +(d.custName2
+      ?'</tr><tr>'
+       +'<td colspan="2" style="text-align:center;vertical-align:top;padding-top:0.8cm;padding-bottom:0.3cm">'
+       +'<p style="white-space:nowrap">ลงชื่อ&nbsp;<span style="border-top:1px solid #000;display:inline-block;width:160px;vertical-align:middle"></span>&nbsp; ผู้รับจำนอง</p>'
+       +'<p>( บริษัท โชคชัย เงินด่วน จำกัด )</p>'
+       +'</td>'
+      :'')
     +'</tr>'
     // แถว 2: พยาน | พยาน
     +'<tr>'

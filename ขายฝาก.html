@@ -212,7 +212,7 @@ body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;
 <body>
 <div class="section active" id="section-sellback">
 <div class="ui" id="sb-form">
-  <button class="back-home" onclick="history.length>1?history.back():document.body.innerHTML='<div style=padding:20px><h2>ปิดหน้าต่างนี้แล้วเปิดไฟล์ index.html</h2></div>'">← หน้าหลัก</button>
+  <button class="back-home" onclick="location.href='index.html'">← หน้าหลัก</button>
   <div class="ui-head">
     <h1>🏡 เอกสารขายฝาก</h1>
     <p>กรอกครั้งเดียว → ได้ ทด.16 + ใบสำคัญจ่ายพร้อมกัน</p>
@@ -876,6 +876,25 @@ function genSellback(){
   window.scrollTo(0,0);
 }
 function launchTD16(){
+  // บันทึกข้อมูลฟอร์มไว้ใน sessionStorage เพื่อ restore เมื่อกลับมา
+  try {
+    var fields = ['sb_date','sb_bill_seq','sb_office_branch','sb_meeting_no','sb_chanote_count',
+      'sb_seller','sb_seller2','sb_seller_addr1','sb_seller_nation',
+      'sb_seller_province','sb_seller_amphoe','sb_seller_tambon',
+      'sb_seller_addr1_2','sb_seller_province2','sb_seller_amphoe2','sb_seller_tambon2',
+      'sb_doc_type','sb_title_no','sb_survey_no','sb_rawang','sb_area',
+      'sb_province','sb_amphoe','sb_tambon',
+      'sb_price','sb_price_t','sb_redeem','sb_redeem_t','sb_period'];
+    var data = {};
+    fields.forEach(function(k){
+      var el = document.getElementById(k);
+      if(el) data[k] = el.type==='checkbox' ? el.checked : el.value;
+    });
+    // checkbox has_seller2
+    var hs2 = document.getElementById('has_seller2');
+    if(hs2) data['has_seller2'] = hs2.checked;
+    sessionStorage.setItem('sb_form_data', JSON.stringify(data));
+  } catch(e) {}
   // ดึงวันที่แยกส่วน
   var rawDate = document.getElementById('sb_date') ? document.getElementById('sb_date').value : '';
   var dayTh='', monthTh='', yearTh='', fullDateTh='';
@@ -1039,6 +1058,22 @@ function getSbSellerAddr(){
 }
 document.addEventListener('DOMContentLoaded',function(){
   addSbPay('cash');
+  // ถ้ากลับมาจาก td16-overlay ให้ restore ข้อมูลจาก sessionStorage
+  try {
+    var saved = sessionStorage.getItem('sb_form_data');
+    if(saved) {
+      var d = JSON.parse(saved);
+      Object.keys(d).forEach(function(k){
+        var el = document.getElementById(k);
+        if(!el) return;
+        if(el.type === 'checkbox') el.checked = d[k];
+        else el.value = d[k];
+      });
+      // trigger events
+      var prov1 = document.getElementById('sb_seller_province');
+      if(prov1 && prov1.value) { var ev=new Event('blur'); prov1.dispatchEvent(ev); }
+    }
+  } catch(e) {}
 
 // ── COMBOBOX HELPER ──
 function makeCombo(inputId, allOptions, onChange){

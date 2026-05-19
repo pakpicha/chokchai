@@ -53,6 +53,25 @@ body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;
 .print-tip-box .step:last-child{border-bottom:none}
 .print-tip-box .step-ic{font-size:22px;flex-shrink:0}
 .print-tip-close{width:100%;background:#1a3a2a;color:#fff;border:none;padding:13px;border-radius:10px;font-size:16px;font-family:inherit;font-weight:600;margin-top:12px;cursor:pointer}
+/* Document styles */
+.doc{background:#fff;font-family:'TH Sarabun New','Sarabun',Arial,sans-serif;font-size:14pt;line-height:1.65;color:#000;border:1px solid #ddd;padding:.8cm 1.2cm;width:100%}
+.v-table{width:100%;border-collapse:collapse;margin:6pt 0}
+.v-table th,.v-table td{border:1px solid #999;padding:5pt 8pt;font-size:13pt;vertical-align:top}
+.v-table th{background:#f5f5f5;text-align:center}
+.v-table .num{text-align:right}
+.v-table .total-row td{font-weight:bold;border-top:2px solid #999}
+@media screen and (max-width:700px){.doc{font-size:3.6vw;padding:4vw 3vw}}
+@media print{
+  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+  html,body{background:#fff!important;margin:0!important;padding:0!important}
+  .ui,.pbtns,.doc-tabs,.back-home,.print-tip,.gen-btn,.add-btn{display:none!important}
+  #mort-preview{display:block!important}
+  .doc-wrap{padding:0!important}
+  .doc{border:none!important;padding:0!important;margin:0!important;font-size:13.5pt!important;line-height:1.65!important}
+  .doc-page{page-break-after:always}
+  .doc-page:last-child{page-break-after:auto}
+}
+@page{size:A4;margin:1.25cm}
 
 /* ── COMBOBOX (searchable + freetext) ── */
 .combo-wrap{position:relative;width:100%}
@@ -65,30 +84,6 @@ body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;
 .combo-opt:last-child{border-bottom:none}
 .combo-no{padding:10px 12px;font-size:13px;color:#888;font-style:italic}
 
-/* Document styles */
-.doc{background:#fff;font-family:'TH Sarabun New','Sarabun',Arial,sans-serif;font-size:14pt;line-height:1.65;color:#000;border:1px solid #ddd;padding:.8cm 1.2cm;width:100%}
-.v-table{width:100%;border-collapse:collapse;margin:6pt 0}
-.v-table th,.v-table td{border:1px solid #999;padding:5pt 8pt;font-size:13pt;vertical-align:top}
-.v-table th{background:#f5f5f5;text-align:center}
-.v-table .num{text-align:right}
-.v-table .total-row td{font-weight:bold;border-top:2px solid #999}
-@media screen and (max-width:700px){.doc{font-size:3.6vw;padding:4vw 3vw}}
-@media print{
-  @page{size:A4;margin:8mm}
-  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
-  html,body{background:#fff!important;margin:0!important;padding:0!important}
-  .ui,.pbtns,.doc-tabs,.back-home,.print-tip,.gen-btn,.add-btn{display:none!important}
-  #mort-preview{display:block!important}
-  .doc-wrap{padding:0!important}
-  .doc{border:none!important;padding:0!important;margin:0!important;font-size:12pt!important;line-height:1.55!important}
-  .doc-page{page-break-after:always;width:100%;box-sizing:border-box}
-  .doc-page:last-child{page-break-after:auto}
-  /* ใบสำคัญจ่าย ให้ fit พอดีหน้า */
-  .voucher-wrap{width:100%!important;max-width:100%!important}
-  table{width:100%!important;table-layout:fixed!important;word-break:break-word}
-  td,th{word-break:break-word;overflow-wrap:break-word}
-}
-@page{size:A4;margin:1.25cm}
 </style>
 </head>
 <body>
@@ -118,48 +113,8 @@ body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;
   <!-- 2. ข้อมูลลูกค้า -->
   <div class="card">
     <div class="ct"><span class="n">2</span> ข้อมูลลูกค้า (ผู้จำนอง)</div>
-
-    <!-- คนที่ 1 -->
-    <div class="fg"><label>ชื่อ-นามสกุลผู้จำนอง คนที่ 1</label>
-      <input type="text" id="cust_name" placeholder="นาย/นาง/นางสาว ชื่อ นามสกุล">
-    </div>
-    <div class="fg"><label>ที่อยู่ (บ้านเลขที่ หมู่ ถนน)</label>
-      <input type="text" id="cust_addr1" placeholder="เช่น 123/4 หมู่ 5 ถ.มิตรภาพ">
-    </div>
-    <div class="fg"><label>จังหวัด</label>
-      <input type="text" id="cust_province" placeholder="พิมพ์หรือเลือกจังหวัด..." style="padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7;width:100%">
-    </div>
-    <div class="fg"><label>อำเภอ/เขต</label>
-      <input type="text" id="cust_amphoe" placeholder="พิมพ์หรือเลือกอำเภอ..." style="padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7;width:100%">
-    </div>
-    <div class="fg"><label>ตำบล/แขวง</label>
-      <input type="text" id="cust_tambon" placeholder="พิมพ์หรือเลือกตำบล..." style="padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7;width:100%">
-    </div>
-
-    <!-- toggle คนที่ 2 -->
-    <div class="fg" style="margin-top:10px;padding-top:10px;border-top:1px dashed #ccc">
-      <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
-        <input type="checkbox" id="has_cust2" onchange="toggleCust2(this.checked)" style="width:16px;height:16px">
-        <span style="font-weight:700">มีผู้จำนองคนที่ 2</span>
-      </label>
-    </div>
-    <div id="cust2-section" style="display:none;padding-top:8px;border-top:1px dashed #ccc;margin-top:4px">
-      <div class="fg"><label>ชื่อ-นามสกุลผู้จำนอง คนที่ 2</label>
-        <input type="text" id="cust_name2" placeholder="นาย/นาง/นางสาว ชื่อ นามสกุล">
-      </div>
-      <div class="fg"><label>ที่อยู่คนที่ 2 (บ้านเลขที่ หมู่ ถนน)</label>
-        <input type="text" id="cust_addr1_2" placeholder="เช่น 123/4 หมู่ 5 ถ.มิตรภาพ">
-      </div>
-      <div class="fg"><label>จังหวัด (คนที่ 2)</label>
-        <input type="text" id="cust_province2" placeholder="พิมพ์หรือเลือกจังหวัด..." style="padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7;width:100%">
-      </div>
-      <div class="fg"><label>อำเภอ/เขต (คนที่ 2)</label>
-        <input type="text" id="cust_amphoe2" placeholder="พิมพ์หรือเลือกอำเภอ..." style="padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7;width:100%">
-      </div>
-      <div class="fg"><label>ตำบล/แขวง (คนที่ 2)</label>
-        <input type="text" id="cust_tambon2" placeholder="พิมพ์หรือเลือกตำบล..." style="padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7;width:100%">
-      </div>
-    </div>
+    <div id="mortgagors-wrap"></div>
+    <button type="button" onclick="addMortgagor()" style="margin-top:8px;width:100%;padding:11px;background:#e8f5e8;border:2px dashed #4caf50;border-radius:8px;font-size:14px;font-family:inherit;color:#1a3a2a;font-weight:700;cursor:pointer">+ เพิ่มผู้จำนอง</button>
   </div>
 
 <!-- 3. รายละเอียดจำนอง -->
@@ -413,38 +368,34 @@ function buildMemo(d){
     +'<td>บริษัท โชคชัย เงินด่วน จำกัด</td>'
     +'<td style="text-align:right;white-space:nowrap">( ผู้รับจำนอง )</td></tr>'
     +'<tr><td>และ</td>'
-    +'<td>'+(d.custName2?d.custName+' และ '+d.custName2:d.custName)+'</td>'
+    +'<td>'+d.custName+'</td>'
     +'<td style="text-align:right;white-space:nowrap">( ผู้จำนอง )</td></tr>'
     +'</table>'
     +'<p style="font-size:'+FS+';margin-bottom:0.3cm">ทั้งสองฝ่าย ได้ตกลงทำสัญญากันดังต่อไปนี้</p>';
 
   var SL='border-top:1px solid #000;display:inline-block;width:160px;vertical-align:middle';
-  var SW='border-top:1px solid #000;display:inline-block;width:160px;vertical-align:middle';
-  var SIGN='<table style="width:100%;border-collapse:collapse;margin-top:1cm;font-size:'+FS+'">'
-    // แถวที่ 1: ผู้รับจำนอง | ผู้จำนอง
-    +'<tr>'
-    +'<td style="width:50%;text-align:center;vertical-align:top;padding-bottom:0.3cm">'
+  var morts=d.mortgagors&&d.mortgagors.length?d.mortgagors:[{name:d.custName}];
+  var _sr='<tr>'
+    +'<td style="width:50%;text-align:center;vertical-align:top;padding-bottom:0.4cm">'
     +'<p style="white-space:nowrap">ลงชื่อ&nbsp;<span style="'+SL+'"></span>&nbsp; ผู้รับจำนอง</p>'
-    +'<p>( บริษัท โชคชัย เงินด่วน จำกัด )</p>'
-    +'</td>'
-    +'<td style="width:50%;text-align:center;vertical-align:top;padding-bottom:0.3cm">'
+    +'<p>( บริษัท โชคชัย เงินด่วน จำกัด )</p></td>'
+    +'<td style="width:50%;text-align:center;vertical-align:top;padding-bottom:0.4cm">'
     +'<p style="white-space:nowrap">ลงชื่อ&nbsp;<span style="'+SL+'"></span>&nbsp; ผู้จำนอง</p>'
-    +'<p>( '+d.custName+' )</p>'
-    +(d.custName2?'<p style="margin-top:0.8cm;white-space:nowrap">ลงชื่อ&nbsp;<span style="'+SL+'"></span>&nbsp; ผู้จำนอง</p><p>( '+d.custName2+' )</p>':'')
-    +'</td>'
-    +'</tr>'
-    // แถวที่ 2: พยาน | พยาน (กึ่งกลาง)
+    +'<p>( '+morts[0].name+' )</p></td></tr>';
+  for(var _ci=1;_ci<morts.length;_ci++){
+    _sr+='<tr><td></td><td style="text-align:center;vertical-align:top;padding-bottom:0.4cm">'
+      +'<p style="white-space:nowrap">ลงชื่อ&nbsp;<span style="'+SL+'"></span>&nbsp; ผู้จำนอง</p>'
+      +'<p>( '+morts[_ci].name+' )</p></td></tr>';
+  }
+  var SIGN='<table style="width:100%;border-collapse:collapse;margin-top:1cm">'+_sr
     +'<tr>'
-    +'<td style="padding:0.9cm 0 0 0;text-align:center;vertical-align:top">'
-    +'<p style="white-space:nowrap">ลงชื่อ&nbsp;<span style="'+SW+'"></span>&nbsp; พยาน</p>'
-    +'<p>(&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)</p>'
-    +'</td>'
-    +'<td style="padding:0.9cm 0 0 0;text-align:center;vertical-align:top">'
-    +'<p style="white-space:nowrap">ลงชื่อ&nbsp;<span style="'+SW+'"></span>&nbsp; พยาน</p>'
-    +'<p>(&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)</p>'
-    +'</td>'
-    +'</tr>'
-    +'</table>';
+    +'<td style="padding:0.9cm 0 0 0;text-align:center">'
+    +'<p style="white-space:nowrap">ลงชื่อ&nbsp;<span style="'+SL+'"></span>&nbsp; พยาน</p>'
+    +'<p>(&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)</p></td>'
+    +'<td style="padding:0.9cm 0 0 0;text-align:center">'
+    +'<p style="white-space:nowrap">ลงชื่อ&nbsp;<span style="'+SL+'"></span>&nbsp; พยาน</p>'
+    +'<p>(&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)</p></td>'
+    +'</tr></table>';
 
   var CLOSE='</div>';
 
@@ -472,7 +423,12 @@ function buildMemo(d){
       +'<p style="font-size:18pt;margin-bottom:0.4cm">บันทึกข้อตกลง</p>'
       +'<p style="font-size:'+FS+';margin-bottom:0.5cm">วันที่</p>'
       +'<table style="width:100%;font-size:'+FS+';margin-bottom:0.2cm"><tr><td>ระหว่าง</td><td>บริษัท โชคชัย เงินด่วน จำกัด</td><td>( ผู้รับจำนอง )</td></tr>'
-      +'<tr><td>และ</td><td>'+(d.custName2?d.custName+' และ '+d.custName2:d.custName)+'</td><td>( ผู้จำนอง )</td></tr></table>'
+      +(function(){
+      var mn=d.mortgagors&&d.mortgagors.length?d.mortgagors:[{name:d.custName}];
+      return mn.map(function(m,i){
+        return '<tr><td>'+(i===0?'และ':'')+'</td><td>'+m.name+'</td><td>( ผู้จำนอง )</td></tr>';
+      }).join('')+'</table>';
+    })()
       +'<p style="font-size:'+FS+';margin-bottom:0.3cm">ทั้งสองฝ่าย ได้ตกลงทำสัญญากันดังต่อไปนี้</p>'
       +'</div>'
       +buildContent(false,true,false)
@@ -523,7 +479,7 @@ function buildVoucher(d,payRows){
   // Each copy = 269/2 = ~134mm = 13.4cm height
   // Use height on wrapper to force exact half-page
   var COPY_H='13.4cm';
-  var CELL='padding:2pt 5pt;font-size:12pt;';
+  var CELL='padding:3pt 6pt;font-size:12.5pt;';
   var ROW_H='1.0cm'; // (13.4 - header~4.5 - labels~1.8 - thead~0.7 - total~0.7 - sign~1cm) / 3rows ≈ 1.55cm but tight
 
   function copy(lbl){
@@ -536,9 +492,9 @@ function buildVoucher(d,payRows){
 
     return '<div style="height:'+COPY_H+';padding:0.3cm 0.6cm;font-family:Sarabun,Arial,sans-serif;box-sizing:border-box;overflow:hidden">'
       // หัว
-      +'<table style="width:100%;border-collapse:collapse;margin-bottom:1pt;table-layout:fixed"><tr>'
-      +'<td><span style="font-size:18pt;font-weight:bold">บริษัท โชคชัย เงินด่วน จำกัด</span></td>'
-      +'<td style="text-align:right;vertical-align:top;white-space:nowrap;font-size:11pt;min-width:120px">'
+      +'<table style="width:100%;border-collapse:collapse;margin-bottom:1pt"><tr>'
+      +'<td><span style="font-size:21pt;font-weight:bold">บริษัท &nbsp; โชคชัย เงินด่วน &nbsp; จำกัด</span></td>'
+      +'<td style="text-align:right;vertical-align:top;white-space:nowrap;font-size:11pt">'
       +'<span style="display:block">'+lbl+'</span>'
       +'<span style="display:block">วันที่ &nbsp;'+shortDate(d.docDate)+'</span>'
       +'</td></tr></table>'
@@ -550,12 +506,12 @@ function buildVoucher(d,payRows){
       // แถว 1-2: ชื่อ/ที่อยู่ col1 แคบ col2 กว้าง
       +'<table style="width:100%;border-collapse:collapse;border-bottom:none">'
       +'<tr>'
-      +'<td style="border:1px solid #999;border-bottom:none;'+CELL+'font-weight:bold;width:25%;vertical-align:top">ชื่อ-นามสกุล ลูกค้า</td>'
-      +'<td style="border:1px solid #999;border-left:none;border-bottom:none;'+CELL+'word-break:break-word;overflow-wrap:break-word">'+(d.custName2?d.custName+' , '+d.custName2:d.custName)+'</td>'
+      +'<td style="border:1px solid #999;border-bottom:none;'+CELL+'white-space:nowrap;font-weight:bold">ชื่อ-นามสกุล ลูกค้า</td>'
+      +'<td style="border:1px solid #999;border-left:none;border-bottom:none;'+CELL+'word-break:break-word">'+(d.mortgagors&&d.mortgagors.length?d.mortgagors.map(function(m){return m.name;}).join(' , '):d.custName)+'</td>'
       +'</tr>'
       +'<tr>'
-      +'<td style="border:1px solid #999;border-top:none;'+CELL+'font-weight:bold;width:25%;vertical-align:top">ที่อยู่ ลูกค้า</td>'
-      +'<td style="border:1px solid #999;border-left:none;border-top:none;'+CELL+'word-break:break-word;overflow-wrap:break-word">'+d.custAddr+(d.custName2&&d.custAddr2?' / '+d.custAddr2:'')+'</td>'
+      +'<td style="border:1px solid #999;border-top:none;'+CELL+'white-space:nowrap;font-weight:bold">ที่อยู่ ลูกค้า</td>'
+      +'<td style="border:1px solid #999;border-left:none;border-top:none;'+CELL+'word-break:break-word">'+(d.mortgagors&&d.mortgagors.length?d.mortgagors.map(function(m){return m.addr;}).filter(Boolean).join(' / '):d.custAddr)+'</td>'
       +'</tr>'
       +'</table>'
 
@@ -573,39 +529,20 @@ function buildVoucher(d,payRows){
       +'</table>'
 
       // ลายเซ็น
-      +(d.custName2
-        // มี 2 คน: บริษัท 50% | คนที่1+คนที่2 แต่ละคนแยกช่อง
-        ?'<table style="width:100%;border-collapse:collapse;margin-top:1.2cm"><tr>'
-          +'<td style="text-align:center;width:34%;vertical-align:top">'
-          +'<div style="border-top:1px solid #000;width:140px;margin:0 auto 2pt"></div>'
+      +(function(){
+        var mv=d.mortgagors&&d.mortgagors.length?d.mortgagors:[{name:d.custName}];
+        var cw=Math.floor(100/(mv.length+1));
+        var rc=mv.map(function(m){return '<td style="text-align:center;vertical-align:top;width:'+cw+'%;padding-top:1.2cm">'
+          +'<div style="border-top:1px solid #000;width:130px;margin:0 auto 3pt"></div>'
+          +'<span style="font-size:11pt">ผู้รับเงิน</span><br>'
+          +'<span style="font-size:10pt">( '+m.name+' )</span></td>';}).join('');
+        return '<table style="width:100%;border-collapse:collapse;margin-top:0.5cm"><tr>'
+          +'<td style="text-align:center;vertical-align:top;width:'+cw+'%;padding-top:1.2cm">'
+          +'<div style="border-top:1px solid #000;width:130px;margin:0 auto 3pt"></div>'
           +'<span style="font-size:11pt">ผู้จ่ายเงิน / ผู้มีอำนาจลงนาม</span><br>'
-          +'<span style="font-size:10pt">( บริษัท โชคชัย เงินด่วน จำกัด )</span>'
-          +'</td>'
-          +'<td style="text-align:center;width:33%;vertical-align:top">'
-          +'<div style="border-top:1px solid #000;width:140px;margin:0 auto 2pt"></div>'
-          +'<span style="font-size:11pt">ผู้รับเงิน</span><br>'
-          +'<span style="font-size:10pt">( '+d.custName+' )</span>'
-          +'</td>'
-          +'<td style="text-align:center;width:33%;vertical-align:top">'
-          +'<div style="border-top:1px solid #000;width:140px;margin:0 auto 2pt"></div>'
-          +'<span style="font-size:11pt">ผู้รับเงิน</span><br>'
-          +'<span style="font-size:10pt">( '+d.custName2+' )</span>'
-          +'</td>'
-          +'</tr></table>'
-        // คนเดียว: บริษัท 50% | ลูกค้า 50%
-        :'<table style="width:100%;border-collapse:collapse;margin-top:1.2cm"><tr>'
-          +'<td style="text-align:center;width:50%;vertical-align:top">'
-          +'<div style="border-top:1px solid #000;width:150px;margin:0 auto 2pt"></div>'
-          +'<span style="font-size:11pt">ผู้จ่ายเงิน / ผู้มีอำนาจลงนาม</span><br>'
-          +'<span style="font-size:10pt">( บริษัท โชคชัย เงินด่วน จำกัด )</span>'
-          +'</td>'
-          +'<td style="text-align:center;width:50%;vertical-align:top">'
-          +'<div style="border-top:1px solid #000;width:150px;margin:0 auto 2pt"></div>'
-          +'<span style="font-size:11pt">ผู้รับเงิน</span><br>'
-          +'<span style="font-size:10pt">( '+d.custName+' )</span>'
-          +'</td>'
-          +'</tr></table>'
-      )
+          +'<span style="font-size:10pt">( บริษัท โชคชัย เงินด่วน จำกัด )</span></td>'
+          +rc+'</tr></table>';
+      })()
       +'</div>';
   }
 
@@ -625,82 +562,61 @@ function buildAddendum(d){
     +'<p style="text-align:center;font-weight:bold;text-decoration:underline;font-size:16pt;margin-bottom:8pt">ข้อตกลงต่อท้ายหนังสือสัญญาจำนอง</p>'
     +'<p style="text-align:center;margin-bottom:4pt">89/28 หมู่ 9 ต.ท่าเยี่ยม อ.โชคชัย จ.นครราชสีมา</p>'
     +'<p style="text-align:center;font-weight:bold;margin-bottom:10pt;font-size:15pt">'+thaiDate(d.docDate)+'</p>'
-    +'<p style="text-align:center;margin-bottom:4pt">ระหว่าง &nbsp;&nbsp; '+(d.custName2?d.custName+' และ '+d.custName2:d.custName)+' &nbsp;&nbsp; ผู้จำนอง</p>'
+    +(function(){
+    var mn=d.mortgagors&&d.mortgagors.length?d.mortgagors:[{name:d.custName}];
+    var names=mn.map(function(m){return m.name;}).join(' และ ');
+    return '<p style="text-align:center;margin-bottom:4pt">ระหว่าง &nbsp;&nbsp; '+names+' &nbsp;&nbsp; ผู้จำนอง</p>';
+  })()
     +'<p style="text-align:center;margin-bottom:4pt">กับ &nbsp;&nbsp; บริษัท โชคชัย เงินด่วน จำกัด &nbsp;&nbsp; ผู้รับจำนอง</p>'
     +'<p style="text-align:center;font-size:13pt;color:#333;margin-bottom:4pt">( สัญญาจำนองลงวันที่ '+thaiDate(d.contractDate)+' )</p>'
     +'<p style="text-align:center;margin-bottom:14pt">ทำ ณ สำนักงานที่ดิน &nbsp; จังหวัด '+lb+lbSub+'</p>'
     +'<p style="margin-bottom:6pt;padding-left:1.5cm;text-indent:-1.5cm;text-align:justify"><strong>ข้อ 1.</strong> ผู้จำนองเป็นเจ้าของทรัพย์สินซึ่งจำนองเป็นประกันการชำระหนี้เงินกู้ทั้งหลายซึ่ง ผู้จำนอง เป็นหนี้ผู้รับจำนองอยู่เป็นจำนวนเงิน '+d.amtFmt+' บาท ('+d.amtT+') ตลอดจนประกันการชำระหนี้อุปกรณ์แห่งหนี้คือดอกเบี้ยค่าสินไหมทดแทนในการไม่ชำระหนี้ และค่าฤชาธรรมเนียมในการบังคับจำนองด้วย</p>'
-    +'<p style="margin-bottom:6pt;padding-left:1.5cm;text-indent:-1.5cm;text-align:justify"><strong>ข้อ 2.</strong> เมื่อผู้รับจำนองบังคับจำนอง เอาทรัพย์สินจำนองรายนี้ออกขายทอดตลาดได้เงินจำนวนสุทธิน้อยกว่าจำนวนเงินที่ค้างชำระ และค่าอุปกรณ์หรือเอาทรัพย์สินที่หลุดจำนองหลุดเป็นสิทธิและทรัพย์สินนั้นมีราคาต่ำกว่าจำนวนเงินที่ค้างชำระและค่าอุปกรณ์ เงินยังขาดจำนวนอยู่เท่าใด ผู้จำนองและหรือลูกหนี้ของผู้รับจำนองยอมรับใช้เงินที่ขาดจำนวนนั้นให้แก่ผู้รับจำนองจนครบ</p>'
-    +'<p style="margin-bottom:6pt;padding-left:1.5cm;text-indent:-1.5cm;text-align:justify"><strong>ข้อ 3.</strong> ถึงแม้จะมีการกระทำอย่างใดอย่างหนึ่งของผู้รับจำนอง เป็นเหตุให้ผู้จำนองไม่อาจเข้ารับช่วงได้ทั้งหมดหรือแต่บางส่วนในสิทธิใดๆ อันได้ให้ไว้แก่ผู้รับจำนองแต่ก่อน หรือในขณะหรือภายหลังที่ผู้จำนองเข้าทำหนังสือสัญญาจำนองรายนี้ ผู้จำนองก็ไม่หลุดพ้นจากความรับผิดในการจำนองรายนี้แต่ประการใด</p>'
-    +'<p style="margin-bottom:6pt;padding-left:1.5cm;text-indent:-1.5cm;text-align:justify"><strong>ข้อ 4.</strong> ในกรณีที่ผู้รับจำนองยอมผ่อนผันเวลาให้แก่ลูกหนี้สำหรับการชำระหนี้เงินกู้รายใดก็ตาม ผู้จำนองขอยืนยันไว้ล่วงหน้าว่าผู้จำนองเป็นอันตกลงด้วยในการผ่อนเวลาทุกคราว จึงไม่เป็นเหตุให้ผู้จำนองหลุดพ้นจากความรับผิดในการจำนองรายนี้</p>'
-    +'<p style="margin-bottom:6pt;padding-left:1.5cm;text-indent:-1.5cm;text-align:justify"><strong>ข้อ 5.</strong> การถอนจำนองจะกระทำได้ต่อเมื่อผู้รับจำนองได้รับชำระหนี้เงินกู้ทุกรายของลูกหนี้ครบถ้วนแล้ว</p>'
-    +'<p style="margin-bottom:6pt;text-align:justify;text-indent:2.5em">ข้อตกลงต่อท้ายหนังสือสัญญาจำนองนี้ทำไว้เป็นสี่ฉบับมีข้อความตรงกัน สำหรับ ผู้จำนอง, ผู้รับจำนอง, สำนักงานที่ดิน และสรรพากรถือไว้ฝ่ายละหนึ่งฉบับ</p>'
-    +'<p style="text-align:justify;margin-top:8pt;font-weight:bold;text-indent:2.5em">ทุกฝ่ายได้ตรวจสอบข้อตกลงต่อท้ายหนังสือสัญญาจำนองนี้และเข้าใจข้อความตลอดแล้ว จึงได้ลงลายมือชื่อหรือพิมพ์ลายนิ้วมือไว้เป็นสำคัญต่อหน้าพยาน</p>'
+    +'<p style="margin-bottom:6pt;padding-left:1.5cm;text-indent:-1.5cm;text-align:justify"><strong>ข้อ 2.</strong> เมื่อผู้รับจำนองบังคับจำนอง เอาทรัพย์สินจำนองรายนี้ออกขายทอดตลาดได้เงินจำนวนสุทธิน้อยกว่าจำนวนเงินที่ค้างชำระ และค่าอุปกรณ์หรือเอาทรัพย์สินที่หลุดจำนองเป็นสิทธิ เงินยังขาดจำนวนอยู่เท่าใด ผู้จำนองและหรือลูกหนี้ของผู้รับจำนองยอมรับใช้เงินที่ขาดจำนวนนั้นให้แก่ผู้รับจำนองจนครบ</p>'
+    +'<p style="margin-bottom:6pt;padding-left:1.5cm;text-indent:-1.5cm;text-align:justify"><strong>ข้อ 3.</strong> ถึงแม้จะมีการกระทำอย่างใดของผู้รับจำนอง เป็นเหตุให้ผู้จำนองไม่อาจเข้ารับช่วงได้ทั้งหมดหรือแต่บางส่วนในสิทธิใดๆ ผู้จำนองก็ไม่หลุดพ้นจากความรับผิดในการจำนองรายนี้แต่ประการใด</p>'
+    +'<p style="margin-bottom:6pt;padding-left:1.5cm;text-indent:-1.5cm;text-align:justify"><strong>ข้อ 4.</strong> ในกรณีที่ผู้รับจำนองยอมผ่อนผันเวลาให้แก่ลูกหนี้สำหรับการชำระหนี้เงินกู้รายใดก็ตาม ผู้จำนองขอยืนยันไว้ล่วงหน้าว่าเป็นอันตกลงด้วยในการผ่อนเวลาทุกคราว จึงไม่เป็นเหตุให้ผู้จำนองหลุดพ้นจากความรับผิด</p>'
+    +'<p style="margin-bottom:6pt;padding-left:1.5cm;text-indent:-1.5cm;text-align:justify"><strong>ข้อ 5.</strong> การถอนจำนองจะกระทำได้ต่อเมื่อผู้รับจำนองได้รับชำระหนี้เงินกู้รายลูกหนี้ครบถ้วนแล้ว ข้อตกลงต่อท้ายนี้ทำไว้เป็นสัญบัตรมีข้อความตรงกัน สำหรับ ผู้จำนอง, ผู้รับจำนอง, สำนักงานที่ดิน ถือไว้ฝ่ายละหนึ่งฉบับ</p>'
+    +'<p style="text-align:justify;margin-top:8pt;font-weight:bold">ทุกฝ่ายได้ตรวจสอบข้อตกลงต่อท้ายหนังสือสัญญาจำนองนี้และเข้าใจข้อความตลอดแล้ว จึงได้ลงลายมือชื่อหรือพิมพ์ลายนิ้วมือไว้เป็นสำคัญต่อหน้าพยาน</p>'
     +'<table style="width:100%;border-collapse:collapse;margin-top:2cm">'
-    // แถว 1: ผู้จำนอง/ลูกหนี้ | ผู้รับจำนอง
-    +'<tr>'
-    +(d.custName2
-      // 2 คน: แสดง 2 คอลัมน์ซ้าย | คอลัมน์ขวาบริษัท
-      ?'<td style="width:50%;text-align:center;vertical-align:top;padding-bottom:0.3cm">'
-       +'<p style="white-space:nowrap">ลงชื่อ&nbsp;<span style="border-top:1px solid #000;display:inline-block;width:150px;vertical-align:middle"></span>&nbsp; ผู้จำนอง/ลูกหนี้</p>'
-       +'<p>( '+d.custName+' )</p>'
-       +'</td>'
-       +'<td style="width:50%;text-align:center;vertical-align:top;padding-bottom:0.3cm">'
-       +'<p style="white-space:nowrap">ลงชื่อ&nbsp;<span style="border-top:1px solid #000;display:inline-block;width:150px;vertical-align:middle"></span>&nbsp; ผู้จำนอง/ลูกหนี้</p>'
-       +'<p>( '+d.custName2+' )</p>'
-       +'</td>'
-      // 1 คน: คอลัมน์เดิม
-      :'<td style="width:50%;text-align:center;vertical-align:top;padding-bottom:0.3cm">'
-       +'<p style="white-space:nowrap">ลงชื่อ&nbsp;<span style="border-top:1px solid #000;display:inline-block;width:160px;vertical-align:middle"></span>&nbsp; ผู้จำนอง/ลูกหนี้</p>'
-       +'<p>( '+d.custName+' )</p>'
-       +'</td>'
-    )
-    +(d.custName2?''
-      :'<td style="width:50%;text-align:center;vertical-align:top;padding-bottom:0.3cm">'
-       +'<p style="white-space:nowrap">ลงชื่อ&nbsp;<span style="border-top:1px solid #000;display:inline-block;width:160px;vertical-align:middle"></span>&nbsp; ผู้รับจำนอง</p>'
-       +'<p>( บริษัท โชคชัย เงินด่วน จำกัด )</p>'
-       +'</td>'
-    )
-    // แถว 2 ถ้ามี 2 คน: ผู้จำนองซ้าย | ผู้รับจำนองขวา
-    +(d.custName2
-      ?'</tr><tr>'
-       +'<td colspan="2" style="text-align:center;vertical-align:top;padding-top:0.8cm;padding-bottom:0.3cm">'
-       +'<p style="white-space:nowrap">ลงชื่อ&nbsp;<span style="border-top:1px solid #000;display:inline-block;width:160px;vertical-align:middle"></span>&nbsp; ผู้รับจำนอง</p>'
-       +'<p>( บริษัท โชคชัย เงินด่วน จำกัด )</p>'
-       +'</td>'
-      :'')
-    +'</tr>'
-    // แถว 2: พยาน | พยาน
-    +'<tr>'
-    +'<td style="text-align:center;vertical-align:top;padding-top:0.9cm">'
-    +'<p style="white-space:nowrap">ลงชื่อ&nbsp;<span style="border-top:1px solid #000;display:inline-block;width:160px;vertical-align:middle"></span>&nbsp; พยาน</p>'
-    +'<p>(&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)</p>'
-    +'</td>'
-    +'<td style="text-align:center;vertical-align:top;padding-top:0.9cm">'
-    +'<p style="white-space:nowrap">ลงชื่อ&nbsp;<span style="border-top:1px solid #000;display:inline-block;width:160px;vertical-align:middle"></span>&nbsp; พยาน</p>'
-    +'<p>(&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)</p>'
-    +'</td>'
-    +'</tr>'
+    +(function(){
+      var m2=d.mortgagors&&d.mortgagors.length?d.mortgagors:[{name:d.custName}];
+      var SL2='border-top:1px solid #000;display:inline-block;width:160px;vertical-align:middle';
+      var r='<tr>'
+        +'<td style="width:50%;text-align:center;vertical-align:top;padding-bottom:0.3cm">'
+        +'<p style="white-space:nowrap">ลงชื่อ&nbsp;<span style="'+SL2+'"></span>&nbsp; ผู้จำนอง/ลูกหนี้</p>'
+        +'<p>( '+m2[0].name+' )</p></td>'
+        +'<td style="width:50%;text-align:center;vertical-align:top;padding-bottom:0.3cm">'
+        +'<p style="white-space:nowrap">ลงชื่อ&nbsp;<span style="'+SL2+'"></span>&nbsp; ผู้รับจำนอง</p>'
+        +'<p>( บริษัท โชคชัย เงินด่วน จำกัด )</p></td></tr>';
+      for(var _i=1;_i<m2.length;_i++){
+        r+='<tr><td style="text-align:center;vertical-align:top;padding-bottom:0.3cm">'
+          +'<p style="white-space:nowrap">ลงชื่อ&nbsp;<span style="'+SL2+'"></span>&nbsp; ผู้จำนอง/ลูกหนี้</p>'
+          +'<p>( '+m2[_i].name+' )</p></td><td></td></tr>';
+      }
+      return r+'<tr>'
+        +'<td style="padding:0.9cm 0 0 0;text-align:center">'
+        +'<p style="white-space:nowrap">ลงชื่อ&nbsp;<span style="'+SL2+'"></span>&nbsp; พยาน</p>'
+        +'<p>(&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)</p></td>'
+        +'<td style="padding:0.9cm 0 0 0;text-align:center">'
+        +'<p style="white-space:nowrap">ลงชื่อ&nbsp;<span style="'+SL2+'"></span>&nbsp; พยาน</p>'
+        +'<p>(&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)</p></td>'
+        +'</tr>';
+    })()
     +'</table>'
     +'</div>';
 }
 
 
 // ── GENERATE ──
-function toggleCust2(show){
-  document.getElementById('cust2-section').style.display = show ? 'block' : 'none';
-  if(!show) document.getElementById('cust_name2').value = '';
-}
-
 function genMortgage(){
   var d={
     docDate:gv('doc_date'),billSeq:gv('bill_seq')||'01',
     landBranch:gv('land_branch')||'......',
     landBranchSub:gv('land_branch_sub')||'',
-    custName:gv('cust_name')||'..........',
-    custName2:gv('cust_name2')||'',
-    custAddr2:(gv('cust_addr1_2')||'')+(gv('cust_province2')?' ต.'+(gv('cust_tambon2')||'...')+' อ.'+(gv('cust_amphoe2')||'...')+' จ.'+(gv('cust_province2')||'...'):''),
-    custAddr:getCustAddr(),
+    custName:(function(){var m=getMortgagors();return m.length?m[0].name:'..........';})(),
+    custAddr:(function(){var m=getMortgagors();return m.length?m[0].addr:getCustAddr();})(),
+    custName2:(function(){var m=getMortgagors();return m.length>1?m.slice(1).map(function(x){return x.name;}).join(' และ '):'';})(),
+    custAddr2:(function(){var m=getMortgagors();return m.length>1?m.slice(1).map(function(x){return x.addr;}).join(' / '):'';})(),
+    mortgagors:getMortgagors(),
     amt:gv('m_amt'),amtFmt:fmtN(gv('m_amt')),
     amtT:gv('m_amt_t')||toBaht(gv('m_amt').replace(/[,\s]/g,'')),
     rate:gv('m_rate')||'......',
@@ -738,8 +654,18 @@ function showDoc(key,docs){
 
 // Init
 document.addEventListener('DOMContentLoaded',function(){
-  // ไม่ต้อง onProvChange auto เพราะเป็น input แล้ว
-// เพิ่ม combobox
+  onProvChange(document.getElementById('cust_province').value);
+  addPay('cash');
+});
+
+function formatAddr(t,a,p){
+  var bkk=p==='กรุงเทพมหานคร';
+  var r=[];
+  if(t)r.push((bkk?'แขวง':'ต.')+t);
+  if(a)r.push((bkk?'เขต':'อ.')+a);
+  if(p)r.push('จ.'+p);
+  return r.join(' ');
+}
 
 // ── COMBOBOX HELPER ──
 function makeCombo(inputId, allOptions, onChange){
@@ -792,47 +718,61 @@ function makeCombo(inputId, allOptions, onChange){
   });
 }
 
-// Province data (ย่อ — รายชื่อจังหวัดไทย)
-var PROVS=['กระบี่','กาญจนบุรี','กาฬสินธุ์','กำแพงเพชร','ขอนแก่น','จันทบุรี','ฉะเชิงเทรา','ชลบุรี','ชัยนาท','ชัยภูมิ','ชุมพร','เชียงราย','เชียงใหม่','ตรัง','ตราด','ตาก','นครนายก','นครปฐม','นครพนม','นครราชสีมา','นครศรีธรรมราช','นครสวรรค์','นนทบุรี','นราธิวาส','น่าน','บึงกาฬ','บุรีรัมย์','ปทุมธานี','ประจวบคีรีขันธ์','ปราจีนบุรี','ปัตตานี','พระนครศรีอยุธยา','พะเยา','พังงา','พัทลุง','พิจิตร','พิษณุโลก','เพชรบุรี','เพชรบูรณ์','แพร่','ภูเก็ต','มหาสารคาม','มุกดาหาร','แม่ฮ่องสอน','ยโสธร','ยะลา','ร้อยเอ็ด','ระนอง','ระยอง','ราชบุรี','ลพบุรี','ลำปาง','ลำพูน','เลย','ศรีสะเกษ','สกลนคร','สงขลา','สตูล','สมุทรปราการ','สมุทรสงคราม','สมุทรสาคร','สระแก้ว','สระบุรี','สิงห์บุรี','สุโขทัย','สุพรรณบุรี','สุราษฎร์ธานี','สุรินทร์','หนองคาย','หนองบัวลำภู','อ่างทอง','อำนาจเจริญ','อุดรธานี','อุตรดิตถ์','อุทัยธานี','อุบลราชธานี'];
+var PROVS=['กรุงเทพมหานคร','กระบี่','กาญจนบุรี','กาฬสินธุ์','กำแพงเพชร','ขอนแก่น','จันทบุรี','ฉะเชิงเทรา','ชลบุรี','ชัยนาท','ชัยภูมิ','ชุมพร','เชียงราย','เชียงใหม่','ตรัง','ตราด','ตาก','นครนายก','นครปฐม','นครพนม','นครราชสีมา','นครศรีธรรมราช','นครสวรรค์','นนทบุรี','นราธิวาส','น่าน','บึงกาฬ','บุรีรัมย์','ปทุมธานี','ประจวบคีรีขันธ์','ปราจีนบุรี','ปัตตานี','พระนครศรีอยุธยา','พะเยา','พังงา','พัทลุง','พิจิตร','พิษณุโลก','เพชรบุรี','เพชรบูรณ์','แพร่','ภูเก็ต','มหาสารคาม','มุกดาหาร','แม่ฮ่องสอน','ยโสธร','ยะลา','ร้อยเอ็ด','ระนอง','ระยอง','ราชบุรี','ลพบุรี','ลำปาง','ลำพูน','เลย','ศรีสะเกษ','สกลนคร','สงขลา','สตูล','สมุทรปราการ','สมุทรสงคราม','สมุทรสาคร','สระแก้ว','สระบุรี','สิงห์บุรี','สุโขทัย','สุพรรณบุรี','สุราษฎร์ธานี','สุรินทร์','หนองคาย','หนองบัวลำภู','อ่างทอง','อำนาจเจริญ','อุดรธานี','อุตรดิตถ์','อุทัยธานี','อุบลราชธานี'];
 
-// init combobox — province triggers amphoe/tambon load via onProvChange
-makeCombo('cust_province', PROVS, function(v){ onProvChange(v); });
-makeCombo('cust_amphoe', [], null);
-makeCombo('cust_tambon', [], null);
-  // combobox สำหรับคนที่ 2
-  makeCombo('cust_province2', PROVS, function(v){
+var mortCount=0;
+function addMortgagor(){
+  mortCount++;
+  var n=mortCount;
+  var wrap=document.getElementById('mortgagors-wrap');
+  var div=document.createElement('div');
+  div.id='mort-'+n;
+  div.style.cssText='border:1px solid #dde8dd;border-radius:10px;padding:12px;margin-bottom:10px;background:#fafaf7';
+  div.innerHTML=
+    '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">'
+    +'<span style="font-weight:700;color:#1a3a2a;font-size:14px">ผู้จำนอง คนที่ '+n+'</span>'
+    +(n>1?'<button type="button" onclick="removeMortgagor('+n+')" style="background:none;border:none;color:#c00;font-size:22px;cursor:pointer;padding:0">×</button>':'')
+    +'</div>'
+    +'<div class="fg"><label>ชื่อ-นามสกุล</label>'
+    +'<input type="text" id="mort_name_'+n+'" placeholder="นาย/นาง/นางสาว ชื่อ นามสกุล"></div>'
+    +'<div class="fg"><label>ที่อยู่ (บ้านเลขที่ หมู่)</label>'
+    +'<input type="text" id="mort_addr_'+n+'" placeholder="เช่น 123/4 หมู่ 5"></div>'
+    +'<div class="fg"><label>จังหวัด</label>'
+    +'<input type="text" id="mort_prov_'+n+'" placeholder="พิมพ์หรือเลือกจังหวัด..." style="padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fff;width:100%"></div>'
+    +'<div class="fg"><label>อำเภอ/เขต</label>'
+    +'<input type="text" id="mort_amp_'+n+'" placeholder="พิมพ์หรือเลือก..." style="padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fff;width:100%"></div>'
+    +'<div class="fg"><label>ตำบล/แขวง</label>'
+    +'<input type="text" id="mort_tam_'+n+'" placeholder="พิมพ์หรือเลือก..." style="padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fff;width:100%"></div>';
+  wrap.appendChild(div);
+  makeCombo('mort_prov_'+n,PROVS,function(v){
     if(typeof ADDR!=='undefined'&&ADDR[v]){
       var amps=Object.keys(ADDR[v]);
-      makeCombo('cust_amphoe2',amps,function(a){
-        if(ADDR[v]&&ADDR[v][a]) makeCombo('cust_tambon2',ADDR[v][a],null);
+      makeCombo('mort_amp_'+n,amps,function(a){
+        if(ADDR[v]&&ADDR[v][a])makeCombo('mort_tam_'+n,ADDR[v][a],null);
       });
     }
   });
-  makeCombo('cust_amphoe2', [], null);
-  makeCombo('cust_tambon2', [], null);
+  makeCombo('mort_amp_'+n,[],null);
+  makeCombo('mort_tam_'+n,[],null);
+}
+function removeMortgagor(n){var el=document.getElementById('mort-'+n);if(el)el.remove();}
+function getMortgagors(){
+  var list=[];
+  document.querySelectorAll('#mortgagors-wrap > div').forEach(function(div){
+    var n=div.id.replace('mort-','');
+    var nm=document.getElementById('mort_name_'+n);
+    if(!nm||!nm.value.trim())return;
+    var ad=document.getElementById('mort_addr_'+n);
+    var pv=document.getElementById('mort_prov_'+n);
+    var ap=document.getElementById('mort_amp_'+n);
+    var tm=document.getElementById('mort_tam_'+n);
+    var fa=[ad?ad.value:'',formatAddr(tm?tm.value:'',ap?ap.value:'',pv?pv.value:'')].filter(Boolean).join(' ');
+    list.push({name:nm.value.trim(),addr:fa});
+  });
+  return list;
+}
+addMortgagor();
 
-// patch onProvChange to also update combo options
-var _origProv = onProvChange;
-onProvChange = function(prov){
-  _origProv(prov);
-  // update amphoe options after load
-  setTimeout(function(){
-    var ampEl = document.getElementById('cust_amphoe');
-    var drop = document.getElementById('cust_amphoe_drop');
-    if(ampEl) ampEl.value = '';
-    // rebuild combo options from ADDR data
-    if(typeof ADDR !== 'undefined' && ADDR[prov]){
-      var amps = Object.keys(ADDR[prov]);
-      makeCombo('cust_amphoe', amps, function(amp){
-        if(typeof ADDR !== 'undefined' && ADDR[prov] && ADDR[prov][amp]){
-          makeCombo('cust_tambon', ADDR[prov][amp], null);
-        }
-      });
-    }
-  }, 100);
-};
-  addPay('cash');
-});
 </script>
 </body>
 </html>

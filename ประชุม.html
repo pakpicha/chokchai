@@ -564,6 +564,40 @@ function closePrintTip(){
 }
 addAg('mortgage');
 
+
+// ── AUTO SAVE/RESTORE localStorage ──
+var LS_KEY = 'form_data_' + window.location.pathname.split('/').pop().replace('.html','');
+
+function autoSave(){
+  try {
+    var data = {};
+    document.querySelectorAll('input[id], select[id], textarea[id]').forEach(function(el){
+      if(el.type === 'checkbox') data[el.id] = el.checked;
+      else data[el.id] = el.value;
+    });
+    localStorage.setItem(LS_KEY, JSON.stringify(data));
+  } catch(e) {}
+}
+
+function autoRestore(){
+  try {
+    var saved = localStorage.getItem(LS_KEY);
+    if(!saved) return false;
+    var data = JSON.parse(saved);
+    Object.keys(data).forEach(function(k){
+      var el = document.getElementById(k);
+      if(!el) return;
+      if(el.type === 'checkbox') el.checked = data[k];
+      else el.value = data[k];
+    });
+    return true;
+  } catch(e) { return false; }
+}
+
+setInterval(autoSave, 2000);
+window.addEventListener('beforeunload', autoSave);
+
+autoRestore();
 </script>
 </body>
 </html>

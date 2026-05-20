@@ -483,6 +483,9 @@ function getSbPayRows(){
     if(t==='cash')rows.push({type:'cash',label:'เงินสด',amt,amtFmt,amtT});
     if(t==='draft')rows.push({type:'draft',label:'ดราฟท์ เลขที่ '+gv('sp'+i+'_dno')+' ธนาคาร'+gv('sp'+i+'_bank')+' สั่งจ่าย '+gv('sp'+i+'_payto'),amt,amtFmt,amtT});
     if(t==='transfer')rows.push({type:'transfer',label:'โอนเข้าบัญชีธนาคาร'+gv('sp'+i+'_bank')+' เลขที่ '+gv('sp'+i+'_accno')+' ชื่อ '+gv('sp'+i+'_accname'),amt,amtFmt,amtT});
+    if(t==='pn')rows.push({type:'pn',label:'ตั๋วสัญญาใช้เงิน เลขที่ '+gv('sp'+i+'_dno')+' สั่งจ่าย '+gv('sp'+i+'_payto'),amt,amtFmt,amtT});
+    if(t==='bankdraft')rows.push({type:'bankdraft',label:'ดราฟต์ธนาคาร เลขที่ '+gv('sp'+i+'_dno')+' ธนาคาร'+gv('sp'+i+'_bank')+' สั่งจ่าย '+gv('sp'+i+'_payto'),amt,amtFmt,amtT});
+    if(t==='check')rows.push({type:'check',label:'เช็ค เลขที่ '+gv('sp'+i+'_dno')+' ธนาคาร'+gv('sp'+i+'_bank')+' สั่งจ่าย '+gv('sp'+i+'_payto'),amt,amtFmt,amtT});
   });
   return rows;
 }

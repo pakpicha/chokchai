@@ -70,16 +70,16 @@ body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;
       <div class="lbl">รายงานการประชุม</div>
       <div class="sub">สร้างเอกสารประชุมพิจารณาสินเชื่อ</div>
     </a>
-    <div class="card" onclick="openSheet('จำนอง')">
+    <a class="card" href="จำนอง.html">
       <div class="ic">📄</div>
       <div class="lbl">จดจำนอง</div>
       <div class="sub">บันทึกข้อตกลง • ต่อท้าย • ใบจ่าย</div>
-    </div>
-    <div class="card" onclick="openSheet('ขายฝาก')">
+    </a>
+    <a class="card" href="ขายฝาก.html">
       <div class="ic">🏡</div>
       <div class="lbl">ขายฝาก</div>
       <div class="sub">ทด.16 • ใบสำคัญจ่าย</div>
-    </div>
+    </a>
     <a class="card" href="กรรมการ.html">
       <div class="ic">💼</div>
       <div class="lbl">กู้เงินกรรมการ</div>
@@ -113,8 +113,7 @@ var MENUS = {
   'ขายฝาก': {
     t: '🏡 ขายฝาก',
     items: [
-      {ic:'🗂️', url:'td16-overlay.html', l:'ทด.16 — บันทึกถ้อยคำ', s:'แบบฟอร์มบันทึกถ้อยคำสำนักงานที่ดิน'},
-      {ic:'💰', url:'ขายฝาก.html',       l:'ใบสำคัญจ่าย', s:'หลักฐานการรับเงินจากการขายฝาก'},
+      {ic:'💰', url:'ขายฝาก.html', l:'ขายฝาก', s:'ทด.16 • ใบสำคัญจ่าย'},
     ]
   }
 };

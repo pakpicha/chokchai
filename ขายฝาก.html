@@ -433,7 +433,7 @@ function syncSbBaht(srcId,tgtId){
   if(el)el.value=toBaht((gv(srcId)||'').replace(/[,\s]/g,''));
 }
 
-var PAY_TYPES={cash:'เงินสด',draft:'ดราฟท์',transfer:'เงินโอน'};
+var PAY_TYPES={cash:'เงินสด',draft:'ดราฟท์',transfer:'เงินโอน',pn:'ตั๋วสัญญาใช้เงิน',bankdraft:'ดราฟต์ธนาคาร',check:'เช็ค'};
 function addSbPay(t){
   if(!t)t='cash';
   sbPayC++;const i='sb'+sbPayC;
@@ -459,6 +459,9 @@ function sbPayFields(i,t){
   if(t==='transfer')return'<label>ธนาคาร</label><input type="text" id="sp'+i+'_bank">'
     +'<label>เลขบัญชี</label><input type="text" id="sp'+i+'_accno">'
     +'<label>ชื่อบัญชี</label><input type="text" id="sp'+i+'_accname">'+amtF;
+  if(t==='pn')return'<label>เลขที่ตั๋วสัญญาใช้เงิน</label><input type="text" id="sp'+i+'_dno" placeholder="เช่น 0001234"><label>สั่งจ่าย (ชื่อผู้รับ)</label><input type="text" id="sp'+i+'_payto" placeholder="ชื่อผู้รับ">'+amtF;
+  if(t==='bankdraft')return'<label>เลขที่ดราฟต์ธนาคาร</label><input type="text" id="sp'+i+'_dno" placeholder="เช่น 1234567"><label>ธนาคาร</label><input type="text" id="sp'+i+'_bank" placeholder="เช่น กรุงเทพ"><label>สั่งจ่าย</label><input type="text" id="sp'+i+'_payto" placeholder="ชื่อผู้รับ">'+amtF;
+  if(t==='check')return'<label>เลขที่เช็ค</label><input type="text" id="sp'+i+'_dno" placeholder="เช่น 001234"><label>ธนาคาร</label><input type="text" id="sp'+i+'_bank" placeholder="เช่น ไทยพาณิชย์"><label>สั่งจ่ายในนาม</label><input type="text" id="sp'+i+'_payto" placeholder="ชื่อผู้รับ">'+amtF;
   return amtF;
 }
 function syncSbPayBaht(i){
@@ -684,7 +687,7 @@ function buildSbVoucher(d,payRows){
   var totalFmt=total?total.toLocaleString('th-TH'):'';
   var totalT=total?toBaht(total):'';
   var rows=payRows.slice();
-  while(rows.length<2)rows.push({label:'',amtFmt:''});
+  while(rows.length<3)rows.push({label:'',amtFmt:''});
   var CELL='padding:2pt 5pt;font-size:12pt;';
 
   function copy(lbl){
@@ -707,7 +710,7 @@ function buildSbVoucher(d,payRows){
         +'</td>';
     }).join('');
 
-    return '<div style="flex:1;min-height:0;padding:0.2cm 0.5cm;font-family:TH Sarabun New,Sarabun,Arial,sans-serif;box-sizing:border-box;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden">'
+    return '<div style="flex:1;min-height:0;padding:1mm 2mm;font-family:TH Sarabun New,Sarabun,Arial,sans-serif;box-sizing:border-box;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden">'
       +'<div>'
       // หัว
       +'<table style="width:100%;border-collapse:collapse;margin-bottom:4pt;table-layout:fixed"><tr>'
@@ -863,6 +866,37 @@ function launchTD16(){
   try{
     localStorage.setItem('td16_from_khaifak', JSON.stringify(data));
   }catch(e){}
+  // บันทึกข้อมูลฟอร์มก่อนไป td16
+  try {
+    var _d={};
+    ['sb_date','sb_bill_seq','sb_office_branch','sb_meeting_no','sb_chanote_count',
+     'sb_doc_type','sb_title_no','sb_survey_no','sb_area','sb_rawang',
+     'sb_province','sb_amphoe','sb_tambon','sb_period',
+     'sb_price','sb_price_t','sb_redeem','sb_redeem_t'].forEach(function(k){
+      var e=document.getElementById(k); if(e) _d[k]=e.value;
+    });
+    var _sels=[];
+    document.querySelectorAll('#sellers-wrap > div').forEach(function(div){
+      var n=div.id.replace('seller-',''); var s={};
+      ['name','addr','prov','amp','tam','nat'].forEach(function(f){
+        var e=document.getElementById('sel_'+f+'_'+n); if(e) s[f]=e.value;
+      });
+      _sels.push(s);
+    });
+    _d['_sellers']=JSON.stringify(_sels);
+    var _pays=[];
+    document.querySelectorAll('.pay-row').forEach(function(row){
+      var i=row.id.replace('spay-','');
+      var tEl=row.querySelector('.sbts'); if(!tEl) return;
+      var p={type:tEl.value};
+      ['amt','amt_t','dno','bank','payto','accno','accname'].forEach(function(f){
+        var e=document.getElementById('sp'+i+'_'+f); if(e) p[f]=e.value;
+      });
+      _pays.push(p);
+    });
+    _d['_pays']=JSON.stringify(_pays);
+    sessionStorage.setItem('sb_form_backup',JSON.stringify(_d));
+  } catch(e2) {}
   window.location.href='td16-overlay.html';
 }
 
@@ -967,6 +1001,45 @@ function getSbSellerAddr(){
   return '';
 }
 document.addEventListener('DOMContentLoaded',function(){
+  // restore จาก sessionStorage ถ้ากลับมาจาก td16
+  try {
+    var _backup = sessionStorage.getItem('sb_form_backup');
+    if(_backup) {
+      var _d = JSON.parse(_backup);
+      // restore ค่าทั่วไป
+      Object.keys(_d).forEach(function(k){
+        if(k==='_sellers'||k==='_pays') return;
+        var el=document.getElementById(k); if(el) el.value=_d[k];
+      });
+      // restore sellers
+      if(_d['_sellers']) {
+        var _sels = JSON.parse(_d['_sellers']);
+        _sels.forEach(function(s, idx){
+          if(idx===0 && sellerCount===0) addSeller();
+          else if(idx>0) addSeller();
+          var n=idx+1;
+          if(s.name) { var el=document.getElementById('sel_name_'+n); if(el) el.value=s.name; }
+          if(s.addr) { var el=document.getElementById('sel_addr_'+n); if(el) el.value=s.addr; }
+          if(s.prov) { var el=document.getElementById('sel_prov_'+n); if(el) el.value=s.prov; }
+          if(s.amp)  { var el=document.getElementById('sel_amp_'+n);  if(el) el.value=s.amp; }
+          if(s.tam)  { var el=document.getElementById('sel_tam_'+n);  if(el) el.value=s.tam; }
+          if(s.nat)  { var el=document.getElementById('sel_nat_'+n);  if(el) el.value=s.nat; }
+        });
+      }
+      // restore pay rows
+      if(_d['_pays']) {
+        var _ps = JSON.parse(_d['_pays']);
+        _ps.forEach(function(p){
+          addSbPay(p.type||'cash');
+          var i='sb'+sbPayC;
+          ['amt','amt_t','dno','bank','payto','accno','accname'].forEach(function(f){
+            if(p[f]) { var el=document.getElementById('sp'+i+'_'+f); if(el) el.value=p[f]; }
+          });
+        });
+        return; // ไม่ต้อง addSbPay('cash') อีก
+      }
+    }
+  } catch(e) {}
   addSbPay('cash');
 
 // ── COMBOBOX HELPER ──
@@ -1171,6 +1244,39 @@ function getSellers(){
   return list;
 }
 addSeller();
+
+
+// ── AUTO SAVE/RESTORE localStorage ──
+var LS_KEY = 'form_data_' + window.location.pathname.split('/').pop().replace('.html','');
+
+function autoSave(){
+  try {
+    var data = {};
+    document.querySelectorAll('input[id], select[id], textarea[id]').forEach(function(el){
+      if(el.type === 'checkbox') data[el.id] = el.checked;
+      else data[el.id] = el.value;
+    });
+    localStorage.setItem(LS_KEY, JSON.stringify(data));
+  } catch(e) {}
+}
+
+function autoRestore(){
+  try {
+    var saved = localStorage.getItem(LS_KEY);
+    if(!saved) return false;
+    var data = JSON.parse(saved);
+    Object.keys(data).forEach(function(k){
+      var el = document.getElementById(k);
+      if(!el) return;
+      if(el.type === 'checkbox') el.checked = data[k];
+      else el.value = data[k];
+    });
+    return true;
+  } catch(e) { return false; }
+}
+
+setInterval(autoSave, 2000);
+window.addEventListener('beforeunload', autoSave);
 
 </script>
 </body>

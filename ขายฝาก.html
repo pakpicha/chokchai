@@ -810,7 +810,9 @@ function launchTD16(){
   var rawDate = document.getElementById('sb_date') ? document.getElementById('sb_date').value : '';
   var dayTh='', monthTh='', yearTh='', fullDateTh='';
   if(rawDate){
-    var dt = new Date(rawDate);
+    // Safari-safe: parse YYYY-MM-DD manually
+    var parts = rawDate.split('-');
+    var dt = parts.length===3 ? new Date(parseInt(parts[0]),parseInt(parts[1])-1,parseInt(parts[2])) : new Date(rawDate);
     var thMonths = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
     dayTh   = String(dt.getDate());
     monthTh = thMonths[dt.getMonth()];

@@ -207,12 +207,24 @@ body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;
 .combo-opt:last-child{border-bottom:none}
 .combo-no{padding:10px 12px;font-size:13px;color:#888;font-style:italic}
 
+
+/* ── COMBOBOX (searchable + freetext) ── */
+.combo-wrap{position:relative;width:100%}
+.combo-input{width:100%;padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7;color:#111;-webkit-appearance:none;box-sizing:border-box}
+.combo-input:focus{outline:none;border-color:#1a3a2a;background:#fff}
+.combo-drop{display:none;position:absolute;top:100%;left:0;right:0;background:#fff;border:1px solid #ccc;border-top:none;border-radius:0 0 8px 8px;max-height:200px;overflow-y:auto;z-index:500;box-shadow:0 4px 12px rgba(0,0,0,.15)}
+.combo-drop.open{display:block}
+.combo-opt{padding:10px 12px;font-size:14px;cursor:pointer;border-bottom:1px solid #f0f0f0}
+.combo-opt:hover,.combo-opt.active{background:#e8f5e8}
+.combo-opt:last-child{border-bottom:none}
+.combo-no{padding:10px 12px;font-size:13px;color:#888;font-style:italic}
+
 </style>
 </head>
 <body>
 <div class="section active" id="section-sellback">
 <div class="ui" id="sb-form">
-  <button class="back-home" onclick="location.href='index.html'">← หน้าหลัก</button>
+  <button class="back-home" onclick="history.length>1?history.back():document.body.innerHTML='<div style=padding:20px><h2>ปิดหน้าต่างนี้แล้วเปิดไฟล์ index.html</h2></div>'">← หน้าหลัก</button>
   <div class="ui-head">
     <h1>🏡 เอกสารขายฝาก</h1>
     <p>กรอกครั้งเดียว → ได้ ทด.16 + ใบสำคัญจ่ายพร้อมกัน</p>
@@ -254,81 +266,20 @@ body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;
   <!-- ข้อมูลผู้ขายฝาก -->
   <div class="card">
     <div class="ct"><span class="n">3</span> ข้อมูลผู้ขายฝาก</div>
+    <div id="sellers-wrap"></div>
+    <button type="button" onclick="addSeller()" style="margin-top:8px;width:100%;padding:11px;background:#e8f5e8;border:2px dashed #4caf50;border-radius:8px;font-size:14px;font-family:inherit;color:#1a3a2a;font-weight:700;cursor:pointer">+ เพิ่มผู้ขายฝาก</button>
+  </div>
 
-    <!-- คนที่ 1 -->
-    <div class="fg"><label>ชื่อ-นามสกุลผู้ขายฝาก คนที่ 1</label>
-      <input type="text" id="sb_seller" placeholder="นาย/นาง/นางสาว ชื่อ นามสกุล">
-    </div>
-    <div class="fg"><label>ที่อยู่ (บ้านเลขที่ หมู่)</label>
-      <input type="text" id="sb_seller_addr1" placeholder="เช่น 123/4 หมู่ 5">
-    </div>
-    <div class="fg"><label>จังหวัด (ผู้ขายฝาก)</label>
-      <input type="text" id="sb_seller_province" placeholder="พิมพ์หรือเลือกจังหวัด..." style="padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7;width:100%">
-    </div>
-    <div class="fg"><label>อำเภอ (ผู้ขายฝาก)</label>
-      <input type="text" id="sb_seller_amphoe" placeholder="พิมพ์หรือเลือกอำเภอ..." style="padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7;width:100%">
-    </div>
-    <div class="fg"><label>ตำบล (ผู้ขายฝาก)</label>
-      <input type="text" id="sb_seller_tambon" placeholder="พิมพ์หรือเลือกตำบล..." style="padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7;width:100%">
-    </div>
-    <div class="fg"><label>สัญชาติ</label>
-      <input type="text" id="sb_seller_nation" value="ไทย">
-    </div>
-
-    <!-- toggle คนที่ 2 -->
-    <div class="fg" style="margin-top:10px;padding-top:10px;border-top:1px dashed #ccc">
-      <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
-        <input type="checkbox" id="has_seller2" onchange="toggleSeller2(this.checked)" style="width:16px;height:16px">
-        <span style="font-weight:700">มีผู้ขายฝากคนที่ 2</span>
-      </label>
-    </div>
-    <div id="seller2-section" style="display:none;padding-top:8px;border-top:1px dashed #ccc;margin-top:4px">
-      <div class="fg"><label>ชื่อ-นามสกุลผู้ขายฝาก คนที่ 2</label>
-        <input type="text" id="sb_seller2" placeholder="นาย/นาง/นางสาว ชื่อ นามสกุล">
-      </div>
-      <div class="fg"><label>ที่อยู่คนที่ 2 (บ้านเลขที่ หมู่)</label>
-        <input type="text" id="sb_seller_addr1_2" placeholder="เช่น 123/4 หมู่ 5">
-      </div>
-      <div class="fg"><label>จังหวัด (คนที่ 2)</label>
-        <input type="text" id="sb_seller_province2" placeholder="พิมพ์หรือเลือกจังหวัด..." style="padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7;width:100%">
-      </div>
-      <div class="fg"><label>อำเภอ (คนที่ 2)</label>
-        <input type="text" id="sb_seller_amphoe2" placeholder="พิมพ์หรือเลือกอำเภอ..." style="padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7;width:100%">
-      </div>
-      <div class="fg"><label>ตำบล (คนที่ 2)</label>
-        <input type="text" id="sb_seller_tambon2" placeholder="พิมพ์หรือเลือกตำบล..." style="padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7;width:100%">
-      </div>
-    </div>
-
+  <!-- รายละเอียดที่ดิน -->
+  <div class="card">
     <div class="ct"><span class="n">4</span> รายละเอียดที่ดิน</div>
     <div class="fg"><label>ประเภทเอกสารสิทธิ์</label>
-      <select id="sb_doc_type" onchange="toggleCondoFields(this.value)" style="-webkit-appearance:none;padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7;width:100%">
-        <option value="โฉนด">โฉนดที่ดิน</option>
-        <option value="นส3ก">หนังสือรับรองการทำประโยชน์ (น.ส.3 ก.)</option>
-        <option value="นส3">หนังสือรับรองการทำประโยชน์ (น.ส.3)</option>
-        <option value="ห้องชุด">ห้องชุด (อาคารชุด)</option>
+      <select id="sb_doc_type" style="-webkit-appearance:none;padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7;width:100%">
+        <option value="โฉนดที่ดิน">โฉนดที่ดิน (น.ส.4)</option>
+        <option value="น.ส.3 ก.">น.ส.3 ก.</option>
+        <option value="น.ส.3">น.ส.3</option>
       </select>
     </div>
-
-    <!-- ช่องพิเศษสำหรับห้องชุด -->
-    <div id="condo-fields" style="display:none">
-      <div class="fg"><label>เลขที่ห้องชุด</label>
-        <input type="text" id="sb_condo_no" placeholder="เช่น 12/34">
-      </div>
-      <div class="fg"><label>ชั้นที่</label>
-        <input type="text" id="sb_condo_floor" placeholder="เช่น 5" inputmode="numeric">
-      </div>
-      <div class="fg"><label>อาคารเลขที่</label>
-        <input type="text" id="sb_condo_bldg" placeholder="เช่น A">
-      </div>
-      <div class="fg"><label>ชื่ออาคารชุด</label>
-        <input type="text" id="sb_condo_name" placeholder="เช่น ลุมพินี คอนโด">
-      </div>
-      <div class="fg"><label>ทะเบียนอาคารชุดเลขที่</label>
-        <input type="text" id="sb_condo_reg" placeholder="เลขทะเบียน">
-      </div>
-    </div>
-
     <div class="fg"><label>เลขที่โฉนด/เอกสารสิทธิ์ (ถ้าหลายแปลง คั่นด้วยลูกน้ำ)</label>
       <input type="text" id="sb_title_no" placeholder="เช่น 1234 หรือ 1234, 5678">
     </div>
@@ -725,28 +676,37 @@ function buildTD16(d){
 // ── BUILD VOUCHER ──
 function buildSbVoucher(d,payRows){
   var no=billNo(d.sb_date,d.sb_bill_seq);
-  var total=payRows.reduce(function(s,r){
-    var n=parseInt((r.amt||'0').replace(/[,\s]/g,''));
-    return s+(isNaN(n)?0:n);
-  },0);
+  var sellers=d.sellers&&d.sellers.length?d.sellers:[{name:d.sb_seller,addr:d.sb_seller_addr}];
+  var total=payRows.reduce(function(s,r){var n=parseInt((r.amt||'0').replace(/[,\s]/g,''));return s+(isNaN(n)?0:n);},0);
   var totalFmt=total?total.toLocaleString('th-TH'):'';
   var totalT=total?toBaht(total):'';
   var rows=payRows.slice();
-  while(rows.length<2) rows.push({label:'',amtFmt:''});
+  while(rows.length<2)rows.push({label:'',amtFmt:''});
   var CELL='padding:2pt 5pt;font-size:12pt;';
-  var seller=d.sb_seller||'';
-  var seller2=d.sb_seller2||'';
-  var sellerAddr2=d.sb_seller_addr2||'';
 
   function copy(lbl){
     var rowsHTML=rows.map(function(r){
-      return '<tr>'
-        +'<td style="border:1px solid #999;'+CELL+'padding-top:8pt;padding-bottom:8pt">'+r.label+'</td>'
-        +'<td style="border:1px solid #999;'+CELL+'text-align:right;white-space:nowrap;width:30%">'+r.amtFmt+'</td>'
-        +'</tr>';
+      return '<tr><td style="border:1px solid #999;'+CELL+'padding-top:7pt;padding-bottom:7pt">'+r.label+'</td>'
+        +'<td style="border:1px solid #999;'+CELL+'text-align:right;white-space:nowrap;width:30%">'+r.amtFmt+'</td></tr>';
     }).join('');
 
-    return '<div style="padding:0.4cm 0.6cm;font-family:TH Sarabun New,Sarabun,Arial,sans-serif;box-sizing:border-box">'
+    // ชื่อทุกคน
+    var allNames=sellers.map(function(s){return s.name;}).join(' , ');
+    var allAddrs=sellers.map(function(s){return s.addr;}).filter(Boolean).join(' / ');
+
+    // ช่องเซ็น
+    var cw=Math.floor(100/(sellers.length+1));
+    var recvCols=sellers.map(function(s){
+      return '<td style="text-align:center;vertical-align:top;padding:0.6cm 2px 0">'
+        +'<div style="border-top:1px solid #000;width:110px;margin:0 auto 3pt"></div>'
+        +'<div style="font-size:11pt">ผู้รับเงิน</div>'
+        +'<div style="font-size:10pt">( '+s.name+' )</div>'
+        +'</td>';
+    }).join('');
+
+    return '<div style="flex:1;min-height:0;padding:0.2cm 0.5cm;font-family:TH Sarabun New,Sarabun,Arial,sans-serif;box-sizing:border-box;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden">'
+      +'<div>'
+      // หัว
       +'<table style="width:100%;border-collapse:collapse;margin-bottom:4pt;table-layout:fixed"><tr>'
       +'<td style="vertical-align:middle">'
       +'<span style="font-size:18pt;font-weight:bold">บริษัท โชคชัย เงินด่วน จำกัด</span><br>'
@@ -759,12 +719,14 @@ function buildSbVoucher(d,payRows){
       +'<span style="font-size:11pt">'+lbl+'</span><br>'
       +'<span style="font-size:11pt">วันที่ '+shortDate(d.sb_date)+'</span>'
       +'</td></tr></table>'
+      // ชื่อ/ที่อยู่
       +'<table style="width:100%;border-collapse:collapse;margin-bottom:4pt;table-layout:fixed">'
       +'<tr><td style="border:1px solid #999;border-bottom:none;'+CELL+'font-weight:bold;width:25%;vertical-align:top">ชื่อ-นามสกุล ลูกค้า</td>'
-      +'<td style="border:1px solid #999;border-left:none;border-bottom:none;'+CELL+'word-break:break-word">'+(seller2?seller+' , '+seller2:seller)+'</td></tr>'
+      +'<td style="border:1px solid #999;border-left:none;border-bottom:none;'+CELL+'word-break:break-word">'+allNames+'</td></tr>'
       +'<tr><td style="border:1px solid #999;border-top:none;'+CELL+'font-weight:bold;width:25%;vertical-align:top">ที่อยู่ ลูกค้า</td>'
-      +'<td style="border:1px solid #999;border-left:none;border-top:none;'+CELL+'word-break:break-word">'+(d.sb_seller_addr||'')+(seller2&&d.sb_seller_addr2?' / '+d.sb_seller_addr2:'')+'</td></tr>'
+      +'<td style="border:1px solid #999;border-left:none;border-top:none;'+CELL+'word-break:break-word">'+allAddrs+'</td></tr>'
       +'</table>'
+      // รายการ
       +'<table style="width:100%;border-collapse:collapse;margin-bottom:4pt;table-layout:fixed">'
       +'<tr style="background:#eee">'
       +'<th style="border:1px solid #999;'+CELL+'text-align:center">รายละเอียดการจ่ายเงิน</th>'
@@ -774,81 +736,37 @@ function buildSbVoucher(d,payRows){
       +'<td style="border:1px solid #999;'+CELL+'">รวมเงินที่จ่าย &nbsp; '+totalT+'</td>'
       +'<td style="border:1px solid #999;'+CELL+'text-align:right;white-space:nowrap">'+totalFmt+'</td>'
       +'</tr></table>'
-      +(seller2
-        // 2 คน
-        ?'<table style="width:100%;border-collapse:collapse;margin-top:1.2cm"><tr>'
-          +'<td style="text-align:center;width:34%;vertical-align:top">'
-          +'<div style="border-top:1px solid #000;width:130px;margin:0 auto 2pt"></div>'
-          +'<span style="font-size:11pt">ผู้จ่ายเงิน / ผู้มีอำนาจลงนาม</span><br>'
-          +'<span style="font-size:10pt">( บริษัท โชคชัย เงินด่วน จำกัด )</span>'
-          +'</td>'
-          +'<td style="text-align:center;width:33%;vertical-align:top">'
-          +'<div style="border-top:1px solid #000;width:130px;margin:0 auto 2pt"></div>'
-          +'<span style="font-size:11pt">ผู้รับเงิน</span><br>'
-          +'<span style="font-size:10pt">( '+seller+' )</span>'
-          +'</td>'
-          +'<td style="text-align:center;width:33%;vertical-align:top">'
-          +'<div style="border-top:1px solid #000;width:130px;margin:0 auto 2pt"></div>'
-          +'<span style="font-size:11pt">ผู้รับเงิน</span><br>'
-          +'<span style="font-size:10pt">( '+seller2+' )</span>'
-          +'</td>'
-          +'</tr></table>'
-        // 1 คน
-        :'<table style="width:100%;border-collapse:collapse;margin-top:1.2cm"><tr>'
-          +'<td style="text-align:center;width:50%;vertical-align:top">'
-          +'<div style="border-top:1px solid #000;width:150px;margin:0 auto 2pt"></div>'
-          +'<span style="font-size:11pt">ผู้จ่ายเงิน / ผู้มีอำนาจลงนาม</span><br>'
-          +'<span style="font-size:10pt">( บริษัท โชคชัย เงินด่วน จำกัด )</span>'
-          +'</td>'
-          +'<td style="text-align:center;width:50%;vertical-align:top">'
-          +'<div style="border-top:1px solid #000;width:150px;margin:0 auto 2pt"></div>'
-          +'<span style="font-size:11pt">ผู้รับเงิน</span><br>'
-          +'<span style="font-size:10pt">( '+seller+' )</span>'
-          +'</td>'
-          +'</tr></table>'
-      )
+      +'</div>'
+      // ช่องเซ็น
+      +'<table style="width:100%;border-collapse:collapse;margin-top:0.3cm"><tr>'
+      +'<td style="text-align:center;vertical-align:top;padding:0.6cm 2px 0;width:'+cw+'%">'
+      +'<div style="border-top:1px solid #000;width:110px;margin:0 auto 3pt"></div>'
+      +'<div style="font-size:11pt">ผู้จ่ายเงิน / ผู้มีอำนาจลงนาม</div>'
+      +'<div style="font-size:10pt">( บริษัท โชคชัย เงินด่วน จำกัด )</div>'
+      +'</td>'+recvCols+'</tr></table>'
       +'</div>';
   }
 
-  return '<div class="doc doc-page">'
+  return '<div class="doc doc-page" style="height:100vh;display:flex;flex-direction:column;box-sizing:border-box">'
     +copy('ต้นฉบับ')
-    +'<hr style="border:none;border-top:2px dashed #aaa;margin:0">'
+    +'<hr style="border:none;border-top:2px dashed #aaa;margin:0;flex-shrink:0">'
     +copy('สำเนา')
     +'</div>';
-}
-
-function toggleCondoFields(val){
-  var el = document.getElementById('condo-fields');
-  if(el) el.style.display = val==='ห้องชุด' ? 'block' : 'none';
-}
-
-function toggleSeller2(show){
-  document.getElementById('seller2-section').style.display = show ? 'block' : 'none';
-  if(!show) document.getElementById('sb_seller2').value = '';
 }
 
 function genSellback(){
   const d={
     sb_date:gv('sb_date'), sb_bill_seq:gv('sb_bill_seq')||'01',
-    sb_date_th:gv('sb_date_th'), sb_doc_type:   gv('sb_doc_type')||'โฉนด',
-    sb_condo_no:   gv('sb_condo_no'),
-    sb_condo_floor:gv('sb_condo_floor'),
-    sb_condo_bldg: gv('sb_condo_bldg'),
-    sb_condo_name: gv('sb_condo_name'),
-    sb_condo_reg:  gv('sb_condo_reg'),
+    sb_date_th:gv('sb_date_th'), sb_doc_type:gv('sb_doc_type'),
     sb_title_no:gv('sb_title_no')||'..........', sb_survey_no:gv('sb_survey_no'),
     sb_area:gv('sb_area'), sb_tambon:gv('sb_tambon'),
     sb_amphoe:gv('sb_amphoe'), sb_province:gv('sb_province')||'นครราชสีมา',
-    sb_seller:gv('sb_seller')||'..........', sb_seller2:gv('sb_seller2')||'',
-    sb_seller_addr2:(function(){
-      var a=gv('sb_seller_addr1_2');
-      var tb=document.getElementById('sb_seller_tambon2')?document.getElementById('sb_seller_tambon2').value:'';
-      var ap=document.getElementById('sb_seller_amphoe2')?document.getElementById('sb_seller_amphoe2').value:'';
-      var pv=document.getElementById('sb_seller_province2')?document.getElementById('sb_seller_province2').value:'';
-      return [a, formatAddr(tb,ap,pv)].filter(Boolean).join(' ');
-    })(),
-    sb_seller_addr:getSbSellerAddr(),
-    sb_seller_nation:gv('sb_seller_nation')||'ไทย',
+    sb_seller:(function(){var s=getSellers();return s.length?s[0].name:'..........';})(),
+    sb_seller2:(function(){var s=getSellers();return s.length>1?s.slice(1).map(function(x){return x.name;}).join(' และ '):'';})(),
+    sb_seller_addr:(function(){var s=getSellers();return s.length?s[0].addr:'';})(),
+    sb_seller_addr2:(function(){var s=getSellers();return s.length>1?s.slice(1).map(function(x){return x.addr;}).join(' / '):'';})(),
+    sellers:getSellers(),
+    sb_seller_nation:(function(){var s=getSellers();return s.length&&s[0].nation?s[0].nation:'ไทย';})(),
     sb_price:gv('sb_price'), sb_price_t:gv('sb_price_t'),
     sb_redeem:gv('sb_redeem'), sb_redeem_t:gv('sb_redeem_t'),
     sb_period:gv('sb_period'),
@@ -882,25 +800,6 @@ function genSellback(){
   window.scrollTo(0,0);
 }
 function launchTD16(){
-  // บันทึกข้อมูลฟอร์มไว้ใน sessionStorage เพื่อ restore เมื่อกลับมา
-  try {
-    var fields = ['sb_date','sb_bill_seq','sb_office_branch','sb_meeting_no','sb_chanote_count',
-      'sb_seller','sb_seller2','sb_seller_addr1','sb_seller_nation',
-      'sb_seller_province','sb_seller_amphoe','sb_seller_tambon',
-      'sb_seller_addr1_2','sb_seller_province2','sb_seller_amphoe2','sb_seller_tambon2',
-      'sb_doc_type','sb_title_no','sb_survey_no','sb_rawang','sb_area',
-      'sb_province','sb_amphoe','sb_tambon',
-      'sb_price','sb_price_t','sb_redeem','sb_redeem_t','sb_period'];
-    var data = {};
-    fields.forEach(function(k){
-      var el = document.getElementById(k);
-      if(el) data[k] = el.type==='checkbox' ? el.checked : el.value;
-    });
-    // checkbox has_seller2
-    var hs2 = document.getElementById('has_seller2');
-    if(hs2) data['has_seller2'] = hs2.checked;
-    sessionStorage.setItem('sb_form_data', JSON.stringify(data));
-  } catch(e) {}
   // ดึงวันที่แยกส่วน
   var rawDate = document.getElementById('sb_date') ? document.getElementById('sb_date').value : '';
   var dayTh='', monthTh='', yearTh='', fullDateTh='';
@@ -944,7 +843,7 @@ function launchTD16(){
     amphoe_land:    document.getElementById('sb_amphoe') ? document.getElementById('sb_amphoe').value : '',
     tambon_land:    document.getElementById('sb_tambon') ? document.getElementById('sb_tambon').value : '',
     // โฉนดจาก = ชื่อผู้ขายฝาก
-    chanote_from:   gv('sb_seller2') ? gv('sb_seller')+' และ '+gv('sb_seller2') : gv('sb_seller'),
+    chanote_from:   gv('sb_seller'),
     // เงิน
     amount:         gv('sb_price'),
     amount_text:    gv('sb_price_t'),
@@ -1027,13 +926,16 @@ function loadZip(){}
 function sbProv1(prov){
   var a=document.getElementById('sb_seller_amphoe');
   var t=document.getElementById('sb_seller_tambon');
+  if(!a||!t) return;
   a.innerHTML='<option value="">-- เลือกอำเภอ --</option>';
   t.innerHTML='<option value="">-- เลือกตำบล --</option>';
   if(!prov||!ADDR[prov])return;
   Object.keys(ADDR[prov]).sort().forEach(function(x){var o=document.createElement('option');o.value=x;o.textContent=x;a.appendChild(o);});
 }
 function sbAmp1(amp){
-  var prov=document.getElementById('sb_seller_province').value;
+  var provEl=document.getElementById('sb_seller_province');
+  if(!provEl) return;
+  var prov=provEl.value;
   var t=document.getElementById('sb_seller_tambon');
   t.innerHTML='<option value="">-- เลือกตำบล --</option>';
   if(!prov||!amp||!ADDR[prov]||!ADDR[prov][amp])return;
@@ -1055,30 +957,103 @@ function sbAmp2(amp){
   ADDR[prov][amp].forEach(function(x){var o=document.createElement('option');o.value=x;o.textContent=x;t.appendChild(o);});
 }
 function getSbSellerAddr(){
-  var a1=gv('sb_seller_addr1');
-  var tam=document.getElementById('sb_seller_tambon')?document.getElementById('sb_seller_tambon').value:'';
-  var amp=document.getElementById('sb_seller_amphoe')?document.getElementById('sb_seller_amphoe').value:'';
-  var pv=document.getElementById('sb_seller_province')?document.getElementById('sb_seller_province').value:'';
-  return [a1, formatAddr(tam,amp,pv)].filter(Boolean).join(' ');
+  var s=getSellers();
+  if(s&&s.length) return s[0].addr||'';
+  return '';
 }
 document.addEventListener('DOMContentLoaded',function(){
   addSbPay('cash');
-  // ถ้ากลับมาจาก td16-overlay ให้ restore ข้อมูลจาก sessionStorage
-  try {
-    var saved = sessionStorage.getItem('sb_form_data');
-    if(saved) {
-      var d = JSON.parse(saved);
-      Object.keys(d).forEach(function(k){
-        var el = document.getElementById(k);
-        if(!el) return;
-        if(el.type === 'checkbox') el.checked = d[k];
-        else el.value = d[k];
-      });
-      // trigger events
-      var prov1 = document.getElementById('sb_seller_province');
-      if(prov1 && prov1.value) { var ev=new Event('blur'); prov1.dispatchEvent(ev); }
+
+// ── COMBOBOX HELPER ──
+function makeCombo(inputId, allOptions, onChange){
+  var inp = document.getElementById(inputId);
+  if(!inp) return;
+  // wrap
+  var wrap = document.createElement('div');
+  wrap.className = 'combo-wrap';
+  inp.parentNode.insertBefore(wrap, inp);
+  wrap.appendChild(inp);
+  inp.className = (inp.className||'') + ' combo-input';
+  inp.autocomplete = 'off';
+  // dropdown
+  var drop = document.createElement('div');
+  drop.className = 'combo-drop';
+  drop.id = inputId + '_drop';
+  wrap.appendChild(drop);
+
+  function renderOpts(filter){
+    var f = (filter||'').toLowerCase().trim();
+    var matched = f ? allOptions.filter(function(o){ return o.toLowerCase().indexOf(f) >= 0; }) : allOptions;
+    if(!matched.length){
+      drop.innerHTML = '<div class="combo-no">ไม่พบ "'+filter+'" — พิมพ์ตามต้องการได้เลย</div>';
+    } else {
+      drop.innerHTML = matched.slice(0,80).map(function(o){
+        return '<div class="combo-opt" data-val="'+o+'">'+o+'</div>';
+      }).join('');
     }
-  } catch(e) {}
+    drop.querySelectorAll('.combo-opt').forEach(function(el){
+      el.addEventListener('mousedown', function(e){
+        e.preventDefault();
+        inp.value = el.dataset.val;
+        drop.classList.remove('open');
+        if(onChange) onChange(el.dataset.val);
+      });
+    });
+  }
+
+  inp.addEventListener('input', function(){
+    renderOpts(this.value);
+    drop.classList.add('open');
+  });
+  inp.addEventListener('focus', function(){
+    renderOpts(this.value);
+    drop.classList.add('open');
+  });
+  inp.addEventListener('blur', function(){
+    setTimeout(function(){ drop.classList.remove('open'); }, 200);
+    if(onChange) onChange(inp.value);
+  });
+}
+
+var PROVS=['กระบี่','กาญจนบุรี','กาฬสินธุ์','กำแพงเพชร','ขอนแก่น','จันทบุรี','ฉะเชิงเทรา','ชลบุรี','ชัยนาท','ชัยภูมิ','ชุมพร','เชียงราย','เชียงใหม่','ตรัง','ตราด','ตาก','นครนายก','นครปฐม','นครพนม','นครราชสีมา','นครศรีธรรมราช','นครสวรรค์','นนทบุรี','นราธิวาส','น่าน','บึงกาฬ','บุรีรัมย์','ปทุมธานี','ประจวบคีรีขันธ์','ปราจีนบุรี','ปัตตานี','พระนครศรีอยุธยา','พะเยา','พังงา','พัทลุง','พิจิตร','พิษณุโลก','เพชรบุรี','เพชรบูรณ์','แพร่','ภูเก็ต','มหาสารคาม','มุกดาหาร','แม่ฮ่องสอน','ยโสธร','ยะลา','ร้อยเอ็ด','ระนอง','ระยอง','ราชบุรี','ลพบุรี','ลำปาง','ลำพูน','เลย','ศรีสะเกษ','สกลนคร','สงขลา','สตูล','สมุทรปราการ','สมุทรสงคราม','สมุทรสาคร','สระแก้ว','สระบุรี','สิงห์บุรี','สุโขทัย','สุพรรณบุรี','สุราษฎร์ธานี','สุรินทร์','หนองคาย','หนองบัวลำภู','อ่างทอง','อำนาจเจริญ','อุดรธานี','อุตรดิตถ์','อุทัยธานี','อุบลราชธานี'];
+  makeCombo('sb_seller_province', PROVS, function(v){ sbProv1(v); });
+  makeCombo('sb_seller_amphoe', [], null);
+  makeCombo('sb_seller_tambon', [], null);
+  makeCombo('sb_province', PROVS, function(v){ sbProv2(v); });
+  makeCombo('sb_amphoe', [], null);
+  makeCombo('sb_tambon', [], null);
+
+  // patch sbProv1/2 to update combo options
+  var _op1=sbProv1; sbProv1=function(p){ _op1(p);
+    setTimeout(function(){
+      if(typeof ADDR!=='undefined'&&ADDR[p]){
+        var amps=Object.keys(ADDR[p]);
+        makeCombo('sb_seller_amphoe',amps,function(a){
+          if(ADDR[p]&&ADDR[p][a]) makeCombo('sb_seller_tambon',ADDR[p][a],null);
+        });
+      }
+    },100);
+  };
+  var _op2=sbProv2; sbProv2=function(p){ _op2(p);
+    setTimeout(function(){
+      if(typeof ADDR!=='undefined'&&ADDR[p]){
+        var amps=Object.keys(ADDR[p]);
+        makeCombo('sb_amphoe',amps,function(a){
+          if(ADDR[p]&&ADDR[p][a]) makeCombo('sb_tambon',ADDR[p][a],null);
+        });
+      }
+    },100);
+  };
+});
+
+function formatAddr(t,a,p){
+  var bkk=p==='กรุงเทพมหานคร';
+  var r=[];
+  if(t)r.push((bkk?'แขวง':'ต.')+t);
+  if(a)r.push((bkk?'เขต':'อ.')+a);
+  if(p)r.push('จ.'+p);
+  return r.join(' ');
+}
 
 // ── COMBOBOX HELPER ──
 function makeCombo(inputId, allOptions, onChange){
@@ -1132,55 +1107,65 @@ function makeCombo(inputId, allOptions, onChange){
 }
 
 var PROVS=['กรุงเทพมหานคร','กระบี่','กาญจนบุรี','กาฬสินธุ์','กำแพงเพชร','ขอนแก่น','จันทบุรี','ฉะเชิงเทรา','ชลบุรี','ชัยนาท','ชัยภูมิ','ชุมพร','เชียงราย','เชียงใหม่','ตรัง','ตราด','ตาก','นครนายก','นครปฐม','นครพนม','นครราชสีมา','นครศรีธรรมราช','นครสวรรค์','นนทบุรี','นราธิวาส','น่าน','บึงกาฬ','บุรีรัมย์','ปทุมธานี','ประจวบคีรีขันธ์','ปราจีนบุรี','ปัตตานี','พระนครศรีอยุธยา','พะเยา','พังงา','พัทลุง','พิจิตร','พิษณุโลก','เพชรบุรี','เพชรบูรณ์','แพร่','ภูเก็ต','มหาสารคาม','มุกดาหาร','แม่ฮ่องสอน','ยโสธร','ยะลา','ร้อยเอ็ด','ระนอง','ระยอง','ราชบุรี','ลพบุรี','ลำปาง','ลำพูน','เลย','ศรีสะเกษ','สกลนคร','สงขลา','สตูล','สมุทรปราการ','สมุทรสงคราม','สมุทรสาคร','สระแก้ว','สระบุรี','สิงห์บุรี','สุโขทัย','สุพรรณบุรี','สุราษฎร์ธานี','สุรินทร์','หนองคาย','หนองบัวลำภู','อ่างทอง','อำนาจเจริญ','อุดรธานี','อุตรดิตถ์','อุทัยธานี','อุบลราชธานี'];
-  makeCombo('sb_seller_province', PROVS, function(v){ sbProv1(v); });
-  makeCombo('sb_seller_amphoe', [], null);
-  makeCombo('sb_seller_tambon', [], null);
-  makeCombo('sb_province', PROVS, function(v){ sbProv2(v); });
-  makeCombo('sb_amphoe', [], null);
-  makeCombo('sb_tambon', [], null);
-  // คนที่ 2
-  makeCombo('sb_seller_province2', PROVS, function(v){
+
+var sellerCount=0;
+
+function addSeller(){
+  sellerCount++;
+  var n=sellerCount;
+  var wrap=document.getElementById('sellers-wrap');
+  var div=document.createElement('div');
+  div.id='seller-'+n;
+  div.style.cssText='border:1px solid #dde8dd;border-radius:10px;padding:12px;margin-bottom:10px;background:#fafaf7';
+  div.innerHTML=
+    '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">'
+    +'<span style="font-weight:700;color:#1a3a2a;font-size:14px">ผู้ขายฝาก คนที่ '+n+'</span>'
+    +(n>1?'<button type="button" onclick="removeSeller('+n+')" style="background:none;border:none;color:#c00;font-size:22px;cursor:pointer;padding:0">×</button>':'')
+    +'</div>'
+    +'<div class="fg"><label>ชื่อ-นามสกุล</label>'
+    +'<input type="text" id="sel_name_'+n+'" placeholder="นาย/นาง/นางสาว ชื่อ นามสกุล"></div>'
+    +'<div class="fg"><label>ที่อยู่ (บ้านเลขที่ หมู่)</label>'
+    +'<input type="text" id="sel_addr_'+n+'" placeholder="เช่น 123/4 หมู่ 5"></div>'
+    +'<div class="fg"><label>จังหวัด</label>'
+    +'<input type="text" id="sel_prov_'+n+'" placeholder="พิมพ์หรือเลือกจังหวัด..." style="padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fff;width:100%"></div>'
+    +'<div class="fg"><label>อำเภอ/เขต</label>'
+    +'<input type="text" id="sel_amp_'+n+'" placeholder="พิมพ์หรือเลือก..." style="padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fff;width:100%"></div>'
+    +'<div class="fg"><label>ตำบล/แขวง</label>'
+    +'<input type="text" id="sel_tam_'+n+'" placeholder="พิมพ์หรือเลือก..." style="padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fff;width:100%"></div>'
+    +'<div class="fg"><label>สัญชาติ</label>'
+    +'<input type="text" id="sel_nat_'+n+'" value="ไทย"></div>';
+  wrap.appendChild(div);
+  makeCombo('sel_prov_'+n,PROVS,function(v){
     if(typeof ADDR!=='undefined'&&ADDR[v]){
       var amps=Object.keys(ADDR[v]);
-      makeCombo('sb_seller_amphoe2',amps,function(a){
-        if(ADDR[v]&&ADDR[v][a]) makeCombo('sb_seller_tambon2',ADDR[v][a],null);
+      makeCombo('sel_amp_'+n,amps,function(a){
+        if(ADDR[v]&&ADDR[v][a])makeCombo('sel_tam_'+n,ADDR[v][a],null);
       });
     }
   });
-  makeCombo('sb_seller_amphoe2', [], null);
-  makeCombo('sb_seller_tambon2', [], null);
-
-  // patch sbProv1/2 to update combo options
-  var _op1=sbProv1; sbProv1=function(p){ _op1(p);
-    setTimeout(function(){
-      if(typeof ADDR!=='undefined'&&ADDR[p]){
-        var amps=Object.keys(ADDR[p]);
-        makeCombo('sb_seller_amphoe',amps,function(a){
-          if(ADDR[p]&&ADDR[p][a]) makeCombo('sb_seller_tambon',ADDR[p][a],null);
-        });
-      }
-    },100);
-  };
-  var _op2=sbProv2; sbProv2=function(p){ _op2(p);
-    setTimeout(function(){
-      if(typeof ADDR!=='undefined'&&ADDR[p]){
-        var amps=Object.keys(ADDR[p]);
-        makeCombo('sb_amphoe',amps,function(a){
-          if(ADDR[p]&&ADDR[p][a]) makeCombo('sb_tambon',ADDR[p][a],null);
-        });
-      }
-    },100);
-  };
-});
-
-function formatAddr(tambon, amphoe, province){
-  var isBkk = province === 'กรุงเทพมหานคร' || province === 'กรุงเทพ';
-  var parts = [];
-  if(tambon)  parts.push((isBkk ? 'แขวง' : 'ต.') + tambon);
-  if(amphoe)  parts.push((isBkk ? 'เขต'  : 'อ.') + amphoe);
-  if(province) parts.push('จ.' + province);
-  return parts.join(' ');
+  makeCombo('sel_amp_'+n,[],null);
+  makeCombo('sel_tam_'+n,[],null);
 }
+
+function removeSeller(n){var el=document.getElementById('seller-'+n);if(el)el.remove();}
+
+function getSellers(){
+  var list=[];
+  document.querySelectorAll('#sellers-wrap > div').forEach(function(div){
+    var n=div.id.replace('seller-','');
+    var nm=document.getElementById('sel_name_'+n);
+    if(!nm||!nm.value.trim())return;
+    var ad=document.getElementById('sel_addr_'+n);
+    var pv=document.getElementById('sel_prov_'+n);
+    var ap=document.getElementById('sel_amp_'+n);
+    var tm=document.getElementById('sel_tam_'+n);
+    var nat=document.getElementById('sel_nat_'+n);
+    var fa=[ad?ad.value:'',formatAddr(tm?tm.value:'',ap?ap.value:'',pv?pv.value:'')].filter(Boolean).join(' ');
+    list.push({name:nm.value.trim(),addr:fa,nation:nat?nat.value:'ไทย'});
+  });
+  return list;
+}
+addSeller();
 
 </script>
 </body>

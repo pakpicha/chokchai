@@ -827,7 +827,7 @@ function launchTD16(){
     // ผู้ให้ถ้อยคำ = ผู้มีอำนาจลงนาม
     person_name:    auth,
     age:            gv('sb_auth_age'),
-    nation:         'ไทย',
+    nation:         (function(){var s=getSellers();return s.length&&s[0].nation?s[0].nation:'ไทย';})(),
     // ที่อยู่บริษัท (ตายตัว)
     addr_no:        '89/28',
     moo:            '9',
@@ -843,7 +843,9 @@ function launchTD16(){
     amphoe_land:    document.getElementById('sb_amphoe') ? document.getElementById('sb_amphoe').value : '',
     tambon_land:    document.getElementById('sb_tambon') ? document.getElementById('sb_tambon').value : '',
     // โฉนดจาก = ชื่อผู้ขายฝาก
-    chanote_from:   gv('sb_seller'),
+    chanote_from:   (function(){var s=getSellers();return s.map(function(x){return x.name;}).join(',') || gv('sb_seller');})(),
+    // ที่อยู่ผู้ขายฝาก
+    seller_addr:    (function(){var s=getSellers();return s.map(function(x){return x.addr;}).filter(Boolean).join(' / ');})(),
     // เงิน
     amount:         gv('sb_price'),
     amount_text:    gv('sb_price_t'),

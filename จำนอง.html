@@ -54,7 +54,7 @@ body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;
 .print-tip-box .step-ic{font-size:22px;flex-shrink:0}
 .print-tip-close{width:100%;background:#1a3a2a;color:#fff;border:none;padding:13px;border-radius:10px;font-size:16px;font-family:inherit;font-weight:600;margin-top:12px;cursor:pointer}
 /* Document styles */
-.doc{background:#fff;font-family:'TH Sarabun New','Sarabun',Arial,sans-serif;font-size:14pt;line-height:1.65;color:#000;border:1px solid #ddd;padding:.8cm 1.2cm;width:100%}
+.doc{background:#fff;font-family:'TH Sarabun New','Sarabun',Arial,sans-serif;font-size:14pt;line-height:1.65;color:#000;border:1px solid #ddd;padding:.3cm 1.2cm .8cm;width:100%}
 .v-table{width:100%;border-collapse:collapse;margin:6pt 0}
 .v-table th,.v-table td{border:1px solid #999;padding:5pt 8pt;font-size:13pt;vertical-align:top}
 .v-table th{background:#f5f5f5;text-align:center}
@@ -297,7 +297,7 @@ function getCustAddr(){
 
 // ── PAYMENT ──
 var payC=0;
-var PAY_TYPES={cash:'เงินสด',draft:'ดราฟท์',transfer:'เงินโอน'};
+var PAY_TYPES={cash:'เงินสด',draft:'ดราฟท์',transfer:'เงินโอน',pn:'ตั๋วสัญญาใช้เงิน',bankdraft:'ดราฟต์ธนาคาร',check:'เช็ค'};
 function addPay(t){
   t=t||'cash';payC++;var i=payC;
   var d=document.createElement('div');
@@ -314,6 +314,9 @@ function payFields(i,t){
   if(t==='cash')return amtF;
   if(t==='draft')return'<label>เลขที่ดราฟท์</label><input type="text" id="p'+i+'_dno"><label>ธนาคาร</label><input type="text" id="p'+i+'_bank"><label>สั่งจ่าย</label><input type="text" id="p'+i+'_payto">'+amtF;
   if(t==='transfer')return'<label>ธนาคาร</label><input type="text" id="p'+i+'_bank"><label>เลขบัญชี</label><input type="text" id="p'+i+'_accno"><label>ชื่อบัญชี</label><input type="text" id="p'+i+'_accname">'+amtF;
+  if(t==='pn')return'<label>เลขที่ตั๋วสัญญาใช้เงิน</label><input type="text" id="p'+i+'_dno" placeholder="เช่น 0001234"><label>สั่งจ่าย (ชื่อผู้รับเงิน)</label><input type="text" id="p'+i+'_payto" placeholder="ชื่อผู้รับ">'+amtF;
+  if(t==='bankdraft')return'<label>เลขที่ดราฟต์ธนาคาร</label><input type="text" id="p'+i+'_dno" placeholder="เช่น 1234567"><label>ธนาคาร</label><input type="text" id="p'+i+'_bank" placeholder="เช่น กรุงเทพ"><label>สั่งจ่าย</label><input type="text" id="p'+i+'_payto" placeholder="ชื่อผู้รับ">'+amtF;
+  if(t==='check')return'<label>เลขที่เช็ค</label><input type="text" id="p'+i+'_dno" placeholder="เช่น 001234"><label>ธนาคาร</label><input type="text" id="p'+i+'_bank" placeholder="เช่น ไทยพาณิชย์"><label>สั่งจ่ายในนาม</label><input type="text" id="p'+i+'_payto" placeholder="ชื่อผู้รับ">'+amtF;
   return amtF;
 }
 function syncPayBaht(i){var a=document.getElementById('p'+i+'_amt');var t=document.getElementById('p'+i+'_amt_t');if(a&&t)t.value=toBaht(a.value.replace(/[,\s]/g,''));}
@@ -328,6 +331,9 @@ function getPayRows(){
     if(t==='cash')rows.push({label:'เงินสด',amt:amt,amtFmt:amtFmt,amtT:amtT});
     if(t==='draft')rows.push({label:'ดราฟท์ เลขที่ '+gv('p'+i+'_dno')+' ธนาคาร'+gv('p'+i+'_bank')+' สั่งจ่าย '+gv('p'+i+'_payto'),amt:amt,amtFmt:amtFmt,amtT:amtT});
     if(t==='transfer')rows.push({label:'โอนเข้าบัญชีธนาคาร'+gv('p'+i+'_bank')+' เลขที่ '+gv('p'+i+'_accno')+' ชื่อ '+gv('p'+i+'_accname'),amt:amt,amtFmt:amtFmt,amtT:amtT});
+    if(t==='pn')rows.push({label:'ตั๋วสัญญาใช้เงิน เลขที่ '+gv('p'+i+'_dno')+' สั่งจ่าย '+gv('p'+i+'_payto'),amt:amt,amtFmt:amtFmt,amtT:amtT});
+    if(t==='bankdraft')rows.push({label:'ดราฟต์ธนาคาร เลขที่ '+gv('p'+i+'_dno')+' ธนาคาร'+gv('p'+i+'_bank')+' สั่งจ่าย '+gv('p'+i+'_payto'),amt:amt,amtFmt:amtFmt,amtT:amtT});
+    if(t==='check')rows.push({label:'เช็ค เลขที่ '+gv('p'+i+'_dno')+' ธนาคาร'+gv('p'+i+'_bank')+' สั่งจ่าย '+gv('p'+i+'_payto'),amt:amt,amtFmt:amtFmt,amtT:amtT});
   });
   return rows;
 }
@@ -367,10 +373,14 @@ function buildMemo(d){
     +'<tr><td style="width:14%;white-space:nowrap">ระหว่าง</td>'
     +'<td>บริษัท โชคชัย เงินด่วน จำกัด</td>'
     +'<td style="text-align:right;white-space:nowrap">( ผู้รับจำนอง )</td></tr>'
-    +'<tr><td>และ</td>'
-    +'<td>'+d.custName+'</td>'
-    +'<td style="text-align:right;white-space:nowrap">( ผู้จำนอง )</td></tr>'
-    +'</table>'
+    +(function(){
+      var mn=d.mortgagors&&d.mortgagors.length?d.mortgagors:[{name:d.custName}];
+      return mn.map(function(m,i){
+        return '<tr><td>'+(i===0?'และ':'')+'</td>'
+          +'<td>'+m.name+'</td>'
+          +'<td style="text-align:right;white-space:nowrap">( ผู้จำนอง )</td></tr>';
+      }).join('')+'</table>';
+    })()
     +'<p style="font-size:'+FS+';margin-bottom:0.3cm">ทั้งสองฝ่าย ได้ตกลงทำสัญญากันดังต่อไปนี้</p>';
 
   var SL='border-top:1px solid #000;display:inline-block;width:160px;vertical-align:middle';
@@ -479,8 +489,8 @@ function buildVoucher(d,payRows){
   // Each copy = 269/2 = ~134mm = 13.4cm height
   // Use height on wrapper to force exact half-page
   var COPY_H='13.4cm';
-  var CELL='padding:3pt 6pt;font-size:12.5pt;';
-  var ROW_H='1.0cm'; // (13.4 - header~4.5 - labels~1.8 - thead~0.7 - total~0.7 - sign~1cm) / 3rows ≈ 1.55cm but tight
+  var CELL='padding:2pt 5pt;font-size:12pt;';
+  var ROW_H='0.8cm'; // (13.4 - header~4.5 - labels~1.8 - thead~0.7 - total~0.7 - sign~1cm) / 3rows ≈ 1.55cm but tight
 
   function copy(lbl){
     var rowsHTML=rows.map(function(r){
@@ -490,7 +500,7 @@ function buildVoucher(d,payRows){
         +'</tr>';
     }).join('');
 
-    return '<div style="height:'+COPY_H+';padding:0.3cm 0.6cm;font-family:Sarabun,Arial,sans-serif;box-sizing:border-box;overflow:hidden">'
+    return '<div style="flex:1;min-height:0;padding:0.2cm 0.5cm;font-family:Sarabun,Arial,sans-serif;box-sizing:border-box;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden">'
       // หัว
       +'<table style="width:100%;border-collapse:collapse;margin-bottom:1pt"><tr>'
       +'<td><span style="font-size:21pt;font-weight:bold">บริษัท &nbsp; โชคชัย เงินด่วน &nbsp; จำกัด</span></td>'
@@ -532,23 +542,26 @@ function buildVoucher(d,payRows){
       +(function(){
         var mv=d.mortgagors&&d.mortgagors.length?d.mortgagors:[{name:d.custName}];
         var cw=Math.floor(100/(mv.length+1));
-        var rc=mv.map(function(m){return '<td style="text-align:center;vertical-align:top;width:'+cw+'%;padding-top:1.2cm">'
-          +'<div style="border-top:1px solid #000;width:130px;margin:0 auto 3pt"></div>'
-          +'<span style="font-size:11pt">ผู้รับเงิน</span><br>'
-          +'<span style="font-size:10pt">( '+m.name+' )</span></td>';}).join('');
-        return '<table style="width:100%;border-collapse:collapse;margin-top:0.5cm"><tr>'
-          +'<td style="text-align:center;vertical-align:top;width:'+cw+'%;padding-top:1.2cm">'
-          +'<div style="border-top:1px solid #000;width:130px;margin:0 auto 3pt"></div>'
-          +'<span style="font-size:11pt">ผู้จ่ายเงิน / ผู้มีอำนาจลงนาม</span><br>'
-          +'<span style="font-size:10pt">( บริษัท โชคชัย เงินด่วน จำกัด )</span></td>'
-          +rc+'</tr></table>';
+        var rc=mv.map(function(m){
+          return '<td style="text-align:center;vertical-align:top;padding:0.6cm 2px 0">'
+            +'<div style="border-top:1px solid #000;width:110px;margin:0 auto 3pt"></div>'
+            +'<div style="font-size:11pt">ผู้รับเงิน</div>'
+            +'<div style="font-size:10pt">( '+m.name+' )</div>'
+            +'</td>';
+        }).join('');
+        return '<table style="width:100%;border-collapse:collapse;margin-top:0.3cm"><tr>'
+          +'<td style="text-align:center;vertical-align:top;padding:0.6cm 2px 0;width:'+cw+'%">'
+          +'<div style="border-top:1px solid #000;width:110px;margin:0 auto 3pt"></div>'
+          +'<div style="font-size:11pt">ผู้จ่ายเงิน / ผู้มีอำนาจลงนาม</div>'
+          +'<div style="font-size:10pt">( บริษัท โชคชัย เงินด่วน จำกัด )</div>'
+          +'</td>'+rc+'</tr></table>';
       })()
       +'</div>';
   }
 
-  return '<div class="doc doc-page">'
+  return '<div class="doc doc-page" style="height:100vh;display:flex;flex-direction:column;box-sizing:border-box">'
     +copy('ต้นฉบับ')
-    +'<div style="border-top:2px dashed #aaa;margin:0"></div>'
+    +'<div style="border-top:2px dashed #aaa;margin:0;flex-shrink:0"></div>'
     +copy('สำเนา')
     +'</div>';
 }

@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>ใบสำคัญจ่ายทั่วไป — โชคชัย เงินด่วน</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'TH Sarabun New','Sarabun',Arial,sans-serif;font-size:15px;background:#f0f0eb;color:#111}
+.wrap{max-width:700px;margin:0 auto;padding:16px}
+.card{background:#fff;border-radius:14px;padding:18px;margin-bottom:14px;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.ct{font-size:13px;font-weight:700;color:#1a3a2a;background:#e8f5e8;border-radius:8px;padding:6px 12px;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.ct .n{background:#1a3a2a;color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0}
+.fg{margin-bottom:10px}
+.fg label{display:block;font-size:12px;color:#555;margin-bottom:4px;font-weight:600}
+.fg input,.fg select,.fg textarea{width:100%;padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7}
+.fg input:focus,.fg select:focus{outline:none;border-color:#1a3a2a}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pay-row{border:1px solid #dde8dd;border-radius:10px;padding:12px;margin-bottom:8px;background:#fafaf7}
+.pay-row .ph{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+.pay-row .ph select{flex:1;padding:8px;font-size:14px;border:1px solid #ccc;border-radius:6px;font-family:inherit}
+.pay-row .ph button{background:#fee;border:1px solid #fcc;border-radius:6px;color:#c00;padding:6px 10px;cursor:pointer;font-size:13px}
+.pay-row .pay-fields{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pay-row .pay-fields label{font-size:12px;color:#555;font-weight:600}
+.pay-row .pay-fields input{width:100%;padding:8px;font-size:14px;border:1px solid #ccc;border-radius:6px;font-family:inherit}
+.pay-row .pay-fields .full{grid-column:1/-1}
+.wht-row{display:flex;align-items:center;gap:8px;margin-top:6px;flex-wrap:wrap}
+.wht-row label{font-size:12px;color:#555;font-weight:600;white-space:nowrap}
+.wht-row select{padding:6px 8px;font-size:13px;border:1px solid #ccc;border-radius:6px;font-family:inherit}
+.wht-row input{width:100px;padding:6px 8px;font-size:13px;border:1px solid #ccc;border-radius:6px;font-family:inherit}
+.wht-row .wht-result{font-size:13px;color:#c00;font-weight:700;min-width:80px}
+.add-btn{width:100%;padding:11px;background:#e8f5e8;border:2px dashed #4caf50;border-radius:8px;font-size:14px;font-family:inherit;color:#1a3a2a;font-weight:700;cursor:pointer;margin-top:4px}
+.gen-btn{width:100%;padding:14px;background:#1a3a2a;color:#fff;border:none;border-radius:10px;font-size:16px;font-family:inherit;font-weight:700;cursor:pointer;margin-top:8px}
+.gen-btn:active{opacity:.85}
+@media print{
+  body{background:#fff}
+  .no-print{display:none!important}
+  .doc-page{page-break-after:always}
+}
+/* doc styles */
+.doc{font-family:'TH Sarabun New','Sarabun',Arial,sans-serif;font-size:13pt;color:#000;background:#fff}
+.doc table{border-collapse:collapse;width:100%}
+</style>
+</head>
+<body>
+<div class="wrap no-print">
+
+  <!-- 1. ข้อมูลทั่วไป -->
+  <div class="card">
+    <div class="ct"><span class="n">1</span> ข้อมูลทั่วไป</div>
+    <div class="row2">
+      <div class="fg"><label>วันที่</label><input type="date" id="gv_date"></div>
+      <div class="fg"><label>บิลที่ของวัน</label><input type="text" id="gv_bill_seq" value="01" placeholder="01"></div>
+    </div>
+  </div>
+
+  <!-- 2. ผู้รับเงิน -->
+  <div class="card">
+    <div class="ct"><span class="n">2</span> ผู้รับเงิน</div>
+    <div class="fg">
+      <label>ประเภทผู้รับเงิน</label>
+      <select id="gv_recv_type" onchange="onRecvTypeChange(this.value)" style="padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7;width:100%">
+        <option value="custom">กรอกเอง</option>
+        <option value="dir">กรรมการ</option>
+      </select>
+    </div>
+    <div id="recv-dir-section" style="display:none">
+      <div class="fg">
+        <label>เลือกกรรมการ</label>
+        <select id="gv_dir_sel" onchange="onDirSelect(this.value)" style="padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7;width:100%">
+          <option value="">-- เลือก --</option>
+          <option value="นายกันตพัฒน์ จรัสบวรพันธ์">นายกันตพัฒน์ จรัสบวรพันธ์</option>
+          <option value="นางชญาน์นัทช์ จรัสบวรพันธ์">นางชญาน์นัทช์ จรัสบวรพันธ์</option>
+          <option value="นายชุณนเกียรติ จรัสบวรพันธ์">นายชุณนเกียรติ จรัสบวรพันธ์</option>
+          <option value="นายฐานวัฒน์ จรัสบวรพันธ์">นายฐานวัฒน์ จรัสบวรพันธ์</option>
+          <option value="นางสาวภัคฐ์พิชา จรัสบวรพันธ์">นางสาวภัคฐ์พิชา จรัสบวรพันธ์</option>
+        </select>
+      </div>
+    </div>
+    <div class="fg"><label>ชื่อ-นามสกุล ผู้รับเงิน</label><input type="text" id="gv_recv_name" placeholder="ชื่อ-นามสกุล"></div>
+    <div class="fg"><label>ที่อยู่ผู้รับเงิน</label><input type="text" id="gv_recv_addr" placeholder="ที่อยู่"></div>
+  </div>
+
+  <!-- 3. รายการจ่าย -->
+  <div class="card">
+    <div class="ct"><span class="n">3</span> รายการจ่ายเงิน</div>
+    <div id="gv-pays-wrap"></div>
+    <button class="add-btn" onclick="addGvPay()">+ เพิ่มรายการ</button>
+  </div>
+
+  <!-- 4. สรุป -->
+  <div class="card" id="summary-card">
+    <div class="ct"><span class="n">4</span> สรุปยอด</div>
+    <div id="summary-detail" style="font-size:14px;line-height:2"></div>
+  </div>
+
+  <button class="gen-btn" onclick="genGvVoucher()">🖨 สร้างใบสำคัญจ่าย</button>
+</div>
+
+<!-- preview -->
+<div id="gv-preview" style="display:none"></div>
+
+<script>
+var DIR_ADDR = {
+  "นายกันตพัฒน์ จรัสบวรพันธ์":   "248/1 หมู่ที่ 9 ต.ท่าเยี่ยม อ.โชคชัย จ.นครราชสีมา",
+  "นางชญาน์นัทช์ จรัสบวรพันธ์":  "247/1 หมู่ที่ 9 ต.ท่าเยี่ยม อ.โชคชัย จ.นครราชสีมา",
+  "นายชุณนเกียรติ จรัสบวรพันธ์":  "222/2 หมู่ที่ 11 ต.กระโทก อ.โชคชัย จ.นครราชสีมา",
+  "นายฐานวัฒน์ จรัสบวรพันธ์":    "242/6 หมู่ที่ 9 ต.ท่าเยี่ยม อ.โชคชัย จ.นครราชสีมา",
+  "นางสาวภัคฐ์พิชา จรัสบวรพันธ์": "256/135 หมู่ที่ 12 ต.โชคชัย อ.โชคชัย จ.นครราชสีมา"
+};
+
+var WHT_TYPES = {
+  "none":  {label:"ไม่หัก",     rate:0},
+  "wht1":  {label:"หัก ณ ที่จ่าย 1%",  rate:0.01},
+  "wht3":  {label:"หัก ณ ที่จ่าย 3%",  rate:0.03},
+  "wht5":  {label:"หัก ณ ที่จ่าย 5%",  rate:0.05},
+  "wht15": {label:"หัก ณ ที่จ่าย 15%", rate:0.15},
+  "vat7":  {label:"VAT 7%",            rate:0.07},
+  "other": {label:"อื่นๆ (กรอก %)",    rate:0}
+};
+
+var payC = 0;
+
+function gv(id){var e=document.getElementById(id);return e?e.value.trim():'';}
+
+function fmtN(s){var n=parseFloat(String(s).replace(/[,\s]/g,''));return isNaN(n)?'':n.toLocaleString('th-TH');}
+
+function toBaht(n){
+  n=parseInt(String(n).replace(/[,\s]/g,''));
+  if(isNaN(n)||n===0)return '';
+  var u=['','หนึ่ง','สอง','สาม','สี่','ห้า','หก','เจ็ด','แปด','เก้า'];
+  var p=['','สิบ','ร้อย','พัน','หมื่น','แสน','ล้าน'];
+  function toText(n){
+    if(n===0)return '';
+    if(n>=1000000)return toText(Math.floor(n/1000000))+'ล้าน'+toText(n%1000000);
+    var r='',d=String(n).split('');
+    d.reverse();
+    for(var i=0;i<d.length;i++){
+      if(d[i]==='0')continue;
+      r=u[parseInt(d[i])]+p[i]+r;
+      if(i===1&&d[i]==='1')r='สิบ'+r.slice(2);
+      if(i===1&&d[i]==='2')r='ยี่สิบ'+r.slice(4);
+    }
+    return r;
+  }
+  return toText(n)+'บาทถ้วน';
+}
+
+function shortDate(s){
+  if(!s)return '......';
+  var p=s.split('-');
+  if(p.length!==3)return s;
+  var d=parseInt(p[2]),m=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'][parseInt(p[1])-1],y=parseInt(p[0])+543;
+  return d+'/'+m+'/'+y;
+}
+
+function billNo(dateStr,seq){
+  if(!dateStr)return 'PV......-'+(seq||'01');
+  var p=dateStr.split('-');
+  return 'PV'+(String(parseInt(p[0])+543).slice(-2)||'00')+(p[1]||'00')+(p[2]||'00')+'-'+(seq||'01');
+}
+
+function onRecvTypeChange(v){
+  document.getElementById('recv-dir-section').style.display = v==='dir'?'block':'none';
+  if(v!=='dir'){
+    document.getElementById('gv_recv_name').value='';
+    document.getElementById('gv_recv_addr').value='';
+  }
+}
+
+function onDirSelect(v){
+  document.getElementById('gv_recv_name').value = v;
+  document.getElementById('gv_recv_addr').value = DIR_ADDR[v]||'';
+}
+
+function addGvPay(){
+  payC++;
+  var i=payC;
+  var wrap=document.getElementById('gv-pays-wrap');
+  var div=document.createElement('div');
+  div.id='gvpay-'+i;
+  div.className='pay-row';
+  div.innerHTML=
+    '<div class="ph">'
+    +'<select id="gvp_type_'+i+'" onchange="onWhtChange('+i+')">'
+    +'<option value="cash">เงินสด</option>'
+    +'<option value="draft">ดราฟท์</option>'
+    +'<option value="transfer">เงินโอน</option>'
+    +'<option value="pn">ตั๋วสัญญาใช้เงิน</option>'
+    +'<option value="bankdraft">ดราฟต์ธนาคาร</option>'
+    +'<option value="check">เช็ค</option>'
+    +'</select>'
+    +(i>0?'<button onclick="removeGvPay('+i+')">× ลบ</button>':'')
+    +'</div>'
+    +'<div class="pay-fields">'
+    +'<div class="full fg"><label>รายการ / คำอธิบาย</label><input type="text" id="gvp_label_'+i+'" placeholder="เช่น คืนเงินต้น / ดอกเบี้ย"></div>'
+    +'<div class="fg"><label>จำนวนเงิน (บาท)</label><input type="text" id="gvp_amt_'+i+'" inputmode="numeric" placeholder="0" oninput="onAmtChange('+i+')"></div>'
+    +'<div class="fg"><label>ตัวอักษร</label><input type="text" id="gvp_amt_t_'+i+'" readonly></div>'
+    +'</div>'
+    // WHT section
+    +'<div class="wht-row">'
+    +'<label>หัก ณ ที่จ่าย:</label>'
+    +'<select id="gvp_wht_'+i+'" onchange="onWhtChange('+i+')">'
+    +'<option value="none">ไม่หัก</option>'
+    +'<option value="wht1">1%</option>'
+    +'<option value="wht3">3%</option>'
+    +'<option value="wht5">5%</option>'
+    +'<option value="wht15">15%</option>'
+    +'<option value="vat7">VAT 7%</option>'
+    +'<option value="other">อื่นๆ</option>'
+    +'</select>'
+    +'<span id="gvp_wht_other_wrap_'+i+'" style="display:none"><input type="text" id="gvp_wht_pct_'+i+'" placeholder="%" style="width:60px" oninput="onWhtChange('+i+')">%</span>'
+    +'<span id="gvp_wht_amt_'+i+'" class="wht-result"></span>'
+    +'</div>';
+  wrap.appendChild(div);
+  updateSummary();
+}
+
+function removeGvPay(i){
+  var el=document.getElementById('gvpay-'+i);
+  if(el){el.remove();updateSummary();}
+}
+
+function onAmtChange(i){
+  var amt=parseFloat((gv('gvp_amt_'+i)||'0').replace(/,/g,''))||0;
+  var el=document.getElementById('gvp_amt_t_'+i);
+  if(el)el.value=amt?toBaht(amt):'';
+  onWhtChange(i);
+}
+
+function onWhtChange(i){
+  var whtType=gv('gvp_wht_'+i);
+  var otherWrap=document.getElementById('gvp_wht_other_wrap_'+i);
+  if(otherWrap)otherWrap.style.display=whtType==='other'?'inline-flex':'none';
+  
+  var amt=parseFloat((gv('gvp_amt_'+i)||'0').replace(/,/g,''))||0;
+  var rate=0;
+  if(whtType==='wht1')rate=0.01;
+  else if(whtType==='wht3')rate=0.03;
+  else if(whtType==='wht5')rate=0.05;
+  else if(whtType==='wht15')rate=0.15;
+  else if(whtType==='vat7')rate=0.07;
+  else if(whtType==='other'){rate=parseFloat(gv('gvp_wht_pct_'+i)||'0')/100||0;}
+  
+  var whtAmt=Math.round(amt*rate*100)/100;
+  var el=document.getElementById('gvp_wht_amt_'+i);
+  if(el)el.textContent=whtAmt>0?('หัก '+whtAmt.toLocaleString('th-TH')+' บาท'):'';
+  updateSummary();
+}
+
+function getPayRows(){
+  var rows=[];
+  document.querySelectorAll('.pay-row').forEach(function(div){
+    var i=div.id.replace('gvpay-','');
+    var label=gv('gvp_label_'+i)||'';
+    var amt=parseFloat((gv('gvp_amt_'+i)||'0').replace(/,/g,''))||0;
+    if(!amt&&!label)return;
+    var whtType=gv('gvp_wht_'+i);
+    var rate=0;
+    if(whtType==='wht1')rate=0.01;
+    else if(whtType==='wht3')rate=0.03;
+    else if(whtType==='wht5')rate=0.05;
+    else if(whtType==='wht15')rate=0.15;
+    else if(whtType==='vat7')rate=0.07;
+    else if(whtType==='other')rate=parseFloat(gv('gvp_wht_pct_'+i)||'0')/100||0;
+    var whtAmt=Math.round(amt*rate*100)/100;
+    var whtLabel=whtAmt>0?WHT_TYPES[whtType].label:'';
+    rows.push({label:label,amt:amt,whtAmt:whtAmt,whtLabel:whtLabel,rate:rate});
+  });
+  return rows;
+}
+
+function updateSummary(){
+  var rows=getPayRows();
+  var totalGross=0,totalWht=0;
+  rows.forEach(function(r){totalGross+=r.amt;totalWht+=r.whtAmt;});
+  var totalNet=totalGross-totalWht;
+  var html='';
+  rows.forEach(function(r){
+    html+='<div>'+r.label+': <b>'+r.amt.toLocaleString('th-TH')+'</b> บาท'+(r.whtAmt>0?' (หัก '+r.whtAmt.toLocaleString('th-TH')+' บาท)':'')+'</div>';
+  });
+  if(totalWht>0)html+='<div style="color:#c00">รวมหัก: <b>'+totalWht.toLocaleString('th-TH')+'</b> บาท</div>';
+  html+='<div style="font-size:16px;font-weight:700;border-top:1px solid #ccc;margin-top:6px;padding-top:6px">ยอดจ่ายสุทธิ: <b>'+totalNet.toLocaleString('th-TH')+'</b> บาท ('+toBaht(Math.round(totalNet))+')</div>';
+  document.getElementById('summary-detail').innerHTML=html;
+}
+
+function genGvVoucher(){
+  var rows=getPayRows();
+  var date=gv('gv_date');
+  var seq=gv('gv_bill_seq')||'01';
+  var no=billNo(date,seq);
+  var recvName=gv('gv_recv_name')||'..........';
+  var recvAddr=gv('gv_recv_addr')||'';
+  
+  var totalGross=0,totalWht=0;
+  rows.forEach(function(r){totalGross+=r.amt;totalWht+=r.whtAmt;});
+  var totalNet=totalGross-totalWht;
+  
+  var CELL='padding:3pt 5pt;font-size:12pt;';
+  
+  function copy(lbl){
+    // แถวรายการ
+    var rowsHTML='';
+    rows.forEach(function(r){
+      rowsHTML+='<tr>'
+        +'<td style="border:1px solid #999;'+CELL+'">'+r.label+'</td>'
+        +'<td style="border:1px solid #999;'+CELL+'text-align:right;white-space:nowrap;width:28%">'+r.amt.toLocaleString('th-TH')+'</td>'
+        +'</tr>';
+      if(r.whtAmt>0){
+        rowsHTML+='<tr>'
+          +'<td style="border:1px solid #999;'+CELL+'color:#c00;padding-left:20pt">'+r.whtLabel+' ('+(r.rate*100)+'%)</td>'
+          +'<td style="border:1px solid #999;'+CELL+'text-align:right;color:#c00;white-space:nowrap">- '+r.whtAmt.toLocaleString('th-TH')+'</td>'
+          +'</tr>';
+      }
+    });
+    // pad ว่าง
+    var total_rows=rows.reduce(function(s,r){return s+1+(r.whtAmt>0?1:0);},0);
+    while(total_rows<3){rowsHTML+='<tr><td style="border:1px solid #999;'+CELL+'height:0.8cm"></td><td style="border:1px solid #999;'+CELL+'"></td></tr>';total_rows++;}
+    
+    return '<div style="flex:1;min-height:0;padding:2mm 3mm;font-family:TH Sarabun New,Sarabun,Arial,sans-serif;box-sizing:border-box;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden">'
+      +'<div>'
+      +'<table style="width:100%;border-collapse:collapse;margin-bottom:4pt"><tr>'
+      +'<td style="vertical-align:middle"><span style="font-size:17pt;font-weight:bold">บริษัท โชคชัย เงินด่วน จำกัด</span><br>'
+      +'<span style="font-size:10pt">No. '+no+'</span><br>'
+      +'<span style="font-size:10pt">89/28 หมู่ 9 ต.ท่าเยี่ยม อ.โชคชัย จ.นครราชสีมา</span><br>'
+      +'<span style="font-size:10pt">เลขประจำตัวผู้เสียภาษี 0305568001941</span></td>'
+      +'<td style="text-align:right;vertical-align:top;white-space:nowrap;min-width:100px">'
+      +'<span style="font-size:13pt;font-weight:bold;color:#c00">ใบสำคัญจ่าย</span><br>'
+      +'<span style="font-size:11pt">'+lbl+'</span><br>'
+      +'<span style="font-size:11pt">วันที่ '+shortDate(date)+'</span></td></tr></table>'
+      // ชื่อ/ที่อยู่
+      +'<table style="width:100%;border-collapse:collapse;margin-bottom:4pt">'
+      +'<tr><td style="border:1px solid #999;border-bottom:none;'+CELL+'font-weight:bold;width:25%">ชื่อ-นามสกุล ผู้รับเงิน</td>'
+      +'<td style="border:1px solid #999;border-left:none;border-bottom:none;'+CELL+'">'+recvName+'</td></tr>'
+      +'<tr><td style="border:1px solid #999;border-top:none;'+CELL+'font-weight:bold">ที่อยู่</td>'
+      +'<td style="border:1px solid #999;border-left:none;border-top:none;'+CELL+'word-break:break-word">'+recvAddr+'</td></tr>'
+      +'</table>'
+      // รายการ
+      +'<table style="width:100%;border-collapse:collapse;margin-bottom:4pt">'
+      +'<tr style="background:#eee"><th style="border:1px solid #999;'+CELL+'text-align:center">รายละเอียดการจ่ายเงิน</th>'
+      +'<th style="border:1px solid #999;'+CELL+'text-align:center;width:28%">จำนวนเงิน (บาท)</th></tr>'
+      +rowsHTML
+      +'<tr style="background:#ddd;font-weight:bold">'
+      +'<td style="border:1px solid #999;'+CELL+'">รวมเงินที่จ่าย &nbsp; '+toBaht(Math.round(totalNet))+'</td>'
+      +'<td style="border:1px solid #999;'+CELL+'text-align:right">'+totalNet.toLocaleString('th-TH')+'</td>'
+      +'</tr></table>'
+      +'</div>'
+      // เซ็น
+      +'<table style="width:100%;border-collapse:collapse;margin-top:0.3cm"><tr>'
+      +'<td style="text-align:center;vertical-align:top;width:50%;padding:0.6cm 2px 0">'
+      +'<div style="border-top:1px solid #000;width:120px;margin:0 auto 3pt"></div>'
+      +'<div style="font-size:11pt">ผู้จ่ายเงิน / ผู้มีอำนาจลงนาม</div>'
+      +'<div style="font-size:10pt">( บริษัท โชคชัย เงินด่วน จำกัด )</div></td>'
+      +'<td style="text-align:center;vertical-align:top;width:50%;padding:0.6cm 2px 0">'
+      +'<div style="border-top:1px solid #000;width:120px;margin:0 auto 3pt"></div>'
+      +'<div style="font-size:11pt">ผู้รับเงิน</div>'
+      +'<div style="font-size:10pt">( '+recvName+' )</div></td>'
+      +'</tr></table>'
+      +'</div>';
+  }
+
+  var html='<div class="doc" style="height:100vh;display:flex;flex-direction:column;box-sizing:border-box">'
+    +copy('ต้นฉบับ')
+    +'<hr style="border:none;border-top:2px dashed #aaa;margin:0;flex-shrink:0">'
+    +copy('สำเนา')
+    +'</div>';
+
+  document.getElementById('gv-preview').innerHTML=html;
+  document.getElementById('gv-preview').style.display='block';
+  document.querySelector('.wrap').style.display='none';
+  window.print();
+  document.getElementById('gv-preview').style.display='none';
+  document.querySelector('.wrap').style.display='block';
+}
+
+// init
+addGvPay();
+
+// auto-save
+var LS_KEY='form_data_ใบสำคัญจ่ายทั่วไป';
+function autoSave(){try{var d={};document.querySelectorAll('input[id],select[id]').forEach(function(e){d[e.id]=e.value;});localStorage.setItem(LS_KEY,JSON.stringify(d));}catch(e){}}
+function autoRestore(){try{var s=localStorage.getItem(LS_KEY);if(!s)return;var d=JSON.parse(s);Object.keys(d).forEach(function(k){var e=document.getElementById(k);if(e)e.value=d[k];});}catch(e){}}
+setInterval(autoSave,2000);
+window.addEventListener('beforeunload',autoSave);
+setTimeout(autoRestore,100);
+</script>
+</body>
+</html>

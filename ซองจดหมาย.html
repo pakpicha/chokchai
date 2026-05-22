@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>พิมพ์ซองจดหมาย — โชคชัย เงินด่วน</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;background:#f0f0eb;color:#111;font-size:15px}
+.wrap{max-width:700px;margin:0 auto;padding:16px}
+.card{background:#fff;border-radius:14px;padding:18px;margin-bottom:14px;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.ct{font-size:13px;font-weight:700;color:#1a3a2a;background:#e8f5e8;border-radius:8px;padding:6px 12px;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.ct .n{background:#1a3a2a;color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0}
+.fg{margin-bottom:10px}
+.fg label{display:block;font-size:12px;color:#555;margin-bottom:4px;font-weight:600}
+.fg input,.fg textarea{width:100%;padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7}
+.fg textarea{min-height:60px;resize:vertical}
+.gen-btn{width:100%;padding:14px;background:#1a3a2a;color:#fff;border:none;border-radius:10px;font-size:16px;font-family:inherit;font-weight:700;cursor:pointer;margin-top:4px}
+.back-btn{display:block;padding:12px;text-align:center;background:#eee;border-radius:8px;margin-bottom:12px;cursor:pointer;font-size:14px;border:none;font-family:inherit;width:100%}
+
+/* ซอง — พอดี No.9 = 22.9×10.2cm แต่ขอทำ 23×11.7cm ตามที่ระบุ */
+@media print {
+  * { margin:0!important; padding:0!important; }
+  body { background:#fff; }
+  .no-print { display:none!important; }
+  @page {
+    size: 23cm 11.7cm landscape;
+    margin: 0;
+  }
+  .envelope-wrap {
+    display: block !important;
+  }
+}
+
+.envelope-wrap {
+  display: none;
+  width: 23cm;
+  height: 11.7cm;
+  position: relative;
+  background: #fff;
+  overflow: hidden;
+}
+
+/* ผู้ส่ง — ซ้ายบน */
+.sender {
+  position: absolute;
+  top: 0.7cm;
+  left: 0.8cm;
+  width: 9cm;
+  font-family: "TH Sarabun New","Sarabun",Arial,sans-serif;
+  font-size: 11pt;
+  line-height: 1.5;
+  color: #000;
+}
+.sender .label {
+  font-size: 9pt;
+  color: #555;
+  margin-bottom: 2pt;
+  font-weight: 600;
+}
+.sender .name {
+  font-size: 12pt;
+  font-weight: bold;
+}
+.sender .postcode {
+  display: inline-block;
+  margin-top: 4pt;
+  border: 1.5px solid #000;
+  padding: 1pt 6pt;
+  font-size: 13pt;
+  font-weight: bold;
+  letter-spacing: 3px;
+  border-radius: 3px;
+}
+
+/* ผู้รับ — กึ่งกลาง-ล่าง */
+.receiver {
+  position: absolute;
+  bottom: 0.9cm;
+  left: 7cm;
+  right: 0.8cm;
+  font-family: "TH Sarabun New","Sarabun",Arial,sans-serif;
+  font-size: 13pt;
+  line-height: 1.65;
+  color: #000;
+}
+.receiver .label {
+  font-size: 9pt;
+  color: #555;
+  margin-bottom: 2pt;
+  font-weight: 600;
+}
+.receiver .name {
+  font-size: 14pt;
+  font-weight: bold;
+}
+.receiver .postcode {
+  display: inline-block;
+  margin-top: 4pt;
+  border: 1.5px solid #000;
+  padding: 1pt 6pt;
+  font-size: 14pt;
+  font-weight: bold;
+  letter-spacing: 4px;
+  border-radius: 3px;
+}
+
+/* แสตมป์ placeholder */
+.stamp-box {
+  position: absolute;
+  top: 0.7cm;
+  right: 0.8cm;
+  width: 3cm;
+  height: 3cm;
+  border: 1.5px dashed #aaa;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9pt;
+  color: #aaa;
+  text-align: center;
+}
+
+/* เส้นแบ่งซ้าย-ขวา (ตกแต่ง) */
+.divider {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 6.5cm;
+  width: 1px;
+  background: repeating-linear-gradient(to bottom, #ccc 0, #ccc 6px, transparent 6px, transparent 10px);
+}
+</style>
+</head>
+<body>
+
+<div class="wrap no-print">
+  <button class="back-btn" onclick="history.back()">← กลับ</button>
+
+  <div class="card">
+    <div class="ct"><span class="n">1</span> ผู้ส่ง (บริษัท)</div>
+    <div class="fg"><label>ชื่อผู้ส่ง</label>
+      <input type="text" id="s_name" value="บริษัท โชคชัย เงินด่วน จำกัด"></div>
+    <div class="fg"><label>ที่อยู่</label>
+      <textarea id="s_addr">89/28 หมู่ 9 ต.ท่าเยี่ยม อ.โชคชัย จ.นครราชสีมา</textarea></div>
+    <div class="fg"><label>รหัสไปรษณีย์</label>
+      <input type="text" id="s_zip" value="30190" maxlength="5" inputmode="numeric"></div>
+  </div>
+
+  <div class="card">
+    <div class="ct"><span class="n">2</span> ผู้รับ (ลูกค้า)</div>
+    <div class="fg"><label>ชื่อผู้รับ</label>
+      <input type="text" id="r_name" placeholder="ชื่อ-นามสกุล ผู้รับ"></div>
+    <div class="fg"><label>ที่อยู่</label>
+      <textarea id="r_addr" placeholder="บ้านเลขที่ ถนน ตำบล อำเภอ จังหวัด"></textarea></div>
+    <div class="fg"><label>รหัสไปรษณีย์</label>
+      <input type="text" id="r_zip" placeholder="เช่น 30000" maxlength="5" inputmode="numeric"></div>
+  </div>
+
+  <button class="gen-btn" onclick="printEnv()">🖨 พิมพ์ซอง</button>
+</div>
+
+<div class="envelope-wrap" id="env">
+  <!-- แสตมป์ -->
+  <div class="stamp-box">แสตมป์</div>
+
+  <!-- เส้นแบ่ง -->
+  <div class="divider"></div>
+
+  <!-- ผู้ส่ง -->
+  <div class="sender">
+    <div class="label">ผู้ส่ง / From</div>
+    <div class="name" id="e_s_name">บริษัท โชคชัย เงินด่วน จำกัด</div>
+    <div id="e_s_addr">89/28 หมู่ 9 ต.ท่าเยี่ยม<br>อ.โชคชัย จ.นครราชสีมา</div>
+    <div class="postcode" id="e_s_zip">30190</div>
+  </div>
+
+  <!-- ผู้รับ -->
+  <div class="receiver">
+    <div class="label">ผู้รับ / To</div>
+    <div class="name" id="e_r_name">................................</div>
+    <div id="e_r_addr">................................</div>
+    <div class="postcode" id="e_r_zip">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+  </div>
+</div>
+
+<script>
+function gv(id){var e=document.getElementById(id);return e?e.value.trim():'';}
+
+function addrToHtml(s){return s.replace(/\n/g,'<br>').replace(/\r/g,'');}
+
+function printEnv(){
+  // อัพเดทข้อมูลใน envelope
+  document.getElementById('e_s_name').textContent = gv('s_name');
+  document.getElementById('e_s_addr').innerHTML = addrToHtml(gv('s_addr'));
+  document.getElementById('e_s_zip').textContent = gv('s_zip')||'     ';
+  document.getElementById('e_r_name').textContent = gv('r_name')||'................................';
+  document.getElementById('e_r_addr').innerHTML = addrToHtml(gv('r_addr'))||'................................';
+  document.getElementById('e_r_zip').textContent = gv('r_zip')||'     ';
+
+  document.querySelector('.wrap').style.display='none';
+  document.getElementById('env').style.display='block';
+  window.print();
+  document.getElementById('env').style.display='none';
+  document.querySelector('.wrap').style.display='block';
+}
+
+// auto-save
+var LS_KEY='form_env';
+function autoSave(){try{var d={};['s_name','s_addr','s_zip','r_name','r_addr','r_zip'].forEach(function(k){var e=document.getElementById(k);if(e)d[k]=e.value;});localStorage.setItem(LS_KEY,JSON.stringify(d));}catch(e){}}
+function autoRestore(){try{var s=localStorage.getItem(LS_KEY);if(!s)return;var d=JSON.parse(s);Object.keys(d).forEach(function(k){var e=document.getElementById(k);if(e)e.value=d[k];});}catch(e){}}
+setInterval(autoSave,2000);
+window.addEventListener('beforeunload',autoSave);
+setTimeout(function(){
+  autoRestore();
+  // รับข้อมูลจากหนังสือแจ้งไถ่ถอน
+  try{
+    var rn=sessionStorage.getItem('env_r_name');
+    var ra=sessionStorage.getItem('env_r_addr');
+    if(rn){document.getElementById('r_name').value=rn;sessionStorage.removeItem('env_r_name');}
+    if(ra){document.getElementById('r_addr').value=ra;sessionStorage.removeItem('env_r_addr');}
+  }catch(ex){}
+},100);
+</script>
+</body>
+</html>

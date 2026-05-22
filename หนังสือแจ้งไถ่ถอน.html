@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>หนังสือแจ้งกำหนดเวลาไถ่ถอน — โชคชัย เงินด่วน</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;font-size:15px;background:#f0f0eb;color:#111}
+.wrap{max-width:700px;margin:0 auto;padding:16px}
+.card{background:#fff;border-radius:14px;padding:18px;margin-bottom:14px;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.ct{font-size:13px;font-weight:700;color:#1a3a2a;background:#e8f5e8;border-radius:8px;padding:6px 12px;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.ct .n{background:#1a3a2a;color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0}
+.fg{margin-bottom:10px}
+.fg label{display:block;font-size:12px;color:#555;margin-bottom:4px;font-weight:600}
+.fg input,.fg select,.fg textarea{width:100%;padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7}
+.fg textarea{min-height:70px;resize:vertical}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.att-row{display:flex;gap:8px;align-items:center;margin-bottom:6px}
+.att-row input{flex:1;padding:8px;font-size:14px;border:1px solid #ccc;border-radius:6px;font-family:inherit}
+.att-row button{background:#fee;border:1px solid #fcc;border-radius:6px;color:#c00;padding:6px 10px;cursor:pointer;font-size:13px}
+.add-btn{width:100%;padding:10px;background:#e8f5e8;border:2px dashed #4caf50;border-radius:8px;font-size:13px;font-family:inherit;color:#1a3a2a;font-weight:700;cursor:pointer;margin-top:4px}
+.gen-btn{width:100%;padding:14px;background:#1a3a2a;color:#fff;border:none;border-radius:10px;font-size:16px;font-family:inherit;font-weight:700;cursor:pointer;margin-top:8px}
+.back-btn{display:block;padding:12px;text-align:center;background:#eee;border-radius:8px;margin-bottom:12px;cursor:pointer;font-size:14px;border:none;font-family:inherit;width:100%}
+@media print{
+  .no-print{display:none!important}
+  body{background:#fff;font-size:14pt}
+  .doc-page{page-break-after:always}
+  .doc-page:last-child{page-break-after:avoid}
+}
+/* doc */
+.doc-page{font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;font-size:14pt;line-height:1.8;color:#000;padding:1.5cm 2cm;width:21cm;margin:0 auto;background:#fff}
+.doc-page p{margin-bottom:6pt;text-align:justify}
+.doc-page .center{text-align:center}
+.doc-page .bold{font-weight:bold}
+.doc-page .underline{text-decoration:underline}
+.doc-page .indent{text-indent:2.5cm}
+.doc-page table{border-collapse:collapse;width:100%}
+.doc-page .sign-section{margin-top:1.5cm}
+.doc-page .sign-line{text-align:center;margin-top:0.5cm}
+</style>
+</head>
+<body>
+
+<div class="wrap no-print" id="form-wrap">
+  <button class="back-btn" onclick="location.href='index.html'">← หน้าหลัก</button>
+
+  <!-- 1. ข้อมูลผู้รับซื้อฝาก -->
+  <div class="card">
+    <div class="ct"><span class="n">1</span> ผู้รับซื้อฝาก (บริษัท)</div>
+    <div class="fg"><label>เขียนที่</label>
+      <input type="text" id="n_writeat" value="89/28 หมู่ 9 ต.ท่าเยี่ยม อ.โชคชัย จ.นครราชสีมา"></div>
+    <div class="fg"><label>วันที่เขียนหนังสือ</label>
+      <input type="date" id="n_writedate"></div>
+    <div class="fg"><label>กรรมการผู้ลงนามแทนบริษัท</label>
+      <select id="n_signer" onchange="onSignerChange(this.value)" style="padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7;width:100%">
+        <option value="นายชุณนเกียรติ จรัสบวรพันธ์">นายชุณนเกียรติ จรัสบวรพันธ์</option>
+        <option value="นางชญาน์นัทช์ จรัสบวรพันธ์">นางชญาน์นัทช์ จรัสบวรพันธ์</option>
+        <option value="นายกันตพัฒน์ จรัสบวรพันธ์">นายกันตพัฒน์ จรัสบวรพันธ์</option>
+        <option value="นายฐานวัฒน์ จรัสบวรพันธ์">นายฐานวัฒน์ จรัสบวรพันธ์</option>
+        <option value="นางสาวภัคฐ์พิชา จรัสบวรพันธ์">นางสาวภัคฐ์พิชา จรัสบวรพันธ์</option>
+      </select></div>
+    <div class="fg"><label>โทรศัพท์</label>
+      <input type="text" id="n_phone" value="0993241635"></div>
+  </div>
+
+  <!-- 2. ผู้ขายฝาก -->
+  <div class="card">
+    <div class="ct"><span class="n">2</span> ผู้ขายฝาก (ผู้รับหนังสือ)</div>
+    <div class="fg"><label>เรียน (ชื่อผู้ขายฝาก)</label>
+      <input type="text" id="n_to" placeholder="เช่น นางกนกนันท์ โรจนเกียรติพงศ์"></div>
+    <div class="fg"><label>ที่อยู่ผู้รับ (สำหรับซอง)</label>
+      <textarea id="n_to_addr" placeholder="ที่อยู่สำหรับจ่าหน้าซอง"></textarea></div>
+  </div>
+
+  <!-- 3. รายละเอียดสัญญา -->
+  <div class="card">
+    <div class="ct"><span class="n">3</span> รายละเอียดสัญญาขายฝาก</div>
+    <div class="fg"><label>วัตถุประสงค์สัญญา</label>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;padding:10px 0">
+      <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:15px">
+        <input type="checkbox" id="n_purpose_house" checked style="width:18px;height:18px"> ที่อยู่อาศัย
+      </label>
+      <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:15px">
+        <input type="checkbox" id="n_purpose_farm" checked style="width:18px;height:18px"> เกษตรกรรม
+      </label>
+      <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:15px">
+        <input type="checkbox" id="n_purpose_commercial" style="width:18px;height:18px"> พาณิชยกรรม
+      </label>
+      <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:15px">
+        <input type="checkbox" id="n_purpose_other" style="width:18px;height:18px"> อื่นๆ
+        <input type="text" id="n_purpose_other_val" placeholder="ระบุ..." style="width:120px;padding:4px 8px;font-size:14px;border:1px solid #ccc;border-radius:6px;font-family:inherit">
+      </label>
+    </div></div>
+    <div class="row2">
+      <div class="fg"><label>กำหนดเวลา (เดือน)</label>
+        <input type="text" id="n_period" value="12"></div>
+      <div class="fg"><label>วันที่ทำสัญญา</label>
+        <input type="date" id="n_contract_date"></div>
+    </div>
+    <div class="fg"><label>ประเภทเอกสาร</label>
+      <select id="n_doc_type" style="padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7;width:100%">
+        <option value="โฉนดที่ดิน">โฉนดที่ดิน</option>
+        <option value="หนังสือรับรองการทำประโยชน์ (น.ส.3 ก.)">น.ส.3 ก.</option>
+        <option value="หนังสือรับรองการทำประโยชน์ (น.ส.3)">น.ส.3</option>
+      </select></div>
+    <div class="row2">
+      <div class="fg"><label>เลขที่โฉนด</label>
+        <input type="text" id="n_chanote_no" placeholder="เช่น 19861"></div>
+      <div class="fg"><label>เลขที่ดิน</label>
+        <input type="text" id="n_land_no" placeholder="เช่น 183"></div>
+    </div>
+    <div class="row3">
+      <div class="fg"><label>ตำบล</label>
+        <input type="text" id="n_tambon" placeholder="ตำบล"></div>
+      <div class="fg"><label>อำเภอ</label>
+        <input type="text" id="n_amphoe" placeholder="อำเภอ"></div>
+      <div class="fg"><label>จังหวัด</label>
+        <input type="text" id="n_province" value="นครราชสีมา"></div>
+    </div>
+    <div class="row2">
+      <div class="fg"><label>สาขาสำนักงานที่ดิน</label>
+        <input type="text" id="n_land_branch" placeholder="เช่น พิมาย หรือ -"></div>
+      <div class="fg"><label>วันที่จดทะเบียน</label>
+        <input type="date" id="n_reg_date"></div>
+    </div>
+  </div>
+
+  <!-- 4. สิ่งที่แนบมาด้วย -->
+  <div class="card">
+    <div class="ct"><span class="n">4</span> สิ่งที่แนบมาด้วย</div>
+    <div style="background:#f0f7f0;border-radius:8px;padding:10px;margin-bottom:12px;font-size:14px;color:#1a3a2a;line-height:1.6">
+      <b>✅ อันหลัก (มีเสมอ):</b><br>
+      สำเนาสัญญาขายฝากที่ดินเพื่อ <span id="att_purpose_preview" style="color:#1a3a2a;font-weight:700">...</span>
+      มีกำหนด <span id="att_period_preview" style="font-weight:700">...</span> เดือน
+      ฉบับลง วันที่ <span id="att_contractdate_preview" style="font-weight:700">...</span>
+    </div>
+    <div style="font-size:13px;font-weight:700;color:#555;margin-bottom:6px">สัญญาขยายกำหนดเวลา (กดเพิ่มถ้ามี):</div>
+    <div id="ext-wrap"></div>
+    <button class="add-btn" onclick="addExt()" style="margin-bottom:14px">+ เพิ่มสำเนาสัญญาขยายกำหนดเวลา</button>
+    <div style="font-size:13px;font-weight:700;color:#555;margin-bottom:6px">แนบอื่นๆ (ถ้ามี):</div>
+    <div id="att-wrap"></div>
+    <button class="add-btn" onclick="addAtt()">+ เพิ่มรายการแนบอื่นๆ</button>
+  </div>
+
+  <!-- 5. กำหนดไถ่ถอน -->
+  <div class="card">
+    <div class="ct"><span class="n">5</span> กำหนดไถ่ถอนและสินไถ่</div>
+    <div class="fg"><label>วันครบกำหนดไถ่</label>
+      <input type="date" id="n_due_date"></div>
+    <div class="row2">
+      <div class="fg"><label>สินไถ่ (ตัวเลข บาท)</label>
+        <input type="text" id="n_redeem_amt" inputmode="numeric" placeholder="เช่น 4762500" oninput="onRedeemChange()"></div>
+      <div class="fg"><label>สินไถ่ (ตัวอักษร)</label>
+        <input type="text" id="n_redeem_t" readonly></div>
+    </div>
+    <div style="font-size:12px;color:#888;padding:4px 0">สำนักงานที่ดินที่จะไปจดทะเบียน = จังหวัด/สาขาเดียวกับที่กรอกในส่วนสัญญา (ด้านบน)</div>
+  </div>
+
+  <button class="gen-btn" onclick="genNotice()">🖨 สร้างหนังสือแจ้ง</button>
+  <button class="gen-btn" onclick="goEnvelope()" style="margin-top:10px;background:#2d5a3d">✉️ พิมพ์ซองจดหมาย</button>
+</div>
+
+<div id="doc-wrap" style="display:none">
+  <div class="no-print" style="padding:12px;background:#1a3a2a;color:#fff;display:flex;gap:10px;align-items:center">
+    <button onclick="backToForm()" style="background:#fff;color:#1a3a2a;border:none;border-radius:6px;padding:8px 16px;cursor:pointer;font-family:inherit;font-weight:700">← แก้ไข</button>
+    <button onclick="window.print()" style="background:#4caf50;color:#fff;border:none;border-radius:6px;padding:8px 16px;cursor:pointer;font-family:inherit;font-weight:700">🖨 พิมพ์</button>
+    <span style="font-size:14px">หนังสือแจ้งกำหนดเวลาไถ่ถอน</span>
+  </div>
+  <div id="doc-content"></div>
+</div>
+
+<script>
+var attC=0;
+var extC=0;
+
+function updateAttPreview(){
+  var purposeList=[];
+  if(document.getElementById('n_purpose_house')&&document.getElementById('n_purpose_house').checked)purposeList.push('ที่อยู่อาศัย');
+  if(document.getElementById('n_purpose_farm')&&document.getElementById('n_purpose_farm').checked)purposeList.push('เกษตรกรรม');
+  if(document.getElementById('n_purpose_commercial')&&document.getElementById('n_purpose_commercial').checked)purposeList.push('พาณิชยกรรม');
+  if(document.getElementById('n_purpose_other')&&document.getElementById('n_purpose_other').checked&&gv('n_purpose_other_val'))purposeList.push(gv('n_purpose_other_val'));
+  var p=document.getElementById('att_purpose_preview');
+  var pe=document.getElementById('att_period_preview');
+  var pd=document.getElementById('att_contractdate_preview');
+  if(p)p.textContent=purposeList.join(' ,') || '...';
+  if(pe)pe.textContent=gv('n_period')||'...';
+  if(pd)pd.textContent=gv('n_contract_date')?thDate(gv('n_contract_date')):'...';
+  // update ext sections ด้วย
+  document.querySelectorAll('.ext-purpose').forEach(function(el){el.textContent=purposeList.join(' ,');});
+}
+
+function addExt(){
+  extC++;
+  var n=extC;
+  var wrap=document.getElementById('ext-wrap');
+  var div=document.createElement('div');
+  div.id='ext-'+n;
+  div.style.cssText='border:1px solid #c8e0c8;border-radius:8px;padding:10px;margin-bottom:8px;background:#f7fcf7';
+  div.innerHTML=
+    '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">'
+      +'<b style="font-size:13px;color:#1a3a2a">ขยายครั้งที่ '+n+'</b>'
+      +'<button type="button" onclick="removeExt('+n+')" style="background:#fee;border:1px solid #fcc;border-radius:5px;color:#c00;padding:2px 8px;cursor:pointer;font-size:13px">ลบ</button>'
+    +'</div>'
+    +'<div style="display:grid;grid-template-columns:80px 1fr 1fr;gap:8px">'
+      +'<div><label style="font-size:11px;color:#666;display:block;margin-bottom:3px">ครั้งที่</label>'
+        +'<input type="text" id="ext_no_'+n+'" value="'+n+'" style="width:100%;padding:7px;font-size:14px;border:1px solid #ccc;border-radius:6px;font-family:inherit"></div>'
+      +'<div><label style="font-size:11px;color:#666;display:block;margin-bottom:3px">กำหนด (เดือน)</label>'
+        +'<input type="text" id="ext_period_'+n+'" placeholder="เช่น 9" style="width:100%;padding:7px;font-size:14px;border:1px solid #ccc;border-radius:6px;font-family:inherit"></div>'
+      +'<div><label style="font-size:11px;color:#666;display:block;margin-bottom:3px">วันที่ฉบับลง</label>'
+        +'<input type="date" id="ext_date_'+n+'" style="width:100%;padding:7px;font-size:14px;border:1px solid #ccc;border-radius:6px;font-family:inherit"></div>'
+    +'</div>';
+  wrap.appendChild(div);
+}
+
+function removeExt(i){var el=document.getElementById('ext-'+i);if(el)el.remove();}
+
+var THMONTHS=['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+
+function gv(id){var e=document.getElementById(id);return e?e.value.trim():'';}
+
+function thDate(s){
+  if(!s)return '......';
+  var p=s.split('-');
+  if(p.length!==3)return s;
+  return parseInt(p[2])+' '+THMONTHS[parseInt(p[1])-1]+' '+(parseInt(p[0])+543);
+}
+
+function toBaht(n){
+  n=parseInt(String(n).replace(/[,\s]/g,''));
+  if(isNaN(n)||n===0)return '';
+  var u=['','หนึ่ง','สอง','สาม','สี่','ห้า','หก','เจ็ด','แปด','เก้า'];
+  var p=['','สิบ','ร้อย','พัน','หมื่น','แสน','ล้าน'];
+  function t(n){
+    if(n===0)return'';
+    if(n>=1000000)return t(Math.floor(n/1000000))+'ล้าน'+t(n%1000000);
+    var r='',d=String(n).split('');d.reverse();
+    for(var i=0;i<d.length;i++){
+      if(d[i]==='0')continue;
+      r=u[parseInt(d[i])]+p[i]+r;
+      if(i===1&&d[i]==='1')r='สิบ'+r.slice(2);
+      if(i===1&&d[i]==='2')r='ยี่สิบ'+r.slice(4);
+    }
+    return r;
+  }
+  return t(n)+'บาทถ้วน';
+}
+
+function fmtNum(s){
+  var n=parseFloat(String(s).replace(/[,\s]/g,''));
+  return isNaN(n)?s:n.toLocaleString('th-TH');
+}
+
+function onRedeemChange(){
+  var amt=gv('n_redeem_amt').replace(/,/g,'');
+  var el=document.getElementById('n_redeem_t');
+  if(el)el.value=amt?toBaht(parseInt(amt)):'';
+}
+
+function onSignerChange(v){
+  // โทรเดิมไม่เปลี่ยน
+}
+
+function addAtt(val){
+  attC++;
+  var i=attC;
+  var wrap=document.getElementById('att-wrap');
+  var div=document.createElement('div');
+  div.id='att-'+i;
+  div.className='att-row';
+  div.innerHTML='<input type="text" id="att_val_'+i+'" placeholder="รายการแนบ..." value="'+(val||'')+'">'
+    +'<button onclick="removeAtt('+i+')">× ลบ</button>';
+  wrap.appendChild(div);
+}
+
+function removeAtt(i){
+  var el=document.getElementById('att-'+i);
+  if(el)el.remove();
+}
+
+function getAtts(purpose,period,contractDate){
+  var list=[];
+  // อันหลัก
+  list.push('สำเนาสัญญาขายฝากที่ดินเพื่อ '+purpose+' มีกำหนด '+period+' เดือน ฉบับลง วันที่ '+contractDate);
+  // สัญญาขยาย — ใช้ #ext-wrap children เพื่อหลีกเลี่ยง nested elements
+  var extWrap=document.getElementById('ext-wrap');
+  if(extWrap){
+    Array.prototype.slice.call(extWrap.children).forEach(function(div){
+      var i=div.id.replace('ext-','');
+      if(!i||isNaN(parseInt(i)))return;
+      var no=gv('ext_no_'+i)||i;
+      var per=gv('ext_period_'+i)||'12';
+      var dt=thDate(gv('ext_date_'+i));
+      list.push('สำเนาสัญญาขยายกำหนดเวลาไถ่ถอนขายฝากที่ดิน เพื่อ '+purpose+' ครั้งที่ '+no+' มีกำหนด '+per+' เดือน ฉบับลง วันที่ '+dt);
+    });
+  }
+  // อื่นๆ
+  document.querySelectorAll('.att-row').forEach(function(div){
+    var i=div.id.replace('att-','');
+    var v=gv('att_val_'+i);
+    if(v)list.push(v);
+  });
+  return list;
+}
+
+function backToForm(){
+  document.getElementById('doc-wrap').style.display='none';
+  document.getElementById('form-wrap').style.display='block';
+}
+
+function genNotice(){
+  var writeat=gv('n_writeat');
+  var writedate=thDate(gv('n_writedate'));
+  var signer=gv('n_signer');
+  var phone=gv('n_phone');
+  var to=gv('n_to')||'...............';
+  var purposeList=[];
+  if(document.getElementById('n_purpose_house')&&document.getElementById('n_purpose_house').checked)purposeList.push('ที่อยู่อาศัย');
+  if(document.getElementById('n_purpose_farm')&&document.getElementById('n_purpose_farm').checked)purposeList.push('เกษตรกรรม');
+  if(document.getElementById('n_purpose_commercial')&&document.getElementById('n_purpose_commercial').checked)purposeList.push('พาณิชยกรรม');
+  if(document.getElementById('n_purpose_other')&&document.getElementById('n_purpose_other').checked&&gv('n_purpose_other_val'))purposeList.push(gv('n_purpose_other_val'));
+  var purpose=purposeList.join(' ,');
+  var period=gv('n_period')||'12';
+  var contractDate=thDate(gv('n_contract_date'));
+  var regDate=thDate(gv('n_reg_date'));
+  var docType=gv('n_doc_type');
+  var chanoteNo=gv('n_chanote_no')||'........';
+  var landNo=gv('n_land_no')||'........';
+  var tambon=gv('n_tambon')||'........';
+  var amphoe=gv('n_amphoe')||'........';
+  var province=gv('n_province')||'นครราชสีมา';
+  var branch=gv('n_land_branch')||'-';
+  var dueDate=thDate(gv('n_due_date'));
+  var redeemAmt=fmtNum(gv('n_redeem_amt'));
+  var redeemT=gv('n_redeem_t');
+  var regOffice=gv('n_province')||'นครราชสีมา';
+  var regBranch=gv('n_land_branch')||'-';
+  var atts=getAtts(purpose,period,contractDate);
+
+  // สิ่งที่แนบ
+  var attHTML='';
+  atts.forEach(function(a){
+    attHTML+='<p style="padding-left:1cm">- '+a+'</p>';
+  });
+
+  // สัญญาอ้างถึง
+  var refText='หนังสือสัญญาขายฝากที่ดินเพื่อ '+purpose+' มีกำหนด '+period+' เดือน ฉบับลง วันที่ '+contractDate;
+
+  var docHTML='<div class="doc-page">'
+    // หัวเรื่อง
+    +'<p class="center bold underline" style="font-size:16pt;margin-bottom:8pt">หนังสือแจ้งกำหนดเวลาไถ่ถอนจากขายฝากและจำนวนสินไถ่</p>'
+    +'<p class="center">เขียนที่ '+writeat+'</p>'
+    +'<p class="center">วันที่ '+writedate+'</p>'
+    +'<br>'
+    +'<table style="width:100%;border-collapse:collapse"><tr>'
+    +'<td style="width:2.5cm;vertical-align:top"><b>เรื่อง</b></td>'
+    +'<td>แจ้งกำหนดเวลาไถ่จากขายฝากและจำนวนสินไถ่</td></tr>'
+    +'<tr><td style="vertical-align:top"><b>เรียน</b></td>'
+    +'<td>'+to+'</td></tr>'
+    +'<tr><td style="vertical-align:top"><b>อ้างถึง</b></td>'
+    +'<td>'+refText+'</td></tr>'
+    +(atts.length?'<tr><td style="vertical-align:top;white-space:nowrap"><b>สิ่งที่แนบมาด้วย</b></td><td>'+atts.map(function(a){return'- '+a;}).join('<br>')+'</td></tr>':'')
+    +'</table>'
+    +'<br>'
+    // เนื้อหา
+    +'<p class="indent">ตามหนังสือที่อ้างถึง ท่านในฐานะผู้ขายฝากได้ทำสัญญาขายฝากที่ดิน มีกำหนด '+period+' เดือน ตามหลักฐาน'+docType+'เลขที่ '+chanoteNo+' เลขที่ดิน '+landNo+' ตำบล '+tambon+' อำเภอ '+amphoe+' จังหวัด '+province+' ไว้กับบริษัท โชคชัย เงินด่วน จำกัด ผู้รับซื้อฝากโดยมีการจดทะเบียนไว้ต่อหน้าพนักงานเจ้าหน้าที่ สำนักงานที่ดินจังหวัด '+province+' สาขา '+branch+' ไว้เมื่อวันที่ '+regDate+' ความละเอียดแจ้งแล้วนั้น</p>'
+    +'<p class="indent">บริษัท โชคชัย เงินด่วน จำกัด ในฐานะผู้รับซื้อฝาก ขอเรียนให้ทราบว่า สัญญาขายฝากดังกล่าว ฉบับลงวันที่ '+contractDate+' จะครบกำหนดเวลาไถ่จากขายฝากใน วันที่ '+dueDate+' และมีจำนวนสินไถ่ตามที่ระบุในสัญญาขายฝากที่ดินจำนวน <b>'+redeemAmt+' บาท ('+redeemT+')</b> จึงขอให้ท่านเตรียมเงินสินไถ่จำนวนดังกล่าว พร้อมเอกสารที่เกี่ยวข้องกับท่านไปดำเนินการจดทะเบียนไถ่จากขายฝากที่สำนักงานที่ดินจังหวัด '+regOffice+' สาขา '+regBranch+' ภายในวันที่ '+dueDate+' ด้วย</p>'
+    +'<p>จึงเรียนมาเพื่อทราบ</p>'
+    // ลงนาม
+    +'<div class="sign-section">'
+    +'<div class="sign-line">'
+    +'<p>( บริษัท โชคชัย เงินด่วน จำกัด โดย '+signer+' )</p>'
+    +'<p>(ผู้รับซื้อฝาก)</p>'
+    +'<p style="margin-top:8pt">โทรศัพท์ '+phone+'</p>'
+    +'</div>'
+    +'</div>'
+    +'</div>';
+
+  document.getElementById('doc-content').innerHTML=docHTML;
+  document.getElementById('form-wrap').style.display='none';
+  document.getElementById('doc-wrap').style.display='block';
+}
+
+function goEnvelope(){
+  // ส่งชื่อ+ที่อยู่ผู้รับไปที่ซองผ่าน sessionStorage
+  try{
+    sessionStorage.setItem('env_r_name', document.getElementById('n_to').value||'');
+    sessionStorage.setItem('env_r_addr', document.getElementById('n_to_addr').value||'');
+  }catch(e){}
+  location.href='ซองจดหมาย.html';
+}
+
+// auto-save
+var LS_KEY='form_data_notice';
+function autoSave(){try{var d={};document.querySelectorAll('input[id],select[id],textarea[id]').forEach(function(e){if(e.type==='checkbox')d[e.id]=e.checked;else d[e.id]=e.value;});localStorage.setItem(LS_KEY,JSON.stringify(d));}catch(e){}}
+function autoRestore(){try{var s=localStorage.getItem(LS_KEY);if(!s)return;var d=JSON.parse(s);Object.keys(d).forEach(function(k){var e=document.getElementById(k);if(!e)return;if(e.type==='checkbox')e.checked=d[k];else e.value=d[k];});}catch(e){}}
+setInterval(autoSave,2000);
+window.addEventListener('beforeunload',autoSave);
+
+// init
+updateAttPreview();
+// ผูก event กับ field ที่ส่งผลต่อ preview
+['n_purpose_house','n_purpose_farm','n_purpose_commercial','n_purpose_other','n_period','n_contract_date'].forEach(function(id){
+  var el=document.getElementById(id);
+  if(el)el.addEventListener('change',updateAttPreview);
+});
+document.getElementById('n_purpose_other_val')&&document.getElementById('n_purpose_other_val').addEventListener('input',updateAttPreview);
+document.getElementById('n_period')&&document.getElementById('n_period').addEventListener('input',updateAttPreview);
+setTimeout(autoRestore,100);
+</script>
+</body>
+</html>

@@ -466,9 +466,10 @@ window.addEventListener('afterprint', function(){
         var dt=_rp.length===3?new Date(parseInt(_rp[0]),parseInt(_rp[1])-1,parseInt(_rp[2])):new Date(rawDate);
         if(!isNaN(dt)){
           var thM=['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
-          if(!fixed['date'])  values['date']  = String(dt.getDate());
-          if(!fixed['month']) values['month'] = thM[dt.getMonth()];
-          if(!fixed['year'])  values['year']  = String(dt.getFullYear()+543);
+          // always override date/month/year จาก raw_date (ไม่สนว่า fixed ไว้ไหม)
+          values['date']  = String(dt.getDate());
+          values['month'] = thM[dt.getMonth()];
+          values['year']  = String(dt.getFullYear()+543);
         }
       }
       lsSet(LS.values, values);

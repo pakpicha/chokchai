@@ -41,15 +41,44 @@ body{font-family:'TH Sarabun New','Sarabun',Arial,sans-serif;font-size:15px;back
 .doc{font-family:'TH Sarabun New','Sarabun',Arial,sans-serif;font-size:13pt;color:#000;background:#fff}
 .doc table{border-collapse:collapse;width:100%}
 
-/* ── Date shortcut ── */
-.dq-wrap{display:flex;gap:6px;align-items:center}
-.dq-wrap input[type="date"]{flex:1}
-.dq-in{width:110px!important;flex:none!important;padding:9px 8px!important;font-size:13px!important;
-  border:1px solid #bbb;border-radius:8px;font-family:inherit;background:#fffde7;
-  letter-spacing:0.5px;text-align:center;color:#333}
-.dq-in::placeholder{font-size:11px;color:#bbb;letter-spacing:0}
-.dq-in.ok{border-color:#4caf50;background:#f7fcf7}
-.dq-in.er{border-color:#e74c3c;background:#fff5f5}
+
+
+/* ── Thai Date Picker ── */
+.tdp-wrap{position:relative;display:inline-block;width:100%}
+.tdp-input{width:100%;padding:9px 36px 9px 11px;font-size:15px;border:1px solid #ccc;
+  border-radius:8px;font-family:inherit;background:#fafaf7;box-sizing:border-box;cursor:text}
+.tdp-input.ok{border-color:#4caf50;background:#f7fcf7}
+.tdp-input.er{border-color:#e74c3c;background:#fff5f5}
+.tdp-icon{position:absolute;right:10px;top:50%;transform:translateY(-50%);
+  font-size:16px;cursor:pointer;color:#888;user-select:none}
+.tdp-drop{display:none;position:absolute;top:calc(100% + 4px);left:0;z-index:9999;
+  background:#fff;border:1px solid #ddd;border-radius:12px;padding:10px;
+  box-shadow:0 4px 16px rgba(0,0,0,.15);min-width:260px}
+.tdp-drop.open{display:block}
+.tdp-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.tdp-nav button{background:none;border:none;cursor:pointer;font-size:18px;color:#1a3a2a;
+  padding:4px 8px;border-radius:6px;font-family:inherit}
+.tdp-nav button:hover{background:#e8f5e8}
+.tdp-nav .tdp-my{font-size:15px;font-weight:700;color:#1a3a2a;cursor:pointer;
+  padding:4px 8px;border-radius:6px}
+.tdp-nav .tdp-my:hover{background:#e8f5e8}
+.tdp-days-hdr{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:4px}
+.tdp-days-hdr span{text-align:center;font-size:11px;color:#888;font-weight:700;padding:2px 0}
+.tdp-days{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+.tdp-day{text-align:center;padding:6px 2px;font-size:13px;border-radius:6px;cursor:pointer;
+  border:none;background:none;font-family:inherit;color:#333;width:100%}
+.tdp-day:hover{background:#e8f5e8;color:#1a3a2a}
+.tdp-day.today{font-weight:700;color:#1a3a2a}
+.tdp-day.sel{background:#1a3a2a!important;color:#fff!important}
+.tdp-day.empty{cursor:default;pointer-events:none}
+.tdp-ym{display:none;padding:4px}
+.tdp-ym.open{display:block}
+.tdp-ym select{width:100%;padding:8px;font-size:15px;border:1px solid #ccc;
+  border-radius:8px;font-family:inherit;background:#fafaf7;margin-bottom:6px}
+.tdp-shortcut{display:flex;gap:6px;margin-top:8px;padding-top:8px;border-top:1px solid #eee}
+.tdp-shortcut input{flex:1;padding:7px 10px;font-size:13px;border:1px solid #ddd;
+  border-radius:6px;font-family:inherit;background:#fffde7;text-align:center}
+.tdp-shortcut span{font-size:11px;color:#999;display:flex;align-items:center;white-space:nowrap}
 </style>
 </head>
 <body>
@@ -59,7 +88,7 @@ body{font-family:'TH Sarabun New','Sarabun',Arial,sans-serif;font-size:15px;back
   <div class="card">
     <div class="ct"><span class="n">1</span> ข้อมูลทั่วไป</div>
     <div class="row2">
-      <div class="fg"><label>วันที่</label><div class="dq-wrap"><input type="date" id="gv_date" onchange="dqSync('gv_date_q','gv_date')"><input type="text" id="gv_date_q" class="dq-in" maxlength="10" placeholder="วว/ดด/ปปปป" inputmode="numeric" oninput="dqType('gv_date_q','gv_date')"></div></div>
+      <div class="fg"><label>วันที่</label><div class="tdp-wrap" id="tdpw_gv_date" onclick="event.stopPropagation()"><input type="hidden" id="gv_date"><input type="text" id="tdpi_gv_date" class="tdp-input" placeholder="เลือกหรือพิมพ์วว/ดด/ปปปป" onfocus="tdpFocus('gv_date')" onkeydown="tdpKeydown('gv_date',event)" readonly="false" autocomplete="off"><span class="tdp-icon" onclick="tdpOpen('gv_date')">📅</span><div class="tdp-drop" id="tdpd_gv_date"><div class="tdp-nav"><button onclick="tdpNav('gv_date',-1,event)">‹</button><span class="tdp-my" onclick="tdpToggleYM('gv_date');event.stopPropagation()">...</span><button onclick="tdpNav('gv_date',1,event)">›</button></div><div class="tdp-ym"></div><div class="tdp-days-hdr"><span>อา</span><span>จ</span><span>อ</span><span>พ</span><span>พฤ</span><span>ศ</span><span>ส</span></div><div class="tdp-days"></div></div></div><script>setTimeout(function(){tdpInit("gv_date","");},50);</script></div>
       <div class="fg"><label>บิลที่ของวัน</label><input type="text" id="gv_bill_seq" value="01" placeholder="01"></div>
     </div>
   </div>
@@ -389,7 +418,9 @@ addGvPay();
 // auto-save
 var LS_KEY='form_data_ใบสำคัญจ่ายทั่วไป';
 function autoSave(){try{var d={};document.querySelectorAll('input[id],select[id]').forEach(function(e){d[e.id]=e.value;});localStorage.setItem(LS_KEY,JSON.stringify(d));}catch(e){}}
-function autoRestore(){try{var s=localStorage.getItem(LS_KEY);if(!s)return;var d=JSON.parse(s);Object.keys(d).forEach(function(k){var e=document.getElementById(k);if(e)e.value=d[k];});}catch(e){}}
+function autoRestore(){try{var s=localStorage.getItem(LS_KEY);if(!s)return;var d=JSON.parse(s);Object.keys(d).forEach(function(k){var e=document.getElementById(k);if(e)e.value=d[k];});
+    // sync date display
+    document.querySelectorAll('input[type="hidden"][id]').forEach(function(d){if(d.value&&document.getElementById('tdpi_'+d.id))tdpSetValue(d.id,d.value);});}catch(e){}}
 setInterval(autoSave,2000);
 window.addEventListener('beforeunload',autoSave);
 setTimeout(autoRestore,100);
@@ -424,6 +455,223 @@ function dqSync(qid,did){
   q.value=p[2]+'/'+p[1]+'/'+(parseInt(p[0])+543);
   q.className=q.className.replace(/\b(ok|er)\b/g,'').trim()+' ok';
 }
+
+
+// ── Thai Date Picker ──
+var _tdpOpen=null;
+var THMONTHS_F=['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+
+function _tdpFmt(iso){
+  if(!iso)return '';
+  var p=iso.split('-');if(p.length!==3)return '';
+  return parseInt(p[2])+' '+THMONTHS_F[parseInt(p[1])-1]+' '+(parseInt(p[0])+543);
+}
+
+
+function _tdpWireEvents(did){
+  var inp=document.getElementById('tdpi_'+did);
+  var icon=inp?inp.parentElement.querySelector('.tdp-icon'):null;
+  var drop=document.getElementById('tdpd_'+did);
+  if(!inp)return;
+  inp.onfocus=function(){tdpFocus(did);};
+  inp.onkeydown=function(e){tdpKeydown(did,e);};
+  if(icon) icon.onclick=function(e){e.stopPropagation();tdpOpen(did);};
+  if(drop){
+    var btns=drop.querySelectorAll('.tdp-nav button');
+    if(btns[0]) btns[0].onclick=function(e){e.stopPropagation();tdpNav(did,-1,e);};
+    if(btns[1]) btns[1].onclick=function(e){e.stopPropagation();tdpNav(did,1,e);};
+    var my=drop.querySelector('.tdp-my');
+    if(my) my.onclick=function(e){e.stopPropagation();tdpToggleYM(did);};
+  }
+}
+
+function tdpInit(did,onchange){
+  var wrap=document.getElementById('tdpw_'+did);
+  if(!wrap||wrap._tdp)return;
+  var today=new Date();
+  wrap._tdp={did:did,cur:{y:today.getFullYear(),m:today.getMonth()},sel:null,onchange:onchange||null,ymMode:false,typing:''};
+  _tdpRender(did);
+}
+
+function _tdpRender(did){
+  var wrap=document.getElementById('tdpw_'+did);
+  if(!wrap||!wrap._tdp)return;
+  var s=wrap._tdp;
+  var drop=document.getElementById('tdpd_'+did);
+  if(!drop)return;
+  var y=s.cur.y,m=s.cur.m,be=y+543;
+  drop.querySelector('.tdp-my').textContent=THMONTHS_F[m]+' '+be;
+  var daysDiv=drop.querySelector('.tdp-days');
+  daysDiv.innerHTML='';
+  var first=new Date(y,m,1).getDay();
+  var last=new Date(y,m+1,0).getDate();
+  var today=new Date();
+  for(var i=0;i<first;i++){var e=document.createElement('button');e.className='tdp-day empty';e.textContent='';daysDiv.appendChild(e);}
+  for(var d=1;d<=last;d++){
+    var btn=document.createElement('button');
+    btn.className='tdp-day';btn.textContent=d;
+    var iso=y+'-'+(m+1<10?'0':'')+(m+1)+'-'+(d<10?'0':'')+d;
+    if(today.getFullYear()===y&&today.getMonth()===m&&today.getDate()===d)btn.classList.add('today');
+    if(s.sel===iso)btn.classList.add('sel');
+    btn.onclick=(function(v){return function(e){e.stopPropagation();tdpSelect(did,v);};})(iso);
+    daysDiv.appendChild(btn);
+  }
+}
+
+function _tdpBuildYM(did){
+  var wrap=document.getElementById('tdpw_'+did);
+  var drop=document.getElementById('tdpd_'+did);
+  if(!wrap||!drop)return;
+  var s=wrap._tdp;
+  var ymDiv=drop.querySelector('.tdp-ym');
+  var ysel='<select onchange="tdpYMChange(\''+did+'\',\'y\',this.value)">';
+  var curBE=s.cur.y+543;
+  for(var be=2540;be<=2590;be++){ysel+='<option value="'+(be-543)+'"'+(be===curBE?' selected':'')+'>'+be+'</option>';}
+  ysel+='</select>';
+  var msel='<select onchange="tdpYMChange(\''+did+'\',\'m\',this.value)">';
+  for(var mi=0;mi<12;mi++){msel+='<option value="'+mi+'"'+(mi===s.cur.m?' selected':'')+'>'+THMONTHS_F[mi]+'</option>';}
+  msel+='</select>';
+  ymDiv.innerHTML=ysel+msel;
+}
+
+function tdpYMChange(did,type,val){
+  var wrap=document.getElementById('tdpw_'+did);
+  if(!wrap||!wrap._tdp)return;
+  wrap._tdp.cur[type==='y'?'y':'m']=parseInt(val);
+  _tdpRender(did);
+}
+
+function tdpToggleYM(did){
+  var wrap=document.getElementById('tdpw_'+did);
+  var drop=document.getElementById('tdpd_'+did);
+  if(!wrap||!drop||!wrap._tdp)return;
+  var s=wrap._tdp;
+  s.ymMode=!s.ymMode;
+  var cal=drop.querySelector('.tdp-days-hdr');
+  var days=drop.querySelector('.tdp-days');
+  var ym=drop.querySelector('.tdp-ym');
+  if(s.ymMode){cal.style.display='none';days.style.display='none';ym.className='tdp-ym open';_tdpBuildYM(did);}
+  else{cal.style.display='';days.style.display='';ym.className='tdp-ym';}
+}
+
+function tdpSelect(did,iso){
+  var wrap=document.getElementById('tdpw_'+did);
+  if(!wrap||!wrap._tdp)return;
+  var s=wrap._tdp;
+  s.sel=iso;s.typing='';
+  var hid=document.getElementById(did);
+  if(hid){hid.value=iso;hid.dispatchEvent(new Event('change'));}
+  var inp=document.getElementById('tdpi_'+did);
+  if(inp){inp.value=_tdpFmt(iso);inp.classList.remove('er');inp.classList.add('ok');}
+  _tdpRender(did);
+  tdpClose();
+  if(s.onchange)try{eval(s.onchange);}catch(e){}
+}
+
+function tdpOpen(did){
+  tdpClose();
+  var drop=document.getElementById('tdpd_'+did);
+  if(drop){drop.classList.add('open');_tdpOpen=did;}
+  var wrap=document.getElementById('tdpw_'+did);
+  var hid=document.getElementById(did);
+  if(wrap&&hid&&hid.value){
+    var p=hid.value.split('-');
+    if(p.length===3){wrap._tdp.cur.y=parseInt(p[0]);wrap._tdp.cur.m=parseInt(p[1])-1;wrap._tdp.sel=hid.value;_tdpRender(did);}
+  }
+}
+
+function tdpClose(){
+  if(_tdpOpen){var d=document.getElementById('tdpd_'+_tdpOpen);if(d)d.classList.remove('open');_tdpOpen=null;}
+}
+
+function tdpNav(did,delta,e){
+  if(e)e.stopPropagation();
+  var wrap=document.getElementById('tdpw_'+did);
+  if(!wrap||!wrap._tdp)return;
+  var s=wrap._tdp;
+  s.cur.m+=delta;
+  if(s.cur.m<0){s.cur.m=11;s.cur.y--;}
+  if(s.cur.m>11){s.cur.m=0;s.cur.y++;}
+  _tdpRender(did);
+}
+
+// ── พิมพ์ในช่องหลักโดยตรง ──
+function tdpKeydown(did,e){
+  var inp=document.getElementById('tdpi_'+did);
+  var wrap=document.getElementById('tdpw_'+did);
+  if(!inp||!wrap||!wrap._tdp)return;
+  var s=wrap._tdp;
+  var k=e.key;
+  // Backspace
+  if(k==='Backspace'){
+    if(s.typing.length>0){s.typing=s.typing.slice(0,-1);}
+    else{tdpSelect(did,'');inp.value='';inp.classList.remove('ok','er');}
+    _tdpShowTyping(did);
+    e.preventDefault();return;
+  }
+  // Tab/Escape
+  if(k==='Tab'||k==='Escape'){tdpClose();return;}
+  // เลขอย่างเดียว
+  if(!/^[0-9]$/.test(k)){e.preventDefault();return;}
+  s.typing=(s.typing||'')+k;
+  _tdpShowTyping(did);
+  e.preventDefault();
+}
+
+function _tdpShowTyping(did){
+  var s=document.getElementById('tdpw_'+did)._tdp;
+  var inp=document.getElementById('tdpi_'+did);
+  var raw=s.typing||'';
+  // format DD/MM/YYYY
+  var disp='';
+  if(raw.length>0)disp=raw.slice(0,2);
+  if(raw.length>2)disp+='/'+raw.slice(2,4);
+  if(raw.length>4)disp+='/'+raw.slice(4,8);
+  if(raw.length===0)disp=s.sel?_tdpFmt(document.getElementById(s.did)?document.getElementById(s.did).value:''):'';
+  inp.value=disp||'';
+  inp.classList.remove('ok','er');
+  // ครบ 8 ตัว → parse
+  if(raw.length===8){
+    var dd=raw.slice(0,2),mm=raw.slice(2,4),be=parseInt(raw.slice(4,8)),ad=be-543;
+    var iso=ad+'-'+mm+'-'+dd;
+    var t=new Date(iso+'T00:00:00');
+    if(!isNaN(t.getTime())&&t.getFullYear()===ad){
+      tdpSelect(did,iso);
+      document.getElementById('tdpw_'+did)._tdp.typing='';
+    } else {
+      inp.classList.add('er');
+    }
+  }
+}
+
+function tdpFocus(did){
+  var wrap=document.getElementById('tdpw_'+did);
+  if(wrap&&wrap._tdp){wrap._tdp.typing='';}
+  tdpOpen(did);
+}
+
+function tdpSetValue(did,iso){
+  if(!iso)return;
+  var hid=document.getElementById(did);if(hid)hid.value=iso;
+  var inp=document.getElementById('tdpi_'+did);
+  if(inp){inp.value=_tdpFmt(iso);inp.classList.remove('er');inp.classList.add('ok');}
+  var wrap=document.getElementById('tdpw_'+did);
+  if(wrap&&wrap._tdp){
+    wrap._tdp.sel=iso;wrap._tdp.typing='';
+    var p=iso.split('-');if(p.length===3){wrap._tdp.cur.y=parseInt(p[0]);wrap._tdp.cur.m=parseInt(p[1])-1;}
+  }
+}
+
+setTimeout(function(){
+  document.querySelectorAll('.tdp-wrap[id^="tdpw_"]').forEach(function(w){
+    var did=w.id.replace('tdpw_','');
+    _tdpWireEvents(did);
+  });
+},200);
+
+document.addEventListener('click',function(e){
+  if(_tdpOpen&&!e.target.closest('#tdpw_'+_tdpOpen))tdpClose();
+});
 
 </script>
 </body>

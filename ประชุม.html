@@ -123,6 +123,13 @@ body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;
   .doc-page:last-child{page-break-after:auto}
 }
 @page{size:A4;margin:1.5cm 1.8cm}
+
+/* ── Date Widget ── */
+.dw-wrap{position:relative;display:flex;align-items:center;gap:6px}
+.dw-txt{flex:1;padding:9px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7;letter-spacing:1px}
+.dw-txt.has-val{border-color:#4caf50;background:#f7fcf7}
+.dw-txt.err{border-color:#e74c3c;background:#fff5f5}
+.dw-hint{font-size:11px;color:#999;margin-top:2px}
 </style>
 </head>
 <body>
@@ -140,7 +147,7 @@ body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;
       <div class="fg"><label>ครั้งที่</label><input type="text" id="mno" placeholder="เช่น 25" inputmode="numeric"></div>
       <div class="fg"><label>ปี พ.ศ.</label><input type="text" id="myr" value="2569"></div>
     </div>
-    <div class="fg"><label>วันที่ประชุม</label><input type="date" id="mdt"></div>
+    <div class="fg"><label>วันที่ประชุม</label><div class="dw-wrap"><input type="text" id="mdt_txt" class="dw-txt" maxlength="10" placeholder="วว/ดด/ปปปป" inputmode="numeric" onkeydown="dwKey('mdt_txt',event)" oninput="dwInput('mdt_txt','mdt')"><input type="hidden" id="mdt"></div><div class="dw-hint">พิมพ์ วว ดด ปปปป (พ.ศ.) เช่น 12082568</div></div>
     <div class="row2">
       <div class="fg"><label>เวลาเริ่ม</label><input type="time" id="ts" value="08:00"></div>
       <div class="fg"><label>เวลาสิ้นสุด</label><input type="time" id="te" value="10:00"></div>
@@ -500,7 +507,7 @@ function buildAgContent(i){
 function genMeeting(){
   const chairman=ch();const all=atts();const others=all.filter(a=>a!==chairman);
   const no=gv('mno')||'......',yr=gv('myr')||'......';
-  const sd=meetShortDate(gv('mdt'));const ts=fmtTime(gv('ts')),te=fmtTime(gv('te'));const loc=gv('loc')||'..........';
+  const sd=meetShortDate(dwGet('mdt'));const ts=fmtTime(gv('ts')),te=fmtTime(gv('te'));const loc=gv('loc')||'..........';
   const items=[];
   document.querySelectorAll('.ai').forEach(el=>{const i=el.id.replace('agi-','');const c=buildAgContent(i);if(c)items.push(c);});
   const fullList=[chairman,...others];
@@ -598,6 +605,68 @@ setInterval(autoSave, 2000);
 window.addEventListener('beforeunload', autoSave);
 
 autoRestore();
+
+// ── Date Widget helpers ──
+function dwKey(id,e){
+  var el=document.getElementById(id);
+  if(!e)e=window.event;
+  var k=e.key;
+  // อนุญาตแค่ตัวเลข, Backspace, Delete, Tab
+  if(!/^[0-9]$/.test(k)&&k!=='Backspace'&&k!=='Delete'&&k!=='Tab'){
+    e.preventDefault&&e.preventDefault();
+    return false;
+  }
+}
+function dwInput(id,hidId){
+  var el=document.getElementById(id);
+  var hid=document.getElementById(hidId);
+  if(!el)return;
+  // กรองเฉพาะตัวเลข
+  var raw=el.value.replace(/[^0-9]/g,'').slice(0,8);
+  // format DD/MM/YYYY
+  var disp='';
+  if(raw.length>=1) disp=raw.slice(0,2);
+  if(raw.length>=3) disp+='/'+raw.slice(2,4);
+  if(raw.length>=5) disp+='/'+raw.slice(4,8);
+  el.value=disp;
+  el.className=el.className.replace(/\b(has-val|err)\b/g,'').trim();
+  if(raw.length===8){
+    var dd=parseInt(raw.slice(0,2));
+    var mm=parseInt(raw.slice(2,4));
+    var yyyy=parseInt(raw.slice(4,8)); // พ.ศ.
+    var yyy_ad=yyyy-543; // แปลงเป็น ค.ศ.
+    if(dd>=1&&dd<=31&&mm>=1&&mm<=12&&yyy_ad>=1900){
+      var ds=yyy_ad+'-'+(mm<10?'0':'')+mm+'-'+(dd<10?'0':'')+dd;
+      if(hid){hid.value=ds;hid.dispatchEvent(new Event('change'));}
+      el.classList.add('has-val');
+    } else {
+      if(hid)hid.value='';
+      el.classList.add('err');
+    }
+  } else {
+    if(hid)hid.value='';
+  }
+}
+function dwSet(hidId,txtId,dateVal){
+  // ตั้งค่าจาก YYYY-MM-DD (ค.ศ.) → แสดง DD/MM/YYYY (พ.ศ.)
+  if(!dateVal)return;
+  var p=dateVal.split('-');
+  if(p.length!==3)return;
+  var hid=document.getElementById(hidId);
+  var txt=document.getElementById(txtId);
+  if(hid)hid.value=dateVal;
+  if(txt){
+    var yyyy_be=parseInt(p[0])+543;
+    txt.value=p[2]+'/'+p[1]+'/'+yyyy_be;
+    txt.classList.remove('err');
+    txt.classList.add('has-val');
+  }
+}
+function dwGet(hidId){
+  var el=document.getElementById(hidId);
+  return el?el.value:'';
+}
+
 </script>
 </body>
 </html>

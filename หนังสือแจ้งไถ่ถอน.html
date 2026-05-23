@@ -49,6 +49,13 @@ body{font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;font-size:15px;back
 .doc-page table{border-collapse:collapse;width:100%}
 .doc-page .sign-section{margin-top:1.5cm}
 .doc-page .sign-line{text-align:center;margin-top:0.5cm}
+
+/* ── Date Widget ── */
+.dw-wrap{position:relative;display:flex;align-items:center;gap:6px}
+.dw-txt{flex:1;padding:9px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7;letter-spacing:1px}
+.dw-txt.has-val{border-color:#4caf50;background:#f7fcf7}
+.dw-txt.err{border-color:#e74c3c;background:#fff5f5}
+.dw-hint{font-size:11px;color:#999;margin-top:2px}
 </style>
 </head>
 <body>
@@ -62,7 +69,7 @@ body{font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;font-size:15px;back
     <div class="fg"><label>เขียนที่</label>
       <input type="text" id="n_writeat" value="89/28 หมู่ 9 ต.ท่าเยี่ยม อ.โชคชัย จ.นครราชสีมา"></div>
     <div class="fg"><label>วันที่เขียนหนังสือ</label>
-      <input type="date" id="n_writedate"></div>
+      <div class="dw-wrap"><input type="text" id="n_writedate_txt" class="dw-txt" maxlength="10" placeholder="วว/ดด/ปปปป" inputmode="numeric" onkeydown="dwKey('n_writedate_txt',event)" oninput="dwInput('n_writedate_txt','n_writedate')"><input type="hidden" id="n_writedate"></div><div class="dw-hint">พิมพ์ วว ดด ปปปป (พ.ศ.) เช่น 12082568</div></div>
     <div class="fg"><label>กรรมการผู้ลงนามแทนบริษัท</label>
       <select id="n_signer" style="width:100%;padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7">
         <option value="นายชุณนเกียรติ จรัสบวรพันธ์">นายชุณนเกียรติ จรัสบวรพันธ์</option>
@@ -107,7 +114,7 @@ body{font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;font-size:15px;back
       <div class="fg"><label>กำหนดเวลา (เดือน)</label>
         <input type="text" id="n_period" value="12"></div>
       <div class="fg"><label>วันที่ทำสัญญา</label>
-        <input type="date" id="n_contract_date"></div>
+        <div class="dw-wrap"><input type="text" id="n_contract_date_txt" class="dw-txt" maxlength="10" placeholder="วว/ดด/ปปปป" inputmode="numeric" onkeydown="dwKey('n_contract_date_txt',event)" oninput="dwInput('n_contract_date_txt','n_contract_date')"><input type="hidden" id="n_contract_date"></div><div class="dw-hint">พิมพ์ วว ดด ปปปป (พ.ศ.) เช่น 12082568</div></div>
     </div>
 
     <!-- ประเภทเอกสารสิทธิ์ — เลือกได้ 1 ประเภท แต่ละประเภทมีฟิลด์ต่างกัน -->
@@ -148,7 +155,7 @@ body{font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;font-size:15px;back
         <div class="fg"><label>สาขาสำนักงานที่ดิน</label>
           <input type="text" id="n_land_branch" placeholder="เช่น พิมาย หรือ -"></div>
         <div class="fg"><label>วันที่จดทะเบียน</label>
-          <input type="date" id="n_reg_date"></div>
+          <div class="dw-wrap"><input type="text" id="n_reg_date_txt" class="dw-txt" maxlength="10" placeholder="วว/ดด/ปปปป" inputmode="numeric" onkeydown="dwKey('n_reg_date_txt',event)" oninput="dwInput('n_reg_date_txt','n_reg_date')"><input type="hidden" id="n_reg_date"></div><div class="dw-hint">พิมพ์ วว ดด ปปปป (พ.ศ.) เช่น 12082568</div></div>
       </div>
     </div>
 
@@ -167,7 +174,7 @@ body{font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;font-size:15px;back
         <div class="fg"><label>สาขาสำนักงานที่ดิน</label>
           <input type="text" id="n_ns3k_branch" placeholder="เช่น พิมาย หรือ -"></div>
         <div class="fg"><label>วันที่จดทะเบียน</label>
-          <input type="date" id="n_ns3k_reg_date"></div>
+          <div class="dw-wrap"><input type="text" id="n_ns3k_reg_date_txt" class="dw-txt" maxlength="10" placeholder="วว/ดด/ปปปป" inputmode="numeric" onkeydown="dwKey('n_ns3k_reg_date_txt',event)" oninput="dwInput('n_ns3k_reg_date_txt','n_ns3k_reg_date')"><input type="hidden" id="n_ns3k_reg_date"></div><div class="dw-hint">พิมพ์ วว ดด ปปปป (พ.ศ.) เช่น 12082568</div></div>
       </div>
     </div>
 
@@ -186,7 +193,7 @@ body{font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;font-size:15px;back
         <div class="fg"><label>สาขาสำนักงานที่ดิน</label>
           <input type="text" id="n_ns3_branch" placeholder="เช่น พิมาย หรือ -"></div>
         <div class="fg"><label>วันที่จดทะเบียน</label>
-          <input type="date" id="n_ns3_reg_date"></div>
+          <div class="dw-wrap"><input type="text" id="n_ns3_reg_date_txt" class="dw-txt" maxlength="10" placeholder="วว/ดด/ปปปป" inputmode="numeric" onkeydown="dwKey('n_ns3_reg_date_txt',event)" oninput="dwInput('n_ns3_reg_date_txt','n_ns3_reg_date')"><input type="hidden" id="n_ns3_reg_date"></div><div class="dw-hint">พิมพ์ วว ดด ปปปป (พ.ศ.) เช่น 12082568</div></div>
       </div>
     </div>
 
@@ -207,7 +214,7 @@ body{font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;font-size:15px;back
         <div class="fg"><label>สาขาสำนักงานที่ดิน</label>
           <input type="text" id="n_condo_branch" placeholder="เช่น เมือง หรือ -"></div>
         <div class="fg"><label>วันที่จดทะเบียน</label>
-          <input type="date" id="n_condo_reg_date"></div>
+          <div class="dw-wrap"><input type="text" id="n_condo_reg_date_txt" class="dw-txt" maxlength="10" placeholder="วว/ดด/ปปปป" inputmode="numeric" onkeydown="dwKey('n_condo_reg_date_txt',event)" oninput="dwInput('n_condo_reg_date_txt','n_condo_reg_date')"><input type="hidden" id="n_condo_reg_date"></div><div class="dw-hint">พิมพ์ วว ดด ปปปป (พ.ศ.) เช่น 12082568</div></div>
       </div>
     </div>
   </div>
@@ -233,7 +240,7 @@ body{font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;font-size:15px;back
   <div class="card">
     <div class="ct"><span class="n">5</span> กำหนดไถ่ถอนและสินไถ่</div>
     <div class="fg"><label>วันครบกำหนดไถ่</label>
-      <input type="date" id="n_due_date"></div>
+      <div class="dw-wrap"><input type="text" id="n_due_date_txt" class="dw-txt" maxlength="10" placeholder="วว/ดด/ปปปป" inputmode="numeric" onkeydown="dwKey('n_due_date_txt',event)" oninput="dwInput('n_due_date_txt','n_due_date')"><input type="hidden" id="n_due_date"></div><div class="dw-hint">พิมพ์ วว ดด ปปปป (พ.ศ.) เช่น 12082568</div></div>
     <div class="row2">
       <div class="fg"><label>สินไถ่ (ตัวเลข บาท)</label>
         <input type="text" id="n_redeem_amt" inputmode="numeric" placeholder="เช่น 4762500" oninput="onRedeemChange()"></div>
@@ -377,7 +384,7 @@ function getLandData(){
     res.amphoe=gv('n_amphoe');
     res.province=gv('n_province')||'นครราชสีมา';
     res.branch=gv('n_land_branch')||'-';
-    res.regDate=thDate(gv('n_reg_date'));
+    res.regDate=thDate(dwGet('n_reg_date'));
     // ข้อความอ้างอิง
     res.landDesc='โฉนดที่ดิน เลขที่ '+(chno||'........')+(lno?' เลขที่ดิน '+lno:'')+(survey?' หน้าสำรวจ '+survey:'')+' ตำบล '+(res.tambon||'......')+' อำเภอ '+(res.amphoe||'......')+' จังหวัด '+res.province;
   } else if(v==='ns3k'){
@@ -391,7 +398,7 @@ function getLandData(){
     res.amphoe=gv('n_ns3k_amphoe');
     res.province=gv('n_ns3k_province')||'นครราชสีมา';
     res.branch=gv('n_ns3k_branch')||'-';
-    res.regDate=thDate(gv('n_ns3k_reg_date'));
+    res.regDate=thDate(dwGet('n_ns3k_reg_date'));
     res.landDesc='หนังสือรับรองการทำประโยชน์ (น.ส.3 ก.) เลขที่ '+(nsno||'........')+(lno?' เลขที่ดิน '+lno:'')+' ตำบล '+(res.tambon||'......')+' อำเภอ '+(res.amphoe||'......')+' จังหวัด '+res.province;
   } else if(v==='ns3'){
     res.docTypeLabel='หนังสือรับรองการทำประโยชน์ (น.ส.3)';
@@ -404,7 +411,7 @@ function getLandData(){
     res.amphoe=gv('n_ns3_amphoe');
     res.province=gv('n_ns3_province')||'นครราชสีมา';
     res.branch=gv('n_ns3_branch')||'-';
-    res.regDate=thDate(gv('n_ns3_reg_date'));
+    res.regDate=thDate(dwGet('n_ns3_reg_date'));
     res.landDesc='หนังสือรับรองการทำประโยชน์ (น.ส.3) เลขที่ '+(nsno||'........')+(lno?' เลขที่ดิน '+lno:'')+' ตำบล '+(res.tambon||'......')+' อำเภอ '+(res.amphoe||'......')+' จังหวัด '+res.province;
   } else if(v==='condo'){
     res.docTypeLabel='หนังสือกรรมสิทธิ์ห้องชุด';
@@ -417,7 +424,7 @@ function getLandData(){
     res.amphoe=gv('n_condo_amphoe');
     res.province=gv('n_condo_province')||'นครราชสีมา';
     res.branch=gv('n_condo_branch')||'-';
-    res.regDate=thDate(gv('n_condo_reg_date'));
+    res.regDate=thDate(dwGet('n_condo_reg_date'));
     res.landDesc='ห้องชุดเลขที่ '+(room||'........')+(bldg?' อาคาร'+bldg:'')+(ach?' เลขที่ อ.ช. '+ach:'')+' ตำบล/แขวง '+(res.tambon||'......')+' อำเภอ/เขต '+(res.amphoe||'......')+' จังหวัด '+res.province;
   }
   return res;
@@ -435,7 +442,7 @@ function updateAttPreview(){
   var pd=document.getElementById('att_contractdate_preview');
   if(p)p.textContent=purposeList.join(' ,') || '...';
   if(pe)pe.textContent=gv('n_period')||'...';
-  if(pd)pd.textContent=gv('n_contract_date')?thDate(gv('n_contract_date')):'...';
+  if(pd)pd.textContent=gv('n_contract_date')?thDate(dwGet('n_contract_date')):'...';
 }
 
 function addExt(){
@@ -456,7 +463,7 @@ function addExt(){
     '<div><label style="font-size:11px;color:#666;display:block;margin-bottom:3px">กำหนด (เดือน)</label>'+
     '<input type="text" id="ext_period_'+n+'" placeholder="เช่น 9" style="width:100%;padding:7px;font-size:14px;border:1px solid #ccc;border-radius:6px;font-family:inherit"></div>'+
     '<div><label style="font-size:11px;color:#666;display:block;margin-bottom:3px">วันที่ฉบับลง</label>'+
-    '<input type="date" id="ext_date_'+n+'" style="width:100%;padding:7px;font-size:14px;border:1px solid #ccc;border-radius:6px;font-family:inherit"></div>'+
+    '<div class="dw-wrap"><input type="text" id="ext_date_'+n+'_txt" class="dw-txt" maxlength="10" placeholder="วว/ดด/ปปปป" inputmode="numeric" onkeydown="dwKey('ext_date_'+n+'_txt',event)" oninput="dwInput('ext_date_'+n+'_txt','ext_date_'+n+'')"><input type="hidden" id="ext_date_'+n+'"></div><div class="dw-hint">พิมพ์ วว ดด ปปปป (พ.ศ.) เช่น 12082568</div></div>'+
     '</div>';
   wrap.appendChild(div);
 }
@@ -483,7 +490,7 @@ function getAtts(purpose,period,contractDate){
       var i=div.id.replace('ext-','');if(!i||isNaN(parseInt(i)))return;
       var no=gv('ext_no_'+i)||i;
       var per=gv('ext_period_'+i)||'12';
-      var dt=thDate(gv('ext_date_'+i));
+      var dt=thDate(dwGet('ext_date_'+i));
       list.push('สำเนาสัญญาขยายกำหนดเวลาไถ่ถอนขายฝากที่ดิน เพื่อ '+purpose+' ครั้งที่ '+no+' มีกำหนด '+per+' เดือน ฉบับลง วันที่ '+dt);
     });
   }
@@ -499,7 +506,7 @@ function getAtts(purpose,period,contractDate){
 function genNotice(){
   saveForm();
   var writeat=gv('n_writeat');
-  var writedate=thDate(gv('n_writedate'));
+  var writedate=thDate(dwGet('n_writedate'));
   var signer=gv('n_signer');
   var phone=gv('n_phone');
 
@@ -514,10 +521,10 @@ function genNotice(){
   if(document.getElementById('n_purpose_other')&&document.getElementById('n_purpose_other').checked&&gv('n_purpose_other_val'))purposeList.push(gv('n_purpose_other_val'));
   var purpose=purposeList.join(' ,');
   var period=gv('n_period')||'12';
-  var contractDate=thDate(gv('n_contract_date'));
+  var contractDate=thDate(dwGet('n_contract_date'));
 
   var land=getLandData();
-  var dueDate=thDate(gv('n_due_date'));
+  var dueDate=thDate(dwGet('n_due_date'));
   var redeemAmt=fmtNum(gv('n_redeem_amt'));
   var redeemT=gv('n_redeem_t');
   var atts=getAtts(purpose,period,contractDate);
@@ -618,6 +625,9 @@ function restoreForm(){
       if(e.type==='checkbox')e.checked=d[k];
       else if(e.type!=='radio')e.value=d[k];
     });
+    // restore date fields
+    var _dfs=['n_writedate','n_contract_date','n_reg_date','n_ns3k_reg_date','n_ns3_reg_date','n_condo_reg_date','n_due_date'];
+    _dfs.forEach(function(fid){if(d[fid])dwSet(fid,fid+'_txt',d[fid]);});
     updateAttPreview();
     updateRearnText();
   }catch(e){
@@ -642,6 +652,68 @@ setTimeout(function(){
   document.getElementById('n_purpose_other_val')&&document.getElementById('n_purpose_other_val').addEventListener('input',updateAttPreview);
   document.getElementById('n_period')&&document.getElementById('n_period').addEventListener('input',updateAttPreview);
 },100);
+
+// ── Date Widget helpers ──
+function dwKey(id,e){
+  var el=document.getElementById(id);
+  if(!e)e=window.event;
+  var k=e.key;
+  // อนุญาตแค่ตัวเลข, Backspace, Delete, Tab
+  if(!/^[0-9]$/.test(k)&&k!=='Backspace'&&k!=='Delete'&&k!=='Tab'){
+    e.preventDefault&&e.preventDefault();
+    return false;
+  }
+}
+function dwInput(id,hidId){
+  var el=document.getElementById(id);
+  var hid=document.getElementById(hidId);
+  if(!el)return;
+  // กรองเฉพาะตัวเลข
+  var raw=el.value.replace(/[^0-9]/g,'').slice(0,8);
+  // format DD/MM/YYYY
+  var disp='';
+  if(raw.length>=1) disp=raw.slice(0,2);
+  if(raw.length>=3) disp+='/'+raw.slice(2,4);
+  if(raw.length>=5) disp+='/'+raw.slice(4,8);
+  el.value=disp;
+  el.className=el.className.replace(/\b(has-val|err)\b/g,'').trim();
+  if(raw.length===8){
+    var dd=parseInt(raw.slice(0,2));
+    var mm=parseInt(raw.slice(2,4));
+    var yyyy=parseInt(raw.slice(4,8)); // พ.ศ.
+    var yyy_ad=yyyy-543; // แปลงเป็น ค.ศ.
+    if(dd>=1&&dd<=31&&mm>=1&&mm<=12&&yyy_ad>=1900){
+      var ds=yyy_ad+'-'+(mm<10?'0':'')+mm+'-'+(dd<10?'0':'')+dd;
+      if(hid){hid.value=ds;hid.dispatchEvent(new Event('change'));}
+      el.classList.add('has-val');
+    } else {
+      if(hid)hid.value='';
+      el.classList.add('err');
+    }
+  } else {
+    if(hid)hid.value='';
+  }
+}
+function dwSet(hidId,txtId,dateVal){
+  // ตั้งค่าจาก YYYY-MM-DD (ค.ศ.) → แสดง DD/MM/YYYY (พ.ศ.)
+  if(!dateVal)return;
+  var p=dateVal.split('-');
+  if(p.length!==3)return;
+  var hid=document.getElementById(hidId);
+  var txt=document.getElementById(txtId);
+  if(hid)hid.value=dateVal;
+  if(txt){
+    var yyyy_be=parseInt(p[0])+543;
+    txt.value=p[2]+'/'+p[1]+'/'+yyyy_be;
+    txt.classList.remove('err');
+    txt.classList.add('has-val');
+  }
+}
+function dwGet(hidId){
+  var el=document.getElementById(hidId);
+  return el?el.value:'';
+}
+
 </script>
 </body>
 </html>

@@ -84,6 +84,13 @@ body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;
 .combo-opt:last-child{border-bottom:none}
 .combo-no{padding:10px 12px;font-size:13px;color:#888;font-style:italic}
 
+
+/* ── Date Widget ── */
+.dw-wrap{position:relative;display:flex;align-items:center;gap:6px}
+.dw-txt{flex:1;padding:9px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7;letter-spacing:1px}
+.dw-txt.has-val{border-color:#4caf50;background:#f7fcf7}
+.dw-txt.err{border-color:#e74c3c;background:#fff5f5}
+.dw-hint{font-size:11px;color:#999;margin-top:2px}
 </style>
 </head>
 <body>
@@ -99,7 +106,7 @@ body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;
   <div class="card">
     <div class="ct"><span class="n">1</span> ข้อมูลทั่วไป</div>
     <div class="row2">
-      <div class="fg"><label>วันที่ทำเอกสาร</label><input type="date" id="doc_date"></div>
+      <div class="fg"><label>วันที่ทำเอกสาร</label><div class="dw-wrap"><input type="text" id="doc_date_txt" class="dw-txt" maxlength="10" placeholder="วว/ดด/ปปปป" inputmode="numeric" onkeydown="dwKey('doc_date_txt',event)" oninput="dwInput('doc_date_txt','doc_date')"><input type="hidden" id="doc_date"></div><div class="dw-hint">พิมพ์ วว ดด ปปปป (พ.ศ.) เช่น 12082568</div></div>
       <div class="fg"><label>บิลที่ของวัน</label><input type="text" id="bill_seq" placeholder="01" maxlength="2" inputmode="numeric"></div>
     </div>
     <div class="fg"><label>สำนักงานที่ดิน จังหวัด</label>
@@ -132,7 +139,7 @@ body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;
       <input type="text" id="m_rate" placeholder="เช่น 15" inputmode="decimal">
     </div>
     <div class="fg"><label>วันที่สัญญาจำนอง</label>
-      <input type="date" id="contract_date">
+      <div class="dw-wrap"><input type="text" id="contract_date_txt" class="dw-txt" maxlength="10" placeholder="วว/ดด/ปปปป" inputmode="numeric" onkeydown="dwKey('contract_date_txt',event)" oninput="dwInput('contract_date_txt','contract_date')"><input type="hidden" id="contract_date"></div><div class="dw-hint">พิมพ์ วว ดด ปปปป (พ.ศ.) เช่น 12082568</div>
     </div>
   </div>
 
@@ -622,7 +629,7 @@ function buildAddendum(d){
 // ── GENERATE ──
 function genMortgage(){
   var d={
-    docDate:gv('doc_date'),billSeq:gv('bill_seq')||'01',
+    docDate:dwGet('doc_date'),billSeq:gv('bill_seq')||'01',
     landBranch:gv('land_branch')||'......',
     landBranchSub:gv('land_branch_sub')||'',
     custName:(function(){var m=getMortgagors();return m.length?m[0].name:'..........';})(),
@@ -634,7 +641,7 @@ function genMortgage(){
     amtT:gv('m_amt_t')||toBaht(gv('m_amt').replace(/[,\s]/g,'')),
     rate:gv('m_rate')||'......',
     item5:gv('memo_item5')||'',
-    contractDate:gv('contract_date'),
+    contractDate:dwGet('contract_date'),
   };
   var payRows=getPayRows();
   var wanted=Array.prototype.slice.call(document.querySelectorAll('.doc-cb:checked')).map(function(c){return c.value;});
@@ -785,6 +792,101 @@ function getMortgagors(){
   return list;
 }
 addMortgagor();
+
+
+// ── AUTO SAVE/RESTORE localStorage ──
+var LS_KEY = 'form_data_' + window.location.pathname.split('/').pop().replace('.html','');
+
+function autoSave(){
+  try {
+    var data = {};
+    document.querySelectorAll('input[id], select[id], textarea[id]').forEach(function(el){
+      if(el.type === 'checkbox') data[el.id] = el.checked;
+      else data[el.id] = el.value;
+    });
+    localStorage.setItem(LS_KEY, JSON.stringify(data));
+  } catch(e) {}
+}
+
+function autoRestore(){
+  try {
+    var saved = localStorage.getItem(LS_KEY);
+    if(!saved) return false;
+    var data = JSON.parse(saved);
+    Object.keys(data).forEach(function(k){
+      var el = document.getElementById(k);
+      if(!el) return;
+      if(el.type === 'checkbox') el.checked = data[k];
+      else el.value = data[k];
+    });
+    return true;
+  } catch(e) { return false; }
+}
+
+setInterval(autoSave, 2000);
+window.addEventListener('beforeunload', autoSave);
+
+
+// ── Date Widget helpers ──
+function dwKey(id,e){
+  var el=document.getElementById(id);
+  if(!e)e=window.event;
+  var k=e.key;
+  // อนุญาตแค่ตัวเลข, Backspace, Delete, Tab
+  if(!/^[0-9]$/.test(k)&&k!=='Backspace'&&k!=='Delete'&&k!=='Tab'){
+    e.preventDefault&&e.preventDefault();
+    return false;
+  }
+}
+function dwInput(id,hidId){
+  var el=document.getElementById(id);
+  var hid=document.getElementById(hidId);
+  if(!el)return;
+  // กรองเฉพาะตัวเลข
+  var raw=el.value.replace(/[^0-9]/g,'').slice(0,8);
+  // format DD/MM/YYYY
+  var disp='';
+  if(raw.length>=1) disp=raw.slice(0,2);
+  if(raw.length>=3) disp+='/'+raw.slice(2,4);
+  if(raw.length>=5) disp+='/'+raw.slice(4,8);
+  el.value=disp;
+  el.className=el.className.replace(/\b(has-val|err)\b/g,'').trim();
+  if(raw.length===8){
+    var dd=parseInt(raw.slice(0,2));
+    var mm=parseInt(raw.slice(2,4));
+    var yyyy=parseInt(raw.slice(4,8)); // พ.ศ.
+    var yyy_ad=yyyy-543; // แปลงเป็น ค.ศ.
+    if(dd>=1&&dd<=31&&mm>=1&&mm<=12&&yyy_ad>=1900){
+      var ds=yyy_ad+'-'+(mm<10?'0':'')+mm+'-'+(dd<10?'0':'')+dd;
+      if(hid){hid.value=ds;hid.dispatchEvent(new Event('change'));}
+      el.classList.add('has-val');
+    } else {
+      if(hid)hid.value='';
+      el.classList.add('err');
+    }
+  } else {
+    if(hid)hid.value='';
+  }
+}
+function dwSet(hidId,txtId,dateVal){
+  // ตั้งค่าจาก YYYY-MM-DD (ค.ศ.) → แสดง DD/MM/YYYY (พ.ศ.)
+  if(!dateVal)return;
+  var p=dateVal.split('-');
+  if(p.length!==3)return;
+  var hid=document.getElementById(hidId);
+  var txt=document.getElementById(txtId);
+  if(hid)hid.value=dateVal;
+  if(txt){
+    var yyyy_be=parseInt(p[0])+543;
+    txt.value=p[2]+'/'+p[1]+'/'+yyyy_be;
+    txt.classList.remove('err');
+    txt.classList.add('has-val');
+  }
+}
+function dwGet(hidId){
+  var el=document.getElementById(hidId);
+  return el?el.value:'';
+}
 
 </script>
 </body>

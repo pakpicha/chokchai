@@ -68,10 +68,14 @@ body{font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;font-size:15px;back
   <!-- 2. ผู้ขายฝาก -->
   <div class="card">
     <div class="ct"><span class="n">2</span> ผู้ขายฝาก (ผู้รับหนังสือ)</div>
-    <div class="fg"><label>เรียน (ชื่อผู้ขายฝาก)</label>
-      <input type="text" id="n_to" placeholder="เช่น นางกนกนันท์ โรจนเกียรติพงศ์"></div>
-    <div class="fg"><label>ที่อยู่ผู้รับ (สำหรับซอง)</label>
-      <textarea id="n_to_addr" placeholder="ที่อยู่สำหรับจ่าหน้าซอง"></textarea></div>
+    <div class="fg"><label>เรียน (ชื่อผู้ขายฝาก) — ถ้าหลายคนใส่ได้เลย เช่น นาย ก, นาง ข</label>
+      <textarea id="n_to" rows="2" placeholder="เช่น นายปัญญาผล ปักกาเวสา, นางสาวอมรัตน์ บุญสอน"></textarea></div>
+    <div class="fg" style="background:#f0f7f0;border-radius:8px;padding:10px">
+      <label style="font-weight:700;color:#1a3a2a">ที่อยู่สำหรับซองจดหมาย</label>
+      <div style="font-size:12px;color:#666;margin-bottom:6px">ถ้ามีหลายคน กรอกแยกกันแต่ละซอง (กด Enter แบ่งซอง)</div>
+      <div id="addr-recipients"></div>
+      <button type="button" onclick="addRecipient()" class="add-btn" style="margin-top:6px">+ เพิ่มที่อยู่ผู้รับ</button>
+    </div>
   </div>
 
   <!-- 3. รายละเอียดสัญญา -->
@@ -99,18 +103,21 @@ body{font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;font-size:15px;back
       <div class="fg"><label>วันที่ทำสัญญา</label>
         <input type="date" id="n_contract_date"></div>
     </div>
-    <div class="fg"><label>ประเภทเอกสาร</label>
-      <select id="n_doc_type" style="padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7;width:100%">
-        <option value="โฉนดที่ดิน">โฉนดที่ดิน</option>
-        <option value="หนังสือรับรองการทำประโยชน์ (น.ส.3 ก.)">น.ส.3 ก.</option>
-        <option value="หนังสือรับรองการทำประโยชน์ (น.ส.3)">น.ส.3</option>
-      </select></div>
-    <div class="row2">
-      <div class="fg"><label>เลขที่โฉนด</label>
-        <input type="text" id="n_chanote_no" placeholder="เช่น 19861"></div>
-      <div class="fg"><label>เลขที่ดิน</label>
-        <input type="text" id="n_land_no" placeholder="เช่น 183"></div>
+    <div class="fg"><label>ประเภทเอกสารสิทธิ์ (เลือกได้หลายอัน)</label>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;padding:8px 0">
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer"><input type="checkbox" id="dt_chanote" checked style="width:16px;height:16px"> โฉนดที่ดิน</label>
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer"><input type="checkbox" id="dt_ns3k" style="width:16px;height:16px"> น.ส.3 ก.</label>
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer"><input type="checkbox" id="dt_ns3" style="width:16px;height:16px"> น.ส.3</label>
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer"><input type="checkbox" id="dt_condo" style="width:16px;height:16px"> ห้องชุด</label>
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer"><input type="checkbox" id="dt_other" style="width:16px;height:16px"> อื่นๆ
+          <input type="text" id="dt_other_val" placeholder="ระบุ..." style="width:100px;padding:4px 8px;font-size:13px;border:1px solid #ccc;border-radius:5px;font-family:inherit">
+        </label>
+      </div>
     </div>
+    <div class="fg"><label>เลขที่โฉนด (ถ้าหลายแปลง คั่นด้วย , เช่น 102968, 139521)</label>
+      <input type="text" id="n_chanote_no" placeholder="เช่น 102968, 139521"></div>
+    <div class="fg"><label>เลขที่ดิน (ถ้าหลายแปลง คั่นด้วย ,)</label>
+      <input type="text" id="n_land_no" placeholder="เช่น 183, 185"></div>
     <div class="row3">
       <div class="fg"><label>ตำบล</label>
         <input type="text" id="n_tambon" placeholder="ตำบล"></div>
@@ -160,6 +167,12 @@ body{font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;font-size:15px;back
 
   <button class="gen-btn" onclick="genNotice()">🖨 สร้างหนังสือแจ้ง</button>
   <button class="gen-btn" onclick="goEnvelope()" style="margin-top:10px;background:#2d5a3d">✉️ พิมพ์ซองจดหมาย</button>
+  <button class="gen-btn" onclick="goReceipt()" style="margin-top:10px;background:#c0392b">📮 พิมพ์ใบตอบรับ ป.133 ก.</button>
+  <div style="margin-top:14px;padding:12px;background:#e8f5e8;border-radius:10px;border:2px solid #4caf50">
+    <div style="font-size:13px;font-weight:700;color:#1a3a2a;margin-bottom:8px">🚀 เปิดทุกอย่างพร้อมกัน</div>
+    <div style="font-size:12px;color:#555;margin-bottom:8px">ข้อมูลลูกค้าจะถูกส่งไปที่ซองและใบตอบรับพร้อมกัน</div>
+    <button class="gen-btn" onclick="openAllDocs()" style="background:#4caf50;font-size:15px;padding:14px">📄 เปิดซอง + ใบตอบรับ (ข้อมูลชุดเดียว)</button>
+  </div>
 </div>
 
 <div id="doc-wrap" style="display:none">
@@ -174,6 +187,48 @@ body{font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;font-size:15px;back
 <script>
 var attC=0;
 var extC=0;
+var rcpC=0;
+
+function addRecipient(name,addr,zip){
+  rcpC++;
+  var n=rcpC;
+  var wrap=document.getElementById('addr-recipients');
+  var div=document.createElement('div');
+  div.id='rcp-'+n;
+  div.style.cssText='border:1px solid #c8e0c8;border-radius:8px;padding:10px;margin-bottom:8px;background:#f7fcf7';
+  div.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">'
+    +'<b style="font-size:12px;color:#1a3a2a">ผู้รับที่ '+n+'</b>'
+    +(n>1?'<button type="button" onclick="removeRcp('+n+')" style="background:#fee;border:1px solid #fcc;border-radius:5px;color:#c00;padding:2px 8px;cursor:pointer;font-size:12px">ลบ</button>':'')
+    +'</div>'
+    +'<div class="fg"><label style="font-size:11px">ชื่อ</label>'
+    +'<input type="text" id="rcp_name_'+n+'" value="'+(name||'')+'" placeholder="ชื่อ-นามสกุล"></div>'
+    +'<div class="fg"><label style="font-size:11px">ที่อยู่</label>'
+    +'<textarea id="rcp_addr_'+n+'" rows="2" style="width:100%;padding:8px;font-size:14px;border:1px solid #ccc;border-radius:6px;font-family:inherit">'+(addr||'')+'</textarea></div>'
+    +'<div class="fg"><label style="font-size:11px">รหัสไปรษณีย์</label>'
+    +'<input type="text" id="rcp_zip_'+n+'" value="'+(zip||'')+'" placeholder="เช่น 30000" maxlength="5" inputmode="numeric" style="width:120px;padding:8px;font-size:14px;border:1px solid #ccc;border-radius:6px;font-family:inherit"></div>';
+  wrap.appendChild(div);
+}
+
+function removeRcp(n){var el=document.getElementById('rcp-'+n);if(el)el.remove();}
+
+function getDocTypes(){
+  var list=[];
+  if(document.getElementById('dt_chanote')&&document.getElementById('dt_chanote').checked)list.push('โฉนดที่ดิน');
+  if(document.getElementById('dt_ns3k')&&document.getElementById('dt_ns3k').checked)list.push('หนังสือรับรองการทำประโยชน์ (น.ส.3 ก.)');
+  if(document.getElementById('dt_ns3')&&document.getElementById('dt_ns3').checked)list.push('หนังสือรับรองการทำประโยชน์ (น.ส.3)');
+  if(document.getElementById('dt_condo')&&document.getElementById('dt_condo').checked)list.push('หนังสือกรรมสิทธิ์ห้องชุด');
+  if(document.getElementById('dt_other')&&document.getElementById('dt_other').checked&&gv('dt_other_val'))list.push(gv('dt_other_val'));
+  return list.join(' , ');
+}
+
+function getRecipients(){
+  var list=[];
+  document.getElementById('addr-recipients').children&&Array.prototype.slice.call(document.getElementById('addr-recipients').children).forEach(function(div){
+    var n=div.id.replace('rcp-','');
+    list.push({name:gv('rcp_name_'+n),addr:gv('rcp_addr_'+n),zip:gv('rcp_zip_'+n)});
+  });
+  return list;
+}
 
 function updateAttPreview(){
   var purposeList=[];
@@ -324,7 +379,7 @@ function genNotice(){
   var period=gv('n_period')||'12';
   var contractDate=thDate(gv('n_contract_date'));
   var regDate=thDate(gv('n_reg_date'));
-  var docType=gv('n_doc_type');
+  var docType=getDocTypes()||'โฉนดที่ดิน';
   var chanoteNo=gv('n_chanote_no')||'........';
   var landNo=gv('n_land_no')||'........';
   var tambon=gv('n_tambon')||'........';
@@ -382,11 +437,34 @@ function genNotice(){
   document.getElementById('doc-wrap').style.display='block';
 }
 
-function goEnvelope(){
-  // ส่งชื่อ+ที่อยู่ผู้รับไปที่ซองผ่าน sessionStorage
+function goReceipt(){
   try{
-    sessionStorage.setItem('env_r_name', document.getElementById('n_to').value||'');
-    sessionStorage.setItem('env_r_addr', document.getElementById('n_to_addr').value||'');
+    var rcps=getRecipients();
+    sessionStorage.setItem('env_recipients', JSON.stringify(rcps));
+    localStorage.setItem('env_recipients_shared', JSON.stringify(rcps));
+  }catch(e){}
+  location.href='ใบตอบรับ.html';
+}
+
+function openAllDocs(){
+  // บันทึก recipients ลง sessionStorage
+  try{
+    var rcps=getRecipients();
+    sessionStorage.setItem('env_recipients', JSON.stringify(rcps));
+    localStorage.setItem('env_recipients_shared', JSON.stringify(rcps));
+  }catch(e){}
+  // เปิดซองในแท็บใหม่
+  window.open('ซองจดหมาย.html','_blank');
+  // เปิดใบตอบรับในแท็บใหม่
+  window.open('ใบตอบรับ.html','_blank');
+  alert('เปิด 2 แท็บแล้ว:\n1. ซองจดหมาย\n2. ใบตอบรับ ป.133 ก.\n\nข้อมูลลูกค้าถูกส่งไปแล้วครับ');
+}
+
+function goEnvelope(){
+  try{
+    var rcps=getRecipients();
+    sessionStorage.setItem('env_recipients', JSON.stringify(rcps));
+    localStorage.setItem('env_recipients_shared', JSON.stringify(rcps));
   }catch(e){}
   location.href='ซองจดหมาย.html';
 }
@@ -399,6 +477,7 @@ setInterval(autoSave,2000);
 window.addEventListener('beforeunload',autoSave);
 
 // init
+addRecipient(); // ผู้รับคนแรก
 updateAttPreview();
 // ผูก event กับ field ที่ส่งผลต่อ preview
 ['n_purpose_house','n_purpose_farm','n_purpose_commercial','n_purpose_other','n_period','n_contract_date'].forEach(function(id){

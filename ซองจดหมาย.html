@@ -24,7 +24,7 @@ body{font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;background:#f0f0eb;
   body { background:#fff; }
   .no-print { display:none!important; }
   @page {
-    size: 23cm 11.7cm landscape;
+    size: 23cm 11.7cm;
     margin: 0;
   }
   .envelope-wrap {
@@ -48,18 +48,18 @@ body{font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;background:#f0f0eb;
   left: 0.8cm;
   width: 9cm;
   font-family: "TH Sarabun New","Sarabun",Arial,sans-serif;
-  font-size: 11pt;
+  font-size: 18pt;
   line-height: 1.5;
   color: #000;
 }
 .sender .label {
-  font-size: 9pt;
+  font-size: 18pt;
   color: #555;
   margin-bottom: 2pt;
   font-weight: 600;
 }
 .sender .name {
-  font-size: 12pt;
+  font-size: 18pt;
   font-weight: bold;
 }
 .sender .postcode {
@@ -67,7 +67,7 @@ body{font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;background:#f0f0eb;
   margin-top: 4pt;
   border: 1.5px solid #000;
   padding: 1pt 6pt;
-  font-size: 13pt;
+  font-size: 18pt;
   font-weight: bold;
   letter-spacing: 3px;
   border-radius: 3px;
@@ -80,18 +80,18 @@ body{font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;background:#f0f0eb;
   left: 7cm;
   right: 0.8cm;
   font-family: "TH Sarabun New","Sarabun",Arial,sans-serif;
-  font-size: 13pt;
+  font-size: 20pt;
   line-height: 1.65;
   color: #000;
 }
 .receiver .label {
-  font-size: 9pt;
+  font-size: 18pt;
   color: #555;
   margin-bottom: 2pt;
   font-weight: 600;
 }
 .receiver .name {
-  font-size: 14pt;
+  font-size: 20pt;
   font-weight: bold;
 }
 .receiver .postcode {
@@ -99,28 +99,13 @@ body{font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;background:#f0f0eb;
   margin-top: 4pt;
   border: 1.5px solid #000;
   padding: 1pt 6pt;
-  font-size: 14pt;
+  font-size: 20pt;
   font-weight: bold;
   letter-spacing: 4px;
   border-radius: 3px;
 }
 
-/* แสตมป์ placeholder */
-.stamp-box {
-  position: absolute;
-  top: 0.7cm;
-  right: 0.8cm;
-  width: 3cm;
-  height: 3cm;
-  border: 1.5px dashed #aaa;
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 9pt;
-  color: #aaa;
-  text-align: center;
-}
+
 
 /* เส้นแบ่งซ้าย-ขวา (ตกแต่ง) */
 .divider {
@@ -146,6 +131,8 @@ body{font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;background:#f0f0eb;
       <textarea id="s_addr">89/28 หมู่ 9 ต.ท่าเยี่ยม อ.โชคชัย จ.นครราชสีมา</textarea></div>
     <div class="fg"><label>รหัสไปรษณีย์</label>
       <input type="text" id="s_zip" value="30190" maxlength="5" inputmode="numeric"></div>
+    <div class="fg"><label>เบอร์โทรศัพท์ผู้ส่ง (ไม่บังคับ)</label>
+      <input type="text" id="s_tel" placeholder="เช่น 044-123456" inputmode="tel"></div>
   </div>
 
   <div class="card">
@@ -156,16 +143,15 @@ body{font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;background:#f0f0eb;
       <textarea id="r_addr" placeholder="บ้านเลขที่ ถนน ตำบล อำเภอ จังหวัด"></textarea></div>
     <div class="fg"><label>รหัสไปรษณีย์</label>
       <input type="text" id="r_zip" placeholder="เช่น 30000" maxlength="5" inputmode="numeric"></div>
+    <div class="fg"><label>เบอร์โทรศัพท์ผู้รับ (ไม่บังคับ)</label>
+      <input type="text" id="r_tel" placeholder="เช่น 081-234-5678" inputmode="tel"></div>
   </div>
 
   <button class="gen-btn" onclick="printEnv()">🖨 พิมพ์ซอง</button>
 </div>
 
 <div class="envelope-wrap" id="env">
-  <!-- แสตมป์ -->
-  <div class="stamp-box">แสตมป์</div>
-
-  <!-- เส้นแบ่ง -->
+    <!-- เส้นแบ่ง -->
   <div class="divider"></div>
 
   <!-- ผู้ส่ง -->
@@ -174,6 +160,7 @@ body{font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;background:#f0f0eb;
     <div class="name" id="e_s_name">บริษัท โชคชัย เงินด่วน จำกัด</div>
     <div id="e_s_addr">89/28 หมู่ 9 ต.ท่าเยี่ยม<br>อ.โชคชัย จ.นครราชสีมา</div>
     <div class="postcode" id="e_s_zip">30190</div>
+    <div id="e_s_tel" style="font-size:20pt;margin-top:4pt;display:none"></div>
   </div>
 
   <!-- ผู้รับ -->
@@ -182,6 +169,7 @@ body{font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;background:#f0f0eb;
     <div class="name" id="e_r_name">................................</div>
     <div id="e_r_addr">................................</div>
     <div class="postcode" id="e_r_zip">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+    <div id="e_r_tel" style="font-size:20pt;margin-top:4pt;display:none"></div>
   </div>
 </div>
 
@@ -195,9 +183,15 @@ function printEnv(){
   document.getElementById('e_s_name').textContent = gv('s_name');
   document.getElementById('e_s_addr').innerHTML = addrToHtml(gv('s_addr'));
   document.getElementById('e_s_zip').textContent = gv('s_zip')||'     ';
+  var sTel=gv('s_tel');
+  var eTel=document.getElementById('e_s_tel');
+  if(eTel){eTel.textContent=sTel?'โทร. '+sTel:'';eTel.style.display=sTel?'block':'none';}
   document.getElementById('e_r_name').textContent = gv('r_name')||'................................';
   document.getElementById('e_r_addr').innerHTML = addrToHtml(gv('r_addr'))||'................................';
   document.getElementById('e_r_zip').textContent = gv('r_zip')||'     ';
+  var rTel=gv('r_tel');
+  var eRTel=document.getElementById('e_r_tel');
+  if(eRTel){eRTel.textContent=rTel?'โทร. '+rTel:'';eRTel.style.display=rTel?'block':'none';}
 
   document.querySelector('.wrap').style.display='none';
   document.getElementById('env').style.display='block';
@@ -214,14 +208,37 @@ setInterval(autoSave,2000);
 window.addEventListener('beforeunload',autoSave);
 setTimeout(function(){
   autoRestore();
-  // รับข้อมูลจากหนังสือแจ้งไถ่ถอน
   try{
-    var rn=sessionStorage.getItem('env_r_name');
-    var ra=sessionStorage.getItem('env_r_addr');
-    if(rn){document.getElementById('r_name').value=rn;sessionStorage.removeItem('env_r_name');}
-    if(ra){document.getElementById('r_addr').value=ra;sessionStorage.removeItem('env_r_addr');}
+    var rcpStr=sessionStorage.getItem('env_recipients')||localStorage.getItem('env_recipients_shared');
+    if(rcpStr){
+      sessionStorage.removeItem('env_recipients');
+      var rcps=JSON.parse(rcpStr);
+      if(rcps.length>0){
+        document.getElementById('r_name').value=rcps[0].name||'';
+        document.getElementById('r_addr').value=rcps[0].addr||'';
+        document.getElementById('r_zip').value=rcps[0].zip||'';
+        // ถ้ามีหลายคน แสดงปุ่ม
+        if(rcps.length>1){
+          var info=document.createElement('div');
+          info.style.cssText='background:#fff3cd;border:1px solid #ffc107;border-radius:8px;padding:10px;margin-bottom:10px;font-size:13px';
+          info.innerHTML='<b>📌 มีผู้รับ '+rcps.length+' คน</b> กดปุ่มด้านล่างเพื่อพิมพ์ซองแต่ละคน<br>'
+            +rcps.map(function(r,i){return '<button onclick="loadRcp('+i+')" style="margin:3px;padding:5px 10px;background:#1a3a2a;color:#fff;border:none;border-radius:5px;cursor:pointer;font-family:inherit;font-size:12px">ซอง '+(i+1)+': '+r.name+'</button>';}).join('');
+          document.querySelector('.wrap').insertBefore(info, document.querySelector('.card'));
+          window._rcps=rcps;
+        }
+      }
+    }
   }catch(ex){}
 },100);
+
+function loadRcp(i){
+  var r=window._rcps&&window._rcps[i];
+  if(!r)return;
+  document.getElementById('r_name').value=r.name||'';
+  document.getElementById('r_addr').value=r.addr||'';
+  document.getElementById('r_zip').value=r.zip||'';
+  document.getElementById('r_tel').value=r.tel||'';
+}
 </script>
 </body>
 </html>

@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>ใบตอบรับ ป.133 ก.</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;font-size:15px;background:#f0f0eb}
+.wrap{max-width:700px;margin:0 auto;padding:16px}
+.card{background:#fff;border-radius:14px;padding:16px;margin-bottom:12px;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.ct{font-size:13px;font-weight:700;color:#1a3a2a;background:#e8f5e8;border-radius:8px;padding:6px 12px;margin-bottom:12px}
+.fg{margin-bottom:8px}
+.fg label{display:block;font-size:12px;color:#555;margin-bottom:3px;font-weight:600}
+.fg input{width:100%;padding:9px 11px;font-size:14px;border:1px solid #ccc;border-radius:7px;font-family:inherit;background:#fafaf7}
+.btn{width:100%;padding:13px;border:none;border-radius:10px;font-size:15px;font-family:inherit;font-weight:700;cursor:pointer;margin-top:6px}
+.btn-red{background:#c0392b;color:#fff}
+.btn-green{background:#1a3a2a;color:#fff}
+.btn-blue{background:#2980b9;color:#fff}
+.back-btn{display:block;padding:11px;text-align:center;background:#eee;border-radius:8px;margin-bottom:12px;cursor:pointer;font-size:14px;border:none;font-family:inherit;width:100%}
+
+/* EDITOR */
+#ed{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:#222;z-index:9999;flex-direction:column}
+#ed.show{display:flex}
+.ed-top{background:#1a3a2a;color:#fff;padding:10px 14px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;flex-shrink:0}
+.ed-top button{padding:7px 14px;border:none;border-radius:6px;font-family:inherit;font-size:13px;cursor:pointer;font-weight:700}
+.ed-tabs{display:flex;gap:6px;background:#333;padding:8px 14px;flex-shrink:0}
+.ed-tabs button{padding:6px 18px;border:none;border-radius:6px;font-family:inherit;font-size:14px;cursor:pointer;font-weight:700;background:#555;color:#fff}
+.ed-tabs button.act{background:#4caf50;color:#fff}
+#paper-outer{flex:1;overflow:auto;display:flex;align-items:flex-start;justify-content:center;padding:20px;background:#444}
+
+/* กระดาษ */
+#paper{
+  width:14.9cm;height:11.1cm;
+  position:relative;background:#fffef5;
+  border:2px solid #222;flex-shrink:0;
+  background-image:linear-gradient(rgba(100,160,255,0.2) 1px,transparent 1px),linear-gradient(90deg,rgba(100,160,255,0.2) 1px,transparent 1px);
+  background-size:1cm 1cm;
+}
+
+/* field */
+.fld{position:absolute;cursor:move;user-select:none;z-index:10;display:inline-block;touch-action:none}
+.fld .ftag{position:absolute;top:-18px;left:0;font-size:9px;background:#2980b9;color:#fff;padding:1px 5px;border-radius:3px;white-space:nowrap;font-family:Arial;pointer-events:none}
+.fld.sel .ftag{background:#e74c3c}
+.fld.sel{outline:2px solid #e74c3c}
+/* zip container */
+.zip-row{display:flex;align-items:center}
+.zip-cell{display:flex;align-items:center;justify-content:center;font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;font-weight:normal}
+
+#info{background:#111;color:#fff;padding:8px 14px;font-size:13px;display:flex;align-items:center;gap:12px;flex-shrink:0;flex-wrap:wrap}
+#info .coord{color:#4caf50;font-family:monospace}
+#info select,#info input{background:#333;color:#fff;border:1px solid #555;border-radius:5px;padding:4px 8px;font-family:monospace;font-size:13px}
+#save-ok{color:#4caf50;font-weight:700;display:none}
+
+/* crosshair */
+.ch{position:absolute;pointer-events:none;z-index:5;background:rgba(255,80,80,0.35)}
+.ch-h{height:1px;left:0;right:0}
+.ch-v{width:1px;top:0;bottom:0}
+
+/* export */
+#export-box{display:none;background:#111;color:#4caf50;font-family:monospace;font-size:11px;padding:12px;margin:8px 14px;border-radius:8px;white-space:pre;overflow:auto;max-height:200px;flex-shrink:0}
+
+/* PRINT */
+@media print{
+  *{margin:0!important;padding:0!important}
+  body,html{background:#fff}
+  .no-print,.wrap,#ed{display:none!important}
+  @page{size:14.9cm 11.1cm;margin:0}
+  #pp{display:block!important;width:14.9cm;height:11.1cm;position:relative;overflow:hidden}
+  .pf{position:absolute;color:#000;white-space:nowrap;font-family:"TH Sarabun New","Sarabun",Arial,sans-serif}
+}
+#pp{display:none;width:14.9cm;height:11.1cm;position:relative;overflow:hidden}
+</style>
+</head>
+<body>
+
+<!-- FORM -->
+<div class="wrap no-print">
+  <button class="back-btn" onclick="location.href='index.html'">← หน้าหลัก</button>
+  <div class="card">
+    <div class="ct">📤 หน้า 1 — ผู้ส่ง</div>
+    <div class="fg"><label>บรรทัด 1</label><input id="s1" value="บริษัท โชคชัย เงินด่วน จำกัด (สำนักงานใหญ่)"></div>
+    <div class="fg"><label>บรรทัด 2</label><input id="s2" value="89/28 หมู่ 9 ต.ท่าเยี่ยม อ.โชคชัย จ.นครราชสีมา"></div>
+    <div class="fg"><label>บรรทัด 3</label><input id="s3" placeholder="ว่างถ้าไม่มี"></div>
+    <div class="fg"><label>บรรทัด 4</label><input id="s4" placeholder="ว่างถ้าไม่มี"></div>
+    <div class="fg"><label>รหัสไปรษณีย์</label><input id="szip" value="30190" maxlength="5"></div>
+  </div>
+  <div class="card">
+    <div class="ct">📥 หน้า 2 — ผู้รับ</div>
+    <div class="fg"><label>ชื่อ</label><input id="rn" placeholder="ชื่อ-นามสกุล"></div>
+    <div class="fg"><label>ที่อยู่ 1</label><input id="ra1" placeholder="บ้านเลขที่ ถนน แขวง/ตำบล"></div>
+    <div class="fg"><label>ที่อยู่ 2</label><input id="ra2" placeholder="เขต/อำเภอ จังหวัด"></div>
+    <div class="fg"><label>รหัสไปรษณีย์</label><input id="rzip" placeholder="เช่น 10110" maxlength="5"></div>
+  </div>
+  <button class="btn btn-blue" onclick="openEd()">🎯 จัดตำแหน่ง (Editor)</button>
+  <button class="btn btn-red" onclick="doPrint(1)" style="margin-top:6px">🖨 พิมพ์หน้า 1</button>
+  <button class="btn btn-green" onclick="doPrint(2)" style="margin-top:6px">🖨 พิมพ์หน้า 2</button>
+</div>
+
+<!-- EDITOR -->
+<div id="ed">
+  <div class="ed-top">
+    <button onclick="closeEd()" style="background:#555;color:#fff">✕ ปิด</button>
+    <span style="font-weight:700">Editor ป.133 ก.</span>
+    <span class="coord" id="coord">x:- y:-</span>
+    <button onclick="savePos()" style="background:#4caf50;color:#fff">📌 Save</button>
+    <button onclick="doExport()" style="background:#f39c12;color:#fff">📋 Export JSON</button>
+    <button onclick="doLockExport()" style="background:#8e44ad;color:#fff">🔒 ส่งให้ฝัง (Lock)</button>
+    <button onclick="doPrintEd()" style="background:#c0392b;color:#fff">🖨 ทดลองพิมพ์</button>
+    <span id="save-ok">✅ Saved!</span>
+  </div>
+  <div class="ed-tabs">
+    <button id="t1" class="act" onclick="setTab(1)">หน้า 1 — ผู้ส่ง</button>
+    <button id="t2" onclick="setTab(2)">หน้า 2 — ผู้รับ</button>
+  </div>
+  <div id="info">
+    <span class="coord" id="selinfo">เลือก field แล้วลาก</span>
+    <span id="font-wrap" style="display:none">
+      font: <input type="number" id="fsize" value="16" min="6" max="28" step="0.5" style="width:60px" oninput="setFont()">pt
+    </span>
+  </div>
+  <div id="paper-outer"><div id="paper">
+    <div class="ch ch-h" id="chh" style="display:none"></div>
+    <div class="ch ch-v" id="chv" style="display:none"></div>
+  </div></div>
+  <div id="export-box"></div>
+</div>
+
+<!-- PRINT -->
+<div id="pp"></div>
+
+<script>
+var PW=14.9,PH=11.1,curTab=1,selEl=null,isDrag=false,dox=0,doy=0;
+var LS='rcpt_pos_v5';
+
+// ตำแหน่ง default
+var DEFS={
+  1:[
+    {id:'s1', label:'บรรทัด 1', key:'s1', x:6.53, y:3.61, f:16},
+    {id:'s2', label:'บรรทัด 2', key:'s2', x:6.53, y:4.71, f:16},
+    {id:'s3', label:'บรรทัด 3', key:'s3', x:6.47, y:5.77, f:16},
+    {id:'s4', label:'บรรทัด 4', key:'s4', x:6.47, y:6.71, f:16},
+    {id:'sz', label:'รหัสไปรษณีย์', key:'szip', x:10.02, y:8.44, f:16, zip:true, cells:5, cw:0.92}
+  ],
+  2:[
+    {id:'rn',  label:'ชื่อ',     key:'rn',  x:1.71, y:1.48, f:14},
+    {id:'ra1', label:'ที่อยู่ 1', key:'ra1', x:2.13, y:2.09, f:14},
+    {id:'ra2', label:'ที่อยู่ 2', key:'ra2', x:0.53, y:2.69, f:14},
+    {id:'rz', label:'รหัสไปรษณีย์', key:'rzip', x:7.49, y:3.39, f:14, zip:true, cells:5, cw:0.60}
+  ]
+};
+
+function gv(id){var e=document.getElementById(id);return e?e.value:''}
+function getData(){
+  return {s1:gv('s1'),s2:gv('s2'),s3:gv('s3'),s4:gv('s4'),szip:gv('szip').padEnd(5,' '),
+    rn:gv('rn'),ra1:gv('ra1'),ra2:gv('ra2'),rzip:gv('rzip').padEnd(5,' ')};
+}
+
+function loadPos(){
+  try{
+    var s=localStorage.getItem(LS);
+    if(s){
+      var p=JSON.parse(s);
+      if(p&&p[1]&&p[2]&&p._v===2) return p;
+    }
+  }catch(e){}
+  return JSON.parse(JSON.stringify(DEFS));
+}
+
+function getPos(){
+  // อ่านจาก DOM elements ที่ลากอยู่
+  var paper=document.getElementById('paper');
+  var pw=paper.offsetWidth,ph=paper.offsetHeight;
+  var pos=loadPos();
+  [1,2].forEach(function(p){
+    paper.querySelectorAll('.fld[data-p="'+p+'"]').forEach(function(el){
+      var fid=el.dataset.fid;
+      for(var i=0;i<pos[p].length;i++){
+        if(pos[p][i].id===fid){
+          pos[p][i].x=Math.round(parseFloat(el.style.left)/pw*PW*100)/100;
+          pos[p][i].y=Math.round(parseFloat(el.style.top)/ph*PH*100)/100;
+          if(!pos[p][i].zip) pos[p][i].f=parseInt(el.style.fontSize)||16;
+          break;
+        }
+      }
+    });
+  });
+  return pos;
+}
+
+function savePos(){
+  var _p=getPos();_p._v=2;localStorage.setItem(LS,JSON.stringify(_p));
+  var ok=document.getElementById('save-ok');
+  ok.style.display='inline';// ล้าง saved layout เก่าที่ไม่มี version (จะได้ใช้ DEFS ใหม่)
+try{var _os=localStorage.getItem(LS);if(_os){var _op=JSON.parse(_os);if(!_op._v)localStorage.removeItem(LS);}}catch(e){}
+
+setTimeout(function(){ok.style.display='none'},2000);
+}
+
+function doExport(){
+  var box=document.getElementById('export-box');
+  box.style.display='block';
+  box.textContent=JSON.stringify(getPos(),null,2);
+}
+
+function doLockExport(){
+  savePos();
+  var pos=getPos();
+  var box=document.getElementById('export-box');
+  box.style.display='block';
+  box.style.border='2px solid #8e44ad';
+  var json=JSON.stringify(pos,null,2);
+  box.textContent='// ===== COPY ข้อความนี้ทั้งหมดส่งให้ฝัง =====\n'+json;
+  // copy to clipboard
+  try{navigator.clipboard.writeText(json);box.textContent+='\n\n✅ Copy ไปแล้ว! ส่งให้ผมได้เลย';}
+  catch(e){box.textContent+='\n\n⚠️ กด Ctrl+A แล้ว Ctrl+C เพื่อ copy';}
+}
+
+// ── RENDER ──
+function render(){
+  var paper=document.getElementById('paper');
+  paper.querySelectorAll('.fld').forEach(function(e){e.remove()});
+  var pos=loadPos();
+  var data=getData();
+  var pw=paper.offsetWidth,ph=paper.offsetHeight;
+
+  [1,2].forEach(function(p){
+    (pos[p]||DEFS[p]).forEach(function(f){
+      var el=document.createElement('div');
+      el.className='fld';
+      el.dataset.p=p;
+      el.dataset.fid=f.id;
+      el.style.left=(f.x/PW*pw)+'px';
+      el.style.top=(f.y/PH*ph)+'px';
+      el.style.visibility=p===curTab?'visible':'hidden';
+
+      // label badge
+      var tag=document.createElement('span');
+      tag.className='ftag';tag.textContent=f.label;
+      el.appendChild(tag);
+
+      if(f.zip){
+        // ก้อนรหัสไปรษณีย์ — row เดียว 5 ช่อง
+        var val=data[f.key]||'     ';
+        var row=document.createElement('div');
+        row.className='zip-row';
+        var cellPx=f.cw/PW*pw;
+        for(var i=0;i<f.cells;i++){
+          var cell=document.createElement('div');
+          cell.className='zip-cell';
+          cell.style.width=cellPx+'px';
+          cell.style.fontSize=f.f+'pt';
+          cell.textContent=val[i]||' ';
+          row.appendChild(cell);
+        }
+        el.appendChild(row);
+        el.style.fontSize=f.f+'pt';
+      } else {
+        el.style.fontSize=f.f+'pt';
+        el.style.fontFamily='"TH Sarabun New","Sarabun",Arial,sans-serif';
+        el.style.whiteSpace='nowrap';
+        var txt=document.createTextNode(data[f.key]||('[ '+f.label+' ]'));
+        el.appendChild(txt);
+      }
+
+      el.addEventListener('mousedown',onDragStart);
+      el.addEventListener('touchstart',onTouchStart,{passive:false});
+      paper.appendChild(el);
+    });
+  });
+
+  // mousemove coord + crosshair
+  paper.onmousemove=function(e){
+    var r=paper.getBoundingClientRect();
+    var x=((e.clientX-r.left)/r.width*PW).toFixed(2);
+    var y=((e.clientY-r.top)/r.height*PH).toFixed(2);
+    document.getElementById('coord').textContent='x:'+x+'  y:'+y+' cm';
+    var chh=document.getElementById('chh'),chv=document.getElementById('chv');
+    chh.style.display='block';chv.style.display='block';
+    chh.style.top=(e.clientY-r.top)+'px';
+    chv.style.left=(e.clientX-r.left)+'px';
+  };
+  paper.onmouseleave=function(){
+    document.getElementById('chh').style.display='none';
+    document.getElementById('chv').style.display='none';
+  };
+  paper.onclick=function(e){if(e.target===paper)desel();};
+}
+
+function setTab(p){
+  curTab=p;
+  document.getElementById('t1').className=p===1?'act':'';
+  document.getElementById('t2').className=p===2?'act':'';
+  document.querySelectorAll('.fld').forEach(function(el){
+    el.style.visibility=parseInt(el.dataset.p)===p?'visible':'hidden';
+  });
+  desel();
+}
+
+// ── DRAG ──
+function onDragStart(e){
+  if(e.button!==0)return;
+  e.preventDefault();e.stopPropagation();
+  selEl=this;selEl.classList.add('sel');showPanel();
+  isDrag=true;
+  var paper=document.getElementById('paper');
+  var r=paper.getBoundingClientRect();
+  dox=e.clientX-parseFloat(selEl.style.left)-r.left;
+  doy=e.clientY-parseFloat(selEl.style.top)-r.top;
+}
+function onTouchStart(e){
+  e.preventDefault();e.stopPropagation();
+  selEl=this;selEl.classList.add('sel');showPanel();
+  isDrag=true;
+  var paper=document.getElementById('paper');
+  var r=paper.getBoundingClientRect();
+  var t=e.touches[0];
+  dox=t.clientX-parseFloat(selEl.style.left)-r.left;
+  doy=t.clientY-parseFloat(selEl.style.top)-r.top;
+}
+document.addEventListener('mousemove',function(e){
+  if(!isDrag||!selEl)return;
+  var paper=document.getElementById('paper');
+  var r=paper.getBoundingClientRect();
+  var x=Math.max(0,Math.min(e.clientX-r.left-dox,r.width-2));
+  var y=Math.max(0,Math.min(e.clientY-r.top-doy,r.height-2));
+  selEl.style.left=x+'px';selEl.style.top=y+'px';
+  document.getElementById('selinfo').textContent='x:'+(x/r.width*PW).toFixed(2)+' y:'+(y/r.height*PH).toFixed(2)+' cm';
+});
+document.addEventListener('touchmove',function(e){
+  if(!isDrag||!selEl)return;
+  e.preventDefault();
+  var paper=document.getElementById('paper');
+  var r=paper.getBoundingClientRect();
+  var t=e.touches[0];
+  var x=Math.max(0,Math.min(t.clientX-r.left-dox,r.width-2));
+  var y=Math.max(0,Math.min(t.clientY-r.top-doy,r.height-2));
+  selEl.style.left=x+'px';selEl.style.top=y+'px';
+},{passive:false});
+document.addEventListener('mouseup',function(){isDrag=false;});
+document.addEventListener('touchend',function(){isDrag=false;});
+
+function desel(){
+  document.querySelectorAll('.fld').forEach(function(e){e.classList.remove('sel')});
+  selEl=null;
+  document.getElementById('font-wrap').style.display='none';
+  document.getElementById('selinfo').textContent='เลือก field แล้วลาก';
+}
+function showPanel(){
+  if(!selEl)return;
+  document.getElementById('font-wrap').style.display='inline';
+  document.getElementById('fsize').value=parseInt(selEl.style.fontSize)||16;
+}
+function setFont(){
+  if(!selEl)return;
+  var f=parseFloat(document.getElementById('fsize').value)||16;
+  selEl.style.fontSize=f+'pt';
+  // ปรับ zip cells ด้วย
+  selEl.querySelectorAll('.zip-cell').forEach(function(c){c.style.fontSize=f+'pt';});
+}
+
+// ── OPEN/CLOSE ──
+function openEd(){
+  document.getElementById('ed').classList.add('show');
+  setTimeout(render,80);
+}
+function closeEd(){document.getElementById('ed').classList.remove('show');}
+
+// ── PRINT ──
+function doPrint(page){
+  var pos=getPos();
+  var data=getData();
+  var pp=document.getElementById('pp');
+  pp.innerHTML='';
+  (pos[page]||DEFS[page]).forEach(function(f){
+    if(f.zip){
+      var val=data[f.key]||'';
+      var gap=f.cw||0.89;
+      for(var i=0;i<f.cells;i++){
+        var ch=val[i]||'';
+        if(!ch.trim())continue;
+        var el=document.createElement('div');
+        el.className='pf';
+        el.style.cssText='position:absolute;left:'+(f.x+i*gap)+'cm;top:'+f.y+'cm;font-size:'+f.f+'pt;font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;text-align:center;width:'+gap+'cm;';
+        el.textContent=ch;
+        pp.appendChild(el);
+      }
+    } else {
+      var v=data[f.key]||'';if(!v.trim())return;
+      var el=document.createElement('div');
+      el.className='pf';
+      el.style.cssText='position:absolute;left:'+f.x+'cm;top:'+f.y+'cm;font-size:'+f.f+'pt;font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;white-space:nowrap;';
+      el.textContent=v;
+      pp.appendChild(el);
+    }
+  });
+  pp.style.display='block';
+  setTimeout(function(){window.print();pp.style.display='none';},300);
+}
+function doPrintEd(){savePos();doPrint(curTab);}
+
+// ── FORM SAVE ──
+var FK=['s1','s2','s3','s4','szip','rn','ra1','ra2','rzip'];
+function saveForm(){try{var d={};FK.forEach(function(k){var e=document.getElementById(k);if(e)d[k]=e.value;});localStorage.setItem('rcpt_form',JSON.stringify(d));}catch(e){}}
+function restoreForm(){try{var s=localStorage.getItem('rcpt_form');if(!s)return;var d=JSON.parse(s);FK.forEach(function(k){var e=document.getElementById(k);if(e&&d[k]!==undefined)e.value=d[k];});}catch(e){}}
+setInterval(saveForm,2000);
+window.addEventListener('beforeunload',saveForm);
+setTimeout(function(){
+  restoreForm();
+  try{
+    var rcps=JSON.parse(sessionStorage.getItem('env_recipients')||localStorage.getItem('env_recipients_shared')||'[]');
+    if(rcps&&rcps.length&&rcps[0].name){
+      document.getElementById('rn').value=rcps[0].name;
+      var a=(rcps[0].addr||'').replace(/\r/g,'').split('\n');
+      document.getElementById('ra1').value=a[0]||'';
+      document.getElementById('ra2').value=a[1]||'';
+      document.getElementById('rzip').value=rcps[0].zip||'';
+    }
+  }catch(e){}
+},100);
+</script>
+</body>
+</html>

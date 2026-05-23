@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>โนติสทนายความ — โชคชัย เงินด่วน</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;font-size:15px;background:#f0f0eb;color:#111}
+.wrap{max-width:720px;margin:0 auto;padding:16px}
+.card{background:#fff;border-radius:14px;padding:18px;margin-bottom:12px;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.ct{font-size:13px;font-weight:700;color:#1a3a2a;background:#e8f5e8;border-radius:8px;padding:6px 12px;margin-bottom:12px}
+.fg{margin-bottom:10px}
+.fg label{display:block;font-size:12px;color:#555;margin-bottom:3px;font-weight:600}
+.fg input,.fg select,.fg textarea{width:100%;padding:9px 11px;font-size:14px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7}
+.fg textarea{min-height:60px;resize:vertical}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.att-row{display:flex;gap:8px;align-items:center;margin-bottom:6px}
+.att-row input{flex:1;padding:8px;font-size:14px;border:1px solid #ccc;border-radius:6px;font-family:inherit}
+.att-row button{background:#fee;border:1px solid #fcc;border-radius:6px;color:#c00;padding:6px 10px;cursor:pointer;font-size:13px}
+.add-btn{width:100%;padding:10px;background:#e8f5e8;border:2px dashed #4caf50;border-radius:8px;font-size:13px;font-family:inherit;color:#1a3a2a;font-weight:700;cursor:pointer;margin-top:4px}
+.gen-btn{width:100%;padding:13px;background:#1a3a2a;color:#fff;border:none;border-radius:10px;font-size:15px;font-family:inherit;font-weight:700;cursor:pointer;margin-top:6px}
+.btn-red{background:#c0392b}
+.btn-green{background:#1a3a2a}
+.btn-blue{background:#2980b9}
+.back-btn{display:block;padding:11px;text-align:center;background:#eee;border-radius:8px;margin-bottom:12px;cursor:pointer;font-size:14px;border:none;font-family:inherit;width:100%}
+
+/* ── PRINT: เอกสาร A4 ── */
+@media print{
+  .no-print{display:none!important}
+  body{background:#fff}
+  @page{size:A4 portrait;margin:2cm 2.5cm}
+  .doc-page{display:block!important}
+}
+.doc-page{display:none;font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;font-size:14pt;line-height:1.8;color:#000}
+
+/* header บริษัทตราด้านซ้าย */
+.law-header{display:flex;align-items:center;gap:16px;margin-bottom:6pt;padding-bottom:8pt;border-bottom:1.5pt solid #000}
+.law-logo{width:70pt;height:70pt;object-fit:contain;flex-shrink:0}
+.law-info{flex:1;line-height:1.5;font-size:13pt}
+.law-info .firm{font-size:16pt;font-weight:bold}
+.law-date{text-align:right;margin:12pt 0 8pt;font-size:14pt}
+.law-subject table{width:100%;border-collapse:collapse;margin-bottom:8pt}
+.law-subject td{vertical-align:top;padding:1pt 0;font-size:14pt}
+.law-subject td:first-child{width:7em;font-weight:bold}
+.law-ref{margin-bottom:8pt}
+.law-ref .ref-title{font-weight:bold;font-size:14pt}
+.law-ref ol{margin-left:2em;font-size:14pt}
+.law-body p{text-indent:2.5cm;text-align:justify;margin-bottom:6pt;font-size:14pt}
+.law-sign{text-align:center;margin-top:1.5cm}
+.law-sign p{font-size:14pt;line-height:2}
+.law-sign .sign-name{border-top:none}
+</style>
+</head>
+<body>
+
+<!-- FORM -->
+<div class="wrap no-print" id="form-wrap">
+  <button class="back-btn" onclick="location.href='index.html'">← หน้าหลัก</button>
+
+  <!-- ข้อมูลทนาย -->
+  <div class="card">
+    <div class="ct">⚖️ สำนักงานทนายความ</div>
+    <div class="fg"><label>ชื่อสำนักงานทนายความ</label>
+      <input id="law_firm" value="สำนักงานทนายความพัตชรัตน์ สุวรรณนิธิภัทร์"></div>
+    <div class="fg"><label>ที่อยู่สำนักงาน</label>
+      <input id="law_addr" value="เลขที่ 243 ถ.ประดิษฐ์ปานะ อ.นางรอง จ.บุรีรัมย์"></div>
+    <div class="fg"><label>โทรศัพท์</label>
+      <input id="law_tel" value="093-2391651"></div>
+    <div class="fg"><label>ชื่อทนายความ (ผู้ลงนาม)</label>
+      <input id="law_sign" value="นางสาวพัตชรัตน์ สุวรรณนิธิภัทร์"></div>
+  </div>
+
+  <!-- ประเภทโนติส -->
+  <div class="card">
+    <div class="ct">📋 ประเภทหนังสือ</div>
+    <div class="fg"><label>ประเภท</label>
+      <select id="notice_type" onchange="onTypeChange(this.value)">
+        <option value="mortgage">แจ้งให้ชำระหนี้และบอกกล่าวบังคับจำนอง</option>
+        <option value="loan">ให้ชำระหนี้ตามสัญญาเงินกู้</option>
+        <option value="sellback">ให้ชำระหนี้ตามสัญญาขายฝาก</option>
+      </select></div>
+    <div class="fg"><label>วันที่หนังสือ</label>
+      <input type="date" id="notice_date"></div>
+    <div class="fg"><label>กำหนดเวลา (วัน)</label>
+      <input id="notice_days" value="60"></div>
+  </div>
+
+  <!-- ผู้รับ -->
+  <div class="card">
+    <div class="ct">👤 ผู้รับหนังสือ (ลูกหนี้)</div>
+    <div class="fg"><label>เรียน (ชื่อ-นามสกุล)</label>
+      <textarea id="to_name" rows="2" placeholder="เช่น นายไสว มาลัย ผู้กู้"></textarea></div>
+    <div class="fg"><label>ที่อยู่ (สำหรับซอง)</label>
+      <textarea id="to_addr" rows="2" placeholder="ที่อยู่จ่าหน้าซอง"></textarea></div>
+    <div class="fg"><label>รหัสไปรษณีย์</label>
+      <input id="to_zip" maxlength="5" placeholder="เช่น 30000"></div>
+  </div>
+
+  <!-- ข้อมูลบริษัทผู้ให้กู้ -->
+  <div class="card">
+    <div class="ct">🏢 บริษัทผู้ให้กู้</div>
+    <div class="fg"><label>ชื่อบริษัท</label>
+      <input id="co_name" value="บริษัท โชคชัย เงินด่วน จำกัด"></div>
+  </div>
+
+  <!-- สัญญาอ้างถึง -->
+  <div class="card">
+    <div class="ct">📎 สัญญาที่อ้างถึง</div>
+    <div id="refs-wrap"></div>
+    <button class="add-btn" onclick="addRef()">+ เพิ่มสัญญาอ้างถึง</button>
+  </div>
+
+  <!-- รายละเอียดหนี้ -->
+  <div class="card">
+    <div class="ct">💰 รายละเอียดหนี้</div>
+    <div class="fg"><label>จำนวนเงิน (บาท)</label>
+      <input id="debt_amt" inputmode="numeric" placeholder="เช่น 1000000" oninput="onDebtChange()"></div>
+    <div class="fg"><label>จำนวนเงิน (ตัวอักษร)</label>
+      <input id="debt_amt_t" readonly></div>
+    <div class="fg"><label>อัตราดอกเบี้ย (%/ปี)</label>
+      <input id="debt_rate" value="15"></div>
+    <div class="fg"><label>วันที่ทำสัญญา (ครั้งแรก)</label>
+      <input type="date" id="debt_date1"></div>
+    <!-- เพิ่มยอดกู้ครั้งต่อมา -->
+    <div id="extra-loans-wrap"></div>
+    <button class="add-btn" onclick="addExtraLoan()">+ เพิ่มยอดกู้ครั้งต่อมา</button>
+  </div>
+
+  <!-- ที่ดินค้ำประกัน (ถ้ามี) -->
+  <div class="card" id="land-card">
+    <div class="ct">🏠 ที่ดินค้ำประกัน</div>
+    <div class="fg"><label>ประเภทเอกสาร</label>
+      <select id="land_doc_type">
+        <option value="โฉนดที่ดิน">โฉนดที่ดิน</option>
+        <option value="น.ส.3 ก.">น.ส.3 ก.</option>
+        <option value="น.ส.3">น.ส.3</option>
+      </select></div>
+    <div class="fg"><label>เลขที่โฉนด (คั่น , ถ้าหลายแปลง)</label>
+      <input id="land_chanote" placeholder="เช่น 315883, 315884"></div>
+    <div class="fg"><label>เลขที่ดิน (คั่น ,)</label>
+      <input id="land_no" placeholder="เช่น 1452, 1453"></div>
+    <div class="row2">
+      <div class="fg"><label>ตำบล</label><input id="land_tambon" placeholder="ตำบล"></div>
+      <div class="fg"><label>อำเภอ</label><input id="land_amphoe" placeholder="อำเภอ"></div>
+    </div>
+    <div class="fg"><label>จังหวัด</label><input id="land_province" value="นครราชสีมา"></div>
+    <div class="fg"><label>พร้อมสิ่งปลูกสร้าง</label>
+      <select id="land_building">
+        <option value="yes">มีสิ่งปลูกสร้าง</option>
+        <option value="no">ไม่มีสิ่งปลูกสร้าง</option>
+      </select></div>
+  </div>
+
+  <button class="gen-btn btn-green" onclick="genNotice()">📄 สร้างหนังสือโนติส</button>
+  <button class="gen-btn btn-blue" onclick="openAllDocs()" style="margin-top:6px">🚀 เปิดซอง + ใบตอบรับพร้อมกัน</button>
+</div>
+
+<!-- DOC PREVIEW -->
+<div id="doc-wrap" style="display:none">
+  <div class="no-print" style="background:#1a3a2a;color:#fff;padding:12px 16px;display:flex;gap:10px;align-items:center">
+    <button onclick="backToForm()" style="background:#fff;color:#1a3a2a;border:none;border-radius:6px;padding:8px 16px;cursor:pointer;font-family:inherit;font-weight:700">← แก้ไข</button>
+    <button onclick="window.print()" style="background:#4caf50;color:#fff;border:none;border-radius:6px;padding:8px 16px;cursor:pointer;font-family:inherit;font-weight:700">🖨 พิมพ์</button>
+    <span style="font-size:14px">หนังสือโนติส</span>
+  </div>
+  <div id="doc-content" style="background:#fff;padding:2cm 2.5cm;min-height:29.7cm;max-width:21cm;margin:0 auto"></div>
+</div>
+
+<script>
+var refC=0,loanC=0;
+
+var THMONTHS=['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+
+function gv(id){var e=document.getElementById(id);return e?e.value.trim():'';}
+
+function thDate(s){
+  if(!s)return '......';
+  var p=s.split('-');if(p.length!==3)return s;
+  return parseInt(p[2])+' '+THMONTHS[parseInt(p[1])-1]+' '+(parseInt(p[0])+543);
+}
+
+function fmtNum(s){var n=parseFloat(String(s).replace(/,/g,''));return isNaN(n)?s:n.toLocaleString('th-TH');}
+
+function toBaht(n){
+  n=parseInt(String(n).replace(/[,\s]/g,''));
+  if(isNaN(n)||n===0)return '';
+  var u=['','หนึ่ง','สอง','สาม','สี่','ห้า','หก','เจ็ด','แปด','เก้า'];
+  var p=['','สิบ','ร้อย','พัน','หมื่น','แสน','ล้าน'];
+  function t(n){
+    if(n===0)return'';
+    if(n>=1000000)return t(Math.floor(n/1000000))+'ล้าน'+t(n%1000000);
+    var r='',d=String(n).split('');d.reverse();
+    for(var i=0;i<d.length;i++){
+      if(d[i]==='0')continue;
+      r=u[parseInt(d[i])]+p[i]+r;
+      if(i===1&&d[i]==='1')r='สิบ'+r.slice(2);
+      if(i===1&&d[i]==='2')r='ยี่สิบ'+r.slice(4);
+    }
+    return r;
+  }
+  return t(n)+'บาทถ้วน';
+}
+
+function onDebtChange(){
+  var amt=gv('debt_amt').replace(/,/g,'');
+  var el=document.getElementById('debt_amt_t');
+  if(el)el.value=amt?toBaht(parseInt(amt)):'';
+}
+
+function onTypeChange(v){
+  var lc=document.getElementById('land-card');
+  lc.style.display=(v==='mortgage'||v==='sellback')?'block':'none';
+}
+
+function addRef(val,date){
+  refC++;
+  var n=refC;
+  var wrap=document.getElementById('refs-wrap');
+  var div=document.createElement('div');
+  div.id='ref-'+n;
+  div.className='att-row';
+  div.innerHTML='<input type="text" id="ref_val_'+n+'" value="'+(val||'')+'" placeholder="เช่น สัญญากู้ยืมเงินและสัญญาจำนอง">'
+    +'<input type="date" id="ref_date_'+n+'" value="'+(date||'')+'" style="width:140px;flex:none">'
+    +'<button onclick="removeRef('+n+')">× ลบ</button>';
+  wrap.appendChild(div);
+}
+
+function removeRef(n){var el=document.getElementById('ref-'+n);if(el)el.remove();}
+
+function addExtraLoan(amt,amtT,date){
+  loanC++;
+  var n=loanC;
+  var wrap=document.getElementById('extra-loans-wrap');
+  var div=document.createElement('div');
+  div.id='loan-'+n;
+  div.style.cssText='border:1px solid #dde8dd;border-radius:8px;padding:10px;margin-bottom:8px';
+  div.innerHTML='<div style="display:flex;justify-content:space-between;margin-bottom:6px">'
+    +'<b style="font-size:13px;color:#1a3a2a">ยอดกู้เพิ่มเติม ครั้งที่ '+n+'</b>'
+    +'<button onclick="removeLoan('+n+')" style="background:none;border:none;color:#c00;cursor:pointer;font-size:18px">×</button>'
+    +'</div>'
+    +'<div class="fg"><label>จำนวนเงิน (บาท)</label>'
+    +'<input type="text" id="loan_amt_'+n+'" value="'+(amt||'')+'" inputmode="numeric" oninput="onLoanAmt('+n+')"></div>'
+    +'<div class="fg"><label>ตัวอักษร</label>'
+    +'<input type="text" id="loan_amt_t_'+n+'" value="'+(amtT||'')+'" readonly></div>'
+    +'<div class="fg"><label>วันที่ทำสัญญา</label>'
+    +'<input type="date" id="loan_date_'+n+'" value="'+(date||'')+'"></div>';
+  wrap.appendChild(div);
+}
+
+function removeLoan(n){var el=document.getElementById('loan-'+n);if(el)el.remove();}
+
+function onLoanAmt(n){
+  var amt=gv('loan_amt_'+n).replace(/,/g,'');
+  var el=document.getElementById('loan_amt_t_'+n);
+  if(el)el.value=amt?toBaht(parseInt(amt)):'';
+}
+
+function getRefs(){
+  var list=[];
+  document.querySelectorAll('[id^="ref-"]').forEach(function(div){
+    var n=div.id.replace('ref-','');
+    var v=gv('ref_val_'+n); var d=gv('ref_date_'+n);
+    if(v)list.push({text:v,date:thDate(d)});
+  });
+  return list;
+}
+
+function getLoans(){
+  var list=[];
+  document.querySelectorAll('[id^="loan-"]').forEach(function(div){
+    var n=div.id.replace('loan-','');
+    var amt=gv('loan_amt_'+n); var amtT=gv('loan_amt_t_'+n); var d=gv('loan_date_'+n);
+    if(amt)list.push({amt:fmtNum(amt),amtT:amtT,date:thDate(d)});
+  });
+  return list;
+}
+
+// ── BUILD DOCUMENT HTML ──
+function buildDoc(){
+  var type=gv('notice_type');
+  var firm=gv('law_firm');
+  var addr=gv('law_addr');
+  var tel=gv('law_tel');
+  var signer=gv('law_sign');
+  var noticeDate=thDate(gv('notice_date'));
+  var days=gv('notice_days')||'60';
+  var toName=gv('to_name');
+  var coName=gv('co_name');
+  var debtAmt=fmtNum(gv('debt_amt'));
+  var debtAmtT=gv('debt_amt_t');
+  var debtRate=gv('debt_rate')||'15';
+  var debtDate1=thDate(gv('debt_date1'));
+  var refs=getRefs();
+  var loans=getLoans();
+  var landDocType=gv('land_doc_type');
+  var landChanote=gv('land_chanote');
+  var landNo=gv('land_no');
+  var landTambon=gv('land_tambon');
+  var landAmphoe=gv('land_amphoe');
+  var landProvince=gv('land_province');
+  var hasBuilding=gv('land_building')==='yes';
+
+  // subject text ตามประเภท
+  var subjects={
+    mortgage:'แจ้งให้ชำระหนี้และบอกกล่าวบังคับจำนอง',
+    loan:'ให้ชำระหนี้ตามสัญญาเงินกู้',
+    sellback:'ให้ชำระหนี้ตามสัญญาขายฝาก'
+  };
+  var subject=subjects[type]||subjects.mortgage;
+
+  // refs HTML
+  var refsHTML='';
+  if(refs.length>0){
+    refsHTML='<div class="law-ref"><span class="ref-title">อ้างถึง</span><ol>';
+    refs.forEach(function(r){
+      refsHTML+='<li>'+r.text+(r.date&&r.date!=='......'?' ฉบับลงวันที่ '+r.date:'')+'</li>';
+    });
+    refsHTML+='</ol></div>';
+  }
+
+  // loans text
+  var loansText='';
+  loans.forEach(function(l){
+    loansText+='และต่อมาท่านได้กู้ยืมเงินจากบริษัทฯ ในวันที่ '+l.date+' เพิ่มเติมอีกจำนวน '+l.amt+' บาท ('+l.amtT+') ';
+  });
+
+  // ยอดรวม
+  var totalAmt=parseInt((gv('debt_amt')||'0').replace(/,/g,''))||0;
+  loans.forEach(function(l){
+    totalAmt+=parseInt((l.amt||'0').replace(/,/g,'').replace(/[^0-9]/g,''))||0;
+  });
+  var totalAmtFmt=totalAmt?totalAmt.toLocaleString('th-TH'):'';
+  var totalAmtT=totalAmt?toBaht(totalAmt):'';
+
+  // ที่ดิน
+  var landText='';
+  if(type==='mortgage'||type==='sellback'){
+    landText='โดยท่านได้นำที่ดิน'+landDocType+' เลขที่ '+landChanote+(landNo?' เลขที่ดิน '+landNo:'')+' ต.'+landTambon+' อ.'+landAmphoe+' จ.'+landProvince+(hasBuilding?' พร้อมสิ่งปลูกสร้าง ซึ่งเป็นกรรมสิทธิ์ของท่าน':'')+' มาจดจำนองเพื่อค้ำประกันการกู้ยืมเงินดังกล่าว ';
+  }
+
+  // body text ตามประเภท
+  var bodyP1='';
+  if(type==='mortgage'){
+    bodyP1='ตามที่ท่านได้กู้ยืมเงิน ไปจาก '+coName+' ในฐานะผู้ให้กู้ ซึ่งต่อไปนี้จะเรียกว่า "บริษัทฯ" ในวันที่ '+debtDate1+' เป็นเงินจำนวน '+debtAmt+' บาท ('+debtAmtT+') ตกลงให้คิดดอกเบี้ยร้อยละ '+debtRate+' ต่อปี โดยตกลงนำส่งดอกเบี้ยเป็นเดือนละครั้งเสมอไป '+loansText+(loans.length>0?' รวมเป็นเงินจำนวนทั้งสิ้น '+totalAmtFmt+' บาท ('+totalAmtT+') โดยตกลงให้คิดดอกเบี้ยร้อยละ '+debtRate+' ต่อปี โดยตกลงนำส่งดอกเบี้ยเป็นเดือนละครั้งเสมอไปจนกว่าจะชำระเสร็จสิ้น':'')+' ตามที่อ้างถึง '+landText+'อันเป็นรายละเอียดที่ท่านทราบดีอยู่แล้วนั้น';
+  } else if(type==='loan'){
+    bodyP1='ตามที่ท่านได้กู้ยืมเงิน ไปจาก '+coName+' ในฐานะผู้ให้กู้ ซึ่งต่อไปนี้จะเรียกว่า "บริษัทฯ" เป็นเงินจำนวน '+debtAmt+' บาท ('+debtAmtT+') ตกลงให้คิดดอกเบี้ยร้อยละ '+debtRate+' ต่อปี '+loansText+'ตามที่อ้างถึง อันเป็นรายละเอียดที่ท่านทราบดีอยู่แล้วนั้น';
+  } else {
+    bodyP1='ตามที่ท่านได้ทำสัญญาขายฝาก '+coName+' จำนวน '+debtAmt+' บาท ('+debtAmtT+') ตามสัญญาขายฝากที่ดิน ฉบับลงวันที่ '+debtDate1+' '+landText+'อันเป็นรายละเอียดที่ท่านทราบดีอยู่แล้วนั้น';
+  }
+
+  var bodyP2='ปรากฏว่าท่านมิได้ปฏิบัติตามสัญญา กล่าวคือ ท่านมิได้ชำระดอกเบี้ยหรือเงินต้นคืนให้แก่บริษัทตามที่กำหนดในสัญญาแต่อย่างใด จึงถือว่าท่านตกเป็นผู้ผิดนัดชำระหนี้';
+
+  var bodyP3='';
+  if(type==='mortgage'){
+    bodyP3='ดังนั้น ข้าพเจ้าในฐานะทนายความผู้รับมอบอำนาจจากบริษัทฯ จึงขอแจ้งให้ท่านนำเงินต้นที่คงค้างชำระพร้อมดอกเบี้ยที่ค้างชำระ และดอกเบี้ยผิดนัด (ถ้ามี) ตลอดจนค่าเสียหายอื่นนับตั้งแต่ผิดนัดจนถึงปัจจุบันมาชำระให้แก่บริษัทฯ และไถ่ถอนจำนองให้เสร็จสิ้น ภายใน '+days+' วัน นับแต่วันที่ท่านได้รับหนังสือหรือถือว่าได้รับหนังสือฉบับนี้ หากพ้นกำหนดดังกล่าวแล้ว ท่านไม่นำเงินมาชำระหนี้ให้แก่บริษัทฯ ข้าพเจ้าขอถือเอาหนังสือฉบับนี้เป็นหนังสือบอกกล่าวให้ชำระหนี้และบอกกล่าวบังคับจำนอง หากท่านยังเพิกเฉยไม่ปฏิบัติตาม ข้าพเจ้ามีความจำเป็นต้องฟ้องร้องดำเนินคดีเพื่อบังคับจำนองเอาที่ดินดังกล่าวออกขายทอดตลาดหรือบังคับเอาทรัพย์สินอื่นกับท่านตามกฎหมายต่อไป';
+  } else {
+    bodyP3='ดังนั้น ข้าพเจ้าในฐานะทนายความผู้รับมอบอำนาจจากบริษัทฯ จึงขอทวงถามให้ท่านชำระหนี้ดังกล่าว ให้แล้วเสร็จภายใน '+days+' วัน นับแต่วันที่ท่านได้รับหนังสือฉบับนี้ หากพ้นกำหนดเวลาดังกล่าวแล้ว ข้าพเจ้ามีความจำเป็นที่จะต้องดำเนินการฟ้องร้องตามกฎหมายต่อไป';
+  }
+
+  return '<div class="doc-page" style="display:block">'
+    // header
+    +'<div class="law-header">'
+    +'<div style="width:70pt;height:70pt;border:1.5pt solid #666;border-radius:4pt;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:9pt;color:#666;text-align:center">ตราสำนักงาน</div>'
+    +'<div class="law-info">'
+    +'<div class="firm">'+firm+'</div>'
+    +'<div>'+addr+'</div>'
+    +'<div>โทร '+tel+'</div>'
+    +'</div></div>'
+    +'<hr style="border:none;border-top:1.5pt solid #000;margin:6pt 0 12pt">'
+    // วันที่
+    +'<div class="law-date">วันที่ '+noticeDate+'</div>'
+    // เรื่อง/เรียน
+    +'<div class="law-subject"><table>'
+    +'<tr><td>เรื่อง</td><td>'+subject+'</td></tr>'
+    +'<tr><td>เรียน</td><td>'+toName+'</td></tr>'
+    +'</table></div>'
+    // อ้างถึง
+    +refsHTML
+    // เนื้อหา
+    +'<div class="law-body">'
+    +'<p>'+bodyP1+'</p>'
+    +'<p>'+bodyP2+'</p>'
+    +'<p>'+bodyP3+'</p>'
+    +'</div>'
+    // ลงนาม
+    +'<div class="law-sign">'
+    +'<p><br>ขอแสดงความนับถือ</p>'
+    +'<p><br><br></p>'
+    +'<p>( '+signer+' )</p>'
+    +'<p>ทนายความผู้รับมอบอำนาจ</p>'
+    +'</div>'
+    +'</div>';
+}
+
+function genNotice(){
+  saveForm();
+  var html=buildDoc();
+  document.getElementById('doc-content').innerHTML=html;
+  document.getElementById('form-wrap').style.display='none';
+  document.getElementById('doc-wrap').style.display='block';
+}
+
+function backToForm(){
+  document.getElementById('doc-wrap').style.display='none';
+  document.getElementById('form-wrap').style.display='block';
+}
+
+function openAllDocs(){
+  saveRecipients();
+  window.open('ซองจดหมาย.html','_blank');
+  window.open('ใบตอบรับ.html','_blank');
+}
+
+function saveRecipients(){
+  try{
+    var rcps=[{name:gv('to_name'),addr:gv('to_addr'),zip:gv('to_zip')}];
+    sessionStorage.setItem('env_recipients',JSON.stringify(rcps));
+    localStorage.setItem('env_recipients_shared',JSON.stringify(rcps));
+  }catch(e){}
+}
+
+// auto-save
+var LS='notice_lawyer';
+var FKEYS=['law_firm','law_addr','law_tel','law_sign','notice_type','notice_date','notice_days',
+  'to_name','to_addr','to_zip','co_name','debt_amt','debt_amt_t','debt_rate','debt_date1',
+  'land_doc_type','land_chanote','land_no','land_tambon','land_amphoe','land_province','land_building'];
+function saveForm(){
+  try{
+    var d={};
+    FKEYS.forEach(function(k){var e=document.getElementById(k);if(e){if(e.type==='checkbox')d[k]=e.checked;else d[k]=e.value;}});
+    // refs
+    var refs=[];document.querySelectorAll('[id^="ref-"]').forEach(function(div){
+      var n=div.id.replace('ref-','');refs.push({v:gv('ref_val_'+n),d:gv('ref_date_'+n)});});
+    d._refs=refs;
+    // loans
+    var loans=[];document.querySelectorAll('[id^="loan-"]').forEach(function(div){
+      var n=div.id.replace('loan-','');loans.push({a:gv('loan_amt_'+n),at:gv('loan_amt_t_'+n),d:gv('loan_date_'+n)});});
+    d._loans=loans;
+    localStorage.setItem(LS,JSON.stringify(d));
+  }catch(e){}
+}
+function restoreForm(){
+  try{
+    var s=localStorage.getItem(LS);if(!s)return;
+    var d=JSON.parse(s);
+    FKEYS.forEach(function(k){var e=document.getElementById(k);if(e&&d[k]!==undefined)e.value=d[k];});
+    if(d._refs)d._refs.forEach(function(r){addRef(r.v,r.d);});
+    if(d._loans)d._loans.forEach(function(l){addExtraLoan(l.a,l.at,l.d);});
+    onTypeChange(gv('notice_type'));
+  }catch(e){}
+}
+setInterval(saveForm,2000);
+window.addEventListener('beforeunload',saveForm);
+setTimeout(function(){
+  restoreForm();
+  // default ref
+  if(!document.querySelectorAll('[id^="ref-"]').length){
+    addRef('สัญญากู้ยืมเงินและสัญญาจำนองที่ดิน','');
+  }
+},100);
+</script>
+</body>
+</html>

@@ -41,12 +41,15 @@ body{font-family:'TH Sarabun New','Sarabun',Arial,sans-serif;font-size:15px;back
 .doc{font-family:'TH Sarabun New','Sarabun',Arial,sans-serif;font-size:13pt;color:#000;background:#fff}
 .doc table{border-collapse:collapse;width:100%}
 
-/* ── Date Widget ── */
-.dw-wrap{position:relative;display:flex;align-items:center;gap:6px}
-.dw-txt{flex:1;padding:9px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7;letter-spacing:1px}
-.dw-txt.has-val{border-color:#4caf50;background:#f7fcf7}
-.dw-txt.err{border-color:#e74c3c;background:#fff5f5}
-.dw-hint{font-size:11px;color:#999;margin-top:2px}
+/* ── Date shortcut ── */
+.dq-wrap{display:flex;gap:6px;align-items:center}
+.dq-wrap input[type="date"]{flex:1}
+.dq-in{width:110px!important;flex:none!important;padding:9px 8px!important;font-size:13px!important;
+  border:1px solid #bbb;border-radius:8px;font-family:inherit;background:#fffde7;
+  letter-spacing:0.5px;text-align:center;color:#333}
+.dq-in::placeholder{font-size:11px;color:#bbb;letter-spacing:0}
+.dq-in.ok{border-color:#4caf50;background:#f7fcf7}
+.dq-in.er{border-color:#e74c3c;background:#fff5f5}
 </style>
 </head>
 <body>
@@ -56,7 +59,7 @@ body{font-family:'TH Sarabun New','Sarabun',Arial,sans-serif;font-size:15px;back
   <div class="card">
     <div class="ct"><span class="n">1</span> ข้อมูลทั่วไป</div>
     <div class="row2">
-      <div class="fg"><label>วันที่</label><div class="dw-wrap"><input type="text" id="gv_date_txt" class="dw-txt" maxlength="10" placeholder="วว/ดด/ปปปป" inputmode="numeric" onkeydown="dwKey('gv_date_txt',event)" oninput="dwInput('gv_date_txt','gv_date')"><input type="hidden" id="gv_date"></div><div class="dw-hint">พิมพ์ วว ดด ปปปป (พ.ศ.) เช่น 12082568</div></div>
+      <div class="fg"><label>วันที่</label><div class="dq-wrap"><input type="date" id="gv_date" onchange="dqSync('gv_date_q','gv_date')"><input type="text" id="gv_date_q" class="dq-in" maxlength="10" placeholder="วว/ดด/ปปปป" inputmode="numeric" oninput="dqType('gv_date_q','gv_date')"></div></div>
       <div class="fg"><label>บิลที่ของวัน</label><input type="text" id="gv_bill_seq" value="01" placeholder="01"></div>
     </div>
   </div>
@@ -293,7 +296,7 @@ function updateSummary(){
 
 function genGvVoucher(){
   var rows=getPayRows();
-  var date=dwGet('gv_date');
+  var date=gv('gv_date');
   var seq=gv('gv_bill_seq')||'01';
   var no=billNo(date,seq);
   var recvName=gv('gv_recv_name')||'..........';
@@ -391,65 +394,35 @@ setInterval(autoSave,2000);
 window.addEventListener('beforeunload',autoSave);
 setTimeout(autoRestore,100);
 
-// ── Date Widget helpers ──
-function dwKey(id,e){
-  var el=document.getElementById(id);
-  if(!e)e=window.event;
-  var k=e.key;
-  // อนุญาตแค่ตัวเลข, Backspace, Delete, Tab
-  if(!/^[0-9]$/.test(k)&&k!=='Backspace'&&k!=='Delete'&&k!=='Tab'){
-    e.preventDefault&&e.preventDefault();
-    return false;
-  }
-}
-function dwInput(id,hidId){
-  var el=document.getElementById(id);
-  var hid=document.getElementById(hidId);
-  if(!el)return;
-  // กรองเฉพาะตัวเลข
-  var raw=el.value.replace(/[^0-9]/g,'').slice(0,8);
-  // format DD/MM/YYYY
-  var disp='';
-  if(raw.length>=1) disp=raw.slice(0,2);
-  if(raw.length>=3) disp+='/'+raw.slice(2,4);
-  if(raw.length>=5) disp+='/'+raw.slice(4,8);
-  el.value=disp;
-  el.className=el.className.replace(/\b(has-val|err)\b/g,'').trim();
+// ── Date quick-type (DDMMYYYY พ.ศ.) ──
+function dqType(qid,did){
+  var q=document.getElementById(qid);
+  var d=document.getElementById(did);
+  if(!q||!d)return;
+  var raw=q.value.replace(/[^0-9]/g,'').slice(0,8);
+  var s='';
+  if(raw.length>0)s=raw.slice(0,2);
+  if(raw.length>2)s+='/'+raw.slice(2,4);
+  if(raw.length>4)s+='/'+raw.slice(4,8);
+  q.value=s;
+  q.className=q.className.replace(/\b(ok|er)\b/g,'').trim();
   if(raw.length===8){
-    var dd=parseInt(raw.slice(0,2));
-    var mm=parseInt(raw.slice(2,4));
-    var yyyy=parseInt(raw.slice(4,8)); // พ.ศ.
-    var yyy_ad=yyyy-543; // แปลงเป็น ค.ศ.
-    if(dd>=1&&dd<=31&&mm>=1&&mm<=12&&yyy_ad>=1900){
-      var ds=yyy_ad+'-'+(mm<10?'0':'')+mm+'-'+(dd<10?'0':'')+dd;
-      if(hid){hid.value=ds;hid.dispatchEvent(new Event('change'));}
-      el.classList.add('has-val');
-    } else {
-      if(hid)hid.value='';
-      el.classList.add('err');
-    }
-  } else {
-    if(hid)hid.value='';
+    var dd=raw.slice(0,2),mm=raw.slice(2,4),yyyy=parseInt(raw.slice(4,8))-543;
+    var iso=yyyy+'-'+mm+'-'+dd;
+    var t=new Date(iso+'T00:00:00');
+    if(!isNaN(t.getTime())&&t.getFullYear()===yyyy){
+      d.value=iso;d.dispatchEvent(new Event('change'));
+      q.classList.add('ok');
+    } else { q.classList.add('er'); }
   }
 }
-function dwSet(hidId,txtId,dateVal){
-  // ตั้งค่าจาก YYYY-MM-DD (ค.ศ.) → แสดง DD/MM/YYYY (พ.ศ.)
-  if(!dateVal)return;
-  var p=dateVal.split('-');
-  if(p.length!==3)return;
-  var hid=document.getElementById(hidId);
-  var txt=document.getElementById(txtId);
-  if(hid)hid.value=dateVal;
-  if(txt){
-    var yyyy_be=parseInt(p[0])+543;
-    txt.value=p[2]+'/'+p[1]+'/'+yyyy_be;
-    txt.classList.remove('err');
-    txt.classList.add('has-val');
-  }
-}
-function dwGet(hidId){
-  var el=document.getElementById(hidId);
-  return el?el.value:'';
+function dqSync(qid,did){
+  var d=document.getElementById(did);
+  var q=document.getElementById(qid);
+  if(!d||!q||!d.value)return;
+  var p=d.value.split('-');if(p.length!==3)return;
+  q.value=p[2]+'/'+p[1]+'/'+(parseInt(p[0])+543);
+  q.className=q.className.replace(/\b(ok|er)\b/g,'').trim()+' ok';
 }
 
 </script>

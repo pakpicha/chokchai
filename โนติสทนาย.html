@@ -51,12 +51,15 @@ body{font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;font-size:15px;back
 .law-sign p{font-size:14pt;line-height:2}
 .law-sign .sign-name{border-top:none}
 
-/* ── Date Widget ── */
-.dw-wrap{position:relative;display:flex;align-items:center;gap:6px}
-.dw-txt{flex:1;padding:9px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7;letter-spacing:1px}
-.dw-txt.has-val{border-color:#4caf50;background:#f7fcf7}
-.dw-txt.err{border-color:#e74c3c;background:#fff5f5}
-.dw-hint{font-size:11px;color:#999;margin-top:2px}
+/* ── Date shortcut ── */
+.dq-wrap{display:flex;gap:6px;align-items:center}
+.dq-wrap input[type="date"]{flex:1}
+.dq-in{width:110px!important;flex:none!important;padding:9px 8px!important;font-size:13px!important;
+  border:1px solid #bbb;border-radius:8px;font-family:inherit;background:#fffde7;
+  letter-spacing:0.5px;text-align:center;color:#333}
+.dq-in::placeholder{font-size:11px;color:#bbb;letter-spacing:0}
+.dq-in.ok{border-color:#4caf50;background:#f7fcf7}
+.dq-in.er{border-color:#e74c3c;background:#fff5f5}
 </style>
 </head>
 <body>
@@ -88,7 +91,7 @@ body{font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;font-size:15px;back
         <option value="sellback">ให้ชำระหนี้ตามสัญญาขายฝาก</option>
       </select></div>
     <div class="fg"><label>วันที่หนังสือ</label>
-      <div class="dw-wrap"><input type="text" id="notice_date_txt" class="dw-txt" maxlength="10" placeholder="วว/ดด/ปปปป" inputmode="numeric" onkeydown="dwKey('notice_date_txt',event)" oninput="dwInput('notice_date_txt','notice_date')"><input type="hidden" id="notice_date"></div><div class="dw-hint">พิมพ์ วว ดด ปปปป (พ.ศ.) เช่น 12082568</div></div>
+      <div class="dq-wrap"><input type="date" id="notice_date" onchange="dqSync('notice_date_q','notice_date')"><input type="text" id="notice_date_q" class="dq-in" maxlength="10" placeholder="วว/ดด/ปปปป" inputmode="numeric" oninput="dqType('notice_date_q','notice_date')"></div></div>
     <div class="fg"><label>กำหนดเวลา (วัน)</label>
       <input id="notice_days" value="60"></div>
   </div>
@@ -111,7 +114,7 @@ body{font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;font-size:15px;back
   <!-- สัญญาอ้างถึง -->
   <div class="card">
     <div class="ct">📎 สัญญาที่อ้างถึง</div>
-    <div style="font-size:12px;color:#666;margin-bottom:8px">วันที่ดึงจาก "วันที่ทำสัญญา" ในรายละเอียดหนี้ด้านล่าง — กรอกครั้งเดียว</div>
+    <div style="font-size:12px;color:#666;margin-bottom:8px">วันที่ดึงจาก "วันที่ทำสัญญา" ด้านล่างอัตโนมัติ</div>
     <div id="refs-wrap"></div>
     <button class="add-btn" onclick="addRef()">+ เพิ่มสัญญาอ้างถึง</button>
   </div>
@@ -126,7 +129,7 @@ body{font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;font-size:15px;back
     <div class="fg"><label>อัตราดอกเบี้ย (%/ปี)</label>
       <input id="debt_rate" value="15"></div>
     <div class="fg"><label>วันที่ทำสัญญา (ครั้งแรก)</label>
-      <div class="dw-wrap"><input type="text" id="debt_date1_txt" class="dw-txt" maxlength="10" placeholder="วว/ดด/ปปปป" inputmode="numeric" onkeydown="dwKey('debt_date1_txt',event)" oninput="dwInput('debt_date1_txt','debt_date1')"><input type="hidden" id="debt_date1" onchange="syncRefDates()"></div><div class="dw-hint">พิมพ์ วว ดด ปปปป (พ.ศ.) เช่น 12082568</div></div>
+      <div class="dq-wrap"><input type="date" id="debt_date1" onchange="dqSync('debt_date1_q','debt_date1')"><input type="text" id="debt_date1_q" class="dq-in" maxlength="10" placeholder="วว/ดด/ปปปป" inputmode="numeric" oninput="dqType('debt_date1_q','debt_date1')"></div></div>
     <!-- เพิ่มยอดกู้ครั้งต่อมา -->
     <div id="extra-loans-wrap"></div>
     <button class="add-btn" onclick="addExtraLoan()">+ เพิ่มยอดกู้ครั้งต่อมา</button>
@@ -173,12 +176,8 @@ body{font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;font-size:15px;back
 
 <script>
 var refC=0,loanC=0,debtorC=0;
-
-// ── ผู้กู้/ผู้จำนอง (หลายคน) ──
 function addDebtor(data){
-  debtorC++;
-  var n=debtorC;
-  var d=data||{};
+  debtorC++;var n=debtorC;var d=data||{};
   var wrap=document.getElementById('debtors-wrap');
   var div=document.createElement('div');
   div.id='debtor-'+n;
@@ -195,7 +194,7 @@ function addDebtor(data){
     '<div class="row2">'+
     '<div class="fg"><label>รหัสไปรษณีย์</label>'+
     '<input type="text" id="db_zip_'+n+'" value="'+(d.zip||'')+'" maxlength="5" inputmode="numeric" style="width:100%;padding:8px;font-size:14px;border:1px solid #ccc;border-radius:6px;font-family:inherit"></div>'+
-    '<div class="fg"><label>เบอร์โทร (ถ้ามี)</label>'+
+    '<div class="fg"><label>เบอร์โทร</label>'+
     '<input type="text" id="db_tel_'+n+'" value="'+(d.tel||'')+'" inputmode="tel"></div>'+
     '</div>';
   wrap.appendChild(div);
@@ -205,7 +204,10 @@ function getDebtors(){
   var list=[];
   document.getElementById('debtors-wrap').querySelectorAll('[id^="debtor-"]').forEach(function(div){
     var n=div.id.replace('debtor-','');
-    list.push({name:gv('db_name_'+n),addr:gv('db_addr_'+n),zip:gv('db_zip_'+n),tel:gv('db_tel_'+n)});
+    list.push({name:(document.getElementById('db_name_'+n)||{value:''}).value.trim(),
+               addr:(document.getElementById('db_addr_'+n)||{value:''}).value.trim(),
+               zip:(document.getElementById('db_zip_'+n)||{value:''}).value.trim(),
+               tel:(document.getElementById('db_tel_'+n)||{value:''}).value.trim()});
   });
   return list;
 }
@@ -247,33 +249,17 @@ function onDebtChange(){
   var el=document.getElementById('debt_amt_t');
   if(el)el.value=amt?toBaht(parseInt(amt)):'';
 }
-function syncRefDates(){
-  // sync วันที่จาก debt_date1 ไปยัง ref ทุกอัน (ถ้า ref date ยังว่างอยู่)
-  var dval=dwGet('debt_date1');
-  if(!dval)return;
-  // หา ref_date hidden inputs ทั้งหมด
-  document.querySelectorAll('input[type="hidden"][id^="ref_date_"]').forEach(function(el){
-    if(!el.value){
-      var txtId=el.id+'_txt';
-      dwSet(el.id, txtId, dval);
-    }
-  });
-}
 
-// ข้อความ default ref แต่ละประเภท
 var DEFAULT_REFS={
   mortgage:'สัญญาจำนองที่ดิน',
   loan:'สัญญากู้ยืมเงิน',
   sellback:'สัญญาขายฝากที่ดิน'
 };
-
 function onTypeChange(v){
   var lc=document.getElementById('land-card');
-  lc.style.display='block'; // ทุกประเภทมีที่ดินค้ำประกันได้
-  // ถ้ายังไม่มี ref ที่กรอก ให้เปลี่ยน default ref อัตโนมัติ
+  lc.style.display='block';
   var refDivs=document.querySelectorAll('[id^="ref-"]');
   if(refDivs.length===1){
-    // มีแค่อันเดียว (default) → เปลี่ยน text ถ้ายังว่างหรือเป็น default เดิม
     var n=refDivs[0].id.replace('ref-','');
     var el=document.getElementById('ref_val_'+n);
     var cur=el?el.value.trim():'';
@@ -289,14 +275,20 @@ function addRef(val,date){
   var div=document.createElement('div');
   div.id='ref-'+n;
   div.className='att-row';
-  var contractDate=dwGet('debt_date1');
+  var contractDate=document.getElementById('debt_date1')?document.getElementById('debt_date1').value:'';
+  var useDate=date||contractDate||'';
+  var qval='';
+  if(useDate){var p=useDate.split('-');if(p.length===3)qval=p[2]+'/'+p[1]+'/'+(parseInt(p[0])+543);}
   div.innerHTML=
     '<select id="ref_val_'+n+'" style="flex:1;padding:8px;font-size:14px;border:1px solid #ccc;border-radius:6px;font-family:inherit">'+
     '<option value="สัญญาจำนองที่ดิน"'+((!val||val==='สัญญาจำนองที่ดิน')?' selected':'')+'>สัญญาจำนองที่ดิน</option>'+
     '<option value="สัญญากู้ยืมเงิน"'+(val==='สัญญากู้ยืมเงิน'?' selected':'')+'>สัญญากู้ยืมเงิน</option>'+
     '<option value="สัญญาขายฝากที่ดิน"'+(val==='สัญญาขายฝากที่ดิน'?' selected':'')+'>สัญญาขายฝากที่ดิน</option>'+
     '</select>'+
-    '<div class="dw-wrap"><input type="text" id="ref_date_'+n+'_txt" class="dw-txt" maxlength="10" placeholder="วว/ดด/ปปปป" inputmode="numeric" onkeydown="dwKey('ref_date_'+n+'_txt',event)" oninput="dwInput('ref_date_'+n+'_txt','ref_date_'+n+'')"><input type="hidden" id="ref_date_'+n+'"></div><div class="dw-hint">พิมพ์ วว ดด ปปปป (พ.ศ.) เช่น 12082568</div>'+
+    '<div class="dq-wrap" style="flex:none">'+
+    '<div class="dq-wrap"><input type="date" id="ref_date_'+n+'" value="'+useDate+'" style="width:140px" onchange="dqSync('ref_date_'+n+'_q','ref_date_'+n+'');dqSync('ref_date_'+n+'_q','ref_date_'+n+'')"><input type="text" id="ref_date_'+n+'_q" class="dq-in" maxlength="10" placeholder="วว/ดด/ปปปป" inputmode="numeric" oninput="dqType('ref_date_'+n+'_q','ref_date_'+n+'')"></div>'+
+    '<input type="text" id="ref_date_'+n+'_q" class="dq-in" value="'+qval+'" maxlength="10" placeholder="วว/ดด/ปปปป" inputmode="numeric" oninput="dqType('ref_date_'+n+'_q','ref_date_'+n+'')">'+
+    '</div>'+
     (n>1?'<button onclick="removeRef('+n+')">× ลบ</button>':'');
   wrap.appendChild(div);
 }
@@ -319,7 +311,7 @@ function addExtraLoan(amt,amtT,date){
     +'<div class="fg"><label>ตัวอักษร</label>'
     +'<input type="text" id="loan_amt_t_'+n+'" value="'+(amtT||'')+'" readonly></div>'
     +'<div class="fg"><label>วันที่ทำสัญญา</label>'
-    +'<div class="dw-wrap"><input type="text" id="loan_date_'+n+'_txt" class="dw-txt" maxlength="10" placeholder="วว/ดด/ปปปป" inputmode="numeric" onkeydown="dwKey('loan_date_'+n+'_txt',event)" oninput="dwInput('loan_date_'+n+'_txt','loan_date_'+n+'')"><input type="hidden" id="loan_date_'+n+'"></div><div class="dw-hint">พิมพ์ วว ดด ปปปป (พ.ศ.) เช่น 12082568</div></div>';
+    +'<div class="dq-wrap"><input type="date" id="loan_date_'+n+'" value="'+(date||'')+'" onchange="dqSync('loan_date_'+n+'_q','loan_date_'+n+'')"><input type="text" id="loan_date_'+n+'_q" class="dq-in" maxlength="10" placeholder="วว/ดด/ปปปป" inputmode="numeric" oninput="dqType('loan_date_'+n+'_q','loan_date_'+n+'')"></div></div>';
   wrap.appendChild(div);
 }
 
@@ -345,7 +337,7 @@ function getLoans(){
   var list=[];
   document.querySelectorAll('[id^="loan-"]').forEach(function(div){
     var n=div.id.replace('loan-','');
-    var amt=gv('loan_amt_'+n); var amtT=gv('loan_amt_t_'+n); var d=dwGet('loan_date_'+n);
+    var amt=gv('loan_amt_'+n); var amtT=gv('loan_amt_t_'+n); var d=gv('loan_date_'+n);
     if(amt)list.push({amt:fmtNum(amt),amtT:amtT,date:thDate(d)});
   });
   return list;
@@ -358,7 +350,7 @@ function buildDoc(){
   var addr=gv('law_addr');
   var tel=gv('law_tel');
   var signer=gv('law_sign');
-  var noticeDate=thDate(dwGet('notice_date'));
+  var noticeDate=thDate(gv('notice_date'));
   var days=gv('notice_days')||'60';
   var debtors=getDebtors();
   var toName=debtors.map(function(d){return d.name;}).filter(Boolean).join(', ')||'...............';
@@ -366,7 +358,7 @@ function buildDoc(){
   var debtAmt=fmtNum(gv('debt_amt'));
   var debtAmtT=gv('debt_amt_t');
   var debtRate=gv('debt_rate')||'15';
-  var debtDate1=thDate(dwGet('debt_date1'));
+  var debtDate1=thDate(gv('debt_date1'));
   var refs=getRefs();
   var loans=getLoans();
   var landDocType=gv('land_doc_type');
@@ -411,10 +403,8 @@ function buildDoc(){
 
   // ที่ดิน
   var landText='';
-  if(type==='mortgage'||type==='sellback'||type==='loan'){
-    if(landChanote||landNo||landTambon){
-      landText=landDocType+' เลขที่ '+landChanote+(landNo?' เลขที่ดิน '+landNo:'')+' ตำบล '+landTambon+' อำเภอ '+landAmphoe+' จังหวัด '+landProvince+(hasBuilding?' พร้อมสิ่งปลูกสร้าง ซึ่งเป็นกรรมสิทธิ์ของท่านมาเพื่อเป็นการประกันหนี้ดังกล่าว':' ซึ่งเป็นกรรมสิทธิ์ของท่านมาเพื่อเป็นการประกันหนี้ดังกล่าว');
-    }
+  if(landChanote||landNo||landTambon){
+    landText=landDocType+' เลขที่ '+landChanote+(landNo?' เลขที่ดิน '+landNo:'')+' ตำบล '+landTambon+' อำเภอ '+landAmphoe+' จังหวัด '+landProvince+(hasBuilding?' พร้อมสิ่งปลูกสร้าง ซึ่งเป็นกรรมสิทธิ์ของท่านมาเพื่อเป็นการประกันหนี้ดังกล่าว':' ซึ่งเป็นกรรมสิทธิ์ของท่านมาเพื่อเป็นการประกันหนี้ดังกล่าว');
   }
 
   // body text ตามประเภท
@@ -493,9 +483,7 @@ function openAllDocs(){
 function saveRecipients(){
   try{
     var debtors=getDebtors();
-    var rcps=debtors.filter(function(d){return d.name||d.addr;}).map(function(d){
-      return{name:d.name,addr:d.addr,zip:d.zip,tel:d.tel};
-    });
+    var rcps=debtors.filter(function(d){return d.name||d.addr;}).map(function(d){return{name:d.name,addr:d.addr,zip:d.zip,tel:d.tel};});
     sessionStorage.setItem('env_recipients',JSON.stringify(rcps));
     localStorage.setItem('env_recipients_shared',JSON.stringify(rcps));
   }catch(e){}
@@ -503,8 +491,8 @@ function saveRecipients(){
 
 // auto-save
 var LS='notice_lawyer';
-var FKEYS=['law_firm','law_addr','law_tel','law_sign','notice_type','notice_days',
-  'co_name','debt_amt','debt_amt_t','debt_rate',
+var FKEYS=['law_firm','law_addr','law_tel','law_sign','notice_type','notice_date','notice_days',
+  'co_name','debt_amt','debt_amt_t','debt_rate','debt_date1',
   'land_doc_type','land_chanote','land_no','land_tambon','land_amphoe','land_province','land_building'];
 function saveForm(){
   try{
@@ -514,13 +502,7 @@ function saveForm(){
     var refs=[];document.querySelectorAll('[id^="ref-"]').forEach(function(div){
       var n=div.id.replace('ref-','');refs.push({v:gv('ref_val_'+n),d:gv('ref_date_'+n)});});
     d._refs=refs;
-    // save date fields
-    d.notice_date=dwGet('notice_date');
-    d.debt_date1=dwGet('debt_date1');
-    // debtors
-    var dbs=[];document.getElementById('debtors-wrap').querySelectorAll('[id^="debtor-"]').forEach(function(div){
-      var n=div.id.replace('debtor-','');dbs.push({name:gv('db_name_'+n),addr:gv('db_addr_'+n),zip:gv('db_zip_'+n),tel:gv('db_tel_'+n)});});
-    d._debtors=dbs;
+    var dbs=[];document.getElementById('debtors-wrap').querySelectorAll('[id^="debtor-"]').forEach(function(div){var n=div.id.replace('debtor-','');dbs.push({name:(document.getElementById('db_name_'+n)||{value:''}).value,addr:(document.getElementById('db_addr_'+n)||{value:''}).value,zip:(document.getElementById('db_zip_'+n)||{value:''}).value,tel:(document.getElementById('db_tel_'+n)||{value:''}).value});});d._debtors=dbs;
     // loans
     var loans=[];document.querySelectorAll('[id^="loan-"]').forEach(function(div){
       var n=div.id.replace('loan-','');loans.push({a:gv('loan_amt_'+n),at:gv('loan_amt_t_'+n),d:gv('loan_date_'+n)});});
@@ -536,9 +518,6 @@ function restoreForm(){
     if(d._refs)d._refs.forEach(function(r){addRef(r.v,r.d);});
     if(d._loans)d._loans.forEach(function(l){addExtraLoan(l.a,l.at,l.d);});
     if(d._debtors&&d._debtors.length){d._debtors.forEach(function(db){addDebtor(db);});}
-    // restore date fields
-    if(d.notice_date) dwSet('notice_date','notice_date_txt',d.notice_date);
-    if(d.debt_date1)  dwSet('debt_date1','debt_date1_txt',d.debt_date1);
     onTypeChange(gv('notice_type'));
   }catch(e){}
 }
@@ -546,74 +525,47 @@ setInterval(saveForm,2000);
 window.addEventListener('beforeunload',saveForm);
 setTimeout(function(){
   restoreForm();
-  // default debtor
-  if(!document.getElementById('debtors-wrap').children.length) addDebtor();
-  // default ref ตามประเภทที่เลือก
+  // default ref
   if(!document.querySelectorAll('[id^="ref-"]').length){
-    var t=gv('notice_type')||'mortgage';
+    var t=document.getElementById('notice_type')?document.getElementById('notice_type').value:'mortgage';
     addRef(DEFAULT_REFS[t]||DEFAULT_REFS.mortgage,'');
   }
+  // default debtor
+  if(!document.getElementById('debtors-wrap').children.length) addDebtor();
 },100);
 
-// ── Date Widget helpers ──
-function dwKey(id,e){
-  var el=document.getElementById(id);
-  if(!e)e=window.event;
-  var k=e.key;
-  // อนุญาตแค่ตัวเลข, Backspace, Delete, Tab
-  if(!/^[0-9]$/.test(k)&&k!=='Backspace'&&k!=='Delete'&&k!=='Tab'){
-    e.preventDefault&&e.preventDefault();
-    return false;
-  }
-}
-function dwInput(id,hidId){
-  var el=document.getElementById(id);
-  var hid=document.getElementById(hidId);
-  if(!el)return;
-  // กรองเฉพาะตัวเลข
-  var raw=el.value.replace(/[^0-9]/g,'').slice(0,8);
-  // format DD/MM/YYYY
-  var disp='';
-  if(raw.length>=1) disp=raw.slice(0,2);
-  if(raw.length>=3) disp+='/'+raw.slice(2,4);
-  if(raw.length>=5) disp+='/'+raw.slice(4,8);
-  el.value=disp;
-  el.className=el.className.replace(/\b(has-val|err)\b/g,'').trim();
+// ── Date quick-type (DDMMYYYY พ.ศ.) ──
+function dqType(qid,did){
+  var q=document.getElementById(qid);
+  var d=document.getElementById(did);
+  if(!q||!d)return;
+  var raw=q.value.replace(/[^0-9]/g,'').slice(0,8);
+  // format
+  var s='';
+  if(raw.length>0)s=raw.slice(0,2);
+  if(raw.length>2)s+='/'+raw.slice(2,4);
+  if(raw.length>4)s+='/'+raw.slice(4,8);
+  q.value=s;
+  q.className=q.className.replace(/\b(ok|er)\b/g,'').trim();
   if(raw.length===8){
-    var dd=parseInt(raw.slice(0,2));
-    var mm=parseInt(raw.slice(2,4));
-    var yyyy=parseInt(raw.slice(4,8)); // พ.ศ.
-    var yyy_ad=yyyy-543; // แปลงเป็น ค.ศ.
-    if(dd>=1&&dd<=31&&mm>=1&&mm<=12&&yyy_ad>=1900){
-      var ds=yyy_ad+'-'+(mm<10?'0':'')+mm+'-'+(dd<10?'0':'')+dd;
-      if(hid){hid.value=ds;hid.dispatchEvent(new Event('change'));}
-      el.classList.add('has-val');
-    } else {
-      if(hid)hid.value='';
-      el.classList.add('err');
-    }
-  } else {
-    if(hid)hid.value='';
+    var dd=raw.slice(0,2),mm=raw.slice(2,4),yyyy_be=parseInt(raw.slice(4,8)),yyyy=yyyy_be-543;
+    var iso=yyyy+'-'+mm+'-'+dd;
+    var t=new Date(iso+'T00:00:00');
+    if(!isNaN(t.getTime())&&t.getFullYear()===yyyy){
+      d.value=iso;
+      d.dispatchEvent(new Event('change'));
+      q.classList.add('ok');
+    } else { q.classList.add('er'); }
   }
 }
-function dwSet(hidId,txtId,dateVal){
-  // ตั้งค่าจาก YYYY-MM-DD (ค.ศ.) → แสดง DD/MM/YYYY (พ.ศ.)
-  if(!dateVal)return;
-  var p=dateVal.split('-');
+function dqSync(qid,did){
+  var d=document.getElementById(did);
+  var q=document.getElementById(qid);
+  if(!d||!q||!d.value)return;
+  var p=d.value.split('-');
   if(p.length!==3)return;
-  var hid=document.getElementById(hidId);
-  var txt=document.getElementById(txtId);
-  if(hid)hid.value=dateVal;
-  if(txt){
-    var yyyy_be=parseInt(p[0])+543;
-    txt.value=p[2]+'/'+p[1]+'/'+yyyy_be;
-    txt.classList.remove('err');
-    txt.classList.add('has-val');
-  }
-}
-function dwGet(hidId){
-  var el=document.getElementById(hidId);
-  return el?el.value:'';
+  q.value=p[2]+'/'+p[1]+'/'+(parseInt(p[0])+543);
+  q.className=q.className.replace(/\b(ok|er)\b/g,'').trim()+' ok';
 }
 
 </script>

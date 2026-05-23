@@ -56,6 +56,15 @@ body{font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;font-size:15px;back
 .dw-txt.has-val{border-color:#4caf50;background:#f7fcf7}
 .dw-txt.err{border-color:#e74c3c;background:#fff5f5}
 .dw-hint{font-size:11px;color:#999;margin-top:2px}
+
+/* ── Date shortcut ── */
+.dq-wrap{display:flex;gap:6px;align-items:center}
+.dq-wrap input[type="date"]{flex:1}
+.dq-in{width:110px!important;flex:none!important;padding:9px 8px!important;font-size:13px!important;
+  border:1px solid #bbb;border-radius:8px;font-family:inherit;background:#fffde7;
+  letter-spacing:1px;text-align:center}
+.dq-in.ok{border-color:#4caf50;background:#f7fcf7}
+.dq-in.er{border-color:#e74c3c;background:#fff5f5}
 </style>
 </head>
 <body>
@@ -712,6 +721,47 @@ function dwSet(hidId,txtId,dateVal){
 function dwGet(hidId){
   var el=document.getElementById(hidId);
   return el?el.value:'';
+}
+
+
+// ── Date quick-type (DDMMYYYY พ.ศ.) ──
+function _dqFmt(raw){
+  var r=raw.replace(/[^0-9]/g,'').slice(0,8);
+  var s='';
+  if(r.length>0)s=r.slice(0,2);
+  if(r.length>2)s+='/'+r.slice(2,4);
+  if(r.length>4)s+='/'+r.slice(4,8);
+  return {fmt:s,raw:r};
+}
+function dqType(qid,did,e){
+  var q=document.getElementById(qid);
+  var d=document.getElementById(did);
+  if(!q||!d)return;
+  var res=_dqFmt(q.value);
+  q.value=res.fmt;
+  q.className=q.className.replace(/\b(ok|er)\b/g,'').trim()+' dq-in';
+  if(res.raw.length===8){
+    var dd=res.raw.slice(0,2),mm=res.raw.slice(2,4),yyyy=parseInt(res.raw.slice(4,8))-543;
+    var iso=yyyy+'-'+mm+'-'+dd;
+    // ตรวจ valid
+    var t=new Date(iso);
+    if(!isNaN(t.getTime())&&t.getFullYear()===yyyy){
+      d.value=iso;
+      d.dispatchEvent(new Event('change'));
+      q.classList.add('ok');
+    } else { q.classList.add('er'); }
+  }
+}
+function dqSync(qid,did){
+  // date picker เปลี่ยน → อัปเดตช่องพิมพ์
+  var d=document.getElementById(did);
+  var q=document.getElementById(qid);
+  if(!d||!q||!d.value)return;
+  var p=d.value.split('-'); // YYYY-MM-DD
+  if(p.length!==3)return;
+  var be=parseInt(p[0])+543;
+  q.value=p[2]+'/'+p[1]+'/'+be;
+  q.className=q.className.replace(/\b(ok|er)\b/g,'').trim()+' dq-in ok';
 }
 
 </script>

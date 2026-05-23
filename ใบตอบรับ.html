@@ -92,6 +92,9 @@ body{font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;font-size:15px;back
     <div class="fg"><label>ที่อยู่ 2</label><input id="ra2" placeholder="เขต/อำเภอ จังหวัด"></div>
     <div class="fg"><label>รหัสไปรษณีย์</label><input id="rzip" placeholder="เช่น 10110" maxlength="5"></div>
   </div>
+  <!-- แถบเลือกผู้รับ (กรณีมาจากแจ้งไถ่ถอนหลายคน) -->
+  <div id="rcp-bar" style="display:none;background:#fff;border-radius:12px;padding:12px;margin-bottom:10px;box-shadow:0 1px 4px rgba(0,0,0,.08)"></div>
+
   <button class="btn btn-blue" onclick="openEd()">🎯 จัดตำแหน่ง (Editor)</button>
   <button class="btn btn-red" onclick="doPrint(1)" style="margin-top:6px">🖨 พิมพ์หน้า 1</button>
   <button class="btn btn-green" onclick="doPrint(2)" style="margin-top:6px">🖨 พิมพ์หน้า 2</button>
@@ -405,16 +408,47 @@ function saveForm(){try{var d={};FK.forEach(function(k){var e=document.getElemen
 function restoreForm(){try{var s=localStorage.getItem('rcpt_form');if(!s)return;var d=JSON.parse(s);FK.forEach(function(k){var e=document.getElementById(k);if(e&&d[k]!==undefined)e.value=d[k];});}catch(e){}}
 setInterval(saveForm,2000);
 window.addEventListener('beforeunload',saveForm);
+
+// ── โหลดผู้รับ (รองรับหลายคน) ──
+window._rcps=[];
+function loadRcp(i){
+  var r=window._rcps[i];
+  if(!r)return;
+  document.getElementById('rn').value=r.name||'';
+  var a=(r.addr||'').replace(/\r/g,'').split('\n');
+  document.getElementById('ra1').value=a[0]||'';
+  document.getElementById('ra2').value=a[1]||'';
+  document.getElementById('rzip').value=r.zip||'';
+  document.querySelectorAll('.rcp-btn').forEach(function(b,idx){
+    b.style.background=idx===i?'#c0392b':'#1a3a2a';
+  });
+}
+function buildRcpBar(rcps){
+  var bar=document.getElementById('rcp-bar');
+  if(!bar)return;
+  if(!rcps||rcps.length===0){bar.style.display='none';return;}
+  bar.style.display='block';
+  if(rcps.length===1){
+    bar.innerHTML='<div style="font-size:13px;color:#1a3a2a;font-weight:700">📥 ผู้รับ: '+rcps[0].name+'</div>';
+  } else {
+    var html='<div style="font-size:13px;font-weight:700;color:#1a3a2a;margin-bottom:6px">📥 มีผู้รับ '+rcps.length+' คน — เลือกเพื่อพิมพ์ใบตอบรับ:</div>';
+    html+=rcps.map(function(r,i){
+      return '<button class="rcp-btn" onclick="loadRcp('+i+')" style="margin:3px;padding:6px 14px;background:#1a3a2a;color:#fff;border:none;border-radius:6px;cursor:pointer;font-family:inherit;font-size:13px;font-weight:700">ใบตอบรับ '+(i+1)+': '+r.name+'</button>';
+    }).join('');
+    bar.innerHTML=html;
+  }
+}
 setTimeout(function(){
   restoreForm();
   try{
-    var rcps=JSON.parse(sessionStorage.getItem('env_recipients')||localStorage.getItem('env_recipients_shared')||'[]');
-    if(rcps&&rcps.length&&rcps[0].name){
-      document.getElementById('rn').value=rcps[0].name;
-      var a=(rcps[0].addr||'').replace(/\r/g,'').split('\n');
-      document.getElementById('ra1').value=a[0]||'';
-      document.getElementById('ra2').value=a[1]||'';
-      document.getElementById('rzip').value=rcps[0].zip||'';
+    var rcpStr=sessionStorage.getItem('env_recipients')||localStorage.getItem('env_recipients_shared');
+    if(rcpStr){
+      var rcps=JSON.parse(rcpStr);
+      if(rcps&&rcps.length){
+        window._rcps=rcps;
+        loadRcp(0);
+        buildRcpBar(rcps);
+      }
     }
   }catch(e){}
 },100);

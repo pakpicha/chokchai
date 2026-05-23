@@ -147,6 +147,9 @@ body{font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;background:#f0f0eb;
       <input type="text" id="r_tel" placeholder="เช่น 081-234-5678" inputmode="tel"></div>
   </div>
 
+  <!-- แถบเลือกผู้รับถ้ามีหลายคน -->
+  <div id="rcp-bar" style="display:none;background:#fff;border-radius:12px;padding:12px;margin-bottom:10px;box-shadow:0 1px 4px rgba(0,0,0,.08)"></div>
+
   <button class="gen-btn" onclick="printEnv()">🖨 พิมพ์ซอง</button>
 </div>
 
@@ -211,21 +214,11 @@ setTimeout(function(){
   try{
     var rcpStr=sessionStorage.getItem('env_recipients')||localStorage.getItem('env_recipients_shared');
     if(rcpStr){
-      sessionStorage.removeItem('env_recipients');
       var rcps=JSON.parse(rcpStr);
-      if(rcps.length>0){
-        document.getElementById('r_name').value=rcps[0].name||'';
-        document.getElementById('r_addr').value=rcps[0].addr||'';
-        document.getElementById('r_zip').value=rcps[0].zip||'';
-        // ถ้ามีหลายคน แสดงปุ่ม
-        if(rcps.length>1){
-          var info=document.createElement('div');
-          info.style.cssText='background:#fff3cd;border:1px solid #ffc107;border-radius:8px;padding:10px;margin-bottom:10px;font-size:13px';
-          info.innerHTML='<b>📌 มีผู้รับ '+rcps.length+' คน</b> กดปุ่มด้านล่างเพื่อพิมพ์ซองแต่ละคน<br>'
-            +rcps.map(function(r,i){return '<button onclick="loadRcp('+i+')" style="margin:3px;padding:5px 10px;background:#1a3a2a;color:#fff;border:none;border-radius:5px;cursor:pointer;font-family:inherit;font-size:12px">ซอง '+(i+1)+': '+r.name+'</button>';}).join('');
-          document.querySelector('.wrap').insertBefore(info, document.querySelector('.card'));
-          window._rcps=rcps;
-        }
+      if(rcps&&rcps.length>0){
+        window._rcps=rcps;
+        loadRcp(0);
+        buildRcpBar(rcps);
       }
     }
   }catch(ex){}
@@ -238,6 +231,25 @@ function loadRcp(i){
   document.getElementById('r_addr').value=r.addr||'';
   document.getElementById('r_zip').value=r.zip||'';
   document.getElementById('r_tel').value=r.tel||'';
+  document.querySelectorAll('.rcp-btn').forEach(function(b,idx){
+    b.style.background=idx===i?'#c0392b':'#1a3a2a';
+  });
+}
+
+function buildRcpBar(rcps){
+  var bar=document.getElementById('rcp-bar');
+  if(!bar)return;
+  if(!rcps||rcps.length===0){bar.style.display='none';return;}
+  bar.style.display='block';
+  if(rcps.length===1){
+    bar.innerHTML='<div style="font-size:13px;color:#1a3a2a;font-weight:700">✉️ ผู้รับ: '+rcps[0].name+'</div>';
+  } else {
+    var html='<div style="font-size:13px;font-weight:700;color:#1a3a2a;margin-bottom:6px">✉️ มีผู้รับ '+rcps.length+' คน — เลือกเพื่อพิมพ์ซอง:</div>';
+    html+=rcps.map(function(r,i){
+      return '<button class="rcp-btn" onclick="loadRcp('+i+')" style="margin:3px;padding:6px 14px;background:#1a3a2a;color:#fff;border:none;border-radius:6px;cursor:pointer;font-family:inherit;font-size:13px;font-weight:700">ซอง '+(i+1)+': '+r.name+'</button>';
+    }).join('');
+    bar.innerHTML=html;
+  }
 }
 </script>
 </body>

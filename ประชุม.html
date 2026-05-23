@@ -179,7 +179,7 @@ body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;
       <div class="fg"><label>ครั้งที่</label><input type="text" id="mno" placeholder="เช่น 25" inputmode="numeric"></div>
       <div class="fg"><label>ปี พ.ศ.</label><input type="text" id="myr" value="2569"></div>
     </div>
-    <div class="fg"><label>วันที่ประชุม</label><div class="tdp-wrap" id="tdpw_mdt" onclick="event.stopPropagation()"><input type="hidden" id="mdt"><input type="text" id="tdpi_mdt" class="tdp-input" placeholder="เลือกหรือพิมพ์วว/ดด/ปปปป" onfocus="tdpFocus('mdt')" onkeydown="tdpKeydown('mdt',event)" readonly="false" autocomplete="off"><span class="tdp-icon" onclick="tdpOpen('mdt')">📅</span><div class="tdp-drop" id="tdpd_mdt"><div class="tdp-nav"><button onclick="tdpNav('mdt',-1,event)">‹</button><span class="tdp-my" onclick="tdpToggleYM('mdt');event.stopPropagation()">...</span><button onclick="tdpNav('mdt',1,event)">›</button></div><div class="tdp-ym"></div><div class="tdp-days-hdr"><span>อา</span><span>จ</span><span>อ</span><span>พ</span><span>พฤ</span><span>ศ</span><span>ส</span></div><div class="tdp-days"></div></div></div><script>setTimeout(function(){tdpInit("mdt","");},50);</script></div>
+    <div class="fg"><label>วันที่ประชุม</label><div class="tdp-wrap" id="tdpw_mdt" onclick="event.stopPropagation()"><input type="hidden" id="mdt"><input type="text" id="tdpi_mdt" class="tdp-input" placeholder="เลือกหรือพิมพ์วว/ดด/ปปปป" onfocus="tdpFocus('mdt')" onkeydown="tdpKeydown('mdt',event)" autocomplete="off"><span class="tdp-icon" onclick="tdpOpen('mdt')">📅</span><div class="tdp-drop" id="tdpd_mdt"><div class="tdp-nav"><button onclick="tdpNav('mdt',-1,event)">‹</button><span class="tdp-my" onclick="tdpToggleYM('mdt');event.stopPropagation()">...</span><button onclick="tdpNav('mdt',1,event)">›</button></div><div class="tdp-ym"></div><div class="tdp-days-hdr"><span>อา</span><span>จ</span><span>อ</span><span>พ</span><span>พฤ</span><span>ศ</span><span>ส</span></div><div class="tdp-days"></div></div></div></div>
     <div class="row2">
       <div class="fg"><label>เวลาเริ่ม</label><input type="time" id="ts" value="08:00"></div>
       <div class="fg"><label>เวลาสิ้นสุด</label><input type="time" id="te" value="10:00"></div>
@@ -539,7 +539,7 @@ function buildAgContent(i){
 function genMeeting(){
   const chairman=ch();const all=atts();const others=all.filter(a=>a!==chairman);
   const no=gv('mno')||'......',yr=gv('myr')||'......';
-  const sd=meetShortDate(gv('mdt'));const ts=fmtTime(gv('ts')),te=fmtTime(gv('te'));const loc=gv('loc')||'..........';
+  const sd=meetShortDate((document.getElementById('mdt')||{value:''}).value);const ts=fmtTime(gv('ts')),te=fmtTime(gv('te'));const loc=gv('loc')||'..........';
   const items=[];
   document.querySelectorAll('.ai').forEach(el=>{const i=el.id.replace('agi-','');const c=buildAgContent(i);if(c)items.push(c);});
   const fullList=[chairman,...others];
@@ -626,13 +626,19 @@ function autoRestore(){
     Object.keys(data).forEach(function(k){
       var el = document.getElementById(k);
       if(!el) return;
-      if(el.type === 'checkbox') el.checked = data[k];
-      else el.value = data[k];
+      try{
+        if(el.type === 'checkbox') el.checked = data[k];
+        else { el.value = data[k]; }
+      }catch(e){}
     });
 
     // sync date display fields
     document.querySelectorAll('input[type="hidden"][id]').forEach(function(d){
       if(d.value&&document.getElementById('tdpi_'+d.id)) tdpSetValue(d.id,d.value);
+    });
+    // restore date pickers
+    document.querySelectorAll('input[type="hidden"][id]').forEach(function(h){
+      if(h.value&&document.getElementById('tdpi_'+h.id))setTimeout(function(){tdpSetValue(h.id,h.value);},200);
     });
     return true;
   } catch(e) { return false; }
@@ -886,6 +892,12 @@ setTimeout(function(){
     _tdpWireEvents(did);
   });
 },200);
+
+setTimeout(function(){
+  document.querySelectorAll('.tdp-wrap[id^="tdpw_"]').forEach(function(w){
+    _tdpWireEvents(w.id.replace('tdpw_',''));
+  });
+},200); // wire static date pickers
 
 document.addEventListener('click',function(e){
   if(_tdpOpen&&!e.target.closest('#tdpw_'+_tdpOpen))tdpClose();

@@ -234,7 +234,7 @@ body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;
   <div class="card">
     <div class="ct"><span class="n">1</span> ข้อมูลทั่วไป</div>
     <div class="row2">
-      <div class="fg"><label>วันที่ทำเอกสาร</label><div class="tdp-wrap" id="tdpw_dl_date" onclick="event.stopPropagation()"><input type="hidden" id="dl_date"><input type="text" id="tdpi_dl_date" class="tdp-input" placeholder="เลือกหรือพิมพ์วว/ดด/ปปปป" onfocus="tdpFocus('dl_date')" onkeydown="tdpKeydown('dl_date',event)" readonly="false" autocomplete="off"><span class="tdp-icon" onclick="tdpOpen('dl_date')">📅</span><div class="tdp-drop" id="tdpd_dl_date"><div class="tdp-nav"><button onclick="tdpNav('dl_date',-1,event)">‹</button><span class="tdp-my" onclick="tdpToggleYM('dl_date');event.stopPropagation()">...</span><button onclick="tdpNav('dl_date',1,event)">›</button></div><div class="tdp-ym"></div><div class="tdp-days-hdr"><span>อา</span><span>จ</span><span>อ</span><span>พ</span><span>พฤ</span><span>ศ</span><span>ส</span></div><div class="tdp-days"></div></div></div><script>setTimeout(function(){tdpInit("dl_date","");},50);</script></div>
+      <div class="fg"><label>วันที่ทำเอกสาร</label><div class="tdp-wrap" id="tdpw_dl_date" onclick="event.stopPropagation()"><input type="hidden" id="dl_date"><input type="text" id="tdpi_dl_date" class="tdp-input" placeholder="เลือกหรือพิมพ์วว/ดด/ปปปป" onfocus="tdpFocus('dl_date')" onkeydown="tdpKeydown('dl_date',event)" autocomplete="off"><span class="tdp-icon" onclick="tdpOpen('dl_date')">📅</span><div class="tdp-drop" id="tdpd_dl_date"><div class="tdp-nav"><button onclick="tdpNav('dl_date',-1,event)">‹</button><span class="tdp-my" onclick="tdpToggleYM('dl_date');event.stopPropagation()">...</span><button onclick="tdpNav('dl_date',1,event)">›</button></div><div class="tdp-ym"></div><div class="tdp-days-hdr"><span>อา</span><span>จ</span><span>อ</span><span>พ</span><span>พฤ</span><span>ศ</span><span>ส</span></div><div class="tdp-days"></div></div></div></div>
       <div class="fg"><label>บิลที่ของวัน</label><input type="text" id="dl_bill_seq" placeholder="01" maxlength="2" inputmode="numeric"></div>
     </div>
     <div class="row2">
@@ -571,7 +571,7 @@ function buildDlVoucher(d){
 
 function genDirLoan(){
   var d={
-    dl_date:gv('dl_date'), dl_bill_seq:gv('dl_bill_seq')||'01',
+    dl_date:(document.getElementById('dl_date')||{value:''}).value, dl_bill_seq:gv('dl_bill_seq')||'01',
     dl_bill_no:gv('dl_bill_no'), dl_year:gv('dl_year')||'2569',
     dl_amt:gv('dl_amt'), dl_amt_t:gv('dl_amt_t'), dl_rate:gv('dl_rate'),
     dl_pay_transfer:gv('dl_pay_transfer'), dl_pay_transfer_t:gv('dl_pay_transfer_t'),
@@ -666,13 +666,19 @@ function autoRestore(){
     Object.keys(data).forEach(function(k){
       var el = document.getElementById(k);
       if(!el) return;
-      if(el.type === 'checkbox') el.checked = data[k];
-      else el.value = data[k];
+      try{
+        if(el.type === 'checkbox') el.checked = data[k];
+        else { el.value = data[k]; }
+      }catch(e){}
     });
 
     // sync date display fields
     document.querySelectorAll('input[type="hidden"][id]').forEach(function(d){
       if(d.value&&document.getElementById('tdpi_'+d.id)) tdpSetValue(d.id,d.value);
+    });
+    // restore date pickers
+    document.querySelectorAll('input[type="hidden"][id]').forEach(function(h){
+      if(h.value&&document.getElementById('tdpi_'+h.id))setTimeout(function(){tdpSetValue(h.id,h.value);},200);
     });
     return true;
   } catch(e) { return false; }
@@ -926,6 +932,12 @@ setTimeout(function(){
     _tdpWireEvents(did);
   });
 },200);
+
+setTimeout(function(){
+  document.querySelectorAll('.tdp-wrap[id^="tdpw_"]').forEach(function(w){
+    _tdpWireEvents(w.id.replace('tdpw_',''));
+  });
+},200); // wire static date pickers
 
 document.addEventListener('click',function(e){
   if(_tdpOpen&&!e.target.closest('#tdpw_'+_tdpOpen))tdpClose();

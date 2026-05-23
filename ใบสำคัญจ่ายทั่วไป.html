@@ -88,7 +88,7 @@ body{font-family:'TH Sarabun New','Sarabun',Arial,sans-serif;font-size:15px;back
   <div class="card">
     <div class="ct"><span class="n">1</span> ข้อมูลทั่วไป</div>
     <div class="row2">
-      <div class="fg"><label>วันที่</label><div class="tdp-wrap" id="tdpw_gv_date" onclick="event.stopPropagation()"><input type="hidden" id="gv_date"><input type="text" id="tdpi_gv_date" class="tdp-input" placeholder="เลือกหรือพิมพ์วว/ดด/ปปปป" onfocus="tdpFocus('gv_date')" onkeydown="tdpKeydown('gv_date',event)" readonly="false" autocomplete="off"><span class="tdp-icon" onclick="tdpOpen('gv_date')">📅</span><div class="tdp-drop" id="tdpd_gv_date"><div class="tdp-nav"><button onclick="tdpNav('gv_date',-1,event)">‹</button><span class="tdp-my" onclick="tdpToggleYM('gv_date');event.stopPropagation()">...</span><button onclick="tdpNav('gv_date',1,event)">›</button></div><div class="tdp-ym"></div><div class="tdp-days-hdr"><span>อา</span><span>จ</span><span>อ</span><span>พ</span><span>พฤ</span><span>ศ</span><span>ส</span></div><div class="tdp-days"></div></div></div><script>setTimeout(function(){tdpInit("gv_date","");},50);</script></div>
+      <div class="fg"><label>วันที่</label><div class="tdp-wrap" id="tdpw_gv_date" onclick="event.stopPropagation()"><input type="hidden" id="gv_date"><input type="text" id="tdpi_gv_date" class="tdp-input" placeholder="เลือกหรือพิมพ์วว/ดด/ปปปป" onfocus="tdpFocus('gv_date')" onkeydown="tdpKeydown('gv_date',event)" autocomplete="off"><span class="tdp-icon" onclick="tdpOpen('gv_date')">📅</span><div class="tdp-drop" id="tdpd_gv_date"><div class="tdp-nav"><button onclick="tdpNav('gv_date',-1,event)">‹</button><span class="tdp-my" onclick="tdpToggleYM('gv_date');event.stopPropagation()">...</span><button onclick="tdpNav('gv_date',1,event)">›</button></div><div class="tdp-ym"></div><div class="tdp-days-hdr"><span>อา</span><span>จ</span><span>อ</span><span>พ</span><span>พฤ</span><span>ศ</span><span>ส</span></div><div class="tdp-days"></div></div></div></div>
       <div class="fg"><label>บิลที่ของวัน</label><input type="text" id="gv_bill_seq" value="01" placeholder="01"></div>
     </div>
   </div>
@@ -309,23 +309,39 @@ function getPayRows(){
   return rows;
 }
 
+function groupWht(rows){
+  // รวมยอดหักที่ rate เดียวกัน → {label, totalWht}
+  var map={};
+  rows.forEach(function(r){
+    if(r.whtAmt<=0)return;
+    var key=r.whtLabel; // เช่น "หัก ณ ที่จ่าย 15%"
+    if(!map[key])map[key]={label:r.whtLabel,total:0};
+    map[key].total+=r.whtAmt;
+  });
+  return Object.values(map);
+}
+
 function updateSummary(){
   var rows=getPayRows();
   var totalGross=0,totalWht=0;
   rows.forEach(function(r){totalGross+=r.amt;totalWht+=r.whtAmt;});
   var totalNet=totalGross-totalWht;
   var html='';
+  // แสดงรายการ (ไม่แสดงยอดหักรายบรรทัด)
   rows.forEach(function(r){
-    html+='<div>'+r.label+': <b>'+r.amt.toLocaleString('th-TH')+'</b> บาท'+(r.whtAmt>0?' (หัก '+r.whtAmt.toLocaleString('th-TH')+' บาท)':'')+'</div>';
+    html+='<div>'+r.label+': <b>'+r.amt.toLocaleString('th-TH')+'</b> บาท</div>';
   });
-  if(totalWht>0)html+='<div style="color:#c00">รวมหัก: <b>'+totalWht.toLocaleString('th-TH')+'</b> บาท</div>';
+  // แสดงยอดหักรวมตาม rate
+  groupWht(rows).forEach(function(g){
+    html+='<div style="color:#c00">'+g.label+': <b>- '+g.total.toLocaleString('th-TH')+'</b> บาท</div>';
+  });
   html+='<div style="font-size:16px;font-weight:700;border-top:1px solid #ccc;margin-top:6px;padding-top:6px">ยอดจ่ายสุทธิ: <b>'+totalNet.toLocaleString('th-TH')+'</b> บาท ('+toBaht(Math.round(totalNet))+')</div>';
   document.getElementById('summary-detail').innerHTML=html;
 }
 
 function genGvVoucher(){
   var rows=getPayRows();
-  var date=gv('gv_date');
+  var date=(document.getElementById('gv_date')||{value:''}).value;
   var seq=gv('gv_bill_seq')||'01';
   var no=billNo(date,seq);
   var recvName=gv('gv_recv_name')||'..........';
@@ -338,22 +354,24 @@ function genGvVoucher(){
   var CELL='padding:3pt 5pt;font-size:12pt;';
   
   function copy(lbl){
-    // แถวรายการ
+    // แถวรายการ (ไม่แสดงหักรายบรรทัด)
     var rowsHTML='';
     rows.forEach(function(r){
       rowsHTML+='<tr>'
         +'<td style="border:1px solid #999;'+CELL+'">'+r.label+'</td>'
         +'<td style="border:1px solid #999;'+CELL+'text-align:right;white-space:nowrap;width:28%">'+r.amt.toLocaleString('th-TH')+'</td>'
         +'</tr>';
-      if(r.whtAmt>0){
-        rowsHTML+='<tr>'
-          +'<td style="border:1px solid #999;'+CELL+'color:#c00;padding-left:20pt">'+r.whtLabel+' ('+(r.rate*100)+'%)</td>'
-          +'<td style="border:1px solid #999;'+CELL+'text-align:right;color:#c00;white-space:nowrap">- '+r.whtAmt.toLocaleString('th-TH')+'</td>'
-          +'</tr>';
-      }
+    });
+    // แถวหัก ณ ที่จ่าย รวมตาม rate
+    var whtGroups=groupWht(rows);
+    whtGroups.forEach(function(g){
+      rowsHTML+='<tr>'
+        +'<td style="border:1px solid #999;'+CELL+'color:#c00">'+g.label+'</td>'
+        +'<td style="border:1px solid #999;'+CELL+'text-align:right;color:#c00;white-space:nowrap">- '+Math.round(g.total*100)/100 .toLocaleString('th-TH')+'</td>'
+        +'</tr>';
     });
     // pad ว่าง
-    var total_rows=rows.reduce(function(s,r){return s+1+(r.whtAmt>0?1:0);},0);
+    var total_rows=rows.length+whtGroups.length;
     while(total_rows<3){rowsHTML+='<tr><td style="border:1px solid #999;'+CELL+'height:0.8cm"></td><td style="border:1px solid #999;'+CELL+'"></td></tr>';total_rows++;}
     
     return '<div style="flex:1;min-height:0;padding:2mm 3mm;font-family:TH Sarabun New,Sarabun,Arial,sans-serif;box-sizing:border-box;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden">'
@@ -668,6 +686,12 @@ setTimeout(function(){
     _tdpWireEvents(did);
   });
 },200);
+
+setTimeout(function(){
+  document.querySelectorAll('.tdp-wrap[id^="tdpw_"]').forEach(function(w){
+    _tdpWireEvents(w.id.replace('tdpw_',''));
+  });
+},200); // wire static date pickers
 
 document.addEventListener('click',function(e){
   if(_tdpOpen&&!e.target.closest('#tdpw_'+_tdpOpen))tdpClose();

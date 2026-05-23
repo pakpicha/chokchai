@@ -273,7 +273,7 @@ body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;
   <div class="card">
     <div class="ct"><span class="n">1</span> ข้อมูลทั่วไป</div>
     <div class="row2">
-      <div class="fg"><label>วันที่ทำเอกสาร</label><div class="tdp-wrap" id="tdpw_sb_date" onclick="event.stopPropagation()"><input type="hidden" id="sb_date"><input type="text" id="tdpi_sb_date" class="tdp-input" placeholder="เลือกหรือพิมพ์วว/ดด/ปปปป" onfocus="tdpFocus('sb_date')" onkeydown="tdpKeydown('sb_date',event)" readonly="false" autocomplete="off"><span class="tdp-icon" onclick="tdpOpen('sb_date')">📅</span><div class="tdp-drop" id="tdpd_sb_date"><div class="tdp-nav"><button onclick="tdpNav('sb_date',-1,event)">‹</button><span class="tdp-my" onclick="tdpToggleYM('sb_date');event.stopPropagation()">...</span><button onclick="tdpNav('sb_date',1,event)">›</button></div><div class="tdp-ym"></div><div class="tdp-days-hdr"><span>อา</span><span>จ</span><span>อ</span><span>พ</span><span>พฤ</span><span>ศ</span><span>ส</span></div><div class="tdp-days"></div></div></div><script>setTimeout(function(){tdpInit("sb_date","");},50);</script></div>
+      <div class="fg"><label>วันที่ทำเอกสาร</label><div class="tdp-wrap" id="tdpw_sb_date" onclick="event.stopPropagation()"><input type="hidden" id="sb_date"><input type="text" id="tdpi_sb_date" class="tdp-input" placeholder="เลือกหรือพิมพ์วว/ดด/ปปปป" onfocus="tdpFocus('sb_date')" onkeydown="tdpKeydown('sb_date',event)" autocomplete="off"><span class="tdp-icon" onclick="tdpOpen('sb_date')">📅</span><div class="tdp-drop" id="tdpd_sb_date"><div class="tdp-nav"><button onclick="tdpNav('sb_date',-1,event)">‹</button><span class="tdp-my" onclick="tdpToggleYM('sb_date');event.stopPropagation()">...</span><button onclick="tdpNav('sb_date',1,event)">›</button></div><div class="tdp-ym"></div><div class="tdp-days-hdr"><span>อา</span><span>จ</span><span>อ</span><span>พ</span><span>พฤ</span><span>ศ</span><span>ส</span></div><div class="tdp-days"></div></div></div></div>
       <div class="fg"><label>บิลที่ของวัน</label><input type="text" id="sb_bill_seq" placeholder="01" maxlength="2" inputmode="numeric"></div>
     </div>
     <div class="fg"><label>สำนักงานที่ดิน สาขา</label>
@@ -487,17 +487,10 @@ function addSbPay(t){
   if(el)el.oninput=function(){syncSbPayBaht(i);};
 }
 function sbPayFields(i,t){
-  const amtF='<label>จำนวนเงิน (บาท)</label>'
-    +'<input type="text" id="sp'+i+'_amt" inputmode="numeric" placeholder="เช่น 950,000">'
-    +'<label>ตัวอักษร (อัตโนมัติ)</label>'
-    +'<input type="text" id="sp'+i+'_amt_t" class="auto" readonly>';
+  const amtF='<label>จำนวนเงิน (บาท)</label><input type="text" id="sp'+i+'_amt" inputmode="numeric" placeholder="เช่น 950,000"><label>ตัวอักษร (อัตโนมัติ)</label><input type="text" id="sp'+i+'_amt_t" class="auto" readonly>';
   if(t==='cash')return amtF;
-  if(t==='draft')return'<label>เลขที่ดราฟท์</label><input type="text" id="sp'+i+'_dno">'
-    +'<label>ธนาคาร</label><input type="text" id="sp'+i+'_bank">'
-    +'<label>สั่งจ่าย</label><input type="text" id="sp'+i+'_payto">'+amtF;
-  if(t==='transfer')return'<label>ธนาคาร</label><input type="text" id="sp'+i+'_bank">'
-    +'<label>เลขบัญชี</label><input type="text" id="sp'+i+'_accno">'
-    +'<label>ชื่อบัญชี</label><input type="text" id="sp'+i+'_accname">'+amtF;
+  if(t==='draft')return'<label>เลขที่ดราฟท์</label><input type="text" id="sp'+i+'_dno"><label>ธนาคาร</label><input type="text" id="sp'+i+'_bank"><label>สั่งจ่าย</label><input type="text" id="sp'+i+'_payto">'+amtF;
+  if(t==='transfer')return'<label>ธนาคาร</label><input type="text" id="sp'+i+'_bank"><label>เลขบัญชี</label><input type="text" id="sp'+i+'_accno"><label>ชื่อบัญชี</label><input type="text" id="sp'+i+'_accname">'+amtF;
   if(t==='pn')return'<label>เลขที่ตั๋วสัญญาใช้เงิน</label><input type="text" id="sp'+i+'_dno" placeholder="เช่น 0001234"><label>สั่งจ่าย (ชื่อผู้รับ)</label><input type="text" id="sp'+i+'_payto" placeholder="ชื่อผู้รับ">'+amtF;
   if(t==='bankdraft')return'<label>เลขที่ดราฟต์ธนาคาร</label><input type="text" id="sp'+i+'_dno" placeholder="เช่น 1234567"><label>ธนาคาร</label><input type="text" id="sp'+i+'_bank" placeholder="เช่น กรุงเทพ"><label>สั่งจ่าย</label><input type="text" id="sp'+i+'_payto" placeholder="ชื่อผู้รับ">'+amtF;
   if(t==='check')return'<label>เลขที่เช็ค</label><input type="text" id="sp'+i+'_dno" placeholder="เช่น 001234"><label>ธนาคาร</label><input type="text" id="sp'+i+'_bank" placeholder="เช่น ไทยพาณิชย์"><label>สั่งจ่ายในนาม</label><input type="text" id="sp'+i+'_payto" placeholder="ชื่อผู้รับ">'+amtF;
@@ -731,8 +724,7 @@ function buildSbVoucher(d,payRows){
 
   function copy(lbl){
     var rowsHTML=rows.map(function(r){
-      return '<tr><td style="border:1px solid #999;'+CELL+'padding-top:7pt;padding-bottom:7pt">'+r.label+'</td>'
-        +'<td style="border:1px solid #999;'+CELL+'text-align:right;white-space:nowrap;width:30%">'+r.amtFmt+'</td></tr>';
+      return '<tr><td style="border:1px solid #999;'+CELL+'padding-top:7pt;padding-bottom:7pt">'+r.label+'</td><td style="border:1px solid #999;'+CELL+'text-align:right;white-space:nowrap;width:30%">'+r.amtFmt+'</td></tr>';
     }).join('');
 
     // ชื่อทุกคน
@@ -742,54 +734,20 @@ function buildSbVoucher(d,payRows){
     // ช่องเซ็น
     var cw=Math.floor(100/(sellers.length+1));
     var recvCols=sellers.map(function(s){
-      return '<td style="text-align:center;vertical-align:top;padding:0.6cm 2px 0">'
-        +'<div style="border-top:1px solid #000;width:110px;margin:0 auto 3pt"></div>'
-        +'<div style="font-size:11pt">ผู้รับเงิน</div>'
-        +'<div style="font-size:10pt">( '+s.name+' )</div>'
-        +'</td>';
+      return '<td style="text-align:center;vertical-align:top;padding:0.6cm 2px 0"><div style="border-top:1px solid #000;width:110px;margin:0 auto 3pt"></div><div style="font-size:11pt">ผู้รับเงิน</div><div style="font-size:10pt">( '+s.name+' )</div></td>';
     }).join('');
 
-    return '<div style="flex:1;min-height:0;padding:1mm 2mm;font-family:TH Sarabun New,Sarabun,Arial,sans-serif;box-sizing:border-box;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden">'
-      +'<div>'
+    return '<div style="flex:1;min-height:0;padding:1mm 2mm;font-family:TH Sarabun New,Sarabun,Arial,sans-serif;box-sizing:border-box;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden"><div>'
       // หัว
-      +'<table style="width:100%;border-collapse:collapse;margin-bottom:4pt;table-layout:fixed"><tr>'
-      +'<td style="vertical-align:middle">'
-      +'<span style="font-size:18pt;font-weight:bold">บริษัท โชคชัย เงินด่วน จำกัด</span><br>'
-      +'<span style="font-size:10pt">No. '+no+'</span><br>'
-      +'<span style="font-size:10pt">89/28 หมู่ 9 ต.ท่าเยี่ยม อ.โชคชัย จ.นครราชสีมา</span><br>'
-      +'<span style="font-size:10pt">เลขประจำตัวผู้เสียภาษี 0305568001941</span>'
-      +'</td>'
-      +'<td style="text-align:right;vertical-align:top;white-space:nowrap;min-width:110px">'
-      +'<span style="font-size:13pt;font-weight:bold;color:#c00">ใบสำคัญจ่าย</span><br>'
-      +'<span style="font-size:11pt">'+lbl+'</span><br>'
-      +'<span style="font-size:11pt">วันที่ '+shortDate(d.sb_date)+'</span>'
-      +'</td></tr></table>'
+      +'<table style="width:100%;border-collapse:collapse;margin-bottom:4pt;table-layout:fixed"><tr><td style="vertical-align:middle"><span style="font-size:18pt;font-weight:bold">บริษัท โชคชัย เงินด่วน จำกัด</span><br><span style="font-size:10pt">No. '+no+'</span><br><span style="font-size:10pt">89/28 หมู่ 9 ต.ท่าเยี่ยม อ.โชคชัย จ.นครราชสีมา</span><br><span style="font-size:10pt">เลขประจำตัวผู้เสียภาษี 0305568001941</span></td><td style="text-align:right;vertical-align:top;white-space:nowrap;min-width:110px"><span style="font-size:13pt;font-weight:bold;color:#c00">ใบสำคัญจ่าย</span><br><span style="font-size:11pt">'+lbl+'</span><br><span style="font-size:11pt">วันที่ '+shortDate(d.sb_date)+'</span></td></tr></table>'
       // ชื่อ/ที่อยู่
-      +'<table style="width:100%;border-collapse:collapse;margin-bottom:4pt;table-layout:fixed">'
-      +'<tr><td style="border:1px solid #999;border-bottom:none;'+CELL+'font-weight:bold;width:25%;vertical-align:top">ชื่อ-นามสกุล ลูกค้า</td>'
-      +'<td style="border:1px solid #999;border-left:none;border-bottom:none;'+CELL+'word-break:break-word">'+allNames+'</td></tr>'
-      +'<tr><td style="border:1px solid #999;border-top:none;'+CELL+'font-weight:bold;width:25%;vertical-align:top">ที่อยู่ ลูกค้า</td>'
-      +'<td style="border:1px solid #999;border-left:none;border-top:none;'+CELL+'word-break:break-word">'+allAddrs+'</td></tr>'
-      +'</table>'
+      +'<table style="width:100%;border-collapse:collapse;margin-bottom:4pt;table-layout:fixed"><tr><td style="border:1px solid #999;border-bottom:none;'+CELL+'font-weight:bold;width:25%;vertical-align:top">ชื่อ-นามสกุล ลูกค้า</td><td style="border:1px solid #999;border-left:none;border-bottom:none;'+CELL+'word-break:break-word">'+allNames+'</td></tr><tr><td style="border:1px solid #999;border-top:none;'+CELL+'font-weight:bold;width:25%;vertical-align:top">ที่อยู่ ลูกค้า</td><td style="border:1px solid #999;border-left:none;border-top:none;'+CELL+'word-break:break-word">'+allAddrs+'</td></tr></table>'
       // รายการ
-      +'<table style="width:100%;border-collapse:collapse;margin-bottom:4pt;table-layout:fixed">'
-      +'<tr style="background:#eee">'
-      +'<th style="border:1px solid #999;'+CELL+'text-align:center">รายละเอียดการจ่ายเงิน</th>'
-      +'<th style="border:1px solid #999;'+CELL+'text-align:center;width:30%">จำนวนเงิน (บาท)</th></tr>'
+      +'<table style="width:100%;border-collapse:collapse;margin-bottom:4pt;table-layout:fixed"><tr style="background:#eee"><th style="border:1px solid #999;'+CELL+'text-align:center">รายละเอียดการจ่ายเงิน</th><th style="border:1px solid #999;'+CELL+'text-align:center;width:30%">จำนวนเงิน (บาท)</th></tr>'
       +rowsHTML
-      +'<tr style="background:#ddd;font-weight:bold">'
-      +'<td style="border:1px solid #999;'+CELL+'">รวมเงินที่จ่าย &nbsp; '+totalT+'</td>'
-      +'<td style="border:1px solid #999;'+CELL+'text-align:right;white-space:nowrap">'+totalFmt+'</td>'
-      +'</tr></table>'
-      +'</div>'
+      +'<tr style="background:#ddd;font-weight:bold"><td style="border:1px solid #999;'+CELL+'">รวมเงินที่จ่าย &nbsp; '+totalT+'</td><td style="border:1px solid #999;'+CELL+'text-align:right;white-space:nowrap">'+totalFmt+'</td></tr></table></div>'
       // ช่องเซ็น
-      +'<table style="width:100%;border-collapse:collapse;margin-top:0.3cm"><tr>'
-      +'<td style="text-align:center;vertical-align:top;padding:0.6cm 2px 0;width:'+cw+'%">'
-      +'<div style="border-top:1px solid #000;width:110px;margin:0 auto 3pt"></div>'
-      +'<div style="font-size:11pt">ผู้จ่ายเงิน / ผู้มีอำนาจลงนาม</div>'
-      +'<div style="font-size:10pt">( บริษัท โชคชัย เงินด่วน จำกัด )</div>'
-      +'</td>'+recvCols+'</tr></table>'
-      +'</div>';
+      +'<table style="width:100%;border-collapse:collapse;margin-top:0.3cm"><tr><td style="text-align:center;vertical-align:top;padding:0.6cm 2px 0;width:'+cw+'%"><div style="border-top:1px solid #000;width:110px;margin:0 auto 3pt"></div><div style="font-size:11pt">ผู้จ่ายเงิน / ผู้มีอำนาจลงนาม</div><div style="font-size:10pt">( บริษัท โชคชัย เงินด่วน จำกัด )</div></td>'+recvCols+'</tr></table></div>';
   }
 
   return '<div class="doc doc-page" style="height:100vh;display:flex;flex-direction:column;box-sizing:border-box">'
@@ -801,7 +759,7 @@ function buildSbVoucher(d,payRows){
 
 function genSellback(){
   const d={
-    sb_date:gv('sb_date'), sb_bill_seq:gv('sb_bill_seq')||'01',
+    sb_date:(document.getElementById('sb_date')||{value:''}).value, sb_bill_seq:gv('sb_bill_seq')||'01',
     sb_date_th:gv('sb_date_th'), sb_doc_type:gv('sb_doc_type'),
     sb_title_no:gv('sb_title_no')||'..........', sb_survey_no:gv('sb_survey_no'),
     sb_area:gv('sb_area'), sb_tambon:gv('sb_tambon'),
@@ -822,13 +780,7 @@ function genSellback(){
   if(wanted.includes('td16')){
     // Build data to send to td16-overlay.html
     // ข้อมูลจะดึงตรงจากฟอร์มโดย launchTD16()
-    var td16LaunchHtml = '<div style="padding:30px 20px;text-align:center">'
-      +'<div style="font-size:48px;margin-bottom:16px">🗂️</div>'
-      +'<div style="font-size:17px;font-weight:700;color:#1a3a2a;margin-bottom:8px">ทด.16 บันทึกถ้อยคำ</div>'
-      +'<div style="font-size:13px;color:#666;margin-bottom:20px;line-height:1.5">ข้อมูลที่กรอกทั้งหมดจะถูกส่งไปยัง<br>หน้า ทด.16 overlay อัตโนมัติ</div>'
-      +'<button onclick="launchTD16()" style="background:#1a3a2a;color:#fff;border:none;padding:14px 28px;border-radius:10px;font-size:16px;font-family:inherit;font-weight:700;cursor:pointer;width:100%;max-width:280px">📋 เปิด ทด.16 Overlay</button>'
-      +'<div style="font-size:11px;color:#aaa;margin-top:12px">ข้อมูลโฉนด, ชื่อ, วันที่, จำนวนเงินจะเด้งเข้าอัตโนมัติ</div>'
-      +'</div>';
+    var td16LaunchHtml = '<div style="padding:30px 20px;text-align:center"><div style="font-size:48px;margin-bottom:16px">🗂️</div><div style="font-size:17px;font-weight:700;color:#1a3a2a;margin-bottom:8px">ทด.16 บันทึกถ้อยคำ</div><div style="font-size:13px;color:#666;margin-bottom:20px;line-height:1.5">ข้อมูลที่กรอกทั้งหมดจะถูกส่งไปยัง<br>หน้า ทด.16 overlay อัตโนมัติ</div><button onclick="launchTD16()" style="background:#1a3a2a;color:#fff;border:none;padding:14px 28px;border-radius:10px;font-size:16px;font-family:inherit;font-weight:700;cursor:pointer;width:100%;max-width:280px">📋 เปิด ทด.16 Overlay</button><div style="font-size:11px;color:#aaa;margin-top:12px">ข้อมูลโฉนด, ชื่อ, วันที่, จำนวนเงินจะเด้งเข้าอัตโนมัติ</div></div>';
 
     docs.td16={label:'ทด.16 บันทึกถ้อยคำ', html:td16LaunchHtml};
   }
@@ -902,7 +854,7 @@ function launchTD16(){
     meeting_no:      gv('sb_meeting_no'),
     chanote_count:   gv('sb_chanote_count') || (gv('sb_title_no') ? String(gv('sb_title_no').split(',').length) : '1'),
     // ส่ง raw date เพื่อให้ td16 แยก วัน/เดือน/ปี เอง
-    raw_date:        gv('sb_date'),
+    raw_date:        (document.getElementById('sb_date')||{value:''}).value,
   };
   try{
     localStorage.setItem('td16_from_khaifak', JSON.stringify(data));
@@ -1237,22 +1189,9 @@ function addSeller(){
   div.id='seller-'+n;
   div.style.cssText='border:1px solid #dde8dd;border-radius:10px;padding:12px;margin-bottom:10px;background:#fafaf7';
   div.innerHTML=
-    '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">'
-    +'<span style="font-weight:700;color:#1a3a2a;font-size:14px">ผู้ขายฝาก คนที่ '+n+'</span>'
+    '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><span style="font-weight:700;color:#1a3a2a;font-size:14px">ผู้ขายฝาก คนที่ '+n+'</span>'
     +(n>1?'<button type="button" onclick="removeSeller('+n+')" style="background:none;border:none;color:#c00;font-size:22px;cursor:pointer;padding:0">×</button>':'')
-    +'</div>'
-    +'<div class="fg"><label>ชื่อ-นามสกุล</label>'
-    +'<input type="text" id="sel_name_'+n+'" placeholder="นาย/นาง/นางสาว ชื่อ นามสกุล"></div>'
-    +'<div class="fg"><label>ที่อยู่ (บ้านเลขที่ หมู่)</label>'
-    +'<input type="text" id="sel_addr_'+n+'" placeholder="เช่น 123/4 หมู่ 5"></div>'
-    +'<div class="fg"><label>จังหวัด</label>'
-    +'<input type="text" id="sel_prov_'+n+'" placeholder="พิมพ์หรือเลือกจังหวัด..." style="padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fff;width:100%"></div>'
-    +'<div class="fg"><label>อำเภอ/เขต</label>'
-    +'<input type="text" id="sel_amp_'+n+'" placeholder="พิมพ์หรือเลือก..." style="padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fff;width:100%"></div>'
-    +'<div class="fg"><label>ตำบล/แขวง</label>'
-    +'<input type="text" id="sel_tam_'+n+'" placeholder="พิมพ์หรือเลือก..." style="padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fff;width:100%"></div>'
-    +'<div class="fg"><label>สัญชาติ</label>'
-    +'<input type="text" id="sel_nat_'+n+'" value="ไทย"></div>';
+    +'</div><div class="fg"><label>ชื่อ-นามสกุล</label><input type="text" id="sel_name_'+n+'" placeholder="นาย/นาง/นางสาว ชื่อ นามสกุล"></div><div class="fg"><label>ที่อยู่ (บ้านเลขที่ หมู่)</label><input type="text" id="sel_addr_'+n+'" placeholder="เช่น 123/4 หมู่ 5"></div><div class="fg"><label>จังหวัด</label><input type="text" id="sel_prov_'+n+'" placeholder="พิมพ์หรือเลือกจังหวัด..." style="padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fff;width:100%"></div><div class="fg"><label>อำเภอ/เขต</label><input type="text" id="sel_amp_'+n+'" placeholder="พิมพ์หรือเลือก..." style="padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fff;width:100%"></div><div class="fg"><label>ตำบล/แขวง</label><input type="text" id="sel_tam_'+n+'" placeholder="พิมพ์หรือเลือก..." style="padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fff;width:100%"></div><div class="fg"><label>สัญชาติ</label><input type="text" id="sel_nat_'+n+'" value="ไทย"></div>';
   wrap.appendChild(div);
   makeCombo('sel_prov_'+n,PROVS,function(v){
     if(typeof ADDR!=='undefined'&&ADDR[v]){
@@ -1309,13 +1248,19 @@ function autoRestore(){
     Object.keys(data).forEach(function(k){
       var el = document.getElementById(k);
       if(!el) return;
-      if(el.type === 'checkbox') el.checked = data[k];
-      else el.value = data[k];
+      try{
+        if(el.type === 'checkbox') el.checked = data[k];
+        else { el.value = data[k]; }
+      }catch(e){}
     });
 
     // sync date display fields
     document.querySelectorAll('input[type="hidden"][id]').forEach(function(d){
       if(d.value&&document.getElementById('tdpi_'+d.id)) tdpSetValue(d.id,d.value);
+    });
+    // restore date pickers
+    document.querySelectorAll('input[type="hidden"][id]').forEach(function(h){
+      if(h.value&&document.getElementById('tdpi_'+h.id))setTimeout(function(){tdpSetValue(h.id,h.value);},200);
     });
     return true;
   } catch(e) { return false; }
@@ -1568,6 +1513,12 @@ setTimeout(function(){
     _tdpWireEvents(did);
   });
 },200);
+
+setTimeout(function(){
+  document.querySelectorAll('.tdp-wrap[id^="tdpw_"]').forEach(function(w){
+    _tdpWireEvents(w.id.replace('tdpw_',''));
+  });
+},200); // wire static date pickers
 
 document.addEventListener('click',function(e){
   if(_tdpOpen&&!e.target.closest('#tdpw_'+_tdpOpen))tdpClose();

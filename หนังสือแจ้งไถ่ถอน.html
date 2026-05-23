@@ -40,7 +40,7 @@ body{font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;font-size:15px;back
   .doc-page{page-break-after:always}
   .doc-page:last-child{page-break-after:avoid}
 }
-.doc-page{font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;font-size:14pt;line-height:1.8;color:#000;padding:1.5cm 2cm;width:21cm;margin:0 auto;background:#fff}
+.doc-page{font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;font-size:14pt;line-height:1.8;color:#000;padding:1.5cm 1.8cm;width:21cm;margin:0 auto;background:#fff}
 .doc-page p{margin-bottom:6pt;text-align:justify}
 .doc-page .center{text-align:center}
 .doc-page .bold{font-weight:bold}
@@ -51,14 +51,8 @@ body{font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;font-size:15px;back
 .doc-page .sign-line{text-align:center;margin-top:0.5cm}
 
 /* ── Date Widget ── */
-.dw-wrap{position:relative;display:flex;align-items:center;gap:6px}
-.dw-txt{flex:1;padding:9px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7;letter-spacing:1px}
 .dw-txt.has-val{border-color:#4caf50;background:#f7fcf7}
 .dw-txt.err{border-color:#e74c3c;background:#fff5f5}
-.dw-hint{font-size:11px;color:#999;margin-top:2px}
-
-
-
 /* ── Thai Date Picker ── */
 .tdp-wrap{position:relative;display:inline-block;width:100%}
 .tdp-input{width:100%;padding:9px 36px 9px 11px;font-size:15px;border:1px solid #ccc;
@@ -108,7 +102,7 @@ body{font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;font-size:15px;back
     <div class="fg"><label>เขียนที่</label>
       <input type="text" id="n_writeat" value="89/28 หมู่ 9 ต.ท่าเยี่ยม อ.โชคชัย จ.นครราชสีมา"></div>
     <div class="fg"><label>วันที่เขียนหนังสือ</label>
-      <div class="tdp-wrap" id="tdpw_n_writedate" onclick="event.stopPropagation()"><input type="hidden" id="n_writedate"><input type="text" id="tdpi_n_writedate" class="tdp-input" placeholder="เลือกหรือพิมพ์วว/ดด/ปปปป" onfocus="tdpFocus('n_writedate')" onkeydown="tdpKeydown('n_writedate',event)" autocomplete="off"><span class="tdp-icon" onclick="tdpOpen('n_writedate')">📅</span><div class="tdp-drop" id="tdpd_n_writedate"><div class="tdp-nav"><button onclick="tdpNav('n_writedate',-1,event)">‹</button><span class="tdp-my" onclick="tdpToggleYM('n_writedate');event.stopPropagation()">...</span><button onclick="tdpNav('n_writedate',1,event)">›</button></div><div class="tdp-ym"></div><div class="tdp-days-hdr"><span>อา</span><span>จ</span><span>อ</span><span>พ</span><span>พฤ</span><span>ศ</span><span>ส</span></div><div class="tdp-days"></div></div></div><script>setTimeout(function(){tdpInit("n_writedate","");},50);</script></div>
+      <div class="tdp-wrap" id="tdpw_n_writedate" onclick="event.stopPropagation()"><input type="hidden" id="n_writedate"><input type="text" id="tdpi_n_writedate" class="tdp-input" placeholder="เลือกหรือพิมพ์วว/ดด/ปปปป" onfocus="tdpFocus('n_writedate')" onkeydown="tdpKeydown('n_writedate',event)" autocomplete="off"><span class="tdp-icon" onclick="tdpOpen('n_writedate')">📅</span><div class="tdp-drop" id="tdpd_n_writedate"><div class="tdp-nav"><button onclick="tdpNav('n_writedate',-1,event)">‹</button><span class="tdp-my" onclick="tdpToggleYM('n_writedate');event.stopPropagation()">...</span><button onclick="tdpNav('n_writedate',1,event)">›</button></div><div class="tdp-ym"></div><div class="tdp-days-hdr"><span>อา</span><span>จ</span><span>อ</span><span>พ</span><span>พฤ</span><span>ศ</span><span>ส</span></div><div class="tdp-days"></div></div></div></div>
     <div class="fg"><label>กรรมการผู้ลงนามแทนบริษัท</label>
       <select id="n_signer" style="width:100%;padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7">
         <option value="นายชุณนเกียรติ จรัสบวรพันธ์">นายชุณนเกียรติ จรัสบวรพันธ์</option>
@@ -153,7 +147,7 @@ body{font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;font-size:15px;back
       <div class="fg"><label>กำหนดเวลา (เดือน)</label>
         <input type="text" id="n_period" value="12"></div>
       <div class="fg"><label>วันที่ทำสัญญา</label>
-        <div class="tdp-wrap" id="tdpw_n_contract_date" onclick="event.stopPropagation()"><input type="hidden" id="n_contract_date"><input type="text" id="tdpi_n_contract_date" class="tdp-input" placeholder="เลือกหรือพิมพ์วว/ดด/ปปปป" onfocus="tdpFocus('n_contract_date')" onkeydown="tdpKeydown('n_contract_date',event)" autocomplete="off"><span class="tdp-icon" onclick="tdpOpen('n_contract_date')">📅</span><div class="tdp-drop" id="tdpd_n_contract_date"><div class="tdp-nav"><button onclick="tdpNav('n_contract_date',-1,event)">‹</button><span class="tdp-my" onclick="tdpToggleYM('n_contract_date');event.stopPropagation()">...</span><button onclick="tdpNav('n_contract_date',1,event)">›</button></div><div class="tdp-ym"></div><div class="tdp-days-hdr"><span>อา</span><span>จ</span><span>อ</span><span>พ</span><span>พฤ</span><span>ศ</span><span>ส</span></div><div class="tdp-days"></div></div></div><script>setTimeout(function(){tdpInit("n_contract_date","");},50);</script></div>
+        <div class="tdp-wrap" id="tdpw_n_contract_date" onclick="event.stopPropagation()"><input type="hidden" id="n_contract_date"><input type="text" id="tdpi_n_contract_date" class="tdp-input" placeholder="เลือกหรือพิมพ์วว/ดด/ปปปป" onfocus="tdpFocus('n_contract_date')" onkeydown="tdpKeydown('n_contract_date',event)" autocomplete="off"><span class="tdp-icon" onclick="tdpOpen('n_contract_date')">📅</span><div class="tdp-drop" id="tdpd_n_contract_date"><div class="tdp-nav"><button onclick="tdpNav('n_contract_date',-1,event)">‹</button><span class="tdp-my" onclick="tdpToggleYM('n_contract_date');event.stopPropagation()">...</span><button onclick="tdpNav('n_contract_date',1,event)">›</button></div><div class="tdp-ym"></div><div class="tdp-days-hdr"><span>อา</span><span>จ</span><span>อ</span><span>พ</span><span>พฤ</span><span>ศ</span><span>ส</span></div><div class="tdp-days"></div></div></div></div>
     </div>
 
     <!-- ประเภทเอกสารสิทธิ์ — เลือกได้ 1 ประเภท แต่ละประเภทมีฟิลด์ต่างกัน -->
@@ -194,7 +188,7 @@ body{font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;font-size:15px;back
         <div class="fg"><label>สาขาสำนักงานที่ดิน</label>
           <input type="text" id="n_land_branch" placeholder="เช่น พิมาย หรือ -"></div>
         <div class="fg"><label>วันที่จดทะเบียน</label>
-          <div class="tdp-wrap" id="tdpw_n_reg_date" onclick="event.stopPropagation()"><input type="hidden" id="n_reg_date"><input type="text" id="tdpi_n_reg_date" class="tdp-input" placeholder="เลือกหรือพิมพ์วว/ดด/ปปปป" onfocus="tdpFocus('n_reg_date')" onkeydown="tdpKeydown('n_reg_date',event)" autocomplete="off"><span class="tdp-icon" onclick="tdpOpen('n_reg_date')">📅</span><div class="tdp-drop" id="tdpd_n_reg_date"><div class="tdp-nav"><button onclick="tdpNav('n_reg_date',-1,event)">‹</button><span class="tdp-my" onclick="tdpToggleYM('n_reg_date');event.stopPropagation()">...</span><button onclick="tdpNav('n_reg_date',1,event)">›</button></div><div class="tdp-ym"></div><div class="tdp-days-hdr"><span>อา</span><span>จ</span><span>อ</span><span>พ</span><span>พฤ</span><span>ศ</span><span>ส</span></div><div class="tdp-days"></div></div></div><script>setTimeout(function(){tdpInit("n_reg_date","");},50);</script></div>
+          <div class="tdp-wrap" id="tdpw_n_reg_date" onclick="event.stopPropagation()"><input type="hidden" id="n_reg_date"><input type="text" id="tdpi_n_reg_date" class="tdp-input" placeholder="เลือกหรือพิมพ์วว/ดด/ปปปป" onfocus="tdpFocus('n_reg_date')" onkeydown="tdpKeydown('n_reg_date',event)" autocomplete="off"><span class="tdp-icon" onclick="tdpOpen('n_reg_date')">📅</span><div class="tdp-drop" id="tdpd_n_reg_date"><div class="tdp-nav"><button onclick="tdpNav('n_reg_date',-1,event)">‹</button><span class="tdp-my" onclick="tdpToggleYM('n_reg_date');event.stopPropagation()">...</span><button onclick="tdpNav('n_reg_date',1,event)">›</button></div><div class="tdp-ym"></div><div class="tdp-days-hdr"><span>อา</span><span>จ</span><span>อ</span><span>พ</span><span>พฤ</span><span>ศ</span><span>ส</span></div><div class="tdp-days"></div></div></div></div>
       </div>
     </div>
 
@@ -213,7 +207,7 @@ body{font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;font-size:15px;back
         <div class="fg"><label>สาขาสำนักงานที่ดิน</label>
           <input type="text" id="n_ns3k_branch" placeholder="เช่น พิมาย หรือ -"></div>
         <div class="fg"><label>วันที่จดทะเบียน</label>
-          <div class="tdp-wrap" id="tdpw_n_ns3k_reg_date" onclick="event.stopPropagation()"><input type="hidden" id="n_ns3k_reg_date"><input type="text" id="tdpi_n_ns3k_reg_date" class="tdp-input" placeholder="เลือกหรือพิมพ์วว/ดด/ปปปป" onfocus="tdpFocus('n_ns3k_reg_date')" onkeydown="tdpKeydown('n_ns3k_reg_date',event)" autocomplete="off"><span class="tdp-icon" onclick="tdpOpen('n_ns3k_reg_date')">📅</span><div class="tdp-drop" id="tdpd_n_ns3k_reg_date"><div class="tdp-nav"><button onclick="tdpNav('n_ns3k_reg_date',-1,event)">‹</button><span class="tdp-my" onclick="tdpToggleYM('n_ns3k_reg_date');event.stopPropagation()">...</span><button onclick="tdpNav('n_ns3k_reg_date',1,event)">›</button></div><div class="tdp-ym"></div><div class="tdp-days-hdr"><span>อา</span><span>จ</span><span>อ</span><span>พ</span><span>พฤ</span><span>ศ</span><span>ส</span></div><div class="tdp-days"></div></div></div><script>setTimeout(function(){tdpInit("n_ns3k_reg_date","");},50);</script></div>
+          <div class="tdp-wrap" id="tdpw_n_ns3k_reg_date" onclick="event.stopPropagation()"><input type="hidden" id="n_ns3k_reg_date"><input type="text" id="tdpi_n_ns3k_reg_date" class="tdp-input" placeholder="เลือกหรือพิมพ์วว/ดด/ปปปป" onfocus="tdpFocus('n_ns3k_reg_date')" onkeydown="tdpKeydown('n_ns3k_reg_date',event)" autocomplete="off"><span class="tdp-icon" onclick="tdpOpen('n_ns3k_reg_date')">📅</span><div class="tdp-drop" id="tdpd_n_ns3k_reg_date"><div class="tdp-nav"><button onclick="tdpNav('n_ns3k_reg_date',-1,event)">‹</button><span class="tdp-my" onclick="tdpToggleYM('n_ns3k_reg_date');event.stopPropagation()">...</span><button onclick="tdpNav('n_ns3k_reg_date',1,event)">›</button></div><div class="tdp-ym"></div><div class="tdp-days-hdr"><span>อา</span><span>จ</span><span>อ</span><span>พ</span><span>พฤ</span><span>ศ</span><span>ส</span></div><div class="tdp-days"></div></div></div></div>
       </div>
     </div>
 
@@ -232,7 +226,7 @@ body{font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;font-size:15px;back
         <div class="fg"><label>สาขาสำนักงานที่ดิน</label>
           <input type="text" id="n_ns3_branch" placeholder="เช่น พิมาย หรือ -"></div>
         <div class="fg"><label>วันที่จดทะเบียน</label>
-          <div class="tdp-wrap" id="tdpw_n_ns3_reg_date" onclick="event.stopPropagation()"><input type="hidden" id="n_ns3_reg_date"><input type="text" id="tdpi_n_ns3_reg_date" class="tdp-input" placeholder="เลือกหรือพิมพ์วว/ดด/ปปปป" onfocus="tdpFocus('n_ns3_reg_date')" onkeydown="tdpKeydown('n_ns3_reg_date',event)" autocomplete="off"><span class="tdp-icon" onclick="tdpOpen('n_ns3_reg_date')">📅</span><div class="tdp-drop" id="tdpd_n_ns3_reg_date"><div class="tdp-nav"><button onclick="tdpNav('n_ns3_reg_date',-1,event)">‹</button><span class="tdp-my" onclick="tdpToggleYM('n_ns3_reg_date');event.stopPropagation()">...</span><button onclick="tdpNav('n_ns3_reg_date',1,event)">›</button></div><div class="tdp-ym"></div><div class="tdp-days-hdr"><span>อา</span><span>จ</span><span>อ</span><span>พ</span><span>พฤ</span><span>ศ</span><span>ส</span></div><div class="tdp-days"></div></div></div><script>setTimeout(function(){tdpInit("n_ns3_reg_date","");},50);</script></div>
+          <div class="tdp-wrap" id="tdpw_n_ns3_reg_date" onclick="event.stopPropagation()"><input type="hidden" id="n_ns3_reg_date"><input type="text" id="tdpi_n_ns3_reg_date" class="tdp-input" placeholder="เลือกหรือพิมพ์วว/ดด/ปปปป" onfocus="tdpFocus('n_ns3_reg_date')" onkeydown="tdpKeydown('n_ns3_reg_date',event)" autocomplete="off"><span class="tdp-icon" onclick="tdpOpen('n_ns3_reg_date')">📅</span><div class="tdp-drop" id="tdpd_n_ns3_reg_date"><div class="tdp-nav"><button onclick="tdpNav('n_ns3_reg_date',-1,event)">‹</button><span class="tdp-my" onclick="tdpToggleYM('n_ns3_reg_date');event.stopPropagation()">...</span><button onclick="tdpNav('n_ns3_reg_date',1,event)">›</button></div><div class="tdp-ym"></div><div class="tdp-days-hdr"><span>อา</span><span>จ</span><span>อ</span><span>พ</span><span>พฤ</span><span>ศ</span><span>ส</span></div><div class="tdp-days"></div></div></div></div>
       </div>
     </div>
 
@@ -253,7 +247,7 @@ body{font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;font-size:15px;back
         <div class="fg"><label>สาขาสำนักงานที่ดิน</label>
           <input type="text" id="n_condo_branch" placeholder="เช่น เมือง หรือ -"></div>
         <div class="fg"><label>วันที่จดทะเบียน</label>
-          <div class="tdp-wrap" id="tdpw_n_condo_reg_date" onclick="event.stopPropagation()"><input type="hidden" id="n_condo_reg_date"><input type="text" id="tdpi_n_condo_reg_date" class="tdp-input" placeholder="เลือกหรือพิมพ์วว/ดด/ปปปป" onfocus="tdpFocus('n_condo_reg_date')" onkeydown="tdpKeydown('n_condo_reg_date',event)" autocomplete="off"><span class="tdp-icon" onclick="tdpOpen('n_condo_reg_date')">📅</span><div class="tdp-drop" id="tdpd_n_condo_reg_date"><div class="tdp-nav"><button onclick="tdpNav('n_condo_reg_date',-1,event)">‹</button><span class="tdp-my" onclick="tdpToggleYM('n_condo_reg_date');event.stopPropagation()">...</span><button onclick="tdpNav('n_condo_reg_date',1,event)">›</button></div><div class="tdp-ym"></div><div class="tdp-days-hdr"><span>อา</span><span>จ</span><span>อ</span><span>พ</span><span>พฤ</span><span>ศ</span><span>ส</span></div><div class="tdp-days"></div></div></div><script>setTimeout(function(){tdpInit("n_condo_reg_date","");},50);</script></div>
+          <div class="tdp-wrap" id="tdpw_n_condo_reg_date" onclick="event.stopPropagation()"><input type="hidden" id="n_condo_reg_date"><input type="text" id="tdpi_n_condo_reg_date" class="tdp-input" placeholder="เลือกหรือพิมพ์วว/ดด/ปปปป" onfocus="tdpFocus('n_condo_reg_date')" onkeydown="tdpKeydown('n_condo_reg_date',event)" autocomplete="off"><span class="tdp-icon" onclick="tdpOpen('n_condo_reg_date')">📅</span><div class="tdp-drop" id="tdpd_n_condo_reg_date"><div class="tdp-nav"><button onclick="tdpNav('n_condo_reg_date',-1,event)">‹</button><span class="tdp-my" onclick="tdpToggleYM('n_condo_reg_date');event.stopPropagation()">...</span><button onclick="tdpNav('n_condo_reg_date',1,event)">›</button></div><div class="tdp-ym"></div><div class="tdp-days-hdr"><span>อา</span><span>จ</span><span>อ</span><span>พ</span><span>พฤ</span><span>ศ</span><span>ส</span></div><div class="tdp-days"></div></div></div></div>
       </div>
     </div>
   </div>
@@ -279,7 +273,7 @@ body{font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;font-size:15px;back
   <div class="card">
     <div class="ct"><span class="n">5</span> กำหนดไถ่ถอนและสินไถ่</div>
     <div class="fg"><label>วันครบกำหนดไถ่</label>
-      <div class="tdp-wrap" id="tdpw_n_due_date" onclick="event.stopPropagation()"><input type="hidden" id="n_due_date"><input type="text" id="tdpi_n_due_date" class="tdp-input" placeholder="เลือกหรือพิมพ์วว/ดด/ปปปป" onfocus="tdpFocus('n_due_date')" onkeydown="tdpKeydown('n_due_date',event)" autocomplete="off"><span class="tdp-icon" onclick="tdpOpen('n_due_date')">📅</span><div class="tdp-drop" id="tdpd_n_due_date"><div class="tdp-nav"><button onclick="tdpNav('n_due_date',-1,event)">‹</button><span class="tdp-my" onclick="tdpToggleYM('n_due_date');event.stopPropagation()">...</span><button onclick="tdpNav('n_due_date',1,event)">›</button></div><div class="tdp-ym"></div><div class="tdp-days-hdr"><span>อา</span><span>จ</span><span>อ</span><span>พ</span><span>พฤ</span><span>ศ</span><span>ส</span></div><div class="tdp-days"></div></div></div><script>setTimeout(function(){tdpInit("n_due_date","");},50);</script></div>
+      <div class="tdp-wrap" id="tdpw_n_due_date" onclick="event.stopPropagation()"><input type="hidden" id="n_due_date"><input type="text" id="tdpi_n_due_date" class="tdp-input" placeholder="เลือกหรือพิมพ์วว/ดด/ปปปป" onfocus="tdpFocus('n_due_date')" onkeydown="tdpKeydown('n_due_date',event)" autocomplete="off"><span class="tdp-icon" onclick="tdpOpen('n_due_date')">📅</span><div class="tdp-drop" id="tdpd_n_due_date"><div class="tdp-nav"><button onclick="tdpNav('n_due_date',-1,event)">‹</button><span class="tdp-my" onclick="tdpToggleYM('n_due_date');event.stopPropagation()">...</span><button onclick="tdpNav('n_due_date',1,event)">›</button></div><div class="tdp-ym"></div><div class="tdp-days-hdr"><span>อา</span><span>จ</span><span>อ</span><span>พ</span><span>พฤ</span><span>ศ</span><span>ส</span></div><div class="tdp-days"></div></div></div></div>
     <div class="row2">
       <div class="fg"><label>สินไถ่ (ตัวเลข บาท)</label>
         <input type="text" id="n_redeem_amt" inputmode="numeric" placeholder="เช่น 4762500" oninput="onRedeemChange()"></div>
@@ -360,20 +354,9 @@ function addSeller(data){
   div.id='seller-'+n;
   div.className='seller-block';
   div.innerHTML=
-    '<div class="sb-head">'+
-    '<span class="sb-title">ผู้ขายฝาก '+(n===1?'1 (หลัก)':n)+'</span>'+
+    '<div class="sb-head"><span class="sb-title">ผู้ขายฝาก '+(n===1?'1 (หลัก)':n)+'</span>'+
     (n>1?'<button type="button" class="del-btn" onclick="removeSeller('+n+')">ลบ</button>':'')+
-    '</div>'+
-    '<div class="fg"><label>ชื่อ-นามสกุล</label>'+
-    '<input type="text" id="sl_name_'+n+'" value="'+(d.name||'')+'" placeholder="เช่น นายสมชาย ใจดี" oninput="updateRearnText()"></div>'+
-    '<div class="fg"><label>ที่อยู่ (สำหรับจ่าซอง)</label>'+
-    '<textarea id="sl_addr_'+n+'" rows="2" style="width:100%;padding:8px;font-size:14px;border:1px solid #ccc;border-radius:6px;font-family:inherit" placeholder="บ้านเลขที่ ถนน ตำบล อำเภอ จังหวัด">'+(d.addr||'')+'</textarea></div>'+
-    '<div class="row2">'+
-    '<div class="fg"><label>รหัสไปรษณีย์</label>'+
-    '<input type="text" id="sl_zip_'+n+'" value="'+(d.zip||'')+'" placeholder="เช่น 30000" maxlength="5" inputmode="numeric" style="padding:8px;font-size:14px;border:1px solid #ccc;border-radius:6px;font-family:inherit;width:100%"></div>'+
-    '<div class="fg"><label>เบอร์โทรศัพท์ (ถ้ามี)</label>'+
-    '<input type="text" id="sl_tel_'+n+'" value="'+(d.tel||'')+'" placeholder="เช่น 081-234-5678" inputmode="tel"></div>'+
-    '</div>';
+    '</div><div class="fg"><label>ชื่อ-นามสกุล</label><input type="text" id="sl_name_'+n+'" value="'+(d.name||'')+'" placeholder="เช่น นายสมชาย ใจดี" oninput="updateRearnText()"></div><div class="fg"><label>ที่อยู่ (สำหรับจ่าซอง)</label><textarea id="sl_addr_'+n+'" rows="2" style="width:100%;padding:8px;font-size:14px;border:1px solid #ccc;border-radius:6px;font-family:inherit" placeholder="บ้านเลขที่ ถนน ตำบล อำเภอ จังหวัด">'+(d.addr||'')+'</textarea></div><div class="row2"><div class="fg"><label>รหัสไปรษณีย์</label><input type="text" id="sl_zip_'+n+'" value="'+(d.zip||'')+'" placeholder="เช่น 30000" maxlength="5" inputmode="numeric" style="padding:8px;font-size:14px;border:1px solid #ccc;border-radius:6px;font-family:inherit;width:100%"></div><div class="fg"><label>เบอร์โทรศัพท์ (ถ้ามี)</label><input type="text" id="sl_tel_'+n+'" value="'+(d.tel||'')+'" placeholder="เช่น 081-234-5678" inputmode="tel"></div></div>';
   wrap.appendChild(div);
   updateRearnText();
 }
@@ -492,18 +475,26 @@ function addExt(){
   div.id='ext-'+n;
   div.style.cssText='border:1px solid #c8e0c8;border-radius:8px;padding:10px;margin-bottom:8px;background:#f7fcf7';
   div.innerHTML=
-    '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">'+
-    '<b style="font-size:13px;color:#1a3a2a">ขยายครั้งที่ '+n+'</b>'+
-    '<button type="button" onclick="removeExt('+n+')" style="background:#fee;border:1px solid #fcc;border-radius:5px;color:#c00;padding:2px 8px;cursor:pointer;font-size:13px">ลบ</button>'+
-    '</div>'+
-    '<div style="display:grid;grid-template-columns:80px 1fr 1fr;gap:8px">'+
-    '<div><label style="font-size:11px;color:#666;display:block;margin-bottom:3px">ครั้งที่</label>'+
-    '<input type="text" id="ext_no_'+n+'" value="'+n+'" style="width:100%;padding:7px;font-size:14px;border:1px solid #ccc;border-radius:6px;font-family:inherit"></div>'+
-    '<div><label style="font-size:11px;color:#666;display:block;margin-bottom:3px">กำหนด (เดือน)</label>'+
-    '<input type="text" id="ext_period_'+n+'" placeholder="เช่น 9" style="width:100%;padding:7px;font-size:14px;border:1px solid #ccc;border-radius:6px;font-family:inherit"></div>'+
-    '<div><label style="font-size:11px;color:#666;display:block;margin-bottom:3px">วันที่ฉบับลง</label>'+
-    '<div class="tdp-wrap" id="tdpw_ext_date_'+n+'" onclick="event.stopPropagation()"><input type="hidden" id="ext_date_'+n+'"><input type="text" id="tdpi_ext_date_'+n+'" class="tdp-input" placeholder="เลือกหรือพิมพ์วว/ดด/ปปปป" onfocus="tdpFocus('ext_date_'+n+'')" onkeydown="tdpKeydown('ext_date_'+n+'',event)" autocomplete="off"><span class="tdp-icon" onclick="tdpOpen('ext_date_'+n+'')">📅</span><div class="tdp-drop" id="tdpd_ext_date_'+n+'"><div class="tdp-nav"><button onclick="tdpNav('ext_date_'+n+'',-1,event)">‹</button><span class="tdp-my" onclick="tdpToggleYM('ext_date_'+n+'');event.stopPropagation()">...</span><button onclick="tdpNav('ext_date_'+n+'',1,event)">›</button></div><div class="tdp-ym"></div><div class="tdp-days-hdr"><span>อา</span><span>จ</span><span>อ</span><span>พ</span><span>พฤ</span><span>ศ</span><span>ส</span></div><div class="tdp-days"></div></div></div><script>setTimeout(function(){tdpInit("ext_date_'+n+'","");},50);</script></div>'+
-    '</div>';
+    '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">'
+    +'<b style="font-size:13px;color:#1a3a2a">ขยายครั้งที่ '+n+'</b>'
+    +'<button type="button" onclick="removeExt('+n+')" style="background:#fee;border:1px solid #fcc;border-radius:5px;color:#c00;padding:2px 8px;cursor:pointer;font-size:13px">ลบ</button>'
+    +'</div>'
+    +'<div style="display:grid;grid-template-columns:80px 1fr 1fr;gap:8px">'
+    +'<div><label style="font-size:11px;color:#666;display:block;margin-bottom:3px">ครั้งที่</label>'
+    +'<input type="text" id="ext_no_'+n+'" value="'+n+'" style="width:100%;padding:7px;font-size:14px;border:1px solid #ccc;border-radius:6px;font-family:inherit"></div>'
+    +'<div><label style="font-size:11px;color:#666;display:block;margin-bottom:3px">กำหนด (เดือน)</label>'
+    +'<input type="text" id="ext_period_'+n+'" placeholder="เช่น 9" style="width:100%;padding:7px;font-size:14px;border:1px solid #ccc;border-radius:6px;font-family:inherit"></div>'
+    +'<div><label style="font-size:11px;color:#666;display:block;margin-bottom:3px">วันที่ฉบับลง</label>'
+    +'<div class="tdp-wrap" id="tdpw_ext_date_'+n+'" onclick="event.stopPropagation()">'
+    +'<input type="hidden" id="ext_date_'+n+'">'
+    +'<input type="text" id="tdpi_ext_date_'+n+'" class="tdp-input" placeholder="เลือกหรือพิมพ์วว/ดด/ปปปป" autocomplete="off">'
+    +'<span class="tdp-icon">📅</span>'
+    +'<div class="tdp-drop" id="tdpd_ext_date_'+n+'">'
+    +'<div class="tdp-nav"><button type="button">‹</button><span class="tdp-my">...</span><button type="button">›</button></div>'
+    +'<div class="tdp-ym"></div>'
+    +'<div class="tdp-days-hdr"><span>อา</span><span>จ</span><span>อ</span><span>พ</span><span>พฤ</span><span>ศ</span><span>ส</span></div>'
+    +'<div class="tdp-days"></div>'
+    +'</div></div></div></div>';
   wrap.appendChild(div);
   setTimeout(function(){
     var did='ext_date_'+n;
@@ -511,7 +502,6 @@ function addExt(){
     _tdpWireEvents(did);
   },30);
 }
-
 function removeExt(i){var el=document.getElementById('ext-'+i);if(el)el.remove();}
 
 function addAtt(val){
@@ -519,8 +509,7 @@ function addAtt(val){
   var wrap=document.getElementById('att-wrap');
   var div=document.createElement('div');
   div.id='att-'+i;div.className='att-row';
-  div.innerHTML='<input type="text" id="att_val_'+i+'" placeholder="รายการแนบ..." value="'+(val||'')+'">'+
-    '<button onclick="removeAtt('+i+')">× ลบ</button>';
+  div.innerHTML='<input type="text" id="att_val_'+i+'" placeholder="รายการแนบ..." value="'+(val||'')+'"><button onclick="removeAtt('+i+')">× ลบ</button>';
   wrap.appendChild(div);
 }
 function removeAtt(i){var el=document.getElementById('att-'+i);if(el)el.remove();}
@@ -574,25 +563,9 @@ function genNotice(){
   var atts=getAtts(purpose,period,contractDate);
   var refText='หนังสือสัญญาขายฝากที่ดินเพื่อ '+purpose+' มีกำหนด '+period+' เดือน ฉบับลง วันที่ '+contractDate;
 
-  var docHTML='<div class="doc-page">'+
-    '<p class="center bold underline" style="font-size:16pt;margin-bottom:8pt">หนังสือแจ้งกำหนดเวลาไถ่ถอนจากขายฝากและจำนวนสินไถ่</p>'+
-    '<p class="center">เขียนที่ '+writeat+'</p>'+
-    '<p class="center">วันที่ '+writedate+'</p><br>'+
-    '<table style="width:100%;border-collapse:collapse"><tr>'+
-    '<td style="width:2.5cm;vertical-align:top"><b>เรื่อง</b></td>'+
-    '<td>แจ้งกำหนดเวลาไถ่จากขายฝากและจำนวนสินไถ่</td></tr>'+
-    '<tr><td style="vertical-align:top"><b>เรียน</b></td><td>'+toText+'</td></tr>'+
-    '<tr><td style="vertical-align:top"><b>อ้างถึง</b></td><td>'+refText+'</td></tr>'+
+  var docHTML='<div class="doc-page"><p class="center bold underline" style="font-size:16pt;margin-bottom:8pt">หนังสือแจ้งกำหนดเวลาไถ่ถอนจากขายฝากและจำนวนสินไถ่</p><p class="center">เขียนที่ '+writeat+'</p><p class="center">วันที่ '+writedate+'</p><br><table style="width:100%;border-collapse:collapse"><tr><td style="width:2.5cm;vertical-align:top"><b>เรื่อง</b></td><td>แจ้งกำหนดเวลาไถ่จากขายฝากและจำนวนสินไถ่</td></tr><tr><td style="vertical-align:top"><b>เรียน</b></td><td>'+toText+'</td></tr><tr><td style="vertical-align:top"><b>อ้างถึง</b></td><td>'+refText+'</td></tr>'+
     (atts.length?'<tr><td style="vertical-align:top;white-space:nowrap"><b>สิ่งที่แนบมาด้วย</b></td><td>'+atts.map(function(a){return'- '+a;}).join('<br>')+'</td></tr>':'')+
-    '</table><br>'+
-    '<p class="indent">ตามหนังสือที่อ้างถึง ท่านในฐานะผู้ขายฝากได้ทำสัญญาขายฝากที่ดิน มีกำหนด '+period+' เดือน ตามหลักฐาน'+land.landDesc+' ไว้กับบริษัท โชคชัย เงินด่วน จำกัด ผู้รับซื้อฝากโดยมีการจดทะเบียนไว้ต่อหน้าพนักงานเจ้าหน้าที่ สำนักงานที่ดินจังหวัด '+land.province+' สาขา '+land.branch+' ไว้เมื่อวันที่ '+land.regDate+' ความละเอียดแจ้งแล้วนั้น</p>'+
-    '<p class="indent">บริษัท โชคชัย เงินด่วน จำกัด ในฐานะผู้รับซื้อฝาก ขอเรียนให้ทราบว่า สัญญาขายฝากดังกล่าว ฉบับลงวันที่ '+contractDate+' จะครบกำหนดเวลาไถ่จากขายฝากใน วันที่ '+dueDate+' และมีจำนวนสินไถ่ตามที่ระบุในสัญญาขายฝากที่ดินจำนวน <b>'+redeemAmt+' บาท ('+redeemT+')</b> จึงขอให้ท่านเตรียมเงินสินไถ่จำนวนดังกล่าว พร้อมเอกสารที่เกี่ยวข้องกับท่านไปดำเนินการจดทะเบียนไถ่จากขายฝากที่สำนักงานที่ดินจังหวัด '+land.province+' สาขา '+land.branch+' ภายในวันที่ '+dueDate+' ด้วย</p>'+
-    '<p>จึงเรียนมาเพื่อทราบ</p>'+
-    '<div class="sign-section"><div class="sign-line">'+
-    '<p>( บริษัท โชคชัย เงินด่วน จำกัด โดย '+signer+' )</p>'+
-    '<p>(ผู้รับซื้อฝาก)</p>'+
-    '<p style="margin-top:8pt">โทรศัพท์ '+phone+'</p>'+
-    '</div></div></div>';
+    '</table><br><p class="indent">ตามหนังสือที่อ้างถึง ท่านในฐานะผู้ขายฝากได้ทำสัญญาขายฝากที่ดิน มีกำหนด '+period+' เดือน ตามหลักฐาน'+land.landDesc+' ไว้กับบริษัท โชคชัย เงินด่วน จำกัด ผู้รับซื้อฝากโดยมีการจดทะเบียนไว้ต่อหน้าพนักงานเจ้าหน้าที่ สำนักงานที่ดินจังหวัด '+land.province+' สาขา '+land.branch+' ไว้เมื่อวันที่ '+land.regDate+' ความละเอียดแจ้งแล้วนั้น</p><p class="indent">บริษัท โชคชัย เงินด่วน จำกัด ในฐานะผู้รับซื้อฝาก ขอเรียนให้ทราบว่า สัญญาขายฝากดังกล่าว ฉบับลงวันที่ '+contractDate+' จะครบกำหนดเวลาไถ่จากขายฝากใน วันที่ '+dueDate+' และมีจำนวนสินไถ่ตามที่ระบุในสัญญาขายฝากที่ดินจำนวน <b>'+redeemAmt+' บาท ('+redeemT+')</b> จึงขอให้ท่านเตรียมเงินสินไถ่จำนวนดังกล่าว พร้อมเอกสารที่เกี่ยวข้องกับท่านไปดำเนินการจดทะเบียนไถ่จากขายฝากที่สำนักงานที่ดินจังหวัด '+land.province+' สาขา '+land.branch+' ภายในวันที่ '+dueDate+' ด้วย</p><p>จึงเรียนมาเพื่อทราบ</p><div class="sign-section"><div class="sign-line"><p>( บริษัท โชคชัย เงินด่วน จำกัด โดย '+signer+' )</p><p>(ผู้รับซื้อฝาก)</p><p style="margin-top:8pt">โทรศัพท์ '+phone+'</p></div></div></div>';
 
   document.getElementById('doc-content').innerHTML=docHTML;
   document.getElementById('form-wrap').style.display='none';
@@ -701,60 +674,6 @@ setTimeout(function(){
   document.getElementById('n_purpose_other_val')&&document.getElementById('n_purpose_other_val').addEventListener('input',updateAttPreview);
   document.getElementById('n_period')&&document.getElementById('n_period').addEventListener('input',updateAttPreview);
 },100);
-
-// ── Date Widget helpers ──
-}
-      el.classList.add('has-val');
-    } else {
-      if(hid)hid.value='';
-      el.classList.add('err');
-    }
-  } else {
-    if(hid)hid.value='';
-  }
-}
-}
-
-
-// ── Date quick-type (DDMMYYYY พ.ศ.) ──
-function _dqFmt(raw){
-  var r=raw.replace(/[^0-9]/g,'').slice(0,8);
-  var s='';
-  if(r.length>0)s=r.slice(0,2);
-  if(r.length>2)s+='/'+r.slice(2,4);
-  if(r.length>4)s+='/'+r.slice(4,8);
-  return {fmt:s,raw:r};
-}
-function dqType(qid,did,e){
-  var q=document.getElementById(qid);
-  var d=document.getElementById(did);
-  if(!q||!d)return;
-  var res=_dqFmt(q.value);
-  q.value=res.fmt;
-  q.className=q.className.replace(/\b(ok|er)\b/g,'').trim()+' dq-in';
-  if(res.raw.length===8){
-    var dd=res.raw.slice(0,2),mm=res.raw.slice(2,4),yyyy=parseInt(res.raw.slice(4,8))-543;
-    var iso=yyyy+'-'+mm+'-'+dd;
-    // ตรวจ valid
-    var t=new Date(iso);
-    if(!isNaN(t.getTime())&&t.getFullYear()===yyyy){
-      d.value=iso;
-      d.dispatchEvent(new Event('change'));
-      q.classList.add('ok');
-    } else { q.classList.add('er'); }
-  }
-}
-function dqSync(qid,did){
-  // date picker เปลี่ยน → อัปเดตช่องพิมพ์
-  var d=document.getElementById(did);
-  var q=document.getElementById(qid);
-  if(!d||!q||!d.value)return;
-  var p=d.value.split('-'); // YYYY-MM-DD
-  if(p.length!==3)return;
-  var be=parseInt(p[0])+543;
-  q.value=p[2]+'/'+p[1]+'/'+be;
-  q.className=q.className.replace(/\b(ok|er)\b/g,'').trim()+' dq-in ok';
-}
 
 
 // ── Thai Date Picker ──
@@ -968,6 +887,12 @@ setTimeout(function(){
     _tdpWireEvents(did);
   });
 },200);
+
+setTimeout(function(){
+  document.querySelectorAll('.tdp-wrap[id^="tdpw_"]').forEach(function(w){
+    _tdpWireEvents(w.id.replace('tdpw_',''));
+  });
+},200); // wire static date pickers
 
 document.addEventListener('click',function(e){
   if(_tdpOpen&&!e.target.closest('#tdpw_'+_tdpOpen))tdpClose();

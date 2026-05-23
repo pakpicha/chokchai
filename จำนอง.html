@@ -138,7 +138,7 @@ body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;
   <div class="card">
     <div class="ct"><span class="n">1</span> ข้อมูลทั่วไป</div>
     <div class="row2">
-      <div class="fg"><label>วันที่ทำเอกสาร</label><div class="tdp-wrap" id="tdpw_doc_date" onclick="event.stopPropagation()"><input type="hidden" id="doc_date"><input type="text" id="tdpi_doc_date" class="tdp-input" placeholder="เลือกหรือพิมพ์วว/ดด/ปปปป" onfocus="tdpFocus('doc_date')" onkeydown="tdpKeydown('doc_date',event)" readonly="false" autocomplete="off"><span class="tdp-icon" onclick="tdpOpen('doc_date')">📅</span><div class="tdp-drop" id="tdpd_doc_date"><div class="tdp-nav"><button onclick="tdpNav('doc_date',-1,event)">‹</button><span class="tdp-my" onclick="tdpToggleYM('doc_date');event.stopPropagation()">...</span><button onclick="tdpNav('doc_date',1,event)">›</button></div><div class="tdp-ym"></div><div class="tdp-days-hdr"><span>อา</span><span>จ</span><span>อ</span><span>พ</span><span>พฤ</span><span>ศ</span><span>ส</span></div><div class="tdp-days"></div></div></div><script>setTimeout(function(){tdpInit("doc_date","");},50);</script></div>
+      <div class="fg"><label>วันที่ทำเอกสาร</label><div class="tdp-wrap" id="tdpw_doc_date" onclick="event.stopPropagation()"><input type="hidden" id="doc_date"><input type="text" id="tdpi_doc_date" class="tdp-input" placeholder="เลือกหรือพิมพ์วว/ดด/ปปปป" onfocus="tdpFocus('doc_date')" onkeydown="tdpKeydown('doc_date',event)" autocomplete="off"><span class="tdp-icon" onclick="tdpOpen('doc_date')">📅</span><div class="tdp-drop" id="tdpd_doc_date"><div class="tdp-nav"><button onclick="tdpNav('doc_date',-1,event)">‹</button><span class="tdp-my" onclick="tdpToggleYM('doc_date');event.stopPropagation()">...</span><button onclick="tdpNav('doc_date',1,event)">›</button></div><div class="tdp-ym"></div><div class="tdp-days-hdr"><span>อา</span><span>จ</span><span>อ</span><span>พ</span><span>พฤ</span><span>ศ</span><span>ส</span></div><div class="tdp-days"></div></div></div></div>
       <div class="fg"><label>บิลที่ของวัน</label><input type="text" id="bill_seq" placeholder="01" maxlength="2" inputmode="numeric"></div>
     </div>
     <div class="fg"><label>สำนักงานที่ดิน จังหวัด</label>
@@ -171,7 +171,7 @@ body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;
       <input type="text" id="m_rate" placeholder="เช่น 15" inputmode="decimal">
     </div>
     <div class="fg"><label>วันที่สัญญาจำนอง</label>
-      <div class="tdp-wrap" id="tdpw_contract_date" onclick="event.stopPropagation()"><input type="hidden" id="contract_date"><input type="text" id="tdpi_contract_date" class="tdp-input" placeholder="เลือกหรือพิมพ์วว/ดด/ปปปป" onfocus="tdpFocus('contract_date')" onkeydown="tdpKeydown('contract_date',event)" readonly="false" autocomplete="off"><span class="tdp-icon" onclick="tdpOpen('contract_date')">📅</span><div class="tdp-drop" id="tdpd_contract_date"><div class="tdp-nav"><button onclick="tdpNav('contract_date',-1,event)">‹</button><span class="tdp-my" onclick="tdpToggleYM('contract_date');event.stopPropagation()">...</span><button onclick="tdpNav('contract_date',1,event)">›</button></div><div class="tdp-ym"></div><div class="tdp-days-hdr"><span>อา</span><span>จ</span><span>อ</span><span>พ</span><span>พฤ</span><span>ศ</span><span>ส</span></div><div class="tdp-days"></div></div></div><script>setTimeout(function(){tdpInit("contract_date","");},50);</script>
+      <div class="tdp-wrap" id="tdpw_contract_date" onclick="event.stopPropagation()"><input type="hidden" id="contract_date"><input type="text" id="tdpi_contract_date" class="tdp-input" placeholder="เลือกหรือพิมพ์วว/ดด/ปปปป" onfocus="tdpFocus('contract_date')" onkeydown="tdpKeydown('contract_date',event)" autocomplete="off"><span class="tdp-icon" onclick="tdpOpen('contract_date')">📅</span><div class="tdp-drop" id="tdpd_contract_date"><div class="tdp-nav"><button onclick="tdpNav('contract_date',-1,event)">‹</button><span class="tdp-my" onclick="tdpToggleYM('contract_date');event.stopPropagation()">...</span><button onclick="tdpNav('contract_date',1,event)">›</button></div><div class="tdp-ym"></div><div class="tdp-days-hdr"><span>อา</span><span>จ</span><span>อ</span><span>พ</span><span>พฤ</span><span>ศ</span><span>ส</span></div><div class="tdp-days"></div></div></div>
     </div>
   </div>
 
@@ -661,7 +661,7 @@ function buildAddendum(d){
 // ── GENERATE ──
 function genMortgage(){
   var d={
-    docDate:gv('doc_date'),billSeq:gv('bill_seq')||'01',
+    docDate:(document.getElementById('doc_date')||{value:''}).value,billSeq:gv('bill_seq')||'01',
     landBranch:gv('land_branch')||'......',
     landBranchSub:gv('land_branch_sub')||'',
     custName:(function(){var m=getMortgagors();return m.length?m[0].name:'..........';})(),
@@ -673,7 +673,7 @@ function genMortgage(){
     amtT:gv('m_amt_t')||toBaht(gv('m_amt').replace(/[,\s]/g,'')),
     rate:gv('m_rate')||'......',
     item5:gv('memo_item5')||'',
-    contractDate:gv('contract_date'),
+    contractDate:(document.getElementById('contract_date')||{value:''}).value,
   };
   var payRows=getPayRows();
   var wanted=Array.prototype.slice.call(document.querySelectorAll('.doc-cb:checked')).map(function(c){return c.value;});
@@ -706,7 +706,8 @@ function showDoc(key,docs){
 
 // Init
 document.addEventListener('DOMContentLoaded',function(){
-  onProvChange(document.getElementById('cust_province').value);
+  var prov = document.getElementById('cust_province');
+  if(prov) onProvChange(prov.value||'');
   addPay('cash');
 });
 
@@ -846,16 +847,19 @@ function autoRestore(){
     if(!saved) return false;
     var data = JSON.parse(saved);
     Object.keys(data).forEach(function(k){
-      var el = document.getElementById(k);
-      if(!el) return;
-      if(el.type === 'checkbox') el.checked = data[k];
-      else el.value = data[k];
+      try{
+        var el = document.getElementById(k);
+        if(!el) return;
+        if(el.type === 'checkbox') el.checked = data[k];
+        else { el.value = data[k]; }
+      }catch(e){}
     });
-
-    // sync date display fields
-    document.querySelectorAll('input[type="hidden"][id]').forEach(function(d){
-      if(d.value&&document.getElementById('tdpi_'+d.id)) tdpSetValue(d.id,d.value);
-    });
+    // restore date pickers
+    setTimeout(function(){
+      document.querySelectorAll('input[type="hidden"][id]').forEach(function(h){
+        if(h.value&&document.getElementById('tdpi_'+h.id)) tdpSetValue(h.id,h.value);
+      });
+    },200);
     return true;
   } catch(e) { return false; }
 }
@@ -1107,6 +1111,12 @@ setTimeout(function(){
     _tdpWireEvents(did);
   });
 },200);
+
+setTimeout(function(){
+  document.querySelectorAll('.tdp-wrap[id^="tdpw_"]').forEach(function(w){
+    _tdpWireEvents(w.id.replace('tdpw_',''));
+  });
+},200); // wire static date pickers
 
 document.addEventListener('click',function(e){
   if(_tdpOpen&&!e.target.closest('#tdpw_'+_tdpOpen))tdpClose();

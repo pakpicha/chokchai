@@ -435,8 +435,26 @@ function buildRcpBar(rcps){
     html+=rcps.map(function(r,i){
       return '<button class="rcp-btn" onclick="loadRcp('+i+')" style="margin:3px;padding:6px 14px;background:#1a3a2a;color:#fff;border:none;border-radius:6px;cursor:pointer;font-family:inherit;font-size:13px;font-weight:700">ใบตอบรับ '+(i+1)+': '+r.name+'</button>';
     }).join('');
+    html+='<button onclick="printAllRcpt()" style="margin:3px;padding:6px 14px;background:#c0392b;color:#fff;border:none;border-radius:6px;cursor:pointer;font-family:inherit;font-size:13px;font-weight:700">🖨 พิมพ์ทุกคน หน้า+หลัง ('+rcps.length+' คน)</button>';
     bar.innerHTML=html;
   }
+}
+
+function printAllRcpt(){
+  var rcps=window._rcps;
+  if(!rcps||!rcps.length)return;
+  // โหลดคนแรกก่อน แล้ว loop พิมพ์ทีละคน
+  var idx=0;
+  function printNext(){
+    if(idx>=rcps.length)return;
+    loadRcp(idx);
+    idx++;
+    setTimeout(function(){
+      window.print();
+      if(idx<rcps.length) setTimeout(printNext,1000);
+    },500);
+  }
+  printNext();
 }
 setTimeout(function(){
   restoreForm();

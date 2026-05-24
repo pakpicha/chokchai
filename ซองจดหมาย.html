@@ -248,8 +248,47 @@ function buildRcpBar(rcps){
     html+=rcps.map(function(r,i){
       return '<button class="rcp-btn" onclick="loadRcp('+i+')" style="margin:3px;padding:6px 14px;background:#1a3a2a;color:#fff;border:none;border-radius:6px;cursor:pointer;font-family:inherit;font-size:13px;font-weight:700">ซอง '+(i+1)+': '+r.name+'</button>';
     }).join('');
+    html+='<button onclick="printAllEnv()" style="margin:3px;padding:6px 14px;background:#c0392b;color:#fff;border:none;border-radius:6px;cursor:pointer;font-family:inherit;font-size:13px;font-weight:700">🖨 พิมพ์ซองทุกคน ('+rcps.length+' ซอง)</button>';
     bar.innerHTML=html;
   }
+}
+
+function printAllEnv(){
+  var rcps=window._rcps;
+  if(!rcps||!rcps.length)return;
+  var idx=0;
+  function next(){
+    if(idx>=rcps.length){window.print();return;}
+    loadRcp(idx);
+    idx++;
+    setTimeout(next,300);
+  }
+  // สร้างหน้าพิมพ์ทุกซองใน iframe
+  var win=window.open('','_blank');
+  if(!win)return;
+  var html=document.documentElement.outerHTML;
+  // inject all envelopes
+  var allHtml='<html><head>'+document.head.innerHTML+'<style>@media print{.no-print{display:none!important}.env-page{page-break-after:always}.env-page:last-child{page-break-after:avoid}}</style></head><body>';
+  rcps.forEach(function(r,i){
+    // clone envelope HTML with this recipient
+    allHtml+='<div class="env-page" style="position:relative;width:22.8cm;height:10.7cm;border:1px solid #ccc;box-sizing:border-box;font-family:TH Sarabun New,Sarabun,Arial,sans-serif;padding:0.8cm 1cm;margin:0 auto">';
+    // ผู้ส่ง
+    var sname=document.getElementById('s_name')?document.getElementById('s_name').value:'บริษัท โชคชัย เงินด่วน จำกัด';
+    var saddr=document.getElementById('s_addr')?document.getElementById('s_addr').value:'89/28 หมู่ 9 ต.ท่าเยี่ยม อ.โชคชัย จ.นครราชสีมา';
+    var szip=document.getElementById('s_zip')?document.getElementById('s_zip').value:'30190';
+    allHtml+='<div style="font-size:13pt"><b>'+sname+'</b><br>'+saddr+'<br>'+szip+'</div>';
+    // ผู้รับ (กลาง-ขวา)
+    allHtml+='<div style="position:absolute;right:1.5cm;top:50%;transform:translateY(-50%);text-align:center;font-size:14pt">';
+    allHtml+='<div>ถึง</div><br>';
+    allHtml+='<b>'+r.name+'</b><br>';
+    allHtml+=(r.addr||'')+'<br>';
+    allHtml+=(r.zip?r.zip:'')+'</div>';
+    allHtml+='</div>';
+  });
+  allHtml+='</body></html>';
+  win.document.write(allHtml);
+  win.document.close();
+  setTimeout(function(){win.print();},500);
 }
 </script>
 </body>

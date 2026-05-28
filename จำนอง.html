@@ -64,8 +64,8 @@ body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;
 @media print{
   *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
   html,body{background:#fff!important;margin:0!important;padding:0!important}
-  .doc-page{height:297mm!important;overflow:hidden!important}
-  .doc-page > div{height:50%!important;flex:0 0 50%!important;overflow:hidden!important}
+  .v-page{height:297mm!important;overflow:hidden!important}
+  .v-half{flex:1 1 0!important;height:auto!important;min-height:0!important;overflow:hidden!important}
   .ui,.pbtns,.doc-tabs,.back-home,.print-tip,.gen-btn,.add-btn{display:none!important}
   #mort-preview{display:block!important}
   .doc-wrap{padding:0!important}
@@ -654,7 +654,7 @@ function buildVoucher(d,payRows){
         +'</tr>';
     }).join('');
 
-    return '<div style="flex:0 0 50%;height:50%;min-height:0;padding:1cm 1.25cm 0.3cm 1.25cm;font-family:TH Sarabun New,Sarabun,Arial,sans-serif;font-size:13px;box-sizing:border-box;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden">'
+    return '<div class="v-half" style="flex:1 1 0;min-height:0;padding:1cm 1.25cm 0.3cm 1.25cm;font-family:TH Sarabun New,Sarabun,Arial,sans-serif;font-size:13px;box-sizing:border-box;display:flex;flex-direction:column;overflow:hidden">'
       +'<div>'
       // หัว
       +'<table style="width:100%;border-collapse:collapse;margin-bottom:3pt"><tr>'
@@ -697,20 +697,21 @@ function buildVoucher(d,payRows){
       +'<td style="border:1px solid #999;'+CELL+'font-weight:bold;text-align:right;white-space:nowrap">'+totalFmt+'</td>'
       +'</tr>'
       +'</table>'
+      +'</div>'
 
-      // ลายเซ็น
+      // ลายเซ็น (ดันชิดขอบล่างของชุด)
       +(function(){
         var mv=d.mortgagors&&d.mortgagors.length?d.mortgagors:[{name:d.custName}];
         var cw=Math.floor(100/(mv.length+1));
         var rc=mv.map(function(m){
-          return '<td style="text-align:center;vertical-align:top;padding:0.6cm 2px 0">'
+          return '<td style="text-align:center;vertical-align:bottom;padding:0 2px">'
             +'<div style="border-top:1px solid #000;width:110px;margin:0 auto 3pt"></div>'
             +'<div style="font-size:11pt">ผู้รับเงิน</div>'
             +'<div style="font-size:10pt">( '+m.name+' )</div>'
             +'</td>';
         }).join('');
-        return '<table style="width:100%;border-collapse:collapse;margin-top:0.3cm"><tr>'
-          +'<td style="text-align:center;vertical-align:top;padding:0.6cm 2px 0;width:'+cw+'%">'
+        return '<table style="width:100%;border-collapse:collapse;margin-top:auto"><tr>'
+          +'<td style="text-align:center;vertical-align:bottom;padding:0 2px;width:'+cw+'%">'
           +'<div style="border-top:1px solid #000;width:110px;margin:0 auto 3pt"></div>'
           +'<div style="font-size:11pt">ผู้จ่ายเงิน / ผู้มีอำนาจลงนาม</div>'
           +'<div style="font-size:10pt">( บริษัท โชคชัย เงินด่วน จำกัด )</div>'
@@ -719,7 +720,7 @@ function buildVoucher(d,payRows){
       +'</div>';
   }
 
-  return '<div class="doc doc-page" style="height:297mm;display:flex;flex-direction:column;box-sizing:border-box;overflow:hidden">'
+  return '<div class="doc doc-page v-page" style="height:297mm;display:flex;flex-direction:column;box-sizing:border-box;overflow:hidden">'
     +copy('ต้นฉบับ')
     +'<div style="border-top:2px dashed #aaa;margin:0;flex-shrink:0"></div>'
     +copy('สำเนา')

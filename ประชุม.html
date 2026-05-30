@@ -553,7 +553,7 @@ function agFields(i,t){
       </div>
     </div>`;
   }
-  if(t==='other')return`<div class="af-grid">${fld(i,'ttl','หัวข้อวาระ',true,'')}${ta(i,'dtl','รายละเอียด',true,'')}</div>`;
+  if(t==='other')return`<div class="af-grid">${fld(i,'ttl','หัวข้อวาระ',true,'')}${ta(i,'dtl','รายละเอียด',true,'')}${ta(i,'sum','สรุปวาระ (แสดงเป็นข้อสรุปท้ายประชุม — ไม่บังคับ)',true,'เช่น ที่ประชุมได้รับทราบ...')}</div>`;
   return'';
 }
 function refreshMortCol(i,ct){document.getElementById('ag'+i+'_mcf').innerHTML=colFieldsHTML(i,'m_',ct);setTimeout(function(){wireColAddr(i,'m_');},30);}
@@ -668,7 +668,7 @@ function buildAgContent(i){
     res.push('กู้ยืมเงินจาก '+loanPartsRes
       +' ดอกเบี้ยร้อยละ '+rate+' ต่อปี รวมเป็นเงินกู้ยืม '+totalFmt+' บาท ('+totalTxt+')'
       +' ให้ '+rep+' เป็นผู้ทำการแทนบริษัทในครั้งนี้ มีอำนาจลงนามในเอกสารต่าง ๆ แทนบริษัท ในการทำหนังสือสัญญาการกู้ยืมเงิน');
-  }else if(t==='other'){title=gfm(i,'ttl');body=gv('ag'+i+'_dtl')||'';}
+  }else if(t==='other'){title=gfm(i,'ttl');body=gv('ag'+i+'_dtl')||'';const sumText=gv('ag'+i+'_sum')||'';if(sumText)res.push(sumText);}
   return{title,body,res,t};
 }
 
@@ -687,19 +687,34 @@ function genMeeting(){
   const roleLines=`<table class="doc-role-table">${roleRows}</table>`;
   let agHTML='';const allRes=[];
   items.forEach((ag,i)=>{
+    // Every agenda ends with the standard unanimous line — no inline sum here
+    const defaultResLine='ที่ประชุมได้พิจารณาแล้วลงมติเป็นเอกฉันท์ให้ บริษัท ดำเนินการได้ตามที่ประธานเสนอ';
     agHTML+=`<div class="doc-sec">
       <p class="doc-sec-title">ระเบียบวาระที่&nbsp;&nbsp;${i+1}.&nbsp;&nbsp;&nbsp;${ag.title}</p>
-      <p class="doc-sec-body" style="text-indent:2.5em">${ag.body}</p>
-      <p class="doc-sec-short" style="text-indent:2.5em">ที่ประชุมได้พิจารณาแล้วลงมติเป็นเอกฉันท์ให้ บริษัท ดำเนินการได้ตามที่ประธานเสนอ</p>
+      ${ag.body?`<p class="doc-sec-body" style="text-indent:2.5em">${ag.body}</p>`:''}
+      <p class="doc-sec-short" style="text-indent:2.5em">${defaultResLine}</p>
     </div>`;
+    // All agenda res items go to the combined summary bullets at the end (including 'other' sum text)
     ag.res.forEach(r=>allRes.push(r));
   });
   if(allRes.length>0){agHTML+=`<p class="doc-combined" style="text-indent:2.5em">ที่ประชุมได้พิจารณาแล้วลงมติเป็นเอกฉันท์ให้บริษัทดำเนินการได้ตามที่ประธานเสนอและเลือกกรรมการของ บริษัท โชคชัย เงินด่วน จำกัด คือ กรรมการผู้มีอำนาจลงนามคนใดคนหนึ่ง เป็นผู้ทำการแทนบริษัทในครั้งนี้ มีอำนาจลงนามในเอกสารต่าง ๆ แทนบริษัท ดังต่อไปนี้</p>
     <ul class="doc-list" style="padding-left:3em">${allRes.map(r=>`<li style="text-align:justify;margin-bottom:4pt">${r}</li>`).join('')}</ul>`;}  const lastN=items.length+1;
   agHTML+=`<div class="doc-sec"><p class="doc-sec-title">ระเบียบวาระที่&nbsp;&nbsp;${lastN}.&nbsp;&nbsp;&nbsp;เรื่องอื่น ๆ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ไม่มี</p></div>`;
+  const logoEl=document.getElementById('_vLogo');
+  const logoSrc=logoEl?logoEl.src:'';
+  const headLogo=logoSrc?`<img src="${logoSrc}" style="width:50px;height:50px;object-fit:contain;flex-shrink:0" alt="logo">`:'';
   document.getElementById('meet-doc-out').innerHTML=`<div class="doc doc-page">
-    <p class="doc-h1">รายงานการประชุม</p>
-    <p class="doc-h2">บริษัท &nbsp;&nbsp; โชคชัย เงินด่วน &nbsp;&nbsp; จำกัด</p>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:4pt;padding-top:1pt">
+      ${headLogo}
+      <div style="line-height:1.4">
+        <p style="margin:0;font-weight:bold;font-size:12pt;color:#1a1a1a">บริษัท โชคชัย เงินด่วน จำกัด</p>
+        <p style="margin:0;font-size:9.5pt;color:#333">เลขประจำตัวผู้เสียภาษี 0-3055-68001-94-1</p>
+      </div>
+    </div>
+    <div style="text-align:center;margin-bottom:4pt">
+      <p class="doc-h1" style="margin-bottom:2pt">บริษัท &nbsp;&nbsp; โชคชัย เงินด่วน &nbsp;&nbsp; จำกัด</p>
+      <p class="doc-h1" style="margin-bottom:0">รายงานการประชุม</p>
+    </div>
     <div class="doc-meta">
       <p style="text-align:center">ประชุมครั้งที่ &nbsp;&nbsp; ${no} &nbsp; / &nbsp; ${yr} &nbsp;&nbsp; เมื่อวันที่ &nbsp;&nbsp; ${sd} &nbsp;&nbsp; เวลา &nbsp; ${ts.replace(' น.','')} – ${te}</p>
       <p style="text-align:center">ประชุม ณ &nbsp;&nbsp; ${loc}</p>

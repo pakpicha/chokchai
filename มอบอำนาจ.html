@@ -27,9 +27,16 @@ body{font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;font-size:15px;back
   @page{size:A4;margin:0}
   .doc-out{display:block!important}
   .doc-page{box-shadow:none!important;margin:0!important;width:21cm!important;height:29.7cm!important;min-height:0!important;overflow:hidden!important}
+  .page2{page-break-before:always;break-before:page}
 }
 .doc-out{display:none}
-.doc-page{font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;color:#000;background:#fff;width:21cm;min-height:0;margin:0 auto;padding:0.3cm 1.3cm 0.25cm;font-size:13pt;line-height:1.22;position:relative}
+.doc-page{font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;color:#000;background:#fff;width:21cm;min-height:0;margin:0 auto 14px;padding:0.3cm 1.3cm 0.25cm;font-size:13pt;line-height:1.22;position:relative}
+.page2{page-break-before:always;padding:1cm 2cm}
+.warn-title{text-align:center;font-size:18pt;font-weight:bold;margin:1.5cm 0 0.4cm;text-decoration:underline}
+.warn-sub{text-align:center;font-size:15pt;font-weight:bold;margin:0 0 1.2cm;text-decoration:underline}
+.warn-list{font-size:13pt;line-height:1.55;margin:0}
+.warn-item{display:flex;gap:8pt;margin-bottom:0.55cm;align-items:flex-start;text-align:justify}
+.warn-item .wn{flex-shrink:0;width:1cm}
 
 .f-corner{position:absolute;top:0.7cm;left:1cm;font-size:14pt;font-weight:bold}
 .f-tag{position:absolute;top:0.7cm;right:1.4cm;font-size:14pt}
@@ -193,7 +200,7 @@ body{font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;font-size:15px;back
       <button onclick="window.print()" style="flex:2;background:#4caf50;color:#fff;border:none;border-radius:8px;padding:11px;cursor:pointer;font-family:inherit;font-weight:700">🖨 พิมพ์</button>
     </div>
   </div>
-  <div id="doc-content" class="doc-page"></div>
+  <div id="doc-content"></div>
 </div>
 
 <script>
@@ -286,6 +293,7 @@ function genDoc(){
   var powers=gv('powers');
 
   var h='';
+  h+='<div class="doc-page">';
   h+='<div class="f-corner">๑</div>';
   h+='<div class="f-tag">(ท.ด.๒๑)</div>';
   h+='<div class="f-garuda"><img src="'+GARUDA+'" alt=""></div>';
@@ -358,6 +366,22 @@ function genDoc(){
   h+='<div style="margin-top:4pt;display:flex;justify-content:space-between;align-items:flex-end;font-size:11pt">';
   h+='  <div style="max-width:13cm"><b>หมายเหตุ</b> การลงลายมือชื่อหรือพิมพ์ลายนิ้วมือ ถ้าใช้อย่างใดให้ขีดฆ่าข้อความที่ไม่ใช้ออก ในกรณีพิมพ์ลายนิ้วมือให้ใช้พิมพ์ลายนิ้วมือแม่มือซ้าย</div>';
   h+='  <div style="font-weight:bold;white-space:nowrap">โปรดอ่านคำเตือนด้านหลัง</div>';
+  h+='</div>';
+  h+='</div>';  // close page 1
+
+  // ===== หน้า 2 — คำเตือน =====
+  h+='<div class="doc-page page2">';
+  h+='  <h2 class="warn-title"><u>คำเตือน</u></h2>';
+  h+='  <h3 class="warn-sub"><u>เพื่อรักษาประโยชน์ของเจ้าของที่ดินและผู้ที่เกี่ยวข้อง</u></h3>';
+  h+='  <div class="warn-list">';
+  h+='    <div class="warn-item"><span class="wn">(๑)</span><span>ให้กรอกเครื่องหมายหนังสือสำคัญสำหรับที่ดินหรืออสังหาริมทรัพย์อย่างอื่น เช่น ตึก บ้านเรือน โรง ให้ชัดเจน</span></div>';
+  h+='    <div class="warn-item"><span class="wn">(๒)</span><span>ให้ระบุเรื่องและอำนาจจัดการให้ชัดเจนว่า มอบอำนาจให้ทำอะไร เช่น ซื้อ ขาย จำนอง ฯลฯ ถ้ามีเงื่อนไขพิเศษเพิ่มเติมก็ให้ระบุไว้ด้วย</span></div>';
+  h+='    <div class="warn-item"><span class="wn">(๓)</span><span>อย่ากรอกข้อความให้ต่างลายมือและใช้น้ำหมึกต่างสีกัน ถ้าใช้พิมพ์ดีดก็ต้องเป็นเครื่องเดียวกัน</span></div>';
+  h+='    <div class="warn-item"><span class="wn">(๔)</span><span>ถ้ามีรอยขูดลบ ตกเติม แก้ไข หรือขีดฆ่า ให้ระบุตกเติมขีดฆ่ากี่คำ และผู้มอบอำนาจลงลายมือชื่อกำกับไว้ทุกแห่ง</span></div>';
+  h+='    <div class="warn-item"><span class="wn">(๕)</span><span>อย่าลงลายมือชื่อผู้มอบอำนาจก่อนกรอกข้อความโดยครบถ้วนและถูกต้องตามความประสงค์แล้ว</span></div>';
+  h+='    <div class="warn-item"><span class="wn">(๖)</span><span>ให้มีพยานอย่างน้อย ๑ คน ถ้าผู้มอบอำนาจพิมพ์ลายนิ้วมือต้องมีพยาน ๒ คน พยานต้องเซ็นชื่อจะพิมพ์ลายนิ้วมือไม่ได้</span></div>';
+  h+='    <div class="warn-item"><span class="wn">(๗)</span><span>หนังสือมอบอำนาจทำในต่างประเทศ ควรให้สถานทูตหรือสถานกงสุล หรือโนตารีปับลิค (Notary Public) รับรองด้วย</span></div>';
+  h+='  </div>';
   h+='</div>';
 
   document.getElementById('doc-content').innerHTML=h;

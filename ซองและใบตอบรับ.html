@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ซองจดหมาย + ใบตอบรับ — โชคชัย เงินด่วน</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;background:#f0f0eb;color:#111;font-size:15px}
+.wrap{max-width:760px;margin:0 auto;padding:16px}
+.card{background:#fff;border-radius:14px;padding:18px;margin-bottom:14px;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.ct{font-size:14px;font-weight:700;color:#1a3a2a;background:#e8f5e8;border-radius:8px;padding:8px 12px;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.ct .n{background:#1a3a2a;color:#fff;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
+.fg{margin-bottom:10px}
+.fg label{display:block;font-size:12px;color:#555;margin-bottom:4px;font-weight:600}
+.fg input,.fg textarea{width:100%;padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7}
+.fg textarea{min-height:60px;resize:vertical}
+.gen-btn{width:100%;padding:14px;background:#1a3a2a;color:#fff;border:none;border-radius:10px;font-size:16px;font-family:inherit;font-weight:700;cursor:pointer;margin-top:4px}
+.back-btn{display:block;padding:12px;text-align:center;background:#eee;border-radius:8px;margin-bottom:12px;cursor:pointer;font-size:14px;border:none;font-family:inherit;width:100%}
+.rcp-box{border:1px solid #ddd;border-radius:10px;padding:12px;margin-bottom:10px;background:#fafafa;position:relative}
+.rcp-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.rcp-head .ttl{font-size:13px;font-weight:700;color:#1a3a2a}
+.rcp-head .del{background:#fee;border:1px solid #fcc;border-radius:6px;color:#c00;padding:4px 10px;cursor:pointer;font-size:12px;font-family:inherit}
+.add-btn{width:100%;padding:10px;background:#e8f5e8;border:2px dashed #4caf50;border-radius:8px;font-size:14px;font-family:inherit;color:#1a3a2a;font-weight:700;cursor:pointer;margin-top:4px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+
+/* PRINT */
+#__embPrintRoot{display:none}
+.__embEnv{width:23cm;height:11.7cm;position:relative;background:#fff;overflow:hidden;page-break-after:always;font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;color:#000;box-sizing:border-box}
+.__embEnv:last-child{page-break-after:auto}
+.__embEnv .es{position:absolute;top:0.7cm;left:0.8cm;width:9cm;font-size:18pt;line-height:1.5}
+.__embEnv .es .lab{font-size:18pt;color:#555;margin-bottom:2pt;font-weight:600}
+.__embEnv .es .nm{font-size:18pt;font-weight:bold}
+.__embEnv .es .pc{display:inline-block;margin-top:4pt;border:1.5px solid #000;padding:1pt 6pt;font-size:18pt;font-weight:bold;letter-spacing:3px;border-radius:3px}
+.__embEnv .er{position:absolute;bottom:0.9cm;left:7cm;right:0.8cm;font-size:20pt;line-height:1.65}
+.__embEnv .er .lab{font-size:18pt;color:#555;margin-bottom:2pt;font-weight:600}
+.__embEnv .er .nm{font-size:20pt;font-weight:bold}
+.__embEnv .er .pc{display:inline-block;margin-top:4pt;border:1.5px solid #000;padding:1pt 6pt;font-size:20pt;font-weight:bold;letter-spacing:4px;border-radius:3px}
+.__embEnv .dv{position:absolute;top:0;bottom:0;left:6.5cm;width:1px;background:repeating-linear-gradient(to bottom,#ccc 0,#ccc 6px,transparent 6px,transparent 10px)}
+.__embRcpt{width:14.9cm;height:11.1cm;position:relative;background:#fff;overflow:hidden;page-break-after:always;font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;color:#000;box-sizing:border-box}
+.__embRcpt:last-child{page-break-after:auto}
+.__embRcpt .pf{position:absolute;white-space:nowrap;color:#000;font-family:"TH Sarabun New","Sarabun",Arial,sans-serif}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <button class="back-btn" onclick="history.back()">← กลับ</button>
+
+  <!-- ผู้ส่ง -->
+  <div class="card">
+    <div class="ct"><span class="n">1</span> ผู้ส่ง (บริษัท)</div>
+    <div class="fg"><label>ชื่อผู้ส่ง</label>
+      <input type="text" id="s_name" value="บริษัท โชคชัย เงินด่วน จำกัด"></div>
+    <div class="fg"><label>ที่อยู่บรรทัด 1</label>
+      <input type="text" id="s_addr1" value="89/28 หมู่ 9 ต.ท่าเยี่ยม"></div>
+    <div class="fg"><label>ที่อยู่บรรทัด 2</label>
+      <input type="text" id="s_addr2" value="อ.โชคชัย จ.นครราชสีมา"></div>
+    <div class="fg"><label>รหัสไปรษณีย์</label>
+      <input type="text" id="s_zip" value="30190" maxlength="5" inputmode="numeric"></div>
+  </div>
+
+  <!-- ผู้รับ (multi) -->
+  <div class="card">
+    <div class="ct"><span class="n">2</span> ผู้รับ (ลูกค้า) — เพิ่มได้หลายคน</div>
+    <div id="rcps-wrap"></div>
+    <button class="add-btn" onclick="addRcp()">+ เพิ่มผู้รับอีกคน</button>
+  </div>
+
+  <!-- ปุ่มพิมพ์ -->
+  <div class="card">
+    <div class="ct"><span class="n">3</span> พิมพ์</div>
+    <div style="font-size:12px;color:#666;margin-bottom:8px">มีผู้รับกี่คน จะพิมพ์เท่านั้นเอง</div>
+    <button class="gen-btn" onclick="embPrintEnvelopes()" style="background:#2d5a3d">✉️ พิมพ์ซองจดหมาย (×N)</button>
+    <button class="gen-btn" onclick="embPrintReceiptsBoth()" style="background:#c0392b;margin-top:8px">📮 พิมพ์ใบตอบรับ ป.133 ก. ผู้ส่ง+ผู้รับ (×N)</button>
+    <button class="gen-btn" onclick="embPrintReceiptsSender()" style="background:#888;margin-top:8px;font-size:14px;padding:11px">📤 พิมพ์เฉพาะหน้าผู้ส่ง (×N)</button>
+    <button class="gen-btn" onclick="embPrintReceiptsReceiver()" style="background:#888;margin-top:8px;font-size:14px;padding:11px">📥 พิมพ์เฉพาะหน้าผู้รับ (×N)</button>
+  </div>
+</div>
+
+<div id="__embPrintRoot"></div>
+
+<script>
+/* ---------- recipient list manage ---------- */
+var _rcpId=0;
+function addRcp(data){
+  data=data||{};
+  _rcpId++;var n=_rcpId;
+  var box=document.createElement('div');
+  box.className='rcp-box';
+  box.id='rcp-'+n;
+  box.innerHTML=
+    '<div class="rcp-head">'
+      +'<div class="ttl">ผู้รับคนที่ <span class="rcp-num">'+document.querySelectorAll('.rcp-box').length+'</span></div>'
+      +'<button type="button" class="del" onclick="delRcp('+n+')">ลบ</button>'
+    +'</div>'
+    +'<div class="fg"><label>ชื่อผู้รับ</label><input type="text" id="r_name_'+n+'" placeholder="ชื่อ-นามสกุล" value="'+(data.name||'').replace(/"/g,'&quot;')+'"></div>'
+    +'<div class="fg"><label>บ้านเลขที่ / ถนน / หมู่</label><input type="text" id="r_addr1_'+n+'" placeholder="เช่น 89/28 หมู่ 9..." value="'+(data.addr1||'').replace(/"/g,'&quot;')+'"></div>'
+    +'<div class="grid2">'
+      +'<div class="fg"><label>จังหวัด</label><input type="text" id="r_prov_'+n+'" placeholder="จังหวัด" value="'+(data.prov||'').replace(/"/g,'&quot;')+'"></div>'
+      +'<div class="fg"><label>อำเภอ/เขต</label><input type="text" id="r_amp_'+n+'" placeholder="อำเภอ" value="'+(data.amp||'').replace(/"/g,'&quot;')+'"></div>'
+    +'</div>'
+    +'<div class="grid2">'
+      +'<div class="fg"><label>ตำบล/แขวง</label><input type="text" id="r_tam_'+n+'" placeholder="ตำบล" value="'+(data.tam||'').replace(/"/g,'&quot;')+'"></div>'
+      +'<div class="fg"><label>รหัสไปรษณีย์</label><input type="text" id="r_zip_'+n+'" placeholder="30190" maxlength="5" inputmode="numeric" value="'+(data.zip||'').replace(/"/g,'&quot;')+'"></div>'
+    +'</div>'
+    +'<div class="fg"><label>📞 เบอร์โทรศัพท์ (ไม่บังคับ)</label><input type="text" id="r_tel_'+n+'" placeholder="เช่น 081-234-5678" inputmode="tel" value="'+(data.tel||'').replace(/"/g,'&quot;')+'"></div>';
+  document.getElementById('rcps-wrap').appendChild(box);
+  renumber();
+  return n;
+}
+function delRcp(n){
+  var b=document.getElementById('rcp-'+n);if(b)b.remove();renumber();
+}
+function renumber(){
+  var nodes=document.querySelectorAll('.rcp-box .rcp-num');
+  for(var i=0;i<nodes.length;i++)nodes[i].textContent=i+1;
+}
+function getRecipients(){
+  var list=[];
+  document.querySelectorAll('#rcps-wrap .rcp-box').forEach(function(b){
+    var n=b.id.replace('rcp-','');
+    var name=(document.getElementById('r_name_'+n)||{value:''}).value.trim();
+    var a1=(document.getElementById('r_addr1_'+n)||{value:''}).value.trim();
+    var pv=(document.getElementById('r_prov_'+n)||{value:''}).value.trim();
+    var ap=(document.getElementById('r_amp_'+n)||{value:''}).value.trim();
+    var tm=(document.getElementById('r_tam_'+n)||{value:''}).value.trim();
+    var zip=(document.getElementById('r_zip_'+n)||{value:''}).value.trim();
+    var tel=(document.getElementById('r_tel_'+n)||{value:''}).value.trim();
+    var addr=[a1,tm?'ต.'+tm:'',ap?'อ.'+ap:'',pv?'จ.'+pv:''].filter(Boolean).join(' ');
+    if(name||addr)list.push({name:name,addr:addr,zip:zip,tel:tel,_a1:a1,_pv:pv,_ap:ap,_tm:tm});
+  });
+  return list;
+}
+
+/* ---------- embedded print ---------- */
+function _embGetRcps(){
+  var rcps=getRecipients();
+  if(!rcps||!rcps.length){alert('กรุณากรอกข้อมูลผู้รับก่อน');return [];}
+  return rcps;
+}
+function _embSetPageSize(w,h){
+  var old=document.getElementById('__embPageCSS');if(old)old.remove();
+  var st=document.createElement('style');st.id='__embPageCSS';
+  st.textContent='@media print{@page{size:'+w+'cm '+h+'cm;margin:0}'
+    +'body *{visibility:hidden!important}'
+    +'#__embPrintRoot,#__embPrintRoot *{visibility:visible!important}'
+    +'#__embPrintRoot{display:block!important;position:absolute;left:0;top:0;width:100%;background:#fff;margin:0;padding:0}'
+    +'html,body{margin:0!important;padding:0!important;background:#fff!important}}';
+  document.head.appendChild(st);
+}
+function _embClearPageSize(){
+  var old=document.getElementById('__embPageCSS');if(old)old.remove();
+  var root=document.getElementById('__embPrintRoot');
+  if(root){root.innerHTML='';root.style.display='none';}
+}
+function _embEsc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function _embPadZip(z){z=String(z||'');while(z.length<5)z+=' ';return z;}
+function _gv(id){var e=document.getElementById(id);return e?e.value.trim():'';}
+
+function _senderInfo(){
+  return{
+    name:_gv('s_name')||'บริษัท โชคชัย เงินด่วน จำกัด',
+    addr1:_gv('s_addr1')||'89/28 หมู่ 9 ต.ท่าเยี่ยม',
+    addr2:_gv('s_addr2')||'อ.โชคชัย จ.นครราชสีมา',
+    zip:_gv('s_zip')||'30190'
+  };
+}
+
+/* ===== ENVELOPE ===== */
+function embPrintEnvelopes(){
+  var rcps=_embGetRcps();if(!rcps.length)return;
+  var s=_senderInfo();
+  var sName=_embEsc(s.name),sAddr=_embEsc(s.addr1)+'<br>'+_embEsc(s.addr2),sZip=_embEsc(s.zip);
+  var html='';
+  rcps.forEach(function(r){
+    var rn=_embEsc(r.name||'................................');
+    var ra=_embEsc(r.addr||'................................');
+    var rz=_embEsc(r.zip||'')||'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+    var rt=_embEsc(r.tel||'');
+    var telHtml=rt?'<div style="font-size:16pt;margin-top:3pt;color:#000">โทร. '+rt+'</div>':'';
+    html+='<div class="__embEnv">'
+      +'<div class="dv"></div>'
+      +'<div class="es"><div class="lab">ผู้ส่ง / From</div><div class="nm">'+sName+'</div><div>'+sAddr+'</div><div class="pc">'+sZip+'</div></div>'
+      +'<div class="er"><div class="lab">ผู้รับ / To</div><div class="nm">'+rn+'</div><div>'+ra+'</div><div class="pc">'+rz+'</div>'+telHtml+'</div>'
+    +'</div>';
+  });
+  var root=document.getElementById('__embPrintRoot');
+  root.innerHTML=html;root.style.display='block';
+  _embSetPageSize(23,11.7);
+  setTimeout(function(){window.print();setTimeout(_embClearPageSize,500);},250);
+}
+
+/* ===== RECEIPT ป.133 ก. ===== */
+function _embRcptPos(){
+  var DEFS={
+    1:[{id:'s1',key:'s1',x:6.53,y:3.61,f:16},{id:'s2',key:'s2',x:6.53,y:4.71,f:16},{id:'s3',key:'s3',x:6.47,y:5.77,f:16},{id:'s4',key:'s4',x:6.47,y:6.71,f:16},{id:'sz',key:'szip',x:10.02,y:8.44,f:16,zip:true,cells:5,cw:0.92}],
+    2:[{id:'rn',key:'rn',x:1.71,y:1.48,f:14},{id:'ra1',key:'ra1',x:2.13,y:2.09,f:14},{id:'ra2',key:'ra2',x:0.53,y:2.69,f:14},{id:'rz',key:'rzip',x:7.49,y:3.39,f:14,zip:true,cells:5,cw:0.60}]
+  };
+  try{var s=localStorage.getItem('rcpt_pos_v5');if(s){var p=JSON.parse(s);if(p&&p[1]&&p[2]&&p._v===2)return p;}}catch(e){}
+  return DEFS;
+}
+function _embRcptPage(page,data){
+  var pos=_embRcptPos();var arr=pos[page]||[];
+  var h='<div class="__embRcpt">';
+  arr.forEach(function(f){
+    if(f.zip){
+      var val=_embPadZip(data[f.key]||'');
+      var gap=f.cw||0.89;
+      for(var i=0;i<f.cells;i++){
+        var ch=val[i]||'';
+        if(!ch||!ch.trim())continue;
+        h+='<div class="pf" style="left:'+(f.x+i*gap)+'cm;top:'+f.y+'cm;font-size:'+f.f+'pt;text-align:center;width:'+gap+'cm">'+_embEsc(ch)+'</div>';
+      }
+    } else {
+      var v=String(data[f.key]||'');if(!v.trim())return;
+      h+='<div class="pf" style="left:'+f.x+'cm;top:'+f.y+'cm;font-size:'+f.f+'pt">'+_embEsc(v)+'</div>';
+    }
+  });
+  h+='</div>';return h;
+}
+function _senderRcptData(){
+  var s=_senderInfo();
+  return{s1:s.name,s2:s.addr1,s3:s.addr2,s4:'',szip:s.zip};
+}
+function _rcvRcptData(r){
+  // r._a1 = บรรทัด 1, ส่วนที่เหลือต./อ./จ. ใส่บรรทัด 2
+  var ra2=[r._tm?'ต.'+r._tm:'',r._ap?'อ.'+r._ap:'',r._pv?'จ.'+r._pv:''].filter(Boolean).join(' ');
+  return{rn:r.name||'',ra1:r._a1||'',ra2:ra2,rzip:r.zip||''};
+}
+
+function embPrintReceiptsSender(){
+  var rcps=_embGetRcps();if(!rcps.length)return;
+  var s=_senderRcptData();
+  var html='';rcps.forEach(function(){html+=_embRcptPage(1,s);});
+  var root=document.getElementById('__embPrintRoot');root.innerHTML=html;root.style.display='block';
+  _embSetPageSize(14.9,11.1);
+  setTimeout(function(){window.print();setTimeout(_embClearPageSize,500);},250);
+}
+function embPrintReceiptsReceiver(){
+  var rcps=_embGetRcps();if(!rcps.length)return;
+  var html='';rcps.forEach(function(r){html+=_embRcptPage(2,_rcvRcptData(r));});
+  var root=document.getElementById('__embPrintRoot');root.innerHTML=html;root.style.display='block';
+  _embSetPageSize(14.9,11.1);
+  setTimeout(function(){window.print();setTimeout(_embClearPageSize,500);},250);
+}
+function embPrintReceiptsBoth(){
+  var rcps=_embGetRcps();if(!rcps.length)return;
+  var s=_senderRcptData();var html='';
+  rcps.forEach(function(r){html+=_embRcptPage(1,s);html+=_embRcptPage(2,_rcvRcptData(r));});
+  var root=document.getElementById('__embPrintRoot');root.innerHTML=html;root.style.display='block';
+  _embSetPageSize(14.9,11.1);
+  setTimeout(function(){window.print();setTimeout(_embClearPageSize,500);},250);
+}
+
+/* ---------- auto-save ---------- */
+var LS_KEY='form_envrcpt_combined';
+function saveAll(){
+  try{
+    var d={s:{name:_gv('s_name'),a1:_gv('s_addr1'),a2:_gv('s_addr2'),z:_gv('s_zip')},r:[]};
+    document.querySelectorAll('#rcps-wrap .rcp-box').forEach(function(b){
+      var n=b.id.replace('rcp-','');
+      d.r.push({
+        name:_gv('r_name_'+n),addr1:_gv('r_addr1_'+n),prov:_gv('r_prov_'+n),
+        amp:_gv('r_amp_'+n),tam:_gv('r_tam_'+n),zip:_gv('r_zip_'+n),tel:_gv('r_tel_'+n)
+      });
+    });
+    localStorage.setItem(LS_KEY,JSON.stringify(d));
+  }catch(e){}
+}
+function restoreAll(){
+  try{
+    var s=localStorage.getItem(LS_KEY);if(!s){addRcp();return;}
+    var d=JSON.parse(s);
+    if(d.s){
+      if(d.s.name)document.getElementById('s_name').value=d.s.name;
+      if(d.s.a1)document.getElementById('s_addr1').value=d.s.a1;
+      if(d.s.a2)document.getElementById('s_addr2').value=d.s.a2;
+      if(d.s.z)document.getElementById('s_zip').value=d.s.z;
+    }
+    if(d.r&&d.r.length){d.r.forEach(function(r){addRcp(r);});}
+    else{addRcp();}
+  }catch(e){addRcp();}
+}
+setInterval(saveAll,2000);
+window.addEventListener('beforeunload',saveAll);
+window.addEventListener('DOMContentLoaded',restoreAll);
+</script>
+</body>
+</html>

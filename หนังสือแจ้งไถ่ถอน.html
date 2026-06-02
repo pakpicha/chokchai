@@ -379,10 +379,12 @@ function embPrintEnvelopes(){
     var rn=_embEsc(r.name||'................................');
     var ra=_embAddrHtml(r.addr||'................................');
     var rz=_embEsc(r.zip||'')||'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+    var rt=_embEsc(r.tel||'');
+    var telHtml=rt?'<div style="font-size:16pt;margin-top:3pt;color:#000">โทร. '+rt+'</div>':'';
     html+='<div class="__embEnv">'
       +'<div class="dv"></div>'
       +'<div class="es"><div class="lab">ผู้ส่ง / From</div><div class="nm">'+sName+'</div><div>'+sAddr+'</div><div class="pc">'+sZip+'</div></div>'
-      +'<div class="er"><div class="lab">ผู้รับ / To</div><div class="nm">'+rn+'</div><div>'+ra+'</div><div class="pc">'+rz+'</div></div>'
+      +'<div class="er"><div class="lab">ผู้รับ / To</div><div class="nm">'+rn+'</div><div>'+ra+'</div><div class="pc">'+rz+'</div>'+telHtml+'</div>'
     +'</div>';
   });
   var root=document.getElementById('__embPrintRoot');
@@ -481,8 +483,9 @@ function getRecipients(){
     var ap=(document.getElementById('rcp_amp_'+n)||{value:''}).value.trim();
     var tm=(document.getElementById('rcp_tam_'+n)||{value:''}).value.trim();
     var zp=(document.getElementById('rcp_zip_'+n)||{value:''}).value.trim();
+    var tl=(document.getElementById('rcp_tel_'+n)||{value:''}).value.trim();
     var fa=[a1,tm?'ต.'+tm:'',ap?'อ.'+ap:'',pv?'จ.'+pv:''].filter(Boolean).join(' ');
-    if(nm||fa) list.push({name:nm,addr:fa,zip:zp});
+    if(nm||fa) list.push({name:nm,addr:fa,zip:zp,tel:tl});
   });
   return list;
 }
@@ -509,6 +512,7 @@ function addRecipient(name,addr,zip){
     +'<div class="fg"><label>ตำบล/แขวง</label><input type="text" id="rcp_tam_'+n+'" placeholder="ตำบล/แขวง..." style="width:100%;padding:9px;font-size:13px;border:1px solid #ccc;border-radius:7px;font-family:inherit;box-sizing:border-box"></div>'
     +'<div class="fg"><label>รหัสไปรษณีย์</label><input type="text" id="rcp_zip_'+n+'" placeholder="รหัสไปรษณีย์" maxlength="5" style="width:100%;padding:9px;font-size:13px;border:1px solid #ccc;border-radius:7px;font-family:inherit;box-sizing:border-box"></div>'
     +'</div>'
+    +'<div class="fg"><label>📞 เบอร์โทรศัพท์ (ไม่บังคับ)</label><input type="text" id="rcp_tel_'+n+'" placeholder="เช่น 081-234-5678" inputmode="tel" style="width:100%;padding:9px;font-size:14px;border:1px solid #ccc;border-radius:7px;font-family:inherit;box-sizing:border-box"></div>'
     ;
   wrap.appendChild(div);
   if(window._wireAddrInput){
@@ -700,10 +704,10 @@ function genNotice(){
     // ลงนาม — มุมขวา แบบสมดุล
     +'<div style="margin-top:1.5cm;text-align:right">'
       +'<div style="display:inline-block;text-align:center;padding-right:0.5cm">'
-        +'<p style="margin:0 0 24pt 0">ขอแสดงความนับถือ</p>'
-        +'<p style="margin:0">( บริษัท โชคชัย เงินด่วน จำกัด โดย '+signer+' )</p>'
-        +'<p style="margin:0">(ผู้รับซื้อฝาก)</p>'
-        +'<p style="margin:8pt 0 0 0">โทรศัพท์ '+phone+'</p>'
+        +'<p style="margin:0 0 24pt 0;text-align:center">ขอแสดงความนับถือ</p>'
+        +'<p style="margin:0;text-align:center">( บริษัท โชคชัย เงินด่วน จำกัด โดย '+signer+' )</p>'
+        +'<p style="margin:0;text-align:center">(ผู้รับซื้อฝาก)</p>'
+        +'<p style="margin:8pt 0 0 0;text-align:center">โทรศัพท์ '+phone+'</p>'
       +'</div>'
     +'</div>'
     +'</div>';

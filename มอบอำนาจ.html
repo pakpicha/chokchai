@@ -102,7 +102,6 @@ body{font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;font-size:15px;back
       <div class="fg"><label>โฉนดหมายเลขที่</label><input id="title_no"></div>
       <div class="fg"><label>จังหวัด (ที่ดิน)</label><input id="land_province" value="นครราชสีมา"></div>
     </div>
-    <div class="fg"><label>เรื่อง</label><input id="subject" placeholder="เช่น มอบอำนาจให้จดทะเบียนจำนอง"></div>
   </div>
 
   <div class="card">
@@ -184,9 +183,89 @@ body{font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;font-size:15px;back
   </div>
 
   <div class="card">
-    <div class="ct"><span class="n">5</span> อำนาจที่มอบให้จัดการ</div>
+    <div class="ct"><span class="n">5</span> เลือกเรื่อง (เทมเพลต)</div>
+    <div class="fg"><label>เลือกเรื่อง</label>
+      <select id="tpl_sel" onchange="onTplChange()">
+        <option value="">— เลือกเรื่อง —</option>
+        <option value="buy">ซื้อที่ดิน</option>
+        <option value="sell">ขายที่ดิน</option>
+        <option value="give">ให้ที่ดิน (โดยเสน่หา)</option>
+        <option value="rent">ให้เช่าที่ดิน</option>
+        <option value="rent_part">ให้แบ่งเช่าที่ดินเฉพาะส่วน</option>
+        <option value="mortgage">รับจำนองที่ดิน</option>
+        <option value="redeem_mortgage">ไถ่ถอนจากจำนอง</option>
+        <option value="sellback">รับซื้อฝากที่ดิน</option>
+        <option value="sellback_part">รับซื้อฝากที่ดินเฉพาะส่วน</option>
+        <option value="redeem_sellback">ไถ่จากขายฝาก</option>
+        <option value="split">แบ่งแยกในนามเดิม</option>
+        <option value="combine">รวมโฉนดที่ดิน</option>
+        <option value="survey">ขอรังวัดสอบเขตที่ดิน</option>
+        <option value="appraise">ขอหนังสือรับรองราคาประเมิน</option>
+        <option value="__other__">อื่นๆ (กรอกเอง)</option>
+      </select>
+      <div class="hint">เลือกเรื่องแล้วระบบจะแสดงช่องให้กรอกข้อมูลเฉพาะเรื่องนั้น พอกดปุ่มจะเติมข้อความให้อัตโนมัติ ยังแก้ไขได้ภายหลัง</div>
+    </div>
+
+    <div class="fg"><label>เรื่อง (พิมพ์เองหรือเลือกเทมเพลตด้านบน)</label>
+      <input id="subject" placeholder="เช่น มอบอำนาจให้จดทะเบียนจำนอง">
+      <div class="hint">ถ้าเลือกเทมเพลตด้านบนแล้วกดปุ่ม ช่องนี้จะถูกเติมให้อัตโนมัติ — แก้ไขต่อหรือพิมพ์เองก็ได้</div>
+    </div>
+
+    <div id="tpl_fields"></div>
+
+    <div id="tpl_common" style="display:none;border-top:1px dashed #ccc;padding-top:10px;margin-top:6px">
+      <div class="fg">
+        <label style="display:flex;align-items:center;gap:8px;font-weight:600;cursor:pointer">
+          <input type="checkbox" id="has_bldg" onchange="onBldgToggle()" style="width:18px;height:18px">
+          พร้อมสิ่งปลูกสร้าง
+        </label>
+      </div>
+      <div id="bldg_detail" style="display:none;background:#f8f8f3;padding:10px;border-radius:8px;margin-bottom:8px">
+        <div class="row2">
+          <div class="fg"><label>ประเภท</label>
+            <select id="bldg_type">
+              <option>บ้าน</option>
+              <option>ตึก</option>
+              <option>ตึกแถว</option>
+              <option>อาคารพาณิชย์</option>
+              <option>โรงเรือน</option>
+            </select>
+          </div>
+          <div class="fg"><label>จำนวนชั้น</label><input id="bldg_floors" placeholder="เช่น 2"></div>
+        </div>
+        <div class="row2">
+          <div class="fg"><label>จำนวนหลัง/คูหา</label><input id="bldg_units" placeholder="เช่น 1"></div>
+          <div class="fg"><label>บ้านเลขที่</label><input id="bldg_no" placeholder="เช่น 89/28"></div>
+        </div>
+      </div>
+
+      <div class="fg">
+        <label style="display:flex;align-items:center;gap:8px;font-weight:600;cursor:pointer">
+          <input type="checkbox" id="multi_title" onchange="onMultiToggle()" style="width:18px;height:18px">
+          มากกว่า 1 โฉนด (รวมหลายแปลง)
+        </label>
+      </div>
+      <div id="multi_detail" style="display:none;background:#f8f8f3;padding:10px;border-radius:8px;margin-bottom:8px">
+        <div class="fg"><label>จำนวนโฉนดรวม</label><input id="multi_count" type="number" min="2" placeholder="เช่น 3"></div>
+        <div class="hint">ระบบจะเปลี่ยนข้อความเป็น "ที่ดินแปลงเครื่องหมายข้างบนนี้รวม X โฉนด"</div>
+      </div>
+
+      <div class="fg">
+        <label style="display:flex;align-items:flex-start;gap:8px;font-weight:600;cursor:pointer;line-height:1.4">
+          <input type="checkbox" id="is_party" style="width:18px;height:18px;flex-shrink:0;margin-top:2px">
+          <span>ผู้รับมอบเป็นคู่สัญญา/ตัวแทนของคู่สัญญา<br><span style="font-weight:400;font-size:12px;color:#666">(จะเพิ่มข้อความ "ยินยอมให้ผู้รับมอบอำนาจเข้าทำการแทนในนามตนเองและ/หรือเป็นตัวแทนของอีกฝ่ายหนึ่งด้วย")</span></span>
+        </label>
+      </div>
+
+      <button type="button" onclick="applyTpl()" style="width:100%;padding:11px;background:#4a7c59;color:#fff;border:none;border-radius:8px;font-family:inherit;font-weight:700;font-size:15px;cursor:pointer;margin-top:8px">📝 ใส่ข้อความให้อัตโนมัติ</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ct"><span class="n">6</span> อำนาจที่มอบให้จัดการ</div>
     <div class="fg"><label>รายละเอียดอำนาจจัดการ</label>
-      <textarea id="powers" style="min-height:120px" placeholder="ระบุให้ชัดเจนว่ามอบอำนาจให้ทำอะไร เช่น ให้มีอำนาจจดทะเบียนจำนอง ..."></textarea>
+      <textarea id="powers" style="min-height:140px" placeholder="กดปุ่ม &quot;ใส่ข้อความให้อัตโนมัติ&quot; ด้านบน หรือพิมพ์เองได้"></textarea>
+      <div class="hint">หลังกดปุ่มเทมเพลต ข้อความจะถูกเติมที่นี่ แก้ไขต่อได้ตามต้องการ</div>
     </div>
   </div>
 
@@ -286,6 +365,324 @@ function idBoxes(id){
   return html;
 }
 
+// ========== ระบบเทมเพลตเรื่องมอบอำนาจ ==========
+// แต่ละเรื่องประกอบด้วย:
+//   subject: หัวเรื่อง (อาจมี {bldg} placeholder)
+//   fields:  ช่องที่ต้องกรอกเพิ่ม
+//   build:   function ที่รับ (f=ค่าฟิลด์, ctx={bldgPhrase, bldgInDetail, plotPhrase}) คืนข้อความ powers
+var TPL={
+  'buy':{
+    subject:'ซื้อที่ดิน{bldg}',
+    fields:[
+      {id:'t_seller',label:'ผู้ขาย (นาย/นาง/นางสาว...)',placeholder:'นายสมชาย ใจดี'},
+      {id:'t_price',label:'ราคา (บาท)',placeholder:'500000'},
+      {id:'t_price_text',label:'ราคา (ตัวอักษร)',placeholder:'ห้าแสนบาทถ้วน'}
+    ],
+    build:function(f,ctx){
+      return 'ซื้อที่ดิน'+ctx.plotPhrase+ctx.bldgInDetail+
+        ' จาก'+(f.t_seller||'………………')+' ในราคา '+(f.t_price||'………')+' บาท ('+(f.t_price_text||'………………')+
+        ') ตลอดจนให้ถ้อยคำต่าง ๆ ต่อพนักงานเจ้าหน้าที่';
+    }
+  },
+  'sell':{
+    subject:'ขายที่ดิน{bldg}',
+    fields:[
+      {id:'t_buyer',label:'ผู้ซื้อ (นาย/นาง/นางสาว...)',placeholder:'นายสมชาย ใจดี'},
+      {id:'t_price',label:'ราคา (บาท)',placeholder:'500000'},
+      {id:'t_price_text',label:'ราคา (ตัวอักษร)',placeholder:'ห้าแสนบาทถ้วน'}
+    ],
+    build:function(f,ctx){
+      return 'ขายที่ดิน'+ctx.plotPhrase+ctx.bldgInDetail+
+        ' ให้แก่'+(f.t_buyer||'………………')+' ในราคา '+(f.t_price||'………')+' บาท ('+(f.t_price_text||'………………')+
+        ') ตลอดจนให้ถ้อยคำต่าง ๆ ต่อพนักงานเจ้าหน้าที่';
+    }
+  },
+  'give':{
+    subject:'ให้ที่ดิน{bldg}',
+    fields:[
+      {id:'t_receiver',label:'ผู้รับ (นาย/นาง/นางสาว...)',placeholder:'นายสมชาย ใจดี'}
+    ],
+    build:function(f,ctx){
+      return 'ให้ที่ดิน'+ctx.plotPhrase+ctx.bldgInDetail+
+        ' แก่'+(f.t_receiver||'………………')+' โดยเสน่หาไม่มีค่าตอบแทน ตลอดจนให้ถ้อยคำต่าง ๆ ต่อพนักงานเจ้าหน้าที่';
+    }
+  },
+  'rent':{
+    subject:'ให้เช่าที่ดินมีกำหนด {years} ปี{bldg}',
+    fields:[
+      {id:'t_years',label:'กำหนดเวลาเช่า (ปี)',placeholder:'3'},
+      {id:'t_from',label:'นับตั้งแต่ (วันที่)',placeholder:'1 มกราคม 2569'},
+      {id:'t_to',label:'ถึง (วันที่)',placeholder:'31 ธันวาคม 2571'},
+      {id:'t_rent',label:'ค่าเช่ารวม (บาท)',placeholder:'120000'},
+      {id:'t_rent_text',label:'ค่าเช่ารวม (ตัวอักษร)',placeholder:'หนึ่งแสนสองหมื่นบาทถ้วน'},
+      {id:'t_period',label:'ชำระเป็นราย',placeholder:'เดือน หรือ ปี',type:'select',opts:['เดือน','ปี']},
+      {id:'t_periodAmt',label:'จำนวนเงินต่องวด (บาท)',placeholder:'10000'},
+      {id:'t_periodAmtText',label:'จำนวนเงินต่องวด (ตัวอักษร)',placeholder:'หนึ่งหมื่นบาทถ้วน'},
+      {id:'t_payDay',label:'กำหนดชำระภายในวันที่',placeholder:'5'}
+    ],
+    build:function(f,ctx){
+      return 'ให้เช่าที่ดิน'+ctx.plotPhrase+'ทั้งแปลง'+ctx.bldgInDetail+
+        ' มีกำหนดเวลา '+(f.t_years||'……')+' ปี นับตั้งแต่ '+(f.t_from||'…………')+
+        ' ถึง '+(f.t_to||'…………')+' คิดค่าเช่าเป็นจำนวนเงิน '+(f.t_rent||'………')+' บาท ('+(f.t_rent_text||'………………')+
+        ') โดยชำระเงินค่าเช่ากันเป็นราย'+(f.t_period||'เดือน')+'ละ '+(f.t_periodAmt||'………')+
+        ' บาท ('+(f.t_periodAmtText||'………………')+') กำหนดชำระค่าเช่าภายในวันที่ '+(f.t_payDay||'……')+
+        ' ของ'+(f.t_period||'เดือน')+' ตลอดจนให้ถ้อยคำต่าง ๆ ต่อพนักงานเจ้าหน้าที่';
+    }
+  },
+  'rent_part':{
+    subject:'ให้แบ่งเช่าที่ดินเฉพาะส่วน มีกำหนด {years} ปี{bldg}',
+    fields:[
+      {id:'t_direction',label:'ทิศที่จะแบ่งเช่า',placeholder:'เช่น เหนือ / ใต้ / ตะวันออก / ตะวันตก'},
+      {id:'t_area',label:'เนื้อที่ประมาณ',placeholder:'เช่น 1 ไร่ 2 งาน'},
+      {id:'t_years',label:'กำหนดเวลาเช่า (ปี)',placeholder:'3'},
+      {id:'t_from',label:'นับตั้งแต่ (วันที่)',placeholder:'1 มกราคม 2569'},
+      {id:'t_to',label:'ถึง (วันที่)',placeholder:'31 ธันวาคม 2571'},
+      {id:'t_rent',label:'ค่าเช่ารวม (บาท)',placeholder:'120000'},
+      {id:'t_rent_text',label:'ค่าเช่ารวม (ตัวอักษร)',placeholder:'หนึ่งแสนสองหมื่นบาทถ้วน'},
+      {id:'t_period',label:'ชำระเป็นราย',placeholder:'เดือน หรือ ปี',type:'select',opts:['เดือน','ปี']},
+      {id:'t_periodAmt',label:'จำนวนเงินต่องวด (บาท)',placeholder:'10000'},
+      {id:'t_periodAmtText',label:'จำนวนเงินต่องวด (ตัวอักษร)',placeholder:'หนึ่งหมื่นบาทถ้วน'},
+      {id:'t_payDay',label:'กำหนดชำระภายในวันที่',placeholder:'5'}
+    ],
+    build:function(f,ctx){
+      return 'ให้แบ่งเช่าที่ดิน'+ctx.plotPhrase+'เฉพาะส่วนของข้าพเจ้าเพียงบางส่วน ทางด้านทิศ'+(f.t_direction||'……')+
+        ' เนื้อที่ประมาณ '+(f.t_area||'……')+ctx.bldgInDetail+
+        ' มีกำหนดเวลา '+(f.t_years||'……')+' ปี นับตั้งแต่ '+(f.t_from||'…………')+
+        ' ถึง '+(f.t_to||'…………')+' คิดค่าเช่าเป็นจำนวนเงิน '+(f.t_rent||'………')+' บาท ('+(f.t_rent_text||'………………')+
+        ') โดยชำระเงินค่าเช่ากันเป็นราย'+(f.t_period||'เดือน')+'ละ '+(f.t_periodAmt||'………')+
+        ' บาท ('+(f.t_periodAmtText||'………………')+') กำหนดชำระค่าเช่าภายในวันที่ '+(f.t_payDay||'……')+
+        ' ของ'+(f.t_period||'เดือน')+' ตลอดจนให้ถ้อยคำต่าง ๆ ต่อพนักงานเจ้าหน้าที่';
+    }
+  },
+  'mortgage':{
+    subject:'รับจำนองที่ดิน{bldg}',
+    fields:[
+      {id:'t_owner',label:'ของ (เจ้าของที่ดิน นาย/นาง/นางสาว...)',placeholder:'นายสมชาย ใจดี'},
+      {id:'t_amount',label:'วงเงิน (บาท)',placeholder:'500000'},
+      {id:'t_amount_text',label:'วงเงิน (ตัวอักษร)',placeholder:'ห้าแสนบาทถ้วน'},
+      {id:'t_interest',label:'อัตราดอกเบี้ยร้อยละ',placeholder:'15'},
+      {id:'t_per',label:'ต่อ',placeholder:'',type:'select',opts:['เดือน','ปี']},
+      {id:'t_debtor',label:'ผู้กู้ (นาย/นาง/นางสาว...)',placeholder:'นายสมชาย ใจดี'}
+    ],
+    build:function(f,ctx){
+      return 'รับจำนองที่ดิน'+ctx.plotPhrase+ctx.bldgInDetail+
+        ' ของ'+(f.t_owner||'………………')+' ในวงเงิน '+(f.t_amount||'………')+
+        ' บาท ('+(f.t_amount_text||'………………')+') อัตราดอกเบี้ยร้อยละ '+(f.t_interest||'……')+
+        ' บาท ต่อ'+(f.t_per||'ปี')+' เพื่อประกันหนี้เงินกู้'+(f.t_debtor||'………………')+
+        ' ตลอดจนให้ถ้อยคำต่าง ๆ ต่อพนักงานเจ้าหน้าที่';
+    }
+  },
+  'redeem_mortgage':{
+    subject:'ไถ่ถอนจากจำนอง',
+    fields:[
+      {id:'t_contract_date',label:'วันที่ทำสัญญาจำนอง',placeholder:'เช่น 1 มกราคม 2568'}
+    ],
+    build:function(f,ctx){
+      return 'ไถ่ถอนจากจำนองที่ดิน'+ctx.plotPhrase+
+        ' ตามสัญญาจำนองฉบับลงวันที่ '+(f.t_contract_date||'…………')+
+        ' ตลอดจนให้ถ้อยคำต่าง ๆ ต่อพนักงานเจ้าหน้าที่';
+    }
+  },
+  'sellback':{
+    subject:'รับซื้อฝากที่ดินมีกำหนดเวลา {years} ปี{bldg}',
+    fields:[
+      {id:'t_years',label:'กำหนดเวลา (ปี)',placeholder:'1'},
+      {id:'t_seller',label:'ผู้ขายฝาก (นาย/นาง/นางสาว...)',placeholder:'นายสมชาย ใจดี'},
+      {id:'t_price',label:'ราคา (บาท)',placeholder:'500000'},
+      {id:'t_price_text',label:'ราคา (ตัวอักษร)',placeholder:'ห้าแสนบาทถ้วน'},
+      {id:'t_redeem_price',label:'กำหนดสินไถ่ (บาท)',placeholder:'550000'},
+      {id:'t_redeem_text',label:'กำหนดสินไถ่ (ตัวอักษร)',placeholder:'ห้าแสนห้าหมื่นบาทถ้วน'}
+    ],
+    build:function(f,ctx){
+      return 'รับซื้อฝากที่ดิน'+ctx.plotPhrase+ctx.bldgInDetail+
+        ' มีกำหนดเวลา '+(f.t_years||'……')+' ปี จาก'+(f.t_seller||'………………')+
+        ' ในราคา '+(f.t_price||'………')+' บาท ('+(f.t_price_text||'………………')+
+        ') กำหนดสินไถ่ในราคา '+(f.t_redeem_price||'………')+' บาท ('+(f.t_redeem_text||'………………')+
+        ') ตลอดจนให้ถ้อยคำต่าง ๆ ต่อพนักงานเจ้าหน้าที่';
+    }
+  },
+  'sellback_part':{
+    subject:'รับซื้อฝากที่ดินเฉพาะส่วน มีกำหนดเวลา {years} ปี{bldg}',
+    fields:[
+      {id:'t_years',label:'กำหนดเวลา (ปี)',placeholder:'1'},
+      {id:'t_seller',label:'ผู้ขายฝาก (นาย/นาง/นางสาว...)',placeholder:'นายสมชาย ใจดี'},
+      {id:'t_price',label:'ราคา (บาท)',placeholder:'500000'},
+      {id:'t_price_text',label:'ราคา (ตัวอักษร)',placeholder:'ห้าแสนบาทถ้วน'},
+      {id:'t_redeem_price',label:'กำหนดสินไถ่ (บาท)',placeholder:'550000'},
+      {id:'t_redeem_text',label:'กำหนดสินไถ่ (ตัวอักษร)',placeholder:'ห้าแสนห้าหมื่นบาทถ้วน'}
+    ],
+    build:function(f,ctx){
+      return 'รับซื้อฝากที่ดินเฉพาะส่วน'+ctx.plotPhrase+ctx.bldgInDetail+
+        ' มีกำหนดเวลา '+(f.t_years||'……')+' ปี จาก'+(f.t_seller||'………………')+
+        ' ในราคา '+(f.t_price||'………')+' บาท ('+(f.t_price_text||'………………')+
+        ') กำหนดสินไถ่ในราคา '+(f.t_redeem_price||'………')+' บาท ('+(f.t_redeem_text||'………………')+
+        ') ตลอดจนให้ถ้อยคำต่าง ๆ ต่อพนักงานเจ้าหน้าที่';
+    }
+  },
+  'redeem_sellback':{
+    subject:'ไถ่จากขายฝาก',
+    fields:[
+      {id:'t_contract_date',label:'วันที่ทำสัญญาขายฝาก',placeholder:'เช่น 1 มกราคม 2568'}
+    ],
+    build:function(f,ctx){
+      return 'ไถ่จากการขายฝากที่ดิน'+ctx.plotPhrase+
+        ' ตามสัญญาขายฝากที่ดินฉบับลงวันที่ '+(f.t_contract_date||'…………')+
+        ' ตลอดจนให้ถ้อยคำต่าง ๆ ต่อพนักงานเจ้าหน้าที่';
+    }
+  },
+  'split':{
+    subject:'แบ่งแยกในนามเดิม',
+    fields:[],
+    build:function(f,ctx){
+      return 'ขอรังวัดแบ่งแยกในนามเดิมที่ดิน'+ctx.plotPhrase+
+        ' นำช่างทำการรังวัดปักหลักเขตและรับรองแนวเขตที่ดิน ถ้าทำการรังวัดแล้วได้รูปแผนที่หรือเนื้อที่ต่างจากเดิม'+
+        ' ให้มีอำนาจยินยอมให้แก้รูปแผนที่ เนื้อที่ให้ถูกต้องตามความจริงได้ แก้คำขอ (ถ้ามี) จดทะเบียนแบ่งแยกในนามเดิม'+
+        ' วางและรับเงินมัดจำรังวัดที่เหลือคืน รับโฉนดที่ดิน ตลอดจนให้ถ้อยคำต่าง ๆ ต่อพนักงานเจ้าหน้าที่';
+    }
+  },
+  'combine':{
+    subject:'รวมโฉนดที่ดิน',
+    fields:[],
+    build:function(f,ctx){
+      return 'ขอรังวัดรวมโฉนดที่ดิน'+ctx.plotPhrase+
+        ' นำช่างทำการรังวัดปักหลักเขตและรับรองแนวเขตที่ดิน ถ้าทำการรังวัดแล้วได้รูปแผนที่หรือเนื้อที่ต่างจากเดิม'+
+        ' ให้มีอำนาจยินยอมให้แก้รูปแผนที่ เนื้อที่ให้ถูกต้องตามความจริงได้ แก้คำขอ (ถ้ามี)'+
+        ' วางและรับเงินมัดจำรังวัดที่เหลือคืน รับโฉนดที่ดิน ตลอดจนให้ถ้อยคำต่าง ๆ ต่อพนักงานเจ้าหน้าที่';
+    }
+  },
+  'survey':{
+    subject:'ขอรังวัดสอบเขตที่ดิน',
+    fields:[],
+    build:function(f,ctx){
+      return 'ขอรังวัดสอบเขตที่ดิน'+ctx.plotPhrase+
+        ' นำช่างทำการรังวัดปักหลักเขตและรับรองแนวเขตที่ดิน ถ้าทำการรังวัดแล้วได้รูปแผนที่หรือเนื้อที่ต่างจากเดิม'+
+        ' ให้มีอำนาจยินยอมให้แก้รูปแผนที่ เนื้อที่ หมายเขต หลักเขตในโฉนดที่ดินให้ถูกต้องตามความจริงได้ แก้คำขอ (ถ้ามี)'+
+        ' วางและรับเงินมัดจำรังวัดที่เหลือคืน รับโฉนดที่ดิน ตลอดจนให้ถ้อยคำต่าง ๆ ต่อพนักงานเจ้าหน้าที่';
+    }
+  },
+  'appraise':{
+    subject:'ขอหนังสือรับรองราคาประเมิน',
+    fields:[
+      {id:'t_purpose',label:'นำไปแสดงต่อ',placeholder:'',type:'select',opts:['ศาล / สถานีตำรวจ (ประกันตัว)','ธนาคาร / สถาบันการเงิน (ขอกู้ยืม)']},
+      {id:'t_place',label:'ชื่อศาล/สถานีตำรวจ/ธนาคาร/สถาบันการเงิน',placeholder:'เช่น ศาลจังหวัดนครราชสีมา หรือ ธนาคารกรุงเทพ'},
+      {id:'t_person',label:'ชื่อผู้ต้องหา/ผู้กู้ (ถ้ามี)',placeholder:'นายสมชาย ใจดี'},
+      {id:'t_case',label:'ข้อหา/วัตถุประสงค์ (กรณีคดี)',placeholder:'เช่น ข้อหา ขับรถโดยประมาท'}
+    ],
+    build:function(f,ctx){
+      var purpose=f.t_purpose||'';
+      var txt='ขอหนังสือรับรองราคาประเมินที่ดิน'+ctx.plotPhrase+'เพื่อนำไปแสดงต่อ';
+      if(purpose.indexOf('ธนาคาร')>=0){
+        txt+='ธนาคาร/สถาบันการเงิน '+(f.t_place||'………………')+
+          ' เพื่อประกอบการพิจารณาการขอกู้ยืม';
+      }else{
+        txt+='ศาล/สถานีตำรวจ '+(f.t_place||'………………')+
+          ' เพื่อประกอบการพิจารณาขอประกันตัว '+(f.t_person||'………………');
+        if(f.t_case)txt+=' ในคดีความผิดหรือข้อหา '+f.t_case;
+      }
+      txt+=' ตลอดจนให้ถ้อยคำต่าง ๆ ต่อพนักงานเจ้าหน้าที่';
+      return txt;
+    }
+  }
+};
+
+function onTplChange(){
+  var sel=gv('tpl_sel');
+  var fieldsBox=document.getElementById('tpl_fields');
+  var commonBox=document.getElementById('tpl_common');
+  fieldsBox.innerHTML='';
+  if(!sel){commonBox.style.display='none';return;}
+  if(sel==='__other__'){
+    commonBox.style.display='none';
+    document.getElementById('subject').value='';
+    document.getElementById('powers').value='';
+    document.getElementById('powers').focus();
+    return;
+  }
+  var tpl=TPL[sel];
+  if(!tpl){commonBox.style.display='none';return;}
+  // สร้าง dynamic fields
+  var html='';
+  if(tpl.fields.length){
+    html+='<div style="background:#f8f8f3;padding:10px;border-radius:8px;margin-bottom:8px">';
+    for(var i=0;i<tpl.fields.length;i++){
+      var fd=tpl.fields[i];
+      html+='<div class="fg"><label>'+esc(fd.label)+'</label>';
+      if(fd.type==='select' && fd.opts){
+        html+='<select id="'+fd.id+'">';
+        for(var j=0;j<fd.opts.length;j++)html+='<option>'+esc(fd.opts[j])+'</option>';
+        html+='</select>';
+      }else{
+        html+='<input id="'+fd.id+'" placeholder="'+esc(fd.placeholder||'')+'">';
+      }
+      html+='</div>';
+    }
+    html+='</div>';
+  }else{
+    html+='<div class="hint" style="padding:8px 0">เรื่องนี้ไม่ต้องกรอกข้อมูลเพิ่ม กดปุ่มด้านล่างได้เลย</div>';
+  }
+  fieldsBox.innerHTML=html;
+  commonBox.style.display='block';
+}
+
+function onBldgToggle(){
+  document.getElementById('bldg_detail').style.display=document.getElementById('has_bldg').checked?'block':'none';
+}
+function onMultiToggle(){
+  document.getElementById('multi_detail').style.display=document.getElementById('multi_title').checked?'block':'none';
+}
+
+function applyTpl(){
+  var sel=gv('tpl_sel');
+  if(!sel||sel==='__other__')return;
+  var tpl=TPL[sel]; if(!tpl)return;
+
+  // เก็บค่า fields
+  var f={};
+  for(var i=0;i<tpl.fields.length;i++){
+    var fd=tpl.fields[i];
+    f[fd.id]=gv(fd.id);
+  }
+
+  // สิ่งปลูกสร้าง
+  var hasBldg=document.getElementById('has_bldg').checked;
+  var bldgPhrase='', bldgInDetail='';
+  if(hasBldg){
+    bldgPhrase=' พร้อมสิ่งปลูกสร้าง';
+    var bt=gv('bldg_type')||'บ้าน';
+    var bf=gv('bldg_floors'), bu=gv('bldg_units'), bn=gv('bldg_no');
+    bldgInDetail=' พร้อม'+bt;
+    if(bf)bldgInDetail+=' '+bf+' ชั้น';
+    if(bu)bldgInDetail+=' '+bu+' หลัง/คูหา';
+    if(bn)bldgInDetail+=' เลขที่ '+bn;
+  }
+
+  // หลายโฉนด
+  var multi=document.getElementById('multi_title').checked;
+  var plotPhrase='แปลงเครื่องหมายข้างบนนี้';
+  if(multi){
+    var cnt=gv('multi_count')||'……';
+    plotPhrase='แปลงเครื่องหมายข้างบนนี้รวม '+cnt+' โฉนด';
+  }
+
+  var ctx={bldgPhrase:bldgPhrase, bldgInDetail:bldgInDetail, plotPhrase:plotPhrase};
+
+  // สร้าง subject
+  var subj=tpl.subject.replace('{bldg}', bldgPhrase);
+  // ใส่ปี (กรณี rent, sellback)
+  subj=subj.replace('{years}', f.t_years||'…');
+  document.getElementById('subject').value=subj;
+
+  // สร้าง powers
+  var powers=tpl.build(f, ctx);
+  // ถ้าผู้รับมอบเป็นคู่สัญญา/ตัวแทน → แทรกข้อความก่อน 'ตลอดจนให้ถ้อยคำ...'
+  if(document.getElementById('is_party').checked){
+    var clause='และยินยอมให้ผู้รับมอบอำนาจเข้าทำการแทนในนามตนเองและ/หรือเป็นตัวแทนของอีกฝ่ายหนึ่งด้วย ';
+    powers=powers.replace(' ตลอดจนให้ถ้อยคำต่าง ๆ', ' '+clause+'ตลอดจนให้ถ้อยคำต่าง ๆ');
+  }
+  document.getElementById('powers').value=powers;
+}
+// ========== จบระบบเทมเพลต ==========
+
 function genDoc(){
   var grantor=gv('grantor');
   var grantee=gv('grantee_name');
@@ -314,7 +711,7 @@ function genDoc(){
   h+='<div class="dr" style="justify-content:flex-end;margin-left:8cm;margin-top:3pt"><span>วันที่</span>'+dot(dd,1)+'<span>เดือน</span>'+dot(dm,2)+'<span>พุทธศักราช</span>'+dot(dy,2)+'</div>';
 
   // ผู้มอบ (บริษัท) — ไม่มีอายุ/เชื้อชาติ/บิดา/มารดา/ตรอกซอย/ถนน → ใส่ขีด -
-  h+='<div class="dr wrap2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;โดยหนังสือฉบับนี้ข้าพเจ้า บริษัท โชคชัย เงินด่วน จำกัด โดย <span style="border-bottom:1px dotted #000;display:inline-block;min-width:7cm;text-align:center">'+esc(grantor)+'</span></div>';
+  h+='<div style="display:flex;align-items:flex-end;gap:6pt;line-height:1.5;margin-top:2pt"><span style="flex-shrink:0;white-space:nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;โดยหนังสือฉบับนี้ข้าพเจ้า บริษัท โชคชัย เงินด่วน จำกัด โดย</span><span class="dot" style="flex:1;text-align:center">'+esc(grantor)+'</span></div>';
   h+='<div class="dr"><span>เลขประจำตัวผู้เสียภาษีอากร</span>'+idBoxes(gv('grantor_id')||'0305568001941')+'<span>อายุ</span>'+dot('-',1)+'<span>ปี เชื้อชาติ</span>'+dot('-',2)+'</div>';
   h+='<div class="dr"><span>สัญชาติ</span>'+dot('ไทย',3)+'<span>บิดาชื่อ</span>'+dot('-',3)+'<span>มารดาชื่อ</span>'+dot('-',3)+'</div>';
   h+='<div class="dr"><span>บ้านเลขที่</span>'+dot('89/28',2)+'<span>หมู่ที่</span>'+dot('9',1)+'<span>ตรอก/ซอย</span>'+dot('-',2)+'<span>ถนน</span>'+dot('-',2)+'</div>';
@@ -347,12 +744,12 @@ function genDoc(){
   h+='</div>';
 
   // ข้อความรับรอง
-  h+='<div class="dr wrap2" style="text-indent:1.5cm;margin-top:2pt">ข้าพเจ้าขอรับรองว่าเป็น ลายมือชื่อ / ลายพิมพ์นิ้วมือ อันแท้จริงของผู้มอบอำนาจและผู้มอบอำนาจได้ลงลายมือชื่อ/พิมพ์ลายนิ้วมือ ต่อหน้าข้าพเจ้า</div>';
+  h+='<div class="dr wrap2" style="text-indent:1cm;margin-top:2pt;font-size:12pt">ข้าพเจ้าขอรับรองว่าเป็นลายมือชื่อ/ลายพิมพ์นิ้วมือ อันแท้จริงของผู้มอบอำนาจและผู้มอบอำนาจได้ลงลายมือชื่อ/พิมพ์ลายนิ้วมือต่อหน้าข้าพเจ้า</div>';
 
   // แถวเดียว: หมายเหตุ (ซ้าย) + พยาน 2 บรรทัด (ขวา)
   h+='<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-top:3pt;gap:10pt">';
   h+='  <div style="border:1px solid #000;padding:3pt 6pt;font-size:10.5pt;line-height:1.3;width:8cm;flex-shrink:0">';
-  h+='    <b>หมายเหตุ</b> กรณีที่ผู้รับมอบอำนาจเป็นนิติบุคคลให้แนบเอกสารหลักฐานสำคัญของนิติบุคคลนั้น เช่น "หนังสือรับรองการจดทะเบียนนิติบุคคลและบัญชีรายชื่อผู้ถือหุ้นล่าสุด" หรือเป็นไปตามที่กฎหมายระบุไว้';
+  h+='    <b>หมายเหตุ</b> กรณีที่ผู้รับมอบอำนาจเป็นคู่สัญญาหรือเป็นตัวแทนของคู่สัญญาให้ระบุข้อความดังต่อไปนี้ด้วย "และยินยอมให้ผู้รับมอบอำนาจเข้าทำการแทนในนามตนเองและ/หรือเป็นตัวแทนของอีกฝ่ายหนึ่งด้วย"';
   h+='  </div>';
   h+='  <div style="text-align:right;padding-right:1cm">';
   h+='    <div>ลงชื่อ <span style="display:inline-block;border-bottom:1px dotted #000;width:6cm;height:1.1em;vertical-align:bottom"></span> พยาน</div>';
@@ -363,9 +760,9 @@ function genDoc(){
   h+='</div>';
 
   // หมายเหตุล่าง + คำเตือน
-  h+='<div style="margin-top:4pt;display:flex;justify-content:space-between;align-items:flex-end;font-size:11pt">';
-  h+='  <div style="max-width:13cm"><b>หมายเหตุ</b> การลงลายมือชื่อหรือพิมพ์ลายนิ้วมือ ถ้าใช้อย่างใดให้ขีดฆ่าข้อความที่ไม่ใช้ออก ในกรณีพิมพ์ลายนิ้วมือให้ใช้พิมพ์ลายนิ้วมือแม่มือซ้าย</div>';
-  h+='  <div style="font-weight:bold;white-space:nowrap">โปรดอ่านคำเตือนด้านหลัง</div>';
+  h+='<div style="margin-top:4pt;display:flex;justify-content:space-between;align-items:flex-end;font-size:10.5pt;gap:8pt">';
+  h+='  <div style="flex:1"><b>หมายเหตุ</b> การลงลายมือชื่อหรือพิมพ์ลายนิ้วมือ ถ้าใช้อย่างใดให้ขีดฆ่าข้อความที่ไม่ใช้ออก ในกรณีพิมพ์ลายนิ้วมือให้ใช้พิมพ์ลายนิ้วแม่มือซ้าย</div>';
+  h+='  <div style="font-weight:bold;white-space:nowrap;flex-shrink:0">โปรดอ่านคำเตือนด้านหลัง</div>';
   h+='</div>';
   h+='</div>';  // close page 1
 

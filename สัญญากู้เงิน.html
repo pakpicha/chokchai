@@ -83,6 +83,21 @@ body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;
 .fp-box{border:1px solid #000;border-bottom:none;width:2cm;height:3cm}
 .fp-box:last-child{border-bottom:1px solid #000}
 
+/* Schedule table — form only, never printed */
+.schedule-wrap{margin-top:8px;max-height:380px;overflow-y:auto;border:1px solid #ddd;border-radius:8px;background:#fff}
+.schedule-table{width:100%;border-collapse:collapse;font-size:12px}
+.schedule-table thead{background:#1a3a2a;color:#fff;position:sticky;top:0;z-index:1}
+.schedule-table th{padding:8px 6px;text-align:right;font-weight:600;white-space:nowrap}
+.schedule-table th:first-child{text-align:center}
+.schedule-table th:nth-child(2){text-align:center}
+.schedule-table td{padding:6px;border-bottom:1px solid #eee;text-align:right;white-space:nowrap}
+.schedule-table td:first-child{text-align:center;font-weight:600;color:#1a3a2a}
+.schedule-table td:nth-child(2){text-align:center;color:#555;font-size:11px}
+.schedule-table tr:last-child td{border-bottom:none;background:#f5faf5;font-weight:700}
+.schedule-summary{background:#f0f7f0;padding:10px 12px;border-radius:8px;margin-top:8px;font-size:13px;color:#1a3a2a;line-height:1.6}
+.schedule-summary b{font-weight:700}
+.schedule-empty{text-align:center;padding:18px;color:#999;font-size:13px;background:#fafafa;border-radius:8px}
+
 .placeholder{text-align:center;color:#999;padding:60px 20px;font-size:14px}
 
 @media print{
@@ -192,11 +207,11 @@ body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;
   <div class="card">
     <div class="ct"><span class="lhs"><span class="n">4</span> รายละเอียดเงินกู้</span></div>
     <div class="row2">
-      <div class="fg"><label>จำนวนเงินกู้ (บาท)</label><input type="text" id="amount" oninput="updateAmountText()" placeholder="500000"></div>
+      <div class="fg"><label>จำนวนเงินกู้ (บาท)</label><input type="text" id="amount" oninput="updateAmountText();updateSchedule()" placeholder="500000"></div>
       <div class="fg"><label>ตัวอักษร (แก้ได้)</label><input type="text" id="amount_text" class="auto" placeholder="ห้าแสนบาทถ้วน"></div>
     </div>
     <div class="row2">
-      <div class="fg"><label>ดอกเบี้ย (ร้อยละ ต่อปี)</label><input type="text" id="rate" value="15"></div>
+      <div class="fg"><label>ดอกเบี้ย (ร้อยละ ต่อปี)</label><input type="text" id="rate" value="15" oninput="updateSchedule()"></div>
       <div class="fg"><label>วันครบกำหนดชำระ</label>
         <div class="tdp-wrap" id="tdpw_due_date" onclick="event.stopPropagation()">
           <input type="hidden" id="due_date">
@@ -228,7 +243,21 @@ body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;
   </div>
 
   <div class="card">
-    <div class="ct"><span class="lhs"><span class="n">6</span> พยาน (ถ้าทราบ)</span></div>
+    <div class="ct"><span class="lhs"><span class="n">6</span> ตารางผ่อนชำระ <span style="font-size:11px;color:#888;font-weight:400">(ดูในระบบเท่านั้น • ไม่พิมพ์)</span></span></div>
+    <div class="fg">
+      <label>รูปแบบการผ่อน</label>
+      <select id="schedule_style" onchange="updateSchedule()">
+        <option value="interest_only">💵 ดอกเบี้ยรายเดือน + เงินต้นงวดสุดท้าย (ตามสัญญาเดิม)</option>
+        <option value="amortized">📉 ผ่อนเท่ากันทุกงวด (ลดต้นลดดอก)</option>
+      </select>
+    </div>
+    <div id="schedule_output">
+      <div class="schedule-empty">กรอกจำนวนเงินกู้ ดอกเบี้ย วันทำสัญญา และวันครบกำหนด เพื่อดูตารางผ่อน</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ct"><span class="lhs"><span class="n">7</span> พยาน (ถ้าทราบ)</span></div>
     <div class="row2">
       <div class="fg"><label>พยานคนที่ 1</label><input type="text" id="witness1" placeholder="ชื่อ-นามสกุล"></div>
       <div class="fg"><label>พยานคนที่ 2</label><input type="text" id="witness2" placeholder="ชื่อ-นามสกุล"></div>
@@ -958,6 +987,161 @@ function fmtPersonList(list){
   return `${names} อายุ ${ages} ปี อยู่บ้านเลขที่ ${addrs} ตำบล${t} อำเภอ${a} จังหวัด${pv}`;
 }
 
+// ─── ตารางผ่อนชำระ ───
+function beToJSDate(beStr){
+  if(!beStr)return null;
+  const m=beStr.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+  if(!m)return null;
+  const d=parseInt(m[1]),mo=parseInt(m[2]),y=parseInt(m[3])-543;
+  const dt=new Date(y,mo-1,d);
+  return isNaN(dt)?null:dt;
+}
+function jsDateToBE(d){
+  if(!d||isNaN(d))return '';
+  const dd=String(d.getDate()).padStart(2,'0');
+  const mm=String(d.getMonth()+1).padStart(2,'0');
+  const yy=d.getFullYear()+543;
+  return `${dd}/${mm}/${yy}`;
+}
+function jsDateToShortBE(d){
+  if(!d||isNaN(d))return '';
+  const M=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+  return `${d.getDate()} ${M[d.getMonth()]} ${(d.getFullYear()+543)%100}`;
+}
+function addMonths(date,n){
+  const d=new Date(date);
+  const targetMonth=d.getMonth()+n;
+  d.setMonth(targetMonth);
+  // ถ้าวันที่เลื่อนเพราะเดือนไม่ครบ (เช่น 31 ม.ค. + 1 เดือน → 31 ก.พ. → 3 มี.ค.)
+  // ให้ปรับกลับเป็นวันสุดท้ายของเดือน
+  if(d.getMonth()!==((targetMonth%12)+12)%12){
+    d.setDate(0); // วันสุดท้ายของเดือนก่อนหน้า
+  }
+  return d;
+}
+function monthsBetween(d1,d2){
+  let m=(d2.getFullYear()-d1.getFullYear())*12;
+  m+=d2.getMonth()-d1.getMonth();
+  if(d2.getDate()<d1.getDate())m--;
+  return m;
+}
+function formatMoney(n){
+  return n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+}
+
+function calcSchedule(principal,annualRate,startDate,endDate,style){
+  const months=monthsBetween(startDate,endDate);
+  if(months<1)return null;
+  const monthlyRate=(annualRate/100)/12;
+  const rows=[];
+  
+  if(style==='interest_only'){
+    // ดอกเบี้ยรายเดือน + เงินต้นงวดสุดท้าย
+    const interest=principal*monthlyRate;
+    for(let i=1;i<=months;i++){
+      const date=addMonths(startDate,i);
+      const isLast=(i===months);
+      rows.push({
+        n:i,
+        date:date,
+        principal:isLast?principal:0,
+        interest:interest,
+        total:isLast?interest+principal:interest,
+        balance:isLast?0:principal
+      });
+    }
+  }else{
+    // Amortized — ผ่อนเท่ากันทุกงวด
+    const pmt=monthlyRate>0
+      ?principal*monthlyRate*Math.pow(1+monthlyRate,months)/(Math.pow(1+monthlyRate,months)-1)
+      :principal/months;
+    let balance=principal;
+    for(let i=1;i<=months;i++){
+      const date=addMonths(startDate,i);
+      const interest=balance*monthlyRate;
+      let principalPaid=pmt-interest;
+      let payment=pmt;
+      // งวดสุดท้ายปรับให้พอดี
+      if(i===months){
+        principalPaid=balance;
+        payment=principalPaid+interest;
+      }
+      balance-=principalPaid;
+      if(balance<0.005)balance=0;
+      rows.push({
+        n:i,
+        date:date,
+        principal:principalPaid,
+        interest:interest,
+        total:payment,
+        balance:balance
+      });
+    }
+  }
+  return rows;
+}
+
+function updateSchedule(){
+  const out=document.getElementById('schedule_output');
+  if(!out)return;
+  
+  const amtRaw=gv('amount').replace(/,/g,'');
+  const rateRaw=gv('rate');
+  const cd=getTDPVal('contract_date');
+  const dd=getTDPVal('due_date');
+  
+  if(!amtRaw||isNaN(amtRaw)||parseFloat(amtRaw)<=0||!rateRaw||isNaN(rateRaw)){
+    out.innerHTML='<div class="schedule-empty">กรอกจำนวนเงินกู้ ดอกเบี้ย วันทำสัญญา และวันครบกำหนด เพื่อดูตารางผ่อน</div>';
+    return;
+  }
+  const start=beToJSDate(cd);
+  const end=beToJSDate(dd);
+  if(!start||!end){
+    out.innerHTML='<div class="schedule-empty">กรุณากรอกวันทำสัญญาและวันครบกำหนดเพื่อดูตารางผ่อน</div>';
+    return;
+  }
+  if(end<=start){
+    out.innerHTML='<div class="schedule-empty" style="color:#c44">⚠️ วันครบกำหนดต้องอยู่หลังวันทำสัญญา</div>';
+    return;
+  }
+  
+  const style=gv('schedule_style')||'interest_only';
+  const principal=parseFloat(amtRaw);
+  const annualRate=parseFloat(rateRaw);
+  const rows=calcSchedule(principal,annualRate,start,end,style);
+  
+  if(!rows||rows.length===0){
+    out.innerHTML='<div class="schedule-empty" style="color:#c44">⚠️ ระยะเวลาสั้นเกินไป ต้องอย่างน้อย 1 เดือน</div>';
+    return;
+  }
+  
+  let totalInterest=0,totalPaid=0;
+  rows.forEach(r=>{totalInterest+=r.interest;totalPaid+=r.total});
+  
+  let html='<div class="schedule-wrap"><table class="schedule-table">';
+  html+='<thead><tr><th>งวด</th><th>วันครบ</th><th>เงินต้น</th><th>ดอกเบี้ย</th><th>รวม</th><th>คงเหลือ</th></tr></thead><tbody>';
+  rows.forEach(r=>{
+    html+=`<tr>
+      <td>${r.n}</td>
+      <td>${jsDateToShortBE(r.date)}</td>
+      <td>${r.principal>0?formatMoney(r.principal):'-'}</td>
+      <td>${formatMoney(r.interest)}</td>
+      <td>${formatMoney(r.total)}</td>
+      <td>${formatMoney(r.balance)}</td>
+    </tr>`;
+  });
+  html+='</tbody></table></div>';
+  
+  const styleLabel=style==='interest_only'?'ดอกเบี้ยรายเดือน + เงินต้นงวดสุดท้าย':'ผ่อนเท่ากันทุกงวด (ลดต้นลดดอก)';
+  html+=`<div class="schedule-summary">
+    📊 <b>สรุป (${styleLabel})</b><br>
+    เงินต้น: <b>${formatMoney(principal)}</b> บาท · ดอกเบี้ย ${annualRate}% ต่อปี · จำนวน <b>${rows.length}</b> งวด<br>
+    ดอกเบี้ยรวม: <b>${formatMoney(totalInterest)}</b> บาท · ชำระทั้งสิ้น: <b>${formatMoney(totalPaid)}</b> บาท
+  </div>`;
+  
+  out.innerHTML=html;
+}
+
 // ─── ปรับฟอนต์เอกสารตามจำนวนคน ───
 function calcDocSizes(total){
   if(total<=1)return {fs:16.5,h1:18.5,sub:14.5,lh:1.5,fp:'3.0cm'};
@@ -1119,9 +1303,10 @@ function autoRestore(){
         setTimeout(()=>{const a=document.getElementById(`g${i}_age`);if(a)a.value=calcAge(gv(`tdpi_g${i}_dob`));},50);
       }
       for(let i=1;i<=cC;i++)wireColAddr(i);
-      try{tdpInit('contract_date',function(){autoFillDue();});_tdpWireEvents('contract_date');}catch(e){}
-      try{tdpInit('due_date');_tdpWireEvents('due_date');}catch(e){}
+      try{tdpInit('contract_date',function(){autoFillDue();updateSchedule();});_tdpWireEvents('contract_date');}catch(e){}
+      try{tdpInit('due_date',function(){updateSchedule();});_tdpWireEvents('due_date');}catch(e){}
       if(bC===0)addBorrower();
+      setTimeout(updateSchedule,80);
     },120);
   }catch(e){if(bC===0)addBorrower()}
 }
@@ -1129,8 +1314,8 @@ function autoRestore(){
 window.addEventListener('DOMContentLoaded',function(){
   autoRestore();
   setTimeout(()=>{
-    try{tdpInit('contract_date',function(){autoFillDue();});_tdpWireEvents('contract_date');}catch(e){}
-    try{tdpInit('due_date');_tdpWireEvents('due_date');}catch(e){}
+    try{tdpInit('contract_date',function(){autoFillDue();updateSchedule();});_tdpWireEvents('contract_date');}catch(e){}
+    try{tdpInit('due_date',function(){updateSchedule();});_tdpWireEvents('due_date');}catch(e){}
   },250);
 });
 setInterval(autoSave,2500);

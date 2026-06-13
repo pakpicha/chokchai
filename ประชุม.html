@@ -27,13 +27,25 @@ body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;
 .fg textarea{resize:vertical;min-height:64px}
 .fg input.auto{background:#f0faf0;color:#1a6a1a;font-style:italic}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.chips{display:flex;flex-wrap:wrap;gap:6px}
-.chips label{display:flex;align-items:center;gap:6px;font-size:14px;cursor:pointer;background:#f5faf5;border:1px solid #cce0cc;padding:7px 11px;border-radius:8px;-webkit-tap-highlight-color:transparent}
-.chips input{width:16px;height:16px;flex-shrink:0}
+.chips{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+.chips label{display:flex;align-items:center;gap:12px;font-size:17px;font-weight:600;cursor:pointer;background:#fff;border:2px solid #cce0cc;padding:12px 16px;border-radius:10px;-webkit-tap-highlight-color:transparent;color:#333;transition:all .15s}
+.chips label:hover{border-color:#1a6a1a;background:#f5faf5}
+.chips label:has(input:checked){background:#1a6a1a;border-color:#1a6a1a;color:#fff;box-shadow:0 2px 6px rgba(26,106,26,.25)}
+.chips input{width:22px;height:22px;flex-shrink:0;accent-color:#1a6a1a;cursor:pointer}
 .add-btn{display:flex;align-items:center;justify-content:center;gap:5px;background:none;border:1.5px dashed #1a3a2a;color:#1a3a2a;padding:10px;border-radius:8px;cursor:pointer;font-size:14px;font-family:inherit;width:100%;margin-top:2px}
 .gen-btn{background:#1a3a2a;color:#fff;border:none;padding:15px;border-radius:10px;font-size:16px;cursor:pointer;font-family:inherit;font-weight:700;width:100%;margin-top:12px}
 .back-home{display:flex;align-items:center;gap:6px;background:none;border:none;color:#1a3a2a;font-size:14px;font-family:inherit;cursor:pointer;padding:6px 0;margin-bottom:8px;font-weight:600}
 .pbtns{display:flex;gap:10px;padding:14px 12px;background:#f0f0eb;border-bottom:1px solid #ddd}
+.fontctl{display:flex;align-items:center;gap:2px;background:#fff;border:1px solid #bbb;border-radius:10px;padding:2px 4px}
+.fbtn{background:none;border:none;color:#1a3a2a;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;padding:9px 8px;border-radius:8px;-webkit-tap-highlight-color:transparent}
+.fbtn:active{background:#e8f5e8}
+.fsize{font-size:12px;font-weight:700;color:#555;min-width:28px;text-align:center}
+.ped{flex:1;background:#fff8e1;color:#7a5a00;border:1px solid #e6c66b;padding:13px 8px;border-radius:10px;cursor:pointer;font-size:15px;font-family:inherit;font-weight:600}
+.ped.on{background:#1a6a1a;color:#fff;border-color:#1a6a1a}
+.doc.editing [data-edit]{background:#fffbe6;outline:1px dashed #d4a017;outline-offset:2px;border-radius:3px;min-height:1em}
+.doc.editing [data-edit]:focus{background:#fff;outline:2px solid #1a6a1a;outline-offset:2px}
+.edit-banner{display:none;padding:8px 12px;background:#fff8e1;color:#7a5a00;font-size:13px;text-align:center;border-bottom:1px solid #e6c66b}
+.doc.editing ~ .edit-banner,.editing-mode .edit-banner{display:block}
 .pbk{flex:1;background:#fff;color:#333;border:1px solid #bbb;padding:13px 8px;border-radius:10px;cursor:pointer;font-size:15px;font-family:inherit;font-weight:600}
 .ppr{flex:2;background:#1a3a2a;color:#fff;border:none;padding:13px 8px;border-radius:10px;cursor:pointer;font-size:15px;font-family:inherit;font-weight:700}
 .doc-tabs{display:flex;gap:6px;padding:10px 12px;background:#f0f0eb;flex-wrap:wrap}
@@ -96,7 +108,7 @@ body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;
 @media print{
   *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
   html,body{background:#fff!important;margin:0!important;padding:0!important}
-  .pbtns,.doc-tabs,.back-home,.print-tip,.gen-btn,.add-btn{display:none!important}
+  .pbtns,.doc-tabs,.back-home,.print-tip,.gen-btn,.add-btn,.ped,.edit-banner,.fontctl{display:none!important}
   #meet-preview{display:block!important}
   .doc-wrap{padding:0!important}
   .doc{border:none!important;padding:0!important;margin:0!important;font-size:13pt!important;line-height:1.6!important}
@@ -122,7 +134,7 @@ body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;
   .doc-page{page-break-after:always}
   .doc-page:last-child{page-break-after:auto}
 }
-@page{size:A4;margin:1.5cm 1.8cm}
+@page{size:A4;margin:0 1.8cm 1.5cm 1.8cm}
 
 .tdp-wrap{position:relative;display:inline-block;width:100%}
 .tdp-input{width:100%;padding:9px 36px 9px 11px;font-size:15px;border:1px solid #ccc;
@@ -329,8 +341,15 @@ function formatAddr(tam,amp,prov){
 <div id="meet-preview" style="display:none">
   <div class="pbtns">
     <button class="pbk" onclick="showMeetForm()">← แก้ไข</button>
+    <button class="ped" id="edit-btn" onclick="toggleEdit()">✏️ แก้เนื้อหา</button>
+    <div class="fontctl">
+      <button class="fbtn" onclick="adjFont(-0.5)" title="ลดฟอนต์">A−</button>
+      <span class="fsize" id="fsize-lb">13</span>
+      <button class="fbtn" onclick="adjFont(0.5)" title="เพิ่มฟอนต์">A+</button>
+    </div>
     <button class="ppr" onclick="showPrintTip()">🖨️ พิมพ์</button>
   </div>
+  <div class="edit-banner" id="edit-banner">✏️ โหมดแก้ไข: คลิกที่ข้อความสีเหลืองเพื่อแก้ไข • กด "✓ เสร็จ" เมื่อแก้เสร็จ</div>
   <div class="doc-wrap" id="meet-doc-out"></div>
 </div>
 </div>
@@ -479,7 +498,14 @@ function dateFld(i,id,lb,fw){
     +'<input type="hidden" id="'+fid+'">'
     +'<input type="text" id="tdpi_'+fid+'" class="tdp-input" placeholder="วว/ดด/ปปปป" onfocus="tdpFocus(\''+fid+'\')" onkeydown="tdpKeydown(\''+fid+'\',event)" autocomplete="off">'
     +'<span class="tdp-icon" onclick="tdpOpen(\''+fid+'\')">📅</span>'
-    +'<div class="tdp-drop" id="tdpd_'+fid+'"></div>'
+    +'<div class="tdp-drop" id="tdpd_'+fid+'">'
+      +'<div class="tdp-nav"><button onclick="tdpNav(\''+fid+'\',-1,event)">‹</button>'
+      +'<span class="tdp-my" onclick="tdpToggleYM(\''+fid+'\');event.stopPropagation()">...</span>'
+      +'<button onclick="tdpNav(\''+fid+'\',1,event)">›</button></div>'
+      +'<div class="tdp-ym"></div>'
+      +'<div class="tdp-days-hdr"><span>อา</span><span>จ</span><span>อ</span><span>พ</span><span>พฤ</span><span>ศ</span><span>ส</span></div>'
+      +'<div class="tdp-days"></div>'
+    +'</div>'
     +'</div></div>';
 }
 function fld(i,id,lb,fw,ph=''){return`<div class="${fw?'fw':''}""><label>${lb}</label><input type="text" id="ag${i}_${id}" placeholder="${ph}"></div>`}
@@ -619,17 +645,17 @@ function buildAgContent(i){
   }else if(t==='extend'){
     const ec=getCol(i,'e_');const aw=ec.type==='ห้องชุด'?'ห้องชุด':'ที่ดิน';
     title=`พิจารณาเรื่องอนุมัติขยายระยะเวลาไถ่จากขายฝาก${aw}`;
-    body=`ประธานได้กล่าวแถลงต่อที่ประชุมว่า การที่เชิญประชุมครั้งนี้ก็เพื่อให้ที่ประชุมพิจารณาเรื่องอนุมัติขยายระยะเวลาไถ่จากขายฝาก${aw}ครั้งที่ ${gfm(i,'extno')} ให้แก่ ${gfm(i,'cust')} กำหนดเพิ่มอีก ${gfm(i,'period')} ตามหนังสือสัญญาขายฝาก${aw} ฉบับลงวันที่ ${gfm(i,'origdt')} โดยขยายระยะเวลาไถ่จากขายฝาก${ec.long} ให้กับ ${gfm(i,'cust')}`;
+    body=`ประธานได้กล่าวแถลงต่อที่ประชุมว่า การที่เชิญประชุมครั้งนี้ก็เพื่อให้ที่ประชุมพิจารณาเรื่องอนุมัติขยายระยะเวลาไถ่จากขายฝาก${aw}ครั้งที่ ${gfm(i,'extno')} ให้แก่ ${gfm(i,'cust')} กำหนดเพิ่มอีก ${gfm(i,'period')} ตามหนังสือสัญญาขายฝาก${aw} ฉบับลงวันที่ ${_tdpFmt(gv('ag'+i+'_origdt'))||'..........'} โดยขยายระยะเวลาไถ่จากขายฝาก${ec.long} ให้กับ ${gfm(i,'cust')}`;
     res.push(`ขอจดทะเบียนขยายระยะเวลาไถ่จากการขายฝาก${aw}ครั้งที่ ${gfm(i,'extno')} มีกำหนด ${gfm(i,'period')} ให้แก่ ${gfm(i,'cust')}`);
   }else if(t==='rdm_mortgage'){
     const rc=getCol(i,'rm_');const aw=rc.type==='ห้องชุด'?'ห้องชุด':'ที่ดิน';
     title=`พิจารณาเรื่องอนุมัติการไถ่ถอนจำนอง${aw}`;
-    body=`ประธานได้กล่าวแถลงต่อที่ประชุมว่า การที่เชิญประชุมครั้งนี้ก็เพื่อให้ที่ประชุมพิจารณาเรื่องอนุมัติการไถ่ถอนจำนองให้แก่ ${gfm(i,'cust')} ตามสัญญาจำนอง${aw} ฉบับลงวันที่ ${gfm(i,'origdt')} เนื่องจากได้รับชำระหนี้เต็มจำนวนแล้ว โดยให้ไถ่ถอนจำนอง${rc.long} ของ ${gfm(i,'cust')} ได้`;
+    body=`ประธานได้กล่าวแถลงต่อที่ประชุมว่า การที่เชิญประชุมครั้งนี้ก็เพื่อให้ที่ประชุมพิจารณาเรื่องอนุมัติการไถ่ถอนจำนองให้แก่ ${gfm(i,'cust')} ตามสัญญาจำนอง${aw} ฉบับลงวันที่ ${_tdpFmt(gv('ag'+i+'_origdt'))||'..........'} เนื่องจากได้รับชำระหนี้เต็มจำนวนแล้ว โดยให้ไถ่ถอนจำนอง${rc.long} ของ ${gfm(i,'cust')} ได้`;
     res.push('ให้รับชำระเงินตามจำนวนหนี้ดังกล่าวและยินยอมให้ไถ่ถอนจำนองได้');
   }else if(t==='rdm_sellback'){
     const rc=getCol(i,'rs_');const aw=rc.type==='ห้องชุด'?'ห้องชุด':'ที่ดิน';
     title=`พิจารณาเรื่องอนุมัติการไถ่ถอนขายฝาก${aw}`;
-    body=`ประธานได้กล่าวแถลงต่อที่ประชุมว่า การที่เชิญประชุมครั้งนี้ก็เพื่อให้ที่ประชุมพิจารณาเรื่องอนุมัติการไถ่ถอนขายฝากให้แก่ ${gfm(i,'cust')} ตามสัญญาขายฝาก${aw} ฉบับลงวันที่ ${gfm(i,'origdt')} เนื่องจากได้รับชำระหนี้เต็มจำนวนแล้ว โดยให้ไถ่ถอนขายฝาก${rc.long} ของ ${gfm(i,'cust')} ได้`;
+    body=`ประธานได้กล่าวแถลงต่อที่ประชุมว่า การที่เชิญประชุมครั้งนี้ก็เพื่อให้ที่ประชุมพิจารณาเรื่องอนุมัติการไถ่ถอนขายฝากให้แก่ ${gfm(i,'cust')} ตามสัญญาขายฝาก${aw} ฉบับลงวันที่ ${_tdpFmt(gv('ag'+i+'_origdt'))||'..........'} เนื่องจากได้รับชำระหนี้เต็มจำนวนแล้ว โดยให้ไถ่ถอนขายฝาก${rc.long} ของ ${gfm(i,'cust')} ได้`;
     res.push('ให้รับชำระเงินตามจำนวนสินไถ่และยินยอมให้ไถ่ถอนขายฝากได้');
   }else if(t==='dirloan'){
     const pur=gv('ag'+i+'_pur')||'การดำเนินการใช้จ่ายอื่นๆ ในบริษัท';
@@ -668,7 +694,7 @@ function buildAgContent(i){
     res.push('กู้ยืมเงินจาก '+loanPartsRes
       +' ดอกเบี้ยร้อยละ '+rate+' ต่อปี รวมเป็นเงินกู้ยืม '+totalFmt+' บาท ('+totalTxt+')'
       +' ให้ '+rep+' เป็นผู้ทำการแทนบริษัทในครั้งนี้ มีอำนาจลงนามในเอกสารต่าง ๆ แทนบริษัท ในการทำหนังสือสัญญาการกู้ยืมเงิน');
-  }else if(t==='other'){title=gfm(i,'ttl');body=gv('ag'+i+'_dtl')||'';const sumText=gv('ag'+i+'_sum')||'';if(sumText)res.push(sumText);}
+  }else if(t==='other'){title=gfm(i,'ttl');body=(gv('ag'+i+'_dtl')||'').replace(/\r\n|\r|\n/g,'<br>');const sumText=(gv('ag'+i+'_sum')||'').replace(/\r\n|\r|\n/g,'<br>');if(sumText)res.push(sumText);}
   return{title,body,res,t};
 }
 
@@ -690,16 +716,16 @@ function genMeeting(){
     // Every agenda ends with the standard unanimous line — no inline sum here
     const defaultResLine='ที่ประชุมได้พิจารณาแล้วลงมติเป็นเอกฉันท์ให้ บริษัท ดำเนินการได้ตามที่ประธานเสนอ';
     agHTML+=`<div class="doc-sec">
-      <p class="doc-sec-title">ระเบียบวาระที่&nbsp;&nbsp;${i+1}.&nbsp;&nbsp;&nbsp;${ag.title}</p>
-      ${ag.body?`<p class="doc-sec-body" style="text-indent:2.5em">${ag.body}</p>`:''}
-      <p class="doc-sec-short" style="text-indent:2.5em">${defaultResLine}</p>
+      <p class="doc-sec-title" data-edit>ระเบียบวาระที่&nbsp;&nbsp;${i+1}.&nbsp;&nbsp;&nbsp;${ag.title}</p>
+      ${ag.body?`<p class="doc-sec-body" data-edit style="text-indent:2.5em">${ag.body}</p>`:''}
+      <p class="doc-sec-short" data-edit style="text-indent:2.5em">${defaultResLine}</p>
     </div>`;
     // All agenda res items go to the combined summary bullets at the end (including 'other' sum text)
     ag.res.forEach(r=>allRes.push(r));
   });
-  if(allRes.length>0){agHTML+=`<p class="doc-combined" style="text-indent:2.5em">ที่ประชุมได้พิจารณาแล้วลงมติเป็นเอกฉันท์ให้บริษัทดำเนินการได้ตามที่ประธานเสนอและเลือกกรรมการของ บริษัท โชคชัย เงินด่วน จำกัด คือ กรรมการผู้มีอำนาจลงนามคนใดคนหนึ่ง เป็นผู้ทำการแทนบริษัทในครั้งนี้ มีอำนาจลงนามในเอกสารต่าง ๆ แทนบริษัท ดังต่อไปนี้</p>
-    <ul class="doc-list" style="padding-left:3em">${allRes.map(r=>`<li style="text-align:justify;margin-bottom:4pt">${r}</li>`).join('')}</ul>`;}  const lastN=items.length+1;
-  agHTML+=`<div class="doc-sec"><p class="doc-sec-title">ระเบียบวาระที่&nbsp;&nbsp;${lastN}.&nbsp;&nbsp;&nbsp;เรื่องอื่น ๆ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ไม่มี</p></div>`;
+  if(allRes.length>0){agHTML+=`<p class="doc-combined" data-edit style="text-indent:2.5em">ที่ประชุมได้พิจารณาแล้วลงมติเป็นเอกฉันท์ให้บริษัทดำเนินการได้ตามที่ประธานเสนอและเลือกกรรมการของ บริษัท โชคชัย เงินด่วน จำกัด คือ กรรมการผู้มีอำนาจลงนามคนใดคนหนึ่ง เป็นผู้ทำการแทนบริษัทในครั้งนี้ มีอำนาจลงนามในเอกสารต่าง ๆ แทนบริษัท ดังต่อไปนี้</p>
+    <ul class="doc-list" style="padding-left:3em">${allRes.map(r=>`<li data-edit style="text-align:justify;margin-bottom:4pt">${r}</li>`).join('')}</ul>`;}  const lastN=items.length+1;
+  agHTML+=`<div class="doc-sec"><p class="doc-sec-title" data-edit>ระเบียบวาระที่&nbsp;&nbsp;${lastN}.&nbsp;&nbsp;&nbsp;เรื่องอื่น ๆ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ไม่มี</p></div>`;
   const logoEl=document.getElementById('_vLogo');
   const logoSrc=logoEl?logoEl.src:'';
   const headLogo=logoSrc?`<img src="${logoSrc}" style="width:50px;height:50px;object-fit:contain;flex-shrink:0" alt="logo">`:'';
@@ -716,16 +742,16 @@ function genMeeting(){
       <p class="doc-h1" style="margin-bottom:0">รายงานการประชุม</p>
     </div>
     <div class="doc-meta">
-      <p style="text-align:center">ประชุมครั้งที่ &nbsp;&nbsp; ${no} &nbsp; / &nbsp; ${yr} &nbsp;&nbsp; เมื่อวันที่ &nbsp;&nbsp; ${sd} &nbsp;&nbsp; เวลา &nbsp; ${ts.replace(' น.','')} – ${te}</p>
-      <p style="text-align:center">ประชุม ณ &nbsp;&nbsp; ${loc}</p>
+      <p style="text-align:center" data-edit>ประชุมครั้งที่ &nbsp;&nbsp; ${no} &nbsp; / &nbsp; ${yr} &nbsp;&nbsp; เมื่อวันที่ &nbsp;&nbsp; ${sd} &nbsp;&nbsp; เวลา &nbsp; ${ts.replace(' น.','')} – ${te}</p>
+      <p style="text-align:center" data-edit>ประชุม ณ &nbsp;&nbsp; ${loc}</p>
       <p>มีผู้เป็นหุ้นส่วนมาเข้าร่วมประชุมดังนี้</p>
-      <p style="font-size:13pt;letter-spacing:0">${topLine}</p>
+      <p style="font-size:13pt;letter-spacing:0" data-edit>${topLine}</p>
     </div>
     <div class="doc-roles">${roleLines}</div>
-    <p class="doc-start">เริ่มการประชุม &nbsp;&nbsp;&nbsp; เวลา &nbsp;&nbsp; ${ts}</p>
+    <p class="doc-start" data-edit>เริ่มการประชุม &nbsp;&nbsp;&nbsp; เวลา &nbsp;&nbsp; ${ts}</p>
     ${agHTML}
     <div class="sign-group">
-      <p class="doc-close">ปิดประชุม &nbsp;&nbsp;&nbsp; เวลา &nbsp;&nbsp; ${te}</p>
+      <p class="doc-close" data-edit>ปิดประชุม &nbsp;&nbsp;&nbsp; เวลา &nbsp;&nbsp; ${te}</p>
       <div class="doc-sign">
         <p style="margin-bottom:.4cm">&nbsp;</p>
         <p>............................................</p>
@@ -752,6 +778,51 @@ function closePrintTip(){
   document.getElementById('print-modal').classList.remove('show');
   document.querySelectorAll('[id^="mdoc-"],[id^="sbdoc-"],[id^="dldoc-"]').forEach(function(el){if(el.getAttribute('data-h')==='1')el.style.display='none';});
 }
+// ── ปรับขนาดฟอนต์ก่อนพิมพ์ ──
+var DOC_FONT_KEY='meet_doc_font_pt';
+var docFont=parseFloat(localStorage.getItem(DOC_FONT_KEY));
+if(!docFont||isNaN(docFont)||docFont<10||docFont>18)docFont=13;
+function applyFont(){
+  var t=docFont,h1=docFont+2;
+  var sel='.doc-meta p,.doc-role-table td,.doc-start,.doc-sec-title,.doc-sec-body,.doc-sec-short,.doc-combined,.doc-list li,.doc-close,.doc-sign p';
+  var css='.doc{font-size:'+t+'pt!important}'
+    +sel+'{font-size:'+t+'pt!important}'
+    +'.doc-h1{font-size:'+h1+'pt!important}'
+    +'@media print{.doc{font-size:'+t+'pt!important}'+sel+'{font-size:'+t+'pt!important}.doc-h1{font-size:'+h1+'pt!important}}';
+  var st=document.getElementById('font-adj');
+  if(!st){st=document.createElement('style');st.id='font-adj';document.head.appendChild(st);}
+  st.textContent=css;
+  var lb=document.getElementById('fsize-lb');
+  if(lb)lb.textContent=(docFont%1===0)?docFont:docFont.toFixed(1);
+}
+function adjFont(d){
+  var v=Math.round((docFont+d)*2)/2;
+  if(v<10)v=10; if(v>18)v=18;
+  docFont=v;
+  try{localStorage.setItem(DOC_FONT_KEY,String(docFont));}catch(e){}
+  applyFont();
+}
+applyFont();
+
+// ── โหมดแก้เนื้อหาก่อนพิมพ์ ──
+var _editOn=false;
+function toggleEdit(){
+  _editOn=!_editOn;
+  var doc=document.querySelector('#meet-doc-out .doc');
+  if(!doc)return;
+  doc.classList.toggle('editing',_editOn);
+  doc.querySelectorAll('[data-edit]').forEach(function(el){
+    el.setAttribute('contenteditable',_editOn?'true':'false');
+  });
+  document.getElementById('edit-banner').style.display=_editOn?'block':'none';
+  var btn=document.getElementById('edit-btn');
+  if(btn){btn.textContent=_editOn?'✓ เสร็จ':'✏️ แก้เนื้อหา';btn.classList.toggle('on',_editOn);}
+  if(_editOn){var f=doc.querySelector('[data-edit]');if(f)f.focus();}
+}
+// ปิดโหมดแก้ก่อนกลับไปแก้ฟอร์ม (กันงงตอนกลับมา)
+var _origShowMeetForm=showMeetForm;
+showMeetForm=function(){if(_editOn)toggleEdit();_origShowMeetForm();};
+
 addAg('mortgage');
 
 

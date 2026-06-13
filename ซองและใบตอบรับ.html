@@ -50,14 +50,12 @@ body{font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;background:#f0f0eb;
   <!-- ผู้ส่ง -->
   <div class="card">
     <div class="ct"><span class="n">1</span> ผู้ส่ง (บริษัท)</div>
-    <div class="fg"><label>ชื่อผู้ส่ง</label>
-      <input type="text" id="s_name" value="บริษัท โชคชัย เงินด่วน จำกัด"></div>
-    <div class="fg"><label>ที่อยู่บรรทัด 1</label>
-      <input type="text" id="s_addr1" value="89/28 หมู่ 9 ต.ท่าเยี่ยม"></div>
-    <div class="fg"><label>ที่อยู่บรรทัด 2</label>
-      <input type="text" id="s_addr2" value="อ.โชคชัย จ.นครราชสีมา"></div>
-    <div class="fg"><label>รหัสไปรษณีย์</label>
-      <input type="text" id="s_zip" value="30190" maxlength="5" inputmode="numeric"></div>
+    <div style="background:#f0f7f0;border:1px solid #b2d8b2;border-radius:8px;padding:10px 14px;font-size:15px;line-height:1.7">
+      <div style="font-weight:700;font-size:16px;color:#1a3a2a">บริษัท โชคชัย เงินด่วน จำกัด</div>
+      <div>89/28 หมู่ 9 ต.ท่าเยี่ยม</div>
+      <div>อ.โชคชัย จ.นครราชสีมา</div>
+      <div>รหัสไปรษณีย์ <strong>30190</strong></div>
+    </div>
   </div>
 
   <!-- ผู้รับ (multi) -->
@@ -160,10 +158,10 @@ function _gv(id){var e=document.getElementById(id);return e?e.value.trim():'';}
 
 function _senderInfo(){
   return{
-    name:_gv('s_name')||'บริษัท โชคชัย เงินด่วน จำกัด',
-    addr1:_gv('s_addr1')||'89/28 หมู่ 9 ต.ท่าเยี่ยม',
-    addr2:_gv('s_addr2')||'อ.โชคชัย จ.นครราชสีมา',
-    zip:_gv('s_zip')||'30190'
+    name:'บริษัท โชคชัย เงินด่วน จำกัด',
+    addr1:'89/28 หมู่ 9 ต.ท่าเยี่ยม',
+    addr2:'อ.โชคชัย จ.นครราชสีมา',
+    zip:'30190'
   };
 }
 
@@ -257,7 +255,7 @@ function embPrintReceiptsBoth(){
 var LS_KEY='form_envrcpt_combined';
 function saveAll(){
   try{
-    var d={s:{name:_gv('s_name'),a1:_gv('s_addr1'),a2:_gv('s_addr2'),z:_gv('s_zip')},r:[]};
+    var d={r:[]};
     document.querySelectorAll('#rcps-wrap .rcp-box').forEach(function(b){
       var n=b.id.replace('rcp-','');
       d.r.push({
@@ -272,12 +270,6 @@ function restoreAll(){
   try{
     var s=localStorage.getItem(LS_KEY);if(!s){addRcp();return;}
     var d=JSON.parse(s);
-    if(d.s){
-      if(d.s.name)document.getElementById('s_name').value=d.s.name;
-      if(d.s.a1)document.getElementById('s_addr1').value=d.s.a1;
-      if(d.s.a2)document.getElementById('s_addr2').value=d.s.a2;
-      if(d.s.z)document.getElementById('s_zip').value=d.s.z;
-    }
     if(d.r&&d.r.length){d.r.forEach(function(r){addRcp(r);});}
     else{addRcp();}
   }catch(e){addRcp();}

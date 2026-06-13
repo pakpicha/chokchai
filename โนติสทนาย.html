@@ -29,7 +29,7 @@ body{font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;font-size:15px;back
 @media print{
   .no-print{display:none!important}
   body{background:#fff}
-  @page{size:A4 portrait;margin:1.5cm 1.8cm}
+  @page{size:A4 portrait;margin:0}
   .doc-page{display:block!important}
 }
 .doc-page{display:none;font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;font-size:14pt;line-height:1.8;color:#000}
@@ -47,7 +47,7 @@ body{font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;font-size:15px;back
 .law-ref .ref-title{font-weight:bold;font-size:14pt}
 .law-ref ol{margin-left:2em;font-size:14pt}
 .law-body p{text-indent:2.5cm;text-align:justify;margin-bottom:6pt;font-size:14pt}
-.law-sign{text-align:center;margin-top:1.5cm}
+.law-sign{text-align:center;margin-top:0.4cm}
 .law-sign p{font-size:14pt;line-height:2}
 .law-sign .sign-name{border-top:none}
 
@@ -249,7 +249,7 @@ function formatAddr(tam,amp,prov){
   <div class="card">
     <div class="ct">🏢 บริษัทผู้ให้กู้</div>
     <div class="fg"><label>ชื่อบริษัท</label>
-      <input id="co_name" value="บริษัท โชคชัย เงินด่วน จำกัด"></div>
+      <input id="co_name" value="บริษัท โชคชัย เงินด่วน จำกัด" readonly></div>
   </div>
 
   <!-- สัญญาอ้างถึง -->
@@ -797,8 +797,8 @@ function buildDoc(){
     +'</div>'
     // ลงนาม
     +'<div class="law-sign">'
-    +'<p><br>ขอแสดงความนับถือ</p>'
-    +'<p><br><br></p>'
+    +'<p>ขอแสดงความนับถือ</p>'
+    +'<p><br></p>'
     +'<p>( '+signer+' )</p>'
     +'<p>ทนายความผู้รับมอบอำนาจ</p>'
     +'</div>'
@@ -847,7 +847,7 @@ function saveRecipients(){
 // auto-save
 var LS='notice_lawyer';
 var FKEYS=['law_firm','law_addr','law_tel','law_sign','notice_type','notice_days',
-  'co_name','debt_amt','debt_amt_t','debt_rate',
+  'debt_amt','debt_amt_t','debt_rate',
   'land_doc_type','land_chanote','land_no','land_tambon','land_amphoe','land_province','land_building'];
 function saveForm(){
   try{

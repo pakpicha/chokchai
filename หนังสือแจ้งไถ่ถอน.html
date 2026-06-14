@@ -26,11 +26,12 @@ body{font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;font-size:15px;back
 @media print{
   .no-print{display:none!important}
   body{background:#fff;font-size:14pt}
-  .doc-page{page-break-after:always}
+  @page{size:A4;margin:1cm 1.5cm}
+  .doc-page{page-break-after:always;padding:0!important}
   .doc-page:last-child{page-break-after:avoid}
 }
 /* doc */
-.doc-page{font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;font-size:14pt;line-height:1.8;color:#000;padding:1.5cm 2cm;width:21cm;margin:0 auto;background:#fff}
+.doc-page{font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;font-size:14pt;line-height:1.8;color:#000;padding:1cm 1.5cm;width:21cm;margin:0 auto;background:#fff}
 .doc-page p{margin-bottom:6pt;text-align:justify}
 .doc-page .center{text-align:center}
 .doc-page .bold{font-weight:bold}

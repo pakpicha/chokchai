@@ -323,7 +323,7 @@ body{
 
 /* Checkbox row (.chips) */
 .chips{margin-bottom:10px}
-.chips label, label.chips{
+.chips label{
   display:inline-flex;align-items:center;gap:8px;
   padding:9px 14px;
   background:var(--field-bg);
@@ -331,18 +331,14 @@ body{
   border-radius:10px;
   font-size:14px;font-weight:500;
   cursor:pointer;color:var(--ink);
-  transition:background .15s,border-color .15s,color .15s,box-shadow .15s;
+  transition:background .15s,border-color .15s;
 }
-.chips label:has(input:checked), label.chips:has(input:checked){
-  background:var(--primary);
+.chips label:has(input:checked){
+  background:var(--primary-soft);
   border-color:var(--primary);
-  color:#fff;font-weight:700;
-  box-shadow:0 2px 8px rgba(15,46,33,.25);
+  color:var(--primary);font-weight:600;
 }
-.chips label:has(input:checked)::before, label.chips:has(input:checked)::before{
-  content:"✓ ";font-weight:900;font-size:15px;
-}
-.chips input[type="checkbox"], label.chips input[type="checkbox"]{width:16px;height:16px;accent-color:#fff}
+.chips input[type="checkbox"]{width:16px;height:16px;accent-color:var(--primary)}
 
 /* Preview / button row */
 .pbtns{display:flex;gap:10px;margin-top:8px;flex-wrap:wrap}
@@ -533,17 +529,11 @@ body{
   text-indent:1cm;
   margin-bottom:2pt;
   text-align:justify;
-  word-break:keep-all;
-  line-break:strict;
-  hyphens:none;
 }
 .doc-clause{
   text-indent:1cm;
   margin-bottom:2pt;
   text-align:justify;
-  word-break:keep-all;
-  line-break:strict;
-  hyphens:none;
 }
 .doc-clause b{font-weight:bold;font-size:1.25em}
 .doc-center{
@@ -653,7 +643,7 @@ body{
 <div class="ui">
   <div class="ui-head">
     <h1>📄 หนังสือสัญญากู้เงินตามกฎหมาย</h1>
-    <p>ร้านแชมป์ลิสซิ่ง</p>
+    <p>บริษัท โชคชัย เงินด่วน จำกัด</p>
   </div>
 
   <div class="card">
@@ -700,14 +690,14 @@ body{
     </div>
     <div class="fg"><label>ผู้ให้กู้</label>
       <select id="lender_dir" onchange="onLenderChange()">
-        <option value="">— เลือกผู้ให้กู้ —</option>
-        <option>นายกันตพัฒน์ จรัสบวรพันธ์</option>
-        <option>นางชญาน์นัทช์ จรัสบวรพันธ์</option>
-        <option>นายชุณนเกียรติ จรัสบวรพันธ์</option>
-        <option>นายฐานวัฒน์ จรัสบวรพันธ์</option>
-        <option>นางสาวภัคฐ์พิชา จรัสบวรพันธ์</option>
+        <option value="">— เลือกกรรมการผู้ลงนาม —</option>
+        <option value="บริษัท โชคชัย เงินด่วน จำกัด โดย นายกันตพัฒน์ จรัสบวรพันธ์">นายกันตพัฒน์ จรัสบวรพันธ์</option>
+        <option value="บริษัท โชคชัย เงินด่วน จำกัด โดย นางชญาน์นัทช์ จรัสบวรพันธ์">นางชญาน์นัทช์ จรัสบวรพันธ์</option>
+        <option value="บริษัท โชคชัย เงินด่วน จำกัด โดย นายชุณนเกียรติ จรัสบวรพันธ์">นายชุณนเกียรติ จรัสบวรพันธ์</option>
+        <option value="บริษัท โชคชัย เงินด่วน จำกัด โดย นายฐานวัฒน์ จรัสบวรพันธ์">นายฐานวัฒน์ จรัสบวรพันธ์</option>
+        <option value="บริษัท โชคชัย เงินด่วน จำกัด โดย นางสาวภัคฐ์พิชา จรัสบวรพันธ์">นางสาวภัคฐ์พิชา จรัสบวรพันธ์</option>
       </select>
-      <div class="hint">เลือกผู้ให้กู้แล้วระบบจะเติม "สถานที่ทำสัญญา" ให้อัตโนมัติ</div>
+      <div class="hint">เลือกกรรมการผู้ลงนาม ระบบจะเติม "สถานที่ทำสัญญา" (ที่อยู่บริษัท) ให้อัตโนมัติ</div>
     </div>
   </div>
 
@@ -790,7 +780,7 @@ body{
     <button onclick="adjustFont(0)" title="คืนค่าอัตโนมัติ" style="margin-left:6px;font-size:11px">⟲ อัตโนมัติ</button>
   </div>
   <div class="doc-wrap">
-    <div class="doc" id="doc-preview" lang="th">
+    <div class="doc" id="doc-preview">
       <div class="placeholder">กรอกข้อมูลแล้วกด <strong>"สร้างเอกสารสัญญา"</strong></div>
     </div>
   </div>
@@ -1225,11 +1215,11 @@ function personBlock(prefix,i){
 
 // === ข้อมูลผู้ให้กู้ 5 คน (สำหรับ auto-fill สถานที่ทำสัญญา) ===
 var LENDER_PEOPLE={
-  "นายกันตพัฒน์ จรัสบวรพันธ์":   "248/1 หมู่ที่ 9 ตำบลท่าเยี่ยม อำเภอโชคชัย จังหวัดนครราชสีมา",
-  "นางชญาน์นัทช์ จรัสบวรพันธ์":  "247/1 หมู่ที่ 9 ตำบลท่าเยี่ยม อำเภอโชคชัย จังหวัดนครราชสีมา",
-  "นายชุณนเกียรติ จรัสบวรพันธ์":  "222/2 หมู่ที่ 11 ตำบลกระโทก อำเภอโชคชัย จังหวัดนครราชสีมา",
-  "นายฐานวัฒน์ จรัสบวรพันธ์":    "242/6 หมู่ที่ 9 ตำบลท่าเยี่ยม อำเภอโชคชัย จังหวัดนครราชสีมา",
-  "นางสาวภัคฐ์พิชา จรัสบวรพันธ์": "256/135 หมู่ที่ 12 ตำบลโชคชัย อำเภอโชคชัย จังหวัดนครราชสีมา"
+  "บริษัท โชคชัย เงินด่วน จำกัด โดย นายกันตพัฒน์ จรัสบวรพันธ์":   "89/28 หมู่ที่ 9 ตำบลท่าเยี่ยม อำเภอโชคชัย จังหวัดนครราชสีมา",
+  "บริษัท โชคชัย เงินด่วน จำกัด โดย นางชญาน์นัทช์ จรัสบวรพันธ์":  "89/28 หมู่ที่ 9 ตำบลท่าเยี่ยม อำเภอโชคชัย จังหวัดนครราชสีมา",
+  "บริษัท โชคชัย เงินด่วน จำกัด โดย นายชุณนเกียรติ จรัสบวรพันธ์":  "89/28 หมู่ที่ 9 ตำบลท่าเยี่ยม อำเภอโชคชัย จังหวัดนครราชสีมา",
+  "บริษัท โชคชัย เงินด่วน จำกัด โดย นายฐานวัฒน์ จรัสบวรพันธ์":    "89/28 หมู่ที่ 9 ตำบลท่าเยี่ยม อำเภอโชคชัย จังหวัดนครราชสีมา",
+  "บริษัท โชคชัย เงินด่วน จำกัด โดย นางสาวภัคฐ์พิชา จรัสบวรพันธ์": "89/28 หมู่ที่ 9 ตำบลท่าเยี่ยม อำเภอโชคชัย จังหวัดนครราชสีมา"
 };
 
 function onLenderChange(){
@@ -1504,7 +1494,7 @@ function fmtCol(c){
   const lbl={land:'โฉนดที่ดิน',nsk:'น.ส.3 ก.',car:'รถยนต์',motorcycle:'รถจักรยานยนต์',gold:'ทองคำ/เครื่องประดับ',bank:'บัญชีเงินฝาก',other:'ทรัพย์สิน'}[c.type];
   if(c.type==='land'||c.type==='nsk'){
     let s=`${lbl} เลขที่ ${c.doc||'..........'} เลขที่ดิน ${c.land||'..........'} ตำบล ${c.tambon||'..........'} อำเภอ ${c.amphoe||'..........'} จังหวัด ${c.province||'..........'}`;
-    if(c.building)s+=' พร้อมสิ่งปลูกสร้างที่มีอยู่และที่จะเกิดขึ้นในอนาคต';
+    if(c.building)s+=' พร้อมสิ่งปลูกสร้างที่มีอยู่และเกิดขึ้นในอนาคต';
     return s;
   }
   if(c.type==='car'||c.type==='motorcycle')return `${lbl} ทะเบียน ${c.plate||'..........'} ยี่ห้อ ${c.brand||'..........'} รุ่น ${c.model||'..........'} สี ${c.color||'..........'} เลขตัวถัง ${c.chassis||'..........'} เลขเครื่อง ${c.engine||'..........'}`;

@@ -6,118 +6,190 @@
 <title>สัญญากู้เงิน — บริษัท โชคชัย เงินด่วน จำกัด</title>
 <meta name="theme-color" content="#1a3a2a">
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-html{font-size:16px}
-body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;color:#111;-webkit-text-size-adjust:100%}
-.ui{max-width:680px;margin:0 auto;padding:12px}
-.ui-head{background:#1a3a2a;color:#fff;padding:14px 16px;border-radius:10px;margin-bottom:12px}
-.ui-head h1{font-size:17px;font-weight:700;line-height:1.3}
-.ui-head p{font-size:12px;opacity:.8;margin-top:3px}
-.card{background:#fff;border-radius:10px;border:1px solid #deded6;padding:14px;margin-bottom:10px}
-.ct{font-size:14px;font-weight:700;color:#1a3a2a;border-bottom:1.5px solid #deeede;padding-bottom:7px;margin-bottom:11px;display:flex;align-items:center;justify-content:space-between;gap:6px}
-.ct .lhs{display:flex;align-items:center;gap:6px}
-.ct .n{background:#1a3a2a;color:#fff;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0}
-.fg{display:flex;flex-direction:column;gap:3px;margin-bottom:9px}
-.fg label{font-size:11px;color:#555;font-weight:600}
-.fg input,.fg select,.fg textarea{padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7;color:#111;width:100%;-webkit-appearance:none}
-.fg input:focus,.fg select:focus,.fg textarea:focus{outline:none;border-color:#1a3a2a;background:#fff}
-.fg textarea{resize:vertical;min-height:60px}
-.fg input.auto{background:#f0faf0;color:#1a6a1a;font-style:italic}
-.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
-.row4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-@media (max-width:480px){.row3,.row4{grid-template-columns:1fr 1fr}}
-.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
-.chips label{display:flex;align-items:center;gap:6px;font-size:14px;cursor:pointer;background:#f5faf5;border:1px solid #cce0cc;padding:8px 12px;border-radius:8px}
-.chips input{width:16px;height:16px;flex-shrink:0}
-.add-btn{display:flex;align-items:center;justify-content:center;gap:5px;background:none;border:1.5px dashed #1a3a2a;color:#1a3a2a;padding:10px;border-radius:8px;cursor:pointer;font-size:14px;font-family:inherit;width:100%;margin-top:6px;font-weight:600}
-.gen-btn{background:#1a3a2a;color:#fff;border:none;padding:15px;border-radius:10px;font-size:16px;cursor:pointer;font-family:inherit;font-weight:700;width:100%;margin-top:12px}
-.pbtns{display:flex;gap:10px;padding:14px 12px;background:#f0f0eb;border-bottom:1px solid #ddd}
-.pbk{flex:1;background:#fff;color:#333;border:1px solid #bbb;padding:13px 8px;border-radius:10px;cursor:pointer;font-size:15px;font-family:inherit;font-weight:600}
-.ppr{flex:2;background:#1a3a2a;color:#fff;border:none;padding:13px 8px;border-radius:10px;cursor:pointer;font-size:15px;font-family:inherit;font-weight:700}
-.back-home{display:flex;align-items:center;gap:6px;background:none;border:none;color:#1a3a2a;font-size:14px;font-family:inherit;cursor:pointer;padding:6px 0;margin-bottom:8px;font-weight:600}
-.section{display:none}
-.section.active{display:block}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:#f4ede0;
+  --card:#fffdf7;
+  --ink:#1a2924;
+  --ink-soft:#5a6661;
+  --ink-faint:#8a9087;
+  --primary:#0f2e21;
+  --primary-2:#1a4530;
+  --primary-soft:#e8efe9;
+  --accent:#b8895a;
+  --accent-soft:#e4cfa9;
+  --gold:#c9a063;
+  --line:#e2d9c5;
+  --line-soft:#efe8d6;
+  --field-bg:#faf6ec;
+  --field-border:#d9cdb1;
+  --field-focus:#b8895a;
+  --danger:#c0392b;
+  --shadow-sm: 0 1px 2px rgba(15,46,33,.06), 0 1px 1px rgba(15,46,33,.04);
+  --shadow-md: 0 4px 14px rgba(15,46,33,.08), 0 2px 4px rgba(15,46,33,.05);
+}
+body{
+  font-family:"Sarabun","TH Sarabun New",-apple-system,system-ui,sans-serif;
+  font-size:15px;
+  background:var(--bg);
+  background-image:
+    radial-gradient(at 20% 0%, rgba(184,137,90,.06) 0px, transparent 50%),
+    radial-gradient(at 80% 100%, rgba(15,46,33,.04) 0px, transparent 50%);
+  background-attachment:fixed;
+  color:var(--ink);
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:720px;margin:0 auto;padding:16px 14px 40px;padding-bottom:max(40px,env(safe-area-inset-bottom))}
+.back-btn{
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  padding:11px 14px;text-align:center;
+  background:rgba(255,253,247,.8);
+  backdrop-filter:blur(8px);
+  border:1px solid var(--line);
+  border-radius:11px;margin-bottom:14px;
+  cursor:pointer;font-size:14px;font-weight:500;
+  color:var(--primary);font-family:inherit;width:100%;
+  transition:transform .15s, background .15s;
+}
+.back-btn:active{transform:translateY(1px);background:var(--primary-soft)}
+.card{
+  background:var(--card);
+  border-radius:16px;
+  padding:18px 16px;
+  margin-bottom:13px;
+  border:1px solid var(--line);
+  box-shadow:var(--shadow-sm);
+  position:relative;
+}
+.ct{
+  font-family:"Bai Jamjuree","Sarabun",sans-serif;
+  font-size:14px;
+  font-weight:600;
+  color:var(--primary);
+  margin-bottom:14px;
+  padding-bottom:11px;
+  border-bottom:1px solid var(--line-soft);
+  display:flex;align-items:center;gap:10px;
+  letter-spacing:.2px;
+}
+.ct .n{
+  background:linear-gradient(135deg,var(--primary) 0%,var(--primary-2) 100%);
+  color:#fffdf7;
+  border-radius:9px;
+  width:26px;height:26px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:700;flex-shrink:0;
+  font-family:"Bai Jamjuree",sans-serif;
+  box-shadow:0 2px 4px rgba(15,46,33,.18);
+}
+.fg{margin-bottom:11px}
+.fg label{display:block;font-size:12px;color:var(--ink-soft);margin-bottom:5px;font-weight:600;letter-spacing:.2px}
+.fg input,.fg select,.fg textarea{
+  width:100%;padding:10px 12px;font-size:15px;
+  border:1px solid var(--field-border);border-radius:10px;
+  font-family:inherit;background:var(--field-bg);color:var(--ink);
+  transition:border-color .15s, box-shadow .15s, background .15s;
+  -webkit-appearance:none;appearance:none;
+}
+.fg input::placeholder,.fg textarea::placeholder{color:var(--ink-faint);opacity:.7}
+.fg input:focus,.fg select:focus,.fg textarea:focus{
+  outline:none;border-color:var(--field-focus);background:#fff;
+  box-shadow:0 0 0 3px rgba(184,137,90,.15);
+}
+.fg select{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%235a6661' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 12px center;padding-right:34px;
+}
+.fg input[readonly]{background:#efe8d6;color:var(--ink-soft);cursor:not-allowed}
+.fg textarea{min-height:64px;resize:vertical;line-height:1.5}
+.fg .hint,.hint{font-size:11px;color:var(--ink-faint);margin-top:5px;line-height:1.4}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.gen-btn{
+  width:100%;padding:15px 18px;
+  background:linear-gradient(135deg,var(--primary) 0%,var(--primary-2) 100%);
+  color:#fffdf7;border:none;border-radius:12px;
+  font-size:16px;font-family:"Bai Jamjuree","Sarabun",sans-serif;font-weight:600;letter-spacing:.3px;
+  cursor:pointer;margin-top:10px;
+  box-shadow:0 4px 12px rgba(15,46,33,.22), inset 0 1px 0 rgba(255,255,255,.1);
+  transition:transform .15s, box-shadow .15s;position:relative;overflow:hidden;
+}
+.gen-btn::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.5;
+}
+.gen-btn:active{transform:translateY(2px);box-shadow:0 2px 6px rgba(15,46,33,.2)}
+.add-btn{
+  width:100%;padding:11px 14px;
+  background:rgba(184,137,90,.08);color:var(--accent);
+  border:1.5px dashed var(--accent-soft);border-radius:11px;
+  font-size:14px;font-family:inherit;font-weight:600;cursor:pointer;margin-top:8px;
+  transition:background .15s, border-color .15s, transform .15s;
+}
+.add-btn:active{transform:translateY(1px);background:rgba(184,137,90,.16);border-color:var(--accent)}
+.att-row,.deb-row,.ref-row,.loan-row,.rcp-row,.pay-row,.gua-row,.col-row{
+  background:rgba(232,239,233,.4);border:1px solid var(--line-soft);
+  border-radius:11px;padding:12px 12px 6px;margin-bottom:10px;position:relative;
+}
+.att-row .del,.deb-row .del,.ref-row .del,.loan-row .del,.rcp-row .del,.pay-row .del,.gua-row .del,.col-row .del{
+  position:absolute;top:8px;right:10px;background:#fff;border:1px solid var(--line);
+  color:var(--danger);width:24px;height:24px;border-radius:50%;
+  font-size:14px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:700;
+}
 
-/* Item blocks (person/collateral) */
-.ai{background:#f6faf6;border:1px solid #cce0cc;border-radius:9px;padding:12px;margin-bottom:10px}
-.ai.gua{background:#fff8eb;border-color:#e6d5a8}
-.ai.col{background:#eef4fa;border-color:#b8cce0}
-.ah{display:flex;align-items:center;gap:8px;margin-bottom:11px}
-.an{background:#1a3a2a;color:#fff;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0}
-.ai.gua .an{background:#8b6f1a}
-.ai.col .an{background:#2a5a8a}
-.at{flex:1;padding:9px 10px;font-size:14px;border:1px solid #bcd0bc;border-radius:7px;font-family:inherit;background:#fff;-webkit-appearance:none;font-weight:600;color:#1a3a2a}
-.ai.gua .at{border-color:#d4c896;color:#8b6f1a}
-.ai.col .at{border-color:#b8cce0;color:#2a5a8a}
-.rb{background:#fff;border:1px solid #dda0a0;color:#b04040;padding:8px 12px;border-radius:7px;cursor:pointer;font-size:13px;font-family:inherit;white-space:nowrap;font-weight:600}
-.af-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.af-grid .fw{grid-column:1/-1;margin-bottom:0}
-.af-grid label{font-size:11px;color:#555;font-weight:600;display:block;margin-bottom:3px}
-.af-grid input,.af-grid textarea,.af-grid select{width:100%;padding:9px 10px;font-size:14px;border:1px solid #ccc;border-radius:7px;font-family:inherit;background:#fff;-webkit-appearance:none}
-.af-grid input.auto{background:#f0faf0;color:#1a6a1a;font-style:italic}
-.af-grid textarea{min-height:60px;resize:vertical}
-.af-grid input:focus,.af-grid select:focus,.af-grid textarea:focus{outline:none;border-color:#1a3a2a;background:#fff}
-
-/* Document preview */
-.doc-wrap{padding:10px}
-.doc{background:#fff;font-family:'TH Sarabun New','Sarabun',serif;font-size:var(--doc-fs,14pt);line-height:var(--doc-lh,1.45);color:#000;border:1px solid #ddd;padding:1cm 1.2cm 1.2cm 2.8cm;width:100%;position:relative;min-height:25cm}
-.doc-h1{text-align:center;font-weight:bold;font-size:var(--doc-h1,16pt);text-decoration:underline;margin-bottom:8pt;letter-spacing:1px}
-.doc-meta{text-align:right;margin-bottom:6pt;padding-right:0.4cm}
-.doc-meta p{margin-bottom:0}
-.doc-start{text-indent:2.5em;text-align:justify;margin-bottom:3pt}
-.doc-clause{padding-left:2.2em;text-indent:-2.2em;text-align:justify;margin-bottom:4pt}
-.doc-center{text-align:center;margin:10pt 0 4pt}
-
-/* Signature section — 2-column grid */
-.doc-sigs{margin-top:12pt;display:grid;grid-template-columns:1fr 1fr;column-gap:22pt;row-gap:0}
-.sig-col{display:flex;flex-direction:column;gap:10pt}
-.sig-cell{text-align:center}
-.sig-cell .sig-line{display:block;border-bottom:1px dotted #333;margin:0 12pt 3pt;height:1.5em}
-.sig-cell .sig-name{margin:0 0 1pt;font-size:0.96em}
-.sig-cell .sig-role{font-size:0.92em;color:#222;font-weight:500}
-.sig-cell .sig-sub{font-size:0.82em;color:#444;font-style:italic;margin-top:-1pt}
-
-/* Fingerprint boxes — TIGHT TOGETHER */
-.fp-boxes{position:absolute;left:0.4cm;top:var(--fp-top,2.8cm);display:flex;flex-direction:column;gap:0}
-.fp-box{border:1px solid #000;border-bottom:none;width:2cm;height:3cm}
-.fp-box:last-child{border-bottom:1px solid #000}
-
-/* Schedule table — form only, never printed */
-.schedule-wrap{margin-top:8px;max-height:380px;overflow-y:auto;border:1px solid #ddd;border-radius:8px;background:#fff}
-.schedule-table{width:100%;border-collapse:collapse;font-size:12px}
-.schedule-table thead{background:#1a3a2a;color:#fff;position:sticky;top:0;z-index:1}
-.schedule-table th{padding:8px 6px;text-align:right;font-weight:600;white-space:nowrap}
-.schedule-table th:first-child{text-align:center}
-.schedule-table th:nth-child(2){text-align:center}
-.schedule-table td{padding:6px;border-bottom:1px solid #eee;text-align:right;white-space:nowrap}
-.schedule-table td:first-child{text-align:center;font-weight:600;color:#1a3a2a}
-.schedule-table td:nth-child(2){text-align:center;color:#555;font-size:11px}
-.schedule-table tr:last-child td{border-bottom:none;background:#f5faf5;font-weight:700}
-.schedule-summary{background:#f0f7f0;padding:10px 12px;border-radius:8px;margin-top:8px;font-size:13px;color:#1a3a2a;line-height:1.6}
-.schedule-summary b{font-weight:700}
-.schedule-empty{text-align:center;padding:18px;color:#999;font-size:13px;background:#fafafa;border-radius:8px}
-
-.placeholder{text-align:center;color:#999;padding:60px 20px;font-size:14px}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.card{animation:fadeUp .35s ease-out both}
+.card:nth-child(1){animation-delay:.02s}
+.card:nth-child(2){animation-delay:.06s}
+.card:nth-child(3){animation-delay:.1s}
+.card:nth-child(4){animation-delay:.14s}
+.card:nth-child(5){animation-delay:.18s}
+.card:nth-child(6){animation-delay:.22s}
+.card:nth-child(7){animation-delay:.26s}
 
 @media print{
   *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
   html,body{background:#fff!important;margin:0!important;padding:0!important}
-  .pbtns,.back-home,.gen-btn,.add-btn,.ui-head,.card,.section.active>.card{display:none!important}
-  .section.preview .doc-wrap,.section.preview .doc-wrap *{display:revert!important;visibility:visible}
-  .ui{max-width:none!important;padding:0!important}
-  .doc-wrap{padding:0!important}
-  .doc{border:none!important;padding:0.5cm 1cm 1cm 2.6cm!important;margin:0!important;line-height:var(--doc-lh,1.4)!important;min-height:auto!important}
-  .doc-start{margin-bottom:2pt!important}
-  .doc-clause{margin-bottom:3pt!important}
-  .doc-center{margin:8pt 0 3pt!important}
-  .doc-sigs{margin-top:8pt!important}
-  .sig-col{gap:8pt!important}
-  .sig-cell .sig-line{height:1.4em!important;margin:0 8pt 2pt!important}
-  .fp-box{width:2cm!important;height:3cm!important}
-  .fp-boxes{left:0.3cm!important}
+  /* ซ่อนทุกอย่างยกเว้น preview */
+  body>*{display:none!important}
+  #sec-preview{display:block!important}
+  .pbtns,.back-home,.schedule-toolbar,.font-ctrl{display:none!important}
+  .doc{min-height:auto!important;overflow:visible!important}
+  .doc-sigs{page-break-inside:avoid!important}
+  .doc-clause{page-break-inside:avoid!important}
+  /* doc wrapper */
+  .ui{max-width:none!important;padding:0!important;margin:0!important}
+  .doc-wrap{padding:0!important;max-width:none!important;width:100%!important;margin:0!important}
+  /* กระดาษ */
+  .doc{
+    border:none!important;
+    box-shadow:none!important;
+    border-radius:0!important;
+    margin:0!important;
+    page-break-after:avoid!important;
+    page-break-inside:avoid!important;
+  }
+  .doc-wrap{display:block!important;padding:0!important;overflow:visible!important}
+  /* ข้อความ */
+  .doc-start{margin-bottom:1pt!important}
+  .doc-clause{margin-bottom:2pt!important}
+  .doc-center{margin:6pt 0 2pt!important}
+  /* ลายเซ็น */
+  .doc-sigs{page-break-inside:avoid!important;margin-top:12pt!important;gap:20pt!important}
+  .sig-col{gap:18pt!important}
+  .sig-cell .sig-line{height:1.6em!important;margin:0 10pt 4pt!important}
+  /* กล่องอากรแสตมป์สำหรับฟ้องคดี — 20mm × 30mm */
+  .fp-boxes{left:5mm!important;top:25mm!important;gap:0!important}
+  .fp-box{
+    width:20mm!important;
+    height:30mm!important;
+    box-sizing:content-box!important;
+    border:1px solid #000!important;
+    border-top:none!important;
+  }
+  .fp-box:first-child{border-top:1px solid #000!important}
 }
-@page{size:A4;margin:1cm}
+@page{size:A4;margin:0}
 
 
 /* Thai Date Picker styles */
@@ -146,46 +218,496 @@ body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;
 .tdp-ym select{width:100%;padding:8px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fafaf7;margin-bottom:6px}
 .tdp-shortcut{display:flex;gap:6px;margin-top:8px;padding-top:8px;border-top:1px solid #eee}
 .tdp-shortcut input{flex:1;padding:7px 10px;font-size:13px;border:1px solid #ddd;border-radius:6px;font-family:inherit;background:#fffde7;text-align:center}
+
+/* ── Dynamic person blocks (borrower/guarantor/collateral) ── */
+.ui{max-width:720px;margin:0 auto;padding:16px 14px 40px;padding-bottom:max(40px,env(safe-area-inset-bottom))}
+.ui-head{
+  background:linear-gradient(135deg,var(--primary) 0%,var(--primary-2) 100%);
+  color:#fffdf7;
+  padding:20px 22px;
+  border-radius:18px;
+  margin-bottom:16px;
+  text-align:center;
+  position:relative;overflow:hidden;
+  box-shadow:0 8px 24px rgba(15,46,33,.18);
+}
+.ui-head::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.6;
+}
+.ui-head h1{
+  font-family:"Bai Jamjuree","Sarabun",sans-serif;
+  font-size:19px;font-weight:700;letter-spacing:-.2px;margin-bottom:4px;line-height:1.2;
+}
+.ui-head p{font-size:13px;opacity:.78;font-weight:300}
+
+/* Item entry block (.ai = ผู้กู้/ค้ำ/หลักประกัน) */
+.ai{
+  background:rgba(232,239,233,.45);
+  border:1px solid var(--line-soft);
+  border-radius:12px;
+  padding:14px 14px 6px;
+  margin-bottom:10px;
+  position:relative;
+}
+.ai.gua{background:rgba(232,239,233,.6);border-color:var(--accent-soft)}
+.ai.col{background:rgba(252,247,235,.6);border-color:var(--accent-soft)}
+
+.ah{
+  display:flex;align-items:center;gap:9px;
+  margin-bottom:10px;padding-bottom:9px;
+  border-bottom:1px dashed var(--line);
+}
+.an{
+  background:linear-gradient(135deg,var(--primary),var(--primary-2));
+  color:#fffdf7;
+  border-radius:8px;
+  width:24px;height:24px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;font-weight:700;flex-shrink:0;
+  font-family:"Bai Jamjuree",sans-serif;
+  box-shadow:0 2px 4px rgba(15,46,33,.18);
+}
+.at{
+  flex:1;font-weight:600;font-size:14px;color:var(--primary);
+  font-family:"Bai Jamjuree","Sarabun",sans-serif;letter-spacing:.1px;
+}
+.rb{
+  background:#fff;border:1px solid var(--line);
+  color:var(--danger);
+  padding:5px 10px;border-radius:8px;
+  font-size:12px;font-weight:600;
+  cursor:pointer;font-family:inherit;
+  transition:background .15s;
+}
+.rb:active{background:#fee;transform:translateY(1px)}
+
+/* Form grid inside person block — proper label/input layout */
+.af-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px 10px;
+}
+.af-grid>div{display:flex;flex-direction:column;margin-bottom:6px}
+.af-grid>div.fw{grid-column:span 2}
+.af-grid label{
+  display:block;
+  font-size:11px;
+  font-weight:600;
+  color:var(--ink-soft);
+  margin-bottom:4px;
+  letter-spacing:.2px;
+}
+.af-grid input,.af-grid select,.af-grid textarea{
+  width:100%;
+  padding:9px 11px;
+  font-size:14px;
+  border:1px solid var(--field-border);
+  border-radius:9px;
+  font-family:inherit;
+  background:var(--field-bg);
+  color:var(--ink);
+  transition:border-color .15s,box-shadow .15s,background .15s;
+  -webkit-appearance:none;appearance:none;
+}
+.af-grid select{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%235a6661' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 11px center;padding-right:30px;
+}
+.af-grid input:focus,.af-grid select:focus{
+  outline:none;border-color:var(--field-focus);background:#fff;
+  box-shadow:0 0 0 3px rgba(184,137,90,.15);
+}
+.af-grid input[readonly]{background:#efe8d6;color:var(--ink-soft);cursor:not-allowed}
+.af-grid input.auto{background:#efe8d6;color:var(--ink-soft)}
+
+/* Checkbox row (.chips) */
+.chips{margin-bottom:10px}
+.chips label, label.chips{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:9px 14px;
+  background:var(--field-bg);
+  border:1px solid var(--field-border);
+  border-radius:10px;
+  font-size:14px;font-weight:500;
+  cursor:pointer;color:var(--ink);
+  transition:background .15s,border-color .15s,color .15s,box-shadow .15s;
+}
+.chips label:has(input:checked), label.chips:has(input:checked){
+  background:var(--primary);
+  border-color:var(--primary);
+  color:#fff;font-weight:700;
+  box-shadow:0 2px 8px rgba(15,46,33,.25);
+}
+.chips label:has(input:checked)::before, label.chips:has(input:checked)::before{
+  content:"✓ ";font-weight:900;font-size:15px;
+}
+.chips input[type="checkbox"], label.chips input[type="checkbox"]{width:16px;height:16px;accent-color:#fff}
+
+/* Preview / button row */
+.pbtns{display:flex;gap:10px;margin-top:8px;flex-wrap:wrap}
+.pbtns>button{flex:1;min-width:130px}
+.placeholder{
+  text-align:center;padding:30px 12px;color:var(--ink-faint);
+  background:var(--field-bg);border:1px dashed var(--field-border);
+  border-radius:12px;font-size:14px;line-height:1.5;
+}
+
+/* Tighter back button */
+.back-home{
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  padding:10px 14px;
+  background:rgba(255,253,247,.8);
+  backdrop-filter:blur(8px);
+  border:1px solid var(--line);
+  border-radius:10px;margin-bottom:12px;
+  font-size:14px;font-weight:500;
+  color:var(--primary);font-family:inherit;width:100%;
+  cursor:pointer;
+  text-decoration:none;
+}
+
+/* Date picker tweaks to match new style */
+.tdp-input{
+  background:var(--field-bg) !important;
+  border:1px solid var(--field-border) !important;
+  border-radius:9px !important;
+  color:var(--ink);
+  padding:10px 36px 10px 12px !important;
+}
+.tdp-input:focus{
+  outline:none;border-color:var(--field-focus) !important;background:#fff !important;
+  box-shadow:0 0 0 3px rgba(184,137,90,.15);
+}
+.tdp-drop{border-radius:12px !important;border-color:var(--line) !important;box-shadow:var(--shadow-lg) !important}
+.tdp-nav button{color:var(--primary) !important;font-weight:700}
+
+
+/* ── Schedule Table styling ── */
+#schedule_output{margin-top:6px}
+.schedule-empty{
+  padding:24px 16px;
+  background:rgba(184,137,90,.08);
+  border:1px dashed var(--accent-soft);
+  border-radius:10px;
+  text-align:center;
+  color:var(--ink-soft);
+  font-size:13.5px;
+  line-height:1.5;
+}
+.schedule-toolbar{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:10px;margin-bottom:10px;flex-wrap:wrap;
+}
+.schedule-print-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:9px 14px;
+  background:#fff;
+  border:1px solid var(--accent);
+  color:var(--accent);
+  border-radius:9px;
+  font-size:13px;font-weight:600;
+  cursor:pointer;font-family:inherit;
+  transition:background .15s,transform .15s;
+}
+.schedule-print-btn:active{background:rgba(184,137,90,.1);transform:translateY(1px)}
+.schedule-wrap{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:11px;
+  overflow:hidden;
+  overflow-x:auto;
+  margin-bottom:12px;
+}
+.schedule-table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:13.5px;
+  font-family:inherit;
+}
+.schedule-table thead th{
+  background:linear-gradient(135deg,var(--primary) 0%,var(--primary-2) 100%);
+  color:#fffdf7;
+  padding:10px 8px;
+  text-align:center;
+  font-weight:600;
+  font-family:"Bai Jamjuree","Sarabun",sans-serif;
+  font-size:12.5px;
+  letter-spacing:.3px;
+  border:none;
+  position:sticky;top:0;
+  white-space:nowrap;
+}
+.schedule-table tbody tr{
+  border-bottom:1px solid var(--line-soft);
+  transition:background .12s;
+}
+.schedule-table tbody tr:hover{background:rgba(232,239,233,.6)}
+.schedule-table tbody tr:nth-child(even){background:rgba(244,237,224,.4)}
+.schedule-table tbody tr:nth-child(even):hover{background:rgba(232,239,233,.6)}
+.schedule-table tbody tr:last-child{border-bottom:none}
+.schedule-table td{
+  padding:9px 8px;
+  text-align:right;
+  font-variant-numeric:tabular-nums;
+  white-space:nowrap;
+}
+.schedule-table td:nth-child(1){text-align:center;font-weight:600;color:var(--primary);width:38px}
+.schedule-table td:nth-child(2){text-align:center}
+.schedule-table td:last-child{font-weight:600}
+
+.schedule-summary{
+  background:linear-gradient(135deg,#fcf7eb 0%,#f8f0dc 100%);
+  border:1px solid var(--accent-soft);
+  border-radius:11px;
+  padding:13px 15px;
+  font-size:13.5px;
+  line-height:1.7;
+  color:var(--ink);
+}
+.schedule-summary b{color:var(--primary)}
+
+
+/* ── Section toggle (form ↔ preview) ── */
+.section{display:none}
+.section.active{display:block}
+
+/* ── Preview action buttons ── */
+.pbtns{
+  display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;
+  max-width:720px;margin:0 auto 12px;padding:0 14px;
+}
+.pbtns button{
+  padding:11px 14px;
+  background:rgba(255,253,247,.95);
+  border:1px solid var(--line);
+  color:var(--primary);
+  border-radius:10px;
+  font-size:14px;font-weight:600;
+  font-family:inherit;cursor:pointer;
+  transition:transform .15s,background .15s,border-color .15s;
+}
+.pbtns button:active{transform:translateY(1px);background:var(--primary-soft);border-color:var(--primary)}
+
+/* ── Document preview (A4 paper look) ── */
+.doc-wrap{
+  max-width:none;margin:0 auto;padding:14px;
+  overflow-x:auto;
+  display:flex;justify-content:center;
+}
+.doc{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:6px;
+  padding:1cm 1cm 1cm 3cm;
+  font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;
+  font-size:var(--doc-fs,16pt);
+  line-height:var(--doc-lh,1.5);
+  color:#000;
+  position:relative;
+  box-shadow:0 8px 32px rgba(15,46,33,.12),0 2px 6px rgba(15,46,33,.06);
+  width:21cm;
+  min-height:29.7cm;
+  box-sizing:border-box;
+  flex-shrink:0;
+}
+
+/* Heading + meta */
+.doc-h1{
+  text-align:center;font-weight:bold;
+  font-size:var(--doc-h1,18pt);
+  margin-bottom:4pt;
+  letter-spacing:.3pt;
+  text-decoration:underline;
+  text-underline-offset:3pt;
+}
+.doc-meta{
+  text-align:right;
+  margin:2pt 0 6pt 0;
+  line-height:1.3;
+}
+.doc-meta p{margin:1pt 0}
+
+/* Clauses + body */
+.doc-start{
+  text-indent:1cm;
+  margin-bottom:2pt;
+  text-align:justify;
+  word-break:keep-all;
+  line-break:strict;
+  hyphens:none;
+}
+.doc-clause{
+  text-indent:1cm;
+  margin-bottom:2pt;
+  text-align:justify;
+  word-break:keep-all;
+  line-break:strict;
+  hyphens:none;
+}
+.doc-clause b{font-weight:bold;font-size:1.25em}
+.doc-center{
+  text-align:center;
+  margin:8pt 0 4pt;
+}
+
+.doc .nowrap{white-space:nowrap}
+
+/* Signatures (2-column grid at bottom) */
+.doc-sigs{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:24pt;
+  margin-top:18pt;
+}
+.sig-col{
+  display:flex;flex-direction:column;gap:22pt;
+}
+.sig-cell{
+  text-align:center;
+}
+.sig-line{
+  border-bottom:1px solid #000;
+  height:1.8em;
+  margin:0 18pt 6pt;
+}
+.sig-cell .sig-name,.sig-cell>div:not(.sig-line){
+  font-size:var(--doc-sub,14.5pt);
+  line-height:1.3;
+}
+
+/* Fingerprint boxes (5 boxes on left margin) */
+.fp-boxes{
+  position:absolute;
+  left:5mm;
+  top:25mm;
+  display:flex;flex-direction:column;gap:0;
+}
+.fp-box{
+  width:20mm;height:30mm;
+  border:1px solid #000;
+  border-top:none;
+  box-sizing:content-box;
+}
+.fp-box:first-child{border-top:1px solid #000}
+
+/* Back-home (top button on preview) */
+.back-home{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:9px 14px;
+  background:rgba(255,253,247,.9);
+  border:1px solid var(--line);
+  color:var(--primary);
+  border-radius:9px;
+  font-size:14px;font-weight:500;
+  font-family:inherit;cursor:pointer;
+  text-decoration:none;
+  margin:0 14px 12px;
+  transition:background .15s;
+}
+.back-home:active{background:var(--primary-soft)}
+
+/* Font size controls */
+.font-ctrl{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  margin:8px auto 12px;
+  max-width:720px;
+  padding:0 14px;
+}
+.font-ctrl button{
+  padding:7px 14px;
+  background:#fff;
+  border:1px solid var(--line);
+  color:var(--primary);
+  border-radius:8px;
+  font-size:14px;font-weight:600;
+  cursor:pointer;font-family:inherit;
+  min-width:42px;
+  transition:background .15s,transform .12s;
+}
+.font-ctrl button:active{transform:translateY(1px);background:var(--primary-soft)}
+.font-ctrl #font-pct{
+  font-size:13px;color:var(--ink-soft);
+  font-variant-numeric:tabular-nums;
+  min-width:50px;text-align:center;
+}
+
+/* Mobile tweak: scale doc */
+@media (max-width:520px){
+  .doc{
+    padding:1cm 0.8cm 1cm 1.8cm;
+    font-size:var(--doc-fs-mb,14pt);
+  }
+  .fp-boxes{left:3mm;gap:0;top:20mm}
+  .fp-box{width:20mm;height:30mm}
+  .doc-sigs{gap:14pt}
+  .pbtns{grid-template-columns:1fr 1fr 1fr;gap:8px}
+  .pbtns button{font-size:12.5px;padding:9px 8px}
+}
+
 </style>
-</head>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet"></head>
 <body>
 
 <div class="section active" id="sec-form">
 <div class="ui">
   <div class="ui-head">
     <h1>📄 หนังสือสัญญากู้เงินตามกฎหมาย</h1>
-    <p>บริษัท โชคชัย เงินด่วน จำกัด</p>
+    <p>ร้านแชมป์ลิสซิ่ง</p>
   </div>
 
   <div class="card">
     <div class="ct"><span class="lhs"><span class="n">1</span> ข้อมูลทั่วไป</span></div>
     <div class="fg"><label>สถานที่ทำสัญญา</label>
-      <input type="text" id="place" value="สำนักงานบริษัทเลขที่ 89/28 หมู่ 9 ตำบล ท่าเยี่ยม อำเภอ โชคชัย จังหวัด นครราชสีมา">
+      <input type="text" id="place" value="" placeholder="เลือกผู้ให้กู้ด้านล่าง ระบบจะเติมที่อยู่ให้อัตโนมัติ">
     </div>
-    <div class="fg"><label>วันที่ทำสัญญา</label>
-      <div class="tdp-wrap" id="tdpw_contract_date" onclick="event.stopPropagation()">
-        <input type="hidden" id="contract_date">
-        <input type="text" id="tdpi_contract_date" class="tdp-input" placeholder="เลือกหรือพิมพ์ วว/ดด/ปปปป" onfocus="tdpFocus('contract_date')" onkeydown="tdpKeydown('contract_date',event)" autocomplete="off">
-        <span class="tdp-icon" onclick="tdpOpen('contract_date')">📅</span>
-        <div class="tdp-drop" id="tdpd_contract_date">
-          <div class="tdp-nav">
-            <button onclick="tdpNav('contract_date',-1,event)">‹</button>
-            <span class="tdp-my" onclick="tdpToggleYM('contract_date');event.stopPropagation()">...</span>
-            <button onclick="tdpNav('contract_date',1,event)">›</button>
+    <div class="row2">
+      <div class="fg"><label>วันที่ทำสัญญา</label>
+        <div class="tdp-wrap" id="tdpw_contract_date" onclick="event.stopPropagation()">
+          <input type="hidden" id="contract_date">
+          <input type="text" id="tdpi_contract_date" class="tdp-input" placeholder="เลือกหรือพิมพ์ วว/ดด/ปปปป" onfocus="tdpFocus('contract_date')" onkeydown="tdpKeydown('contract_date',event)" autocomplete="off">
+          <span class="tdp-icon" onclick="tdpOpen('contract_date')">📅</span>
+          <div class="tdp-drop" id="tdpd_contract_date">
+            <div class="tdp-nav">
+              <button onclick="tdpNav('contract_date',-1,event)">‹</button>
+              <span class="tdp-my" onclick="tdpToggleYM('contract_date');event.stopPropagation()">...</span>
+              <button onclick="tdpNav('contract_date',1,event)">›</button>
+            </div>
+            <div class="tdp-ym"></div>
+            <div class="tdp-days-hdr"><span>อา</span><span>จ</span><span>อ</span><span>พ</span><span>พฤ</span><span>ศ</span><span>ส</span></div>
+            <div class="tdp-days"></div>
           </div>
-          <div class="tdp-ym"></div>
-          <div class="tdp-days-hdr"><span>อา</span><span>จ</span><span>อ</span><span>พ</span><span>พฤ</span><span>ศ</span><span>ส</span></div>
-          <div class="tdp-days"></div>
         </div>
       </div>
+      <div class="fg"><label>วันครบกำหนดชำระ</label>
+        <div class="tdp-wrap" id="tdpw_due_date" onclick="event.stopPropagation()">
+          <input type="hidden" id="due_date">
+          <input type="text" id="tdpi_due_date" class="tdp-input" placeholder="เลือกหรือพิมพ์ วว/ดด/ปปปป" onfocus="tdpFocus('due_date')" onkeydown="tdpKeydown('due_date',event)" autocomplete="off">
+          <span class="tdp-icon" onclick="tdpOpen('due_date')">📅</span>
+          <div class="tdp-drop" id="tdpd_due_date">
+            <div class="tdp-nav">
+              <button onclick="tdpNav('due_date',-1,event)">‹</button>
+              <span class="tdp-my" onclick="tdpToggleYM('due_date');event.stopPropagation()">...</span>
+              <button onclick="tdpNav('due_date',1,event)">›</button>
+            </div>
+            <div class="tdp-ym"></div>
+            <div class="tdp-days-hdr"><span>อา</span><span>จ</span><span>อ</span><span>พ</span><span>พฤ</span><span>ศ</span><span>ส</span></div>
+            <div class="tdp-days"></div>
+          </div>
+        </div>
+        <div class="hint">💡 auto-fill = วันทำสัญญา + 1 ปี</div>
+      </div>
     </div>
-    <div class="fg"><label>ผู้ให้กู้ — กรรมการลงนาม</label>
-      <select id="lender_dir">
-        <option>นาย ชุณนเกียรติ จรัสบวรพันธ์</option>
-        <option>นาง ชญาน์นัทช์ จรัสบวรพันธ์</option>
-        <option>นาย กันตพัฒน์ จรัสบวรพันธ์</option>
-        <option>นางสาว ภัคฐ์พิชา จรัสบวรพันธ์</option>
+    <div class="fg"><label>ผู้ให้กู้</label>
+      <select id="lender_dir" onchange="onLenderChange()">
+        <option value="">— เลือกผู้ให้กู้ —</option>
+        <option>นายกันตพัฒน์ จรัสบวรพันธ์</option>
+        <option>นางชญาน์นัทช์ จรัสบวรพันธ์</option>
+        <option>นายชุณนเกียรติ จรัสบวรพันธ์</option>
+        <option>นายฐานวัฒน์ จรัสบวรพันธ์</option>
+        <option>นางสาวภัคฐ์พิชา จรัสบวรพันธ์</option>
       </select>
+      <div class="hint">เลือกผู้ให้กู้แล้วระบบจะเติม "สถานที่ทำสัญญา" ให้อัตโนมัติ</div>
     </div>
   </div>
 
@@ -210,27 +732,7 @@ body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;
       <div class="fg"><label>จำนวนเงินกู้ (บาท)</label><input type="text" id="amount" oninput="updateAmountText();updateSchedule()" placeholder="500000"></div>
       <div class="fg"><label>ตัวอักษร (แก้ได้)</label><input type="text" id="amount_text" class="auto" placeholder="ห้าแสนบาทถ้วน"></div>
     </div>
-    <div class="row2">
-      <div class="fg"><label>ดอกเบี้ย (ร้อยละ ต่อปี)</label><input type="text" id="rate" value="15" oninput="updateSchedule()"></div>
-      <div class="fg"><label>วันครบกำหนดชำระ</label>
-        <div class="tdp-wrap" id="tdpw_due_date" onclick="event.stopPropagation()">
-          <input type="hidden" id="due_date">
-          <input type="text" id="tdpi_due_date" class="tdp-input" placeholder="เลือกหรือพิมพ์ วว/ดด/ปปปป" onfocus="tdpFocus('due_date')" onkeydown="tdpKeydown('due_date',event)" autocomplete="off">
-          <span class="tdp-icon" onclick="tdpOpen('due_date')">📅</span>
-          <div class="tdp-drop" id="tdpd_due_date">
-            <div class="tdp-nav">
-              <button onclick="tdpNav('due_date',-1,event)">‹</button>
-              <span class="tdp-my" onclick="tdpToggleYM('due_date');event.stopPropagation()">...</span>
-              <button onclick="tdpNav('due_date',1,event)">›</button>
-            </div>
-            <div class="tdp-ym"></div>
-            <div class="tdp-days-hdr"><span>อา</span><span>จ</span><span>อ</span><span>พ</span><span>พฤ</span><span>ศ</span><span>ส</span></div>
-            <div class="tdp-days"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <p style="font-size:11px;color:#888;margin-top:4px">💡 ครบกำหนด auto-fill = วันทำสัญญา + 1 ปี</p>
+    <div class="fg"><label>ดอกเบี้ย (ร้อยละ ต่อปี)</label><input type="text" id="rate" value="15" oninput="updateSchedule()"></div>
   </div>
 
   <div class="card">
@@ -244,12 +746,19 @@ body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;
 
   <div class="card">
     <div class="ct"><span class="lhs"><span class="n">6</span> ตารางผ่อนชำระ <span style="font-size:11px;color:#888;font-weight:400">(ดูในระบบเท่านั้น • ไม่พิมพ์)</span></span></div>
-    <div class="fg">
-      <label>รูปแบบการผ่อน</label>
-      <select id="schedule_style" onchange="updateSchedule()">
-        <option value="interest_only">💵 ดอกเบี้ยรายเดือน + เงินต้นงวดสุดท้าย (ตามสัญญาเดิม)</option>
-        <option value="amortized">📉 ผ่อนเท่ากันทุกงวด (ลดต้นลดดอก)</option>
-      </select>
+    <div class="row2">
+      <div class="fg">
+        <label>รูปแบบการผ่อน</label>
+        <select id="schedule_style" onchange="updateSchedule()">
+          <option value="interest_only">💵 ดอกเบี้ยรายเดือน + เงินต้นงวดสุดท้าย (ตามสัญญาเดิม)</option>
+          <option value="amortized">📉 ผ่อนเท่ากันทุกงวด (ลดต้นลดดอก)</option>
+        </select>
+      </div>
+      <div class="fg">
+        <label>จำนวนงวด (เดือน)</label>
+        <input type="number" id="schedule_months" placeholder="ตามวันครบสัญญา" min="1" max="600" oninput="updateSchedule()">
+        <div class="hint">เว้นว่าง = ใช้ตามวันครบสัญญา · ใส่ตัวเลขเพื่อ override</div>
+      </div>
     </div>
     <div id="schedule_output">
       <div class="schedule-empty">กรอกจำนวนเงินกู้ ดอกเบี้ย วันทำสัญญา และวันครบกำหนด เพื่อดูตารางผ่อน</div>
@@ -272,10 +781,16 @@ body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;
   <div class="pbtns">
     <button class="pbk" onclick="backToForm()">← แก้ไข</button>
     <button class="pbk" onclick="resetAll()">🔄 ล้าง</button>
-    <button class="ppr" onclick="window.print()">🖨️ พิมพ์ / PDF</button>
+    <button class="ppr" onclick="printContract()">🖨️ พิมพ์ / PDF</button>
+  </div>
+  <div class="font-ctrl">
+    <button onclick="adjustFont(-1)" title="ลดขนาด">A−</button>
+    <span id="font-pct">100%</span>
+    <button onclick="adjustFont(1)" title="เพิ่มขนาด">A+</button>
+    <button onclick="adjustFont(0)" title="คืนค่าอัตโนมัติ" style="margin-left:6px;font-size:11px">⟲ อัตโนมัติ</button>
   </div>
   <div class="doc-wrap">
-    <div class="doc" id="doc-preview">
+    <div class="doc" id="doc-preview" lang="th">
       <div class="placeholder">กรอกข้อมูลแล้วกด <strong>"สร้างเอกสารสัญญา"</strong></div>
     </div>
   </div>
@@ -466,7 +981,7 @@ function tdpSelect(did,iso){
   if(inp){inp.value=_tdpFmt(iso);inp.classList.remove('er');inp.classList.add('ok');}
   _tdpRender(did);
   tdpClose();
-  if(s.onchange)try{eval(s.onchange);}catch(e){}
+  if(s.onchange&&typeof s.onchange==='function')try{s.onchange(iso);}catch(e){console.warn(e);}
 }
 function tdpOpen(did){
   tdpClose();
@@ -708,15 +1223,35 @@ function personBlock(prefix,i){
   </div>`;
 }
 
+// === ข้อมูลผู้ให้กู้ 5 คน (สำหรับ auto-fill สถานที่ทำสัญญา) ===
+var LENDER_PEOPLE={
+  "นายกันตพัฒน์ จรัสบวรพันธ์":   "248/1 หมู่ที่ 9 ตำบลท่าเยี่ยม อำเภอโชคชัย จังหวัดนครราชสีมา",
+  "นางชญาน์นัทช์ จรัสบวรพันธ์":  "247/1 หมู่ที่ 9 ตำบลท่าเยี่ยม อำเภอโชคชัย จังหวัดนครราชสีมา",
+  "นายชุณนเกียรติ จรัสบวรพันธ์":  "222/2 หมู่ที่ 11 ตำบลกระโทก อำเภอโชคชัย จังหวัดนครราชสีมา",
+  "นายฐานวัฒน์ จรัสบวรพันธ์":    "242/6 หมู่ที่ 9 ตำบลท่าเยี่ยม อำเภอโชคชัย จังหวัดนครราชสีมา",
+  "นางสาวภัคฐ์พิชา จรัสบวรพันธ์": "256/135 หมู่ที่ 12 ตำบลโชคชัย อำเภอโชคชัย จังหวัดนครราชสีมา"
+};
+
+function onLenderChange(){
+  var sel=document.getElementById('lender_dir').value;
+  var placeEl=document.getElementById('place');
+  if(!placeEl) return;
+  if(!sel){placeEl.value=''; return;}
+  var addr=LENDER_PEOPLE[sel];
+  if(addr) placeEl.value=addr;
+}
+
 function addBorrower(){
   bC++;
-  document.getElementById('borrowers').appendChild(elN(personBlock('b',bC)));
-  setTimeout(()=>wirePerson('b',bC),20);
+  var idx=bC;
+  document.getElementById('borrowers').appendChild(elN(personBlock('b',idx)));
+  wirePerson('b',idx);
 }
 function addGuarantor(){
   gC++;
-  document.getElementById('guarantors').appendChild(elN(personBlock('g',gC)));
-  setTimeout(()=>wirePerson('g',gC),20);
+  var idx=gC;
+  document.getElementById('guarantors').appendChild(elN(personBlock('g',idx)));
+  wirePerson('g',idx);
 }
 
 function wirePerson(p,i){
@@ -969,7 +1504,7 @@ function fmtCol(c){
   const lbl={land:'โฉนดที่ดิน',nsk:'น.ส.3 ก.',car:'รถยนต์',motorcycle:'รถจักรยานยนต์',gold:'ทองคำ/เครื่องประดับ',bank:'บัญชีเงินฝาก',other:'ทรัพย์สิน'}[c.type];
   if(c.type==='land'||c.type==='nsk'){
     let s=`${lbl} เลขที่ ${c.doc||'..........'} เลขที่ดิน ${c.land||'..........'} ตำบล ${c.tambon||'..........'} อำเภอ ${c.amphoe||'..........'} จังหวัด ${c.province||'..........'}`;
-    if(c.building)s+=' พร้อมสิ่งปลูกสร้างที่มีอยู่และเกิดขึ้นในอนาคต';
+    if(c.building)s+=' พร้อมสิ่งปลูกสร้างที่มีอยู่และที่จะเกิดขึ้นในอนาคต';
     return s;
   }
   if(c.type==='car'||c.type==='motorcycle')return `${lbl} ทะเบียน ${c.plate||'..........'} ยี่ห้อ ${c.brand||'..........'} รุ่น ${c.model||'..........'} สี ${c.color||'..........'} เลขตัวถัง ${c.chassis||'..........'} เลขเครื่อง ${c.engine||'..........'}`;
@@ -980,11 +1515,16 @@ function fmtCol(c){
 
 function fmtPersonList(list){
   if(list.length===0)return '..........';
-  const names=list.map(p=>`${p.title||''} ${p.name||'..........'}${p.idcard?' (เลขประจำตัวประชาชน '+p.idcard+')':''}`).join(', ');
+  // ห่อชื่อด้วย nowrap span ไม่ให้ชื่อฉีกข้ามบรรทัด
+  const names=list.map(function(p){
+    var nm=(p.title||'')+' '+(p.name||'..........');
+    var idc=p.idcard?' <span class="nowrap">(เลขประจำตัวประชาชน '+p.idcard+')</span>':'';
+    return '<span class="nowrap">'+nm+'</span>'+idc;
+  }).join(', ');
   const ages=list.map(p=>p.age||'..').join(', ');
-  const addrs=list.map(p=>p.addr||'..........').join(', ');
+  const addrs=list.map(p=>'<span class="nowrap">'+(p.addr||'..........')+'</span>').join(', ');
   const t=list[0].tambon||'..........',a=list[0].amphoe||'..........',pv=list[0].province||'..........';
-  return `${names} อายุ ${ages} ปี อยู่บ้านเลขที่ ${addrs} ตำบล${t} อำเภอ${a} จังหวัด${pv}`;
+  return `${names} อายุ ${ages} ปี อยู่บ้านเลขที่ ${addrs} <span class="nowrap">ตำบล${t}</span> <span class="nowrap">อำเภอ${a}</span> <span class="nowrap">จังหวัด${pv}</span>`;
 }
 
 // ─── ตารางผ่อนชำระ ───
@@ -1029,8 +1569,7 @@ function formatMoney(n){
   return n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
 }
 
-function calcSchedule(principal,annualRate,startDate,endDate,style){
-  const months=monthsBetween(startDate,endDate);
+function calcSchedule(principal,annualRate,startDate,months,style){
   if(months<1)return null;
   const monthlyRate=(annualRate/100)/12;
   const rows=[];
@@ -1081,6 +1620,73 @@ function calcSchedule(principal,annualRate,startDate,endDate,style){
   return rows;
 }
 
+function printSchedule(){
+  var out=document.getElementById('schedule_output');
+  if(!out) return;
+  var tableEl=out.querySelector('.schedule-wrap');
+  var sumEl=out.querySelector('.schedule-summary');
+  if(!tableEl){alert('กรุณากรอกข้อมูลให้ครบก่อนปริ้น');return;}
+  
+  // ดึงข้อมูลผู้กู้ ผู้ให้กู้
+  var lender=gv('lender_dir')||'(ไม่ระบุ)';
+  var amount=gv('amount')||'-';
+  var rate=gv('rate')||'-';
+  var contractDate=gv('contract_date')||'';
+  var dueDate=gv('due_date')||'';
+  
+  // รวบรวมรายชื่อผู้กู้
+  var borrowers=[];
+  document.querySelectorAll('#borrowers .ai').forEach(function(div){
+    var pre=div.id.split('-')[0]+div.id.split('-')[1];
+    var title=gv(pre+'_title')||'';
+    var name=gv(pre+'_name')||'';
+    if(name) borrowers.push(title+' '+name);
+  });
+  var borrowerText=borrowers.length?borrowers.join(', '):'(ยังไม่ได้กรอก)';
+  
+  var w=window.open('','_blank','width=900,height=1000');
+  if(!w){alert('โปรดอนุญาต popup เพื่อปริ้นตาราง');return;}
+  
+  var css=`
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;padding:24px;color:#000;background:#fff}
+    h1{font-size:20pt;margin-bottom:6pt;font-weight:700;text-align:center;color:#0f2e21}
+    .meta{font-size:12pt;line-height:1.55;margin-bottom:14pt;padding:10pt 12pt;background:#f4ede0;border-radius:8pt;border:1px solid #e2d9c5}
+    .meta b{color:#0f2e21}
+    table{width:100%;border-collapse:collapse;margin-bottom:10pt}
+    thead th{background:#0f2e21;color:#fffdf7;padding:8pt 6pt;text-align:center;font-size:11pt;font-weight:600}
+    tbody td{padding:7pt 6pt;text-align:right;font-size:11pt;border:1px solid #ccc;font-variant-numeric:tabular-nums}
+    tbody td:nth-child(1){text-align:center;font-weight:600}
+    tbody td:nth-child(2){text-align:center}
+    tbody tr:nth-child(even){background:#faf6ec}
+    .summary{padding:10pt 12pt;background:#fcf7eb;border:1px solid #e4cfa9;border-radius:6pt;font-size:11.5pt;line-height:1.7}
+    .summary b{color:#0f2e21}
+    .foot{text-align:center;margin-top:14pt;font-size:9pt;color:#888;font-style:italic}
+    @media print{
+      body{padding:8pt}
+      .no-print{display:none!important}
+      @page{size:A4;margin:0}
+    }
+  `;
+  
+  w.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>ตารางผ่อนชำระ</title><style>'+css+'</style></head><body>');
+  w.document.write('<h1>📋 ตารางผ่อนชำระเงินกู้</h1>');
+  w.document.write('<div class="meta">');
+  w.document.write('<div><b>ผู้ให้กู้:</b> '+lender+'</div>');
+  w.document.write('<div><b>ผู้กู้:</b> '+borrowerText+'</div>');
+  w.document.write('<div><b>เงินต้น:</b> '+(parseFloat(amount.replace(/,/g,''))||0).toLocaleString('th-TH')+' บาท · <b>ดอกเบี้ย:</b> '+rate+'% ต่อปี</div>');
+  if(contractDate&&dueDate){
+    w.document.write('<div><b>วันทำสัญญา:</b> '+jsDateToShortBE(new Date(contractDate))+' · <b>วันครบกำหนด:</b> '+jsDateToShortBE(new Date(dueDate))+'</div>');
+  }
+  w.document.write('</div>');
+  w.document.write(tableEl.innerHTML.replace('<table class="schedule-table">','<table>').replace('class="schedule-table"',''));
+  if(sumEl) w.document.write(sumEl.outerHTML.replace('class="schedule-summary"','class="summary"'));
+  w.document.write('<div class="foot">เอกสารนี้ใช้ประกอบการพิจารณาเท่านั้น — ไม่ใช่หลักฐานทางกฎหมาย</div>');
+  w.document.write('</body></html>');
+  w.document.close();
+  setTimeout(function(){w.focus();w.print();},250);
+}
+
 function updateSchedule(){
   const out=document.getElementById('schedule_output');
   if(!out)return;
@@ -1108,7 +1714,13 @@ function updateSchedule(){
   const style=gv('schedule_style')||'interest_only';
   const principal=parseFloat(amtRaw);
   const annualRate=parseFloat(rateRaw);
-  const rows=calcSchedule(principal,annualRate,start,end,style);
+  
+  // จำนวนงวด: ใช้ override ถ้ามี ไม่งั้นใช้ตามวันครบสัญญา
+  const monthsOverride=parseInt(gv('schedule_months'))||0;
+  const monthsFromDates=monthsBetween(start,end);
+  const effectiveMonths=monthsOverride>0 ? monthsOverride : monthsFromDates;
+  
+  const rows=calcSchedule(principal,annualRate,start,effectiveMonths,style);
   
   if(!rows||rows.length===0){
     out.innerHTML='<div class="schedule-empty" style="color:#c44">⚠️ ระยะเวลาสั้นเกินไป ต้องอย่างน้อย 1 เดือน</div>';
@@ -1118,7 +1730,9 @@ function updateSchedule(){
   let totalInterest=0,totalPaid=0;
   rows.forEach(r=>{totalInterest+=r.interest;totalPaid+=r.total});
   
-  let html='<div class="schedule-wrap"><table class="schedule-table">';
+  var _monthsSource = monthsOverride>0 ? ('กำหนดเอง · สัญญาจริง '+monthsFromDates+' เดือน') : 'ตามวันครบสัญญา';
+  let html='<div class="schedule-toolbar"><div style="font-size:12.5px;color:var(--ink-soft)">📋 <b>'+rows.length+' งวด</b> · '+_monthsSource+'</div><button class="schedule-print-btn" onclick="printSchedule()">🖨️ ปริ้นตารางผ่อน</button></div>';
+  html+='<div class="schedule-wrap"><table class="schedule-table">';
   html+='<thead><tr><th>งวด</th><th>วันครบ</th><th>เงินต้น</th><th>ดอกเบี้ย</th><th>รวม</th><th>คงเหลือ</th></tr></thead><tbody>';
   rows.forEach(r=>{
     html+=`<tr>
@@ -1143,13 +1757,93 @@ function updateSchedule(){
 }
 
 // ─── ปรับฟอนต์เอกสารตามจำนวนคน ───
-function calcDocSizes(total){
-  if(total<=1)return {fs:16.5,h1:18.5,sub:14.5,lh:1.5,fp:'3.0cm'};
-  if(total===2)return {fs:15.5,h1:17.5,sub:14.5,lh:1.45,fp:'2.8cm'};
-  if(total===3)return {fs:14.5,h1:16.5,sub:13.5,lh:1.4,fp:'2.6cm'};
-  if(total===4)return {fs:13.5,h1:15.5,sub:12.5,lh:1.35,fp:'2.5cm'};
-  if(total===5)return {fs:12.5,h1:14.5,sub:11.5,lh:1.3,fp:'2.3cm'};
-  return {fs:11.5,h1:13.5,sub:10.5,lh:1.25,fp:'2.2cm'};
+// global state: เก็บค่า ratio ที่ระบบหาได้ + ตัวคูณจากผู้ใช้
+var _autoRatio=1.0;
+var _userMult=1.0;
+var _baseFs=16,_baseH1=18,_baseSub=14;
+
+function applyFontRatio(){
+  var docEl=document.getElementById('doc-preview');
+  if(!docEl) return;
+  var r=_autoRatio*_userMult;
+  docEl.style.setProperty('--doc-fs',(_baseFs*r).toFixed(3)+'pt');
+  docEl.style.setProperty('--doc-h1',(_baseH1*r).toFixed(3)+'pt');
+  docEl.style.setProperty('--doc-sub',(_baseSub*r).toFixed(3)+'pt');
+  var pct=document.getElementById('font-pct');
+  if(pct) pct.textContent=Math.round(_userMult*100)+'%';
+}
+
+function adjustFont(delta){
+  if(delta===0){
+    // reset to auto
+    _userMult=1.0;
+  } else {
+    // step ±5%
+    _userMult+=delta*0.05;
+    if(_userMult<0.5) _userMult=0.5;
+    if(_userMult>2.0) _userMult=2.0;
+  }
+  applyFontRatio();
+  try{localStorage.setItem('loanFontMult',_userMult);}catch(e){}
+}
+
+function fitContentToA4(){
+  var docEl=document.getElementById('doc-preview');
+  if(!docEl) return;
+
+  var cs=getComputedStyle(docEl);
+  _baseFs=parseFloat(docEl.style.getPropertyValue('--doc-fs'))||parseFloat(cs.getPropertyValue('--doc-fs'))||16;
+  _baseH1=parseFloat(docEl.style.getPropertyValue('--doc-h1'))||parseFloat(cs.getPropertyValue('--doc-h1'))||18;
+  _baseSub=parseFloat(docEl.style.getPropertyValue('--doc-sub'))||parseFloat(cs.getPropertyValue('--doc-sub'))||14;
+
+  var targetH=27.7*(96/2.54);
+
+  var origOv=docEl.style.overflow;
+  var origH=docEl.style.height;
+  docEl.style.overflow='visible';
+  docEl.style.height='auto';
+
+  // Binary search หา auto ratio
+  var lo=0.3,hi=2.5;
+  for(var i=0;i<16;i++){
+    var mid=(lo+hi)/2;
+    docEl.style.setProperty('--doc-fs',(_baseFs*mid).toFixed(3)+'pt');
+    docEl.style.setProperty('--doc-h1',(_baseH1*mid).toFixed(3)+'pt');
+    docEl.style.setProperty('--doc-sub',(_baseSub*mid).toFixed(3)+'pt');
+    void docEl.offsetHeight;
+    var h=docEl.scrollHeight;
+    if(h>targetH) hi=mid;
+    else lo=mid;
+  }
+  _autoRatio=(lo+hi)/2*0.985;
+  if(_autoRatio>2.3) _autoRatio=2.3;
+  if(_autoRatio<0.6) _autoRatio=0.6;  // floor 60% — เกินก็แตกหน้าได้
+
+  // load saved user multiplier
+  try{
+    var saved=parseFloat(localStorage.getItem('loanFontMult'));
+    if(!isNaN(saved)&&saved>=0.5&&saved<=2.0) _userMult=saved;
+  }catch(e){}
+
+  applyFontRatio();
+
+  docEl.style.overflow=origOv||'';
+  docEl.style.height=origH||'';
+}
+
+function printContract(){window.print();}
+
+function calcDocSizes(total,extraLines){
+  var weight=total+(extraLines||0)*0.5;
+  // ค่าฐาน +0.5pt
+  if(weight<=1)return {fs:41.5,h1:43.5,sub:31.5,lh:1.35};
+  if(weight<=2)return {fs:39.5,h1:41.5,sub:29.5,lh:1.32};
+  if(weight<=3)return {fs:37.5,h1:39.5,sub:28.5,lh:1.3};
+  if(weight<=4)return {fs:36.5,h1:38.5,sub:27.5,lh:1.28};
+  if(weight<=5)return {fs:35.5,h1:37.5,sub:26.5,lh:1.26};
+  if(weight<=6)return {fs:34.5,h1:36.5,sub:25.5,lh:1.24};
+  if(weight<=8)return {fs:33.5,h1:35.5,sub:24.5,lh:1.22};
+  return        {fs:32.5,h1:34.5,sub:23.5,lh:1.2};
 }
 
 // ─── สร้างเอกสาร ───
@@ -1159,7 +1853,7 @@ function generateContract(){
   const dp=fmtDateParts(getTDPVal('contract_date'));
   const lender=gv('lender_dir');
   const borrowers=readPersons('b');
-  const guarantors=gc('has_guarantor')?readPersons('g'):[];
+  const guarantors=readPersons('g');
   const collaterals=readCollaterals();
   const amtRaw=gv('amount').replace(/,/g,'');
   const amount=amtRaw?Number(amtRaw).toLocaleString('en-US'):'..........';
@@ -1171,13 +1865,13 @@ function generateContract(){
 
   // ปรับฟอนต์ตามจำนวน
   const totalPeople=borrowers.length+guarantors.length;
-  const sz=calcDocSizes(totalPeople);
+  const sz=calcDocSizes(totalPeople,collaterals.length);
   const docEl=document.getElementById('doc-preview');
   docEl.style.setProperty('--doc-fs',sz.fs+'pt');
   docEl.style.setProperty('--doc-h1',sz.h1+'pt');
   docEl.style.setProperty('--doc-sub',sz.sub+'pt');
   docEl.style.setProperty('--doc-lh',sz.lh);
-  docEl.style.setProperty('--fp-top',sz.fp);
+  // fp-top no longer needed (fixed 5mm)
 
   let html='';
   html+='<div class="fp-boxes">';
@@ -1188,7 +1882,7 @@ function generateContract(){
   html+=`<div class="doc-meta"><p>ทำที่ ${place}</p><p>วันที่ ${dp.d} เดือน ${dp.m} พ.ศ. ${dp.y}</p></div>`;
 
   const bText=fmtPersonList(borrowers);
-  html+=`<div class="doc-start">ข้าพเจ้า ${bText} ได้ทำหนังสือสัญญากู้เงินให้ไว้แก่ บริษัท โชคชัย เงินด่วน จำกัด โดย ${lender} กรรมการผู้มีอำนาจ มีข้อสัญญาดังต่อไปนี้</div>`;
+  html+=`<div class="doc-start">ข้าพเจ้า ${bText} ได้ทำหนังสือสัญญากู้เงินให้ไว้แก่ ${lender} ในฐานะผู้ให้กู้ มีข้อสัญญาดังต่อไปนี้</div>`;
 
   if(guarantors.length>0){
     const gText=fmtPersonList(guarantors);
@@ -1232,7 +1926,7 @@ function generateContract(){
     const fn=`${g.title||''} ${g.name||''}`.trim();
     leftCol+=sigCell(fn,'ผู้ค้ำประกัน');
   });
-  rightCol+=sigCell(lender,'ผู้ให้กู้','กรรมการผู้มีอำนาจ');
+  rightCol+=sigCell(lender,'ผู้ให้กู้','');
   rightCol+=sigCell(w1,'พยาน');
   rightCol+=sigCell(w2,'พยาน');
   html+=`<div class="doc-sigs"><div class="sig-col">${leftCol}</div><div class="sig-col">${rightCol}</div></div>`;
@@ -1241,6 +1935,7 @@ function generateContract(){
   document.getElementById('sec-form').classList.remove('active');
   document.getElementById('sec-preview').classList.add('active');
   window.scrollTo(0,0);
+  setTimeout(fitContentToA4,50);
 }
 
 function backToForm(){

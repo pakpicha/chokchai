@@ -74,6 +74,14 @@ body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;
   .doc-page:last-child{page-break-after:auto}
 }
 @page{size:A4;margin:0}
+/* ── ADDENDUM: 0.5cm paper margin + scalable font ── */
+@media print{
+  .doc.addendum{padding:0.5cm!important;font-size:calc(13pt * var(--afs,1))!important;line-height:1.5!important}
+  .afs-bar{display:none!important}
+}
+.afs-bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:10px 12px;background:#f0f0eb;border-bottom:1px solid #ddd}
+.afs-bar button{background:#fff;border:1px solid #bbb;border-radius:8px;padding:8px 14px;font-size:15px;font-family:inherit;font-weight:700;color:#1a3a2a;cursor:pointer}
+.afs-bar .afs-lbl{font-size:13px;color:#555}
 
 /* ── COMBOBOX (searchable + freetext) ── */
 .combo-wrap{position:relative;width:100%}
@@ -364,6 +372,24 @@ function goBack(){if(history.length>1){history.back();}else{location.href='index
 function showPrintTip(){document.getElementById('print-modal').classList.add('show');try{window.print();}catch(e){}}
 function closePrintTip(){document.getElementById('print-modal').classList.remove('show');}
 function showMortForm(){document.getElementById('mort-form').style.display='block';document.getElementById('mort-preview').style.display='none';window.scrollTo(0,0);}
+
+// ── ADDENDUM FONT SIZE (เพิ่ม/ลดฟอนต์) ──
+function afsGet(){var v=parseFloat(localStorage.getItem('mort_afs'));return (v&&v>0)?v:1;}
+function afsApply(v){
+  var doc=document.getElementById('addendum-doc');
+  if(doc)doc.style.setProperty('--afs',''+v);
+  var lbl=document.getElementById('afs-val');
+  if(lbl)lbl.textContent=Math.round(v*100)+'%';
+  try{localStorage.setItem('mort_afs',''+v);}catch(e){}
+}
+function afsStep(delta){
+  var v=afsGet()+delta;
+  if(v<0.6)v=0.6;
+  if(v>1.8)v=1.8;
+  v=Math.round(v*100)/100;
+  afsApply(v);
+}
+function afsReset(){afsApply(1);}
 
 // ── THAI BAHT ──
 function toBaht(v){
@@ -732,17 +758,22 @@ function buildVoucher(d,payRows){
 function buildAddendum(d){
   var lb=d.landBranch||'......';
   var lbSub=d.landBranchSub?(' สาขา '+d.landBranchSub):'';
-  return'<div class="doc doc-page" style="font-size:13pt;line-height:1.5;padding:1cm">'
-    +'<p style="text-align:center;font-weight:bold;text-decoration:underline;font-size:15pt;margin-bottom:6pt">ข้อตกลงต่อท้ายหนังสือสัญญาจำนอง</p>'
+  return'<div class="afs-bar"><span class="afs-lbl">ขนาดตัวอักษร</span>'
+    +'<button type="button" onclick="afsStep(-0.1)">A&minus;</button>'
+    +'<span id="afs-val" class="afs-lbl">100%</span>'
+    +'<button type="button" onclick="afsStep(0.1)">A+</button>'
+    +'<button type="button" onclick="afsReset()">รีเซ็ต</button></div>'
+    +'<div id="addendum-doc" class="doc doc-page addendum" style="font-size:calc(13pt * var(--afs,1));line-height:1.5;padding:0.5cm">'
+    +'<p style="text-align:center;font-weight:bold;text-decoration:underline;font-size:1.15em;margin-bottom:6pt">ข้อตกลงต่อท้ายหนังสือสัญญาจำนอง</p>'
     +'<p style="text-align:center;margin-bottom:4pt">89/28 หมู่ 9 ต.ท่าเยี่ยม อ.โชคชัย จ.นครราชสีมา</p>'
-    +'<p style="text-align:center;font-weight:bold;margin-bottom:10pt;font-size:15pt">'+thaiDate(d.docDate)+'</p>'
+    +'<p style="text-align:center;font-weight:bold;margin-bottom:10pt;font-size:1.15em">'+thaiDate(d.docDate)+'</p>'
     +(function(){
     var mn=d.mortgagors&&d.mortgagors.length?d.mortgagors:[{name:d.custName}];
     var names=mn.map(function(m){return m.name;}).join(' และ ');
     return '<p style="text-align:center;margin-bottom:4pt">ระหว่าง &nbsp;&nbsp; '+names+' &nbsp;&nbsp; ผู้จำนอง</p>';
   })()
     +'<p style="text-align:center;margin-bottom:4pt">กับ &nbsp;&nbsp; บริษัท โชคชัย เงินด่วน จำกัด &nbsp;&nbsp; ผู้รับจำนอง</p>'
-    +'<p style="text-align:center;font-size:13pt;color:#333;margin-bottom:4pt">( สัญญาจำนองลงวันที่ '+thaiDate(d.contractDate)+' )</p>'
+    +'<p style="text-align:center;font-size:1em;color:#333;margin-bottom:4pt">( สัญญาจำนองลงวันที่ '+thaiDate(d.contractDate)+' )</p>'
     +'<p style="text-align:center;margin-bottom:14pt">ทำ ณ สำนักงานที่ดิน &nbsp; จังหวัด '+lb+lbSub+'</p>'
     +'<p style="margin-bottom:6pt;padding-left:1.5cm;text-indent:-1.5cm;text-align:justify"><strong>ข้อ 1.</strong> ผู้จำนองเป็นเจ้าของทรัพย์สินซึ่งจำนองเป็นประกันการชำระหนี้เงินกู้ทั้งหลายซึ่ง ผู้จำนอง เป็นหนี้ผู้รับจำนองอยู่เป็นจำนวนเงิน '+d.amtFmt+' บาท ('+d.amtT+') ตลอดจนประกันการชำระหนี้อุปกรณ์แห่งหนี้คือดอกเบี้ยค่าสินไหมทดแทนในการไม่ชำระหนี้ และค่าฤชาธรรมเนียมในการบังคับจำนองด้วย</p>'
     +'<p style="margin-bottom:6pt;padding-left:1.5cm;text-indent:-1.5cm;text-align:justify"><strong>ข้อ 2.</strong> เมื่อผู้รับจำนองบังคับจำนอง เอาทรัพย์สินจำนองรายนี้ออกขายทอดตลาดได้เงินจำนวนสุทธิน้อยกว่าจำนวนเงินที่ค้างชำระ และค่าอุปกรณ์หรือเอาทรัพย์สินที่หลุดจำนองเป็นสิทธิ เงินยังขาดจำนวนอยู่เท่าใด ผู้จำนองและหรือลูกหนี้ของผู้รับจำนองยอมรับใช้เงินที่ขาดจำนวนนั้นให้แก่ผู้รับจำนองจนครบ</p>'
@@ -819,6 +850,7 @@ function genMortgage(){
   window._mortDocs=docs;
   document.getElementById('mort-form').style.display='none';
   document.getElementById('mort-preview').style.display='block';
+  afsApply(afsGet());
   window.scrollTo(0,0);
 }
 function showDoc(key,docs){

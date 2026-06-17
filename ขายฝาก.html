@@ -437,6 +437,9 @@ function _voucherLogoBig(){
     <div class="fg"><label>เลขที่โฉนด/เอกสารสิทธิ์ (ถ้าหลายแปลง คั่นด้วยลูกน้ำ)</label>
       <input type="text" id="sb_title_no" placeholder="เช่น 1234 หรือ 1234, 5678">
     </div>
+    <div class="fg"><label>เลขที่ดิน</label>
+      <input type="text" id="sb_land_no" placeholder="เช่น 2043">
+    </div>
     <div class="fg"><label>หน้าสำรวจ</label>
       <input type="text" id="sb_survey_no" placeholder="เช่น 329">
     </div>
@@ -1002,7 +1005,7 @@ function launchTD16(){
     // ที่ดิน
     rawang:         gv('sb_rawang'),
     chanote:        gv('sb_title_no'),
-    land_no:        gv('sb_title_no'),
+    land_no:        gv('sb_land_no'),
     survey:         gv('sb_survey_no'),
     province_land:  document.getElementById('sb_province') ? document.getElementById('sb_province').value : '',
     amphoe_land:    document.getElementById('sb_amphoe') ? document.getElementById('sb_amphoe').value : '',
@@ -1029,7 +1032,7 @@ function launchTD16(){
   try {
     var _d={};
     ['sb_date','sb_bill_seq','sb_office_branch','sb_meeting_no','sb_chanote_count',
-     'sb_doc_type','sb_title_no','sb_survey_no','sb_area','sb_rawang',
+     'sb_doc_type','sb_title_no','sb_land_no','sb_survey_no','sb_area','sb_rawang',
      'sb_province','sb_amphoe','sb_tambon','sb_period',
      'sb_price','sb_price_t','sb_redeem','sb_redeem_t'].forEach(function(k){
       var e=document.getElementById(k); if(e) _d[k]=e.value;

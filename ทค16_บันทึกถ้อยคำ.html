@@ -52,6 +52,8 @@
   .nb{white-space:nowrap;}
   .clz{display:inline-block;width:2.9em;margin-left:1.4cm;text-align:left;white-space:nowrap;}
   .line.cl{text-align:left;text-indent:0;}
+  .line.cl.fill{text-align:justify;text-align-last:justify;}
+  .line.cl.just{text-align:justify;}
   .line.flex2{display:flex;flex-wrap:wrap;align-items:baseline;column-gap:.22em;row-gap:1px;text-indent:0;}
   .line.flex2 .clz{margin-left:1.4cm;}
   .line.flex2 .lbl{white-space:nowrap;flex:0 0 auto;}
@@ -149,6 +151,7 @@
       <div class="fg"><label>โฉนดที่ดินเลขที่</label><input id="i_deedno" oninput="R()" placeholder="210401"></div>
       <div class="fg"><label>จังหวัด</label><input id="i_hprovince" oninput="R()" placeholder="นครราชสีมา"></div>
       <div class="fg full"><label>สำนักงานที่ดินจังหวัด</label><input id="i_office" oninput="R()" value="นครราชสีมา"></div>
+      <div class="fg full"><label>สาขา (ถ้ามี)</label><input id="i_branch" oninput="R()" value=""></div>
     </div>
     <div class="grid c3">
       <div class="fg"><label>วันที่</label><input id="i_dd" oninput="R()" placeholder="8"></div>
@@ -256,7 +259,7 @@
         <div class="hdr"><span class="hl"><span class="lbl">เลขที่ดิน</span><span class="f" id="f_landno"></span><span class="lbl">หน้าสำรวจ</span><span class="f" id="f_survey"></span></span><span class="hr"><span class="lbl">อำเภอ</span><span class="f" id="f_hamphoe"></span></span></div>
         <div class="hdr"><span class="hl"><span class="lbl">โฉนดที่ดินเลขที่</span><span class="f" id="f_deedno"></span></span><span class="hr"><span class="lbl">จังหวัด</span><span class="f" id="f_hprovince"></span></span></div>
         <div class="line row rt"><span class="lbl">สำนักงานที่ดินจังหวัด</span><span class="f w-md" id="f_office"></span></div>
-        <div class="line row"><span class="lbl">วันที่</span><span class="f w-sm" id="f_dd"></span><span class="lbl">เดือน</span><span class="f w-md" id="f_mm"></span><span class="lbl">พ.ศ.</span><span class="f w-sm" id="f_yyyy"></span></div>
+        <div class="line row rt"><span class="lbl">วันที่</span><span class="f w-sm" id="f_dd"></span><span class="lbl">เดือน</span><span class="f w-md" id="f_mm"></span><span class="lbl">พ.ศ.</span><span class="f w-sm" id="f_yyyy"></span></div>
 
         <div class="line row indent"><span class="lbl">ข้าพเจ้า</span><span class="f w-xl" id="f_declarant"></span><span class="nb"><span class="lbl">อายุ</span><span class="f w-xs" id="f_age"></span><span class="lbl">ปี</span></span><span class="lbl">เชื้อชาติ</span><span class="f w-sm gr" id="f_race"></span></div>
         <div class="line row"><span class="lbl">สัญชาติ</span><span class="f w-sm gr" id="f_nat"></span><span class="lbl">เป็นบุตร</span><span class="f w-md gr" id="f_child"></span><span class="lbl">อยู่ที่บ้าน</span><span class="f w-sm" id="f_house"></span><span class="lbl">เลขที่</span><span class="f w-sm" id="f_addrno"></span><span class="lbl">หมู่</span><span class="f w-xs" id="f_moo"></span></div>
@@ -272,8 +275,11 @@
         <div class="line indent cl"><span class="clz"><b>ข้อ 1.</b></span>บริษัทมีชื่อตามที่ได้จดทะเบียนไว้ในหอทะเบียนหุ้นส่วนบริษัทกลาง <span class="nb">กรมทะเบียนการค้า</span> <span class="nb">กระทรวงพาณิชย์</span> <span class="nb">&ldquo;บริษัท<span class="f w-xl" id="f_coname"></span>&rdquo;</span> <span class="nb">มีสัญชาติ<span class="f w-lg" id="f_conat"></span></span></div>
         <div class="line indent cl"><span class="clz"><b>ข้อ 2.</b></span>ขณะนี้สำนักงานใหญ่ของบริษัทตั้งอยู่<span class="nb">เลขที่<span class="f w-sm" id="f_co_addrno"></span></span><span class="nb">หมู่<span class="f w-xs" id="f_co_moo"></span></span> <span class="nb">ตำบล<span class="f w-md" id="f_co_tambon"></span></span><span class="nb">อำเภอ<span class="f w-md" id="f_co_amphoe"></span></span><span class="nb">จังหวัด<span class="f w-md" id="f_co_province"></span></span></div>
         <div class="line indent cl"><span class="clz"><b>ข้อ 3.</b></span>บริษัทมีวัตถุประสงค์ตามที่ระบุไว้ในหนังสือบริคณห์สนธิ และโดยเฉพาะวัตถุประสงค์เกี่ยวกับการทำนิติกรรมเกี่ยวกับที่ดิน <span class="nb">ได้ระบุไว้ในหนังสือบริคณห์สนธิ ข้อที่<span class="f w-xl" id="f_objclause"></span></span></div>
-        <div class="line indent cl"><span class="clz"><b>ข้อ 4.</b></span>บริษัทมีทุนตามที่ได้จดทะเบียนไว้แล้ว<span class="nb">เป็นเงิน<span class="f w-md" id="f_capital"></span>บาท</span> <span class="nb">(<span class="f w-xl" id="f_capitaltext"></span>)</span> <span class="nb">แบ่งออกเป็นหุ้นรวม<span class="f w-sm" id="f_shares"></span>หุ้น</span> <span class="nb">มีมูลค่าหุ้นละ<span class="f w-sm" id="f_par"></span>บาท</span> <span class="nb">(<span class="f w-lg" id="f_partext"></span>)</span> <span class="nb">บริษัทได้ออกใบหุ้นชนิด<span class="f w-md" id="f_sharetype"></span></span>ให้แก่ผู้ถือหุ้น</div>
-        <div class="line indent cl"><span class="clz"><b>ข้อ 5.</b></span>ผู้ถือหุ้นทั้งหมดเป็นบุคคลธรรมดา<span class="nb">รวม<span class="f w-xs" id="f_natp"></span>คน</span> <span class="nb">เป็นนิติบุคคล<span class="f w-xs" id="f_jur"></span>คน</span> ผู้ถือหุ้นเป็นบุคคลธรรมดาเป็นคนสัญชาติไทย <span class="nb">รวม<span class="f w-xs" id="f_thaip"></span>คน</span> <span class="nb">ถือหุ้นรวม<span class="f w-sm" id="f_thaish"></span>หุ้น</span> <span class="nb">เป็นบุคคลต่างด้าว<span class="f w-xs" id="f_frp"></span>คน</span> <span class="nb">ผู้ถือหุ้นรวม<span class="f w-sm" id="f_frsh"></span>หุ้น</span> <span class="nb">เป็นนิติบุคคลสัญชาติไทยถือหุ้นรวม<span class="f w-sm" id="f_thjsh"></span>หุ้น</span> <span class="nb">เป็นนิติบุคคลต่างด้าวถือหุ้นรวม<span class="f w-sm" id="f_frjsh"></span>หุ้น</span></div>
+        <div class="line row"><span class="clz"><b>ข้อ 4.</b></span><span class="nb">บริษัทมีทุนตามที่ได้จดทะเบียนไว้แล้ว</span><span class="lbl">เป็นเงิน</span><span class="f gr" id="f_capital"></span><span class="lbl">บาท</span></div>
+        <div class="line row"><span class="lbl">(</span><span class="f gr" id="f_capitaltext"></span><span class="lbl">)</span><span class="lbl">แบ่งออกเป็นหุ้นรวม</span><span class="f gr" id="f_shares"></span><span class="lbl">หุ้น</span></div>
+        <div class="line row"><span class="lbl">มีมูลค่าหุ้นละ</span><span class="f gr" id="f_par"></span><span class="lbl">บาท</span><span class="lbl">(</span><span class="f gr" id="f_partext"></span><span class="lbl">)</span></div>
+        <div class="line row"><span class="lbl">บริษัทได้ออกใบหุ้นชนิด</span><span class="f gr" id="f_sharetype"></span><span class="lbl">ให้แก่ผู้ถือหุ้น</span></div>
+        <div class="line indent cl just"><span class="clz"><b>ข้อ 5.</b></span>ผู้ถือหุ้นทั้งหมดเป็นบุคคลธรรมดา<span class="nb">รวม<span class="f w-xs" id="f_natp"></span>คน</span> <span class="nb">เป็นนิติบุคคล<span class="f w-xs" id="f_jur"></span>คน</span> ผู้ถือหุ้นเป็นบุคคลธรรมดาเป็นคนสัญชาติไทย <span class="nb">รวม<span class="f w-xs" id="f_thaip"></span>คน</span> <span class="nb">ถือหุ้นรวม<span class="f w-sm" id="f_thaish"></span>หุ้น</span> <span class="nb">เป็นบุคคลต่างด้าว<span class="f w-xs" id="f_frp"></span>คน</span> <span class="nb">ผู้ถือหุ้นรวม<span class="f w-sm" id="f_frsh"></span>หุ้น</span> <span class="nb">เป็นนิติบุคคลสัญชาติไทยถือหุ้นรวม<span class="f w-sm" id="f_thjsh"></span>หุ้น</span> <span class="nb">เป็นนิติบุคคลต่างด้าวถือหุ้นรวม<span class="f w-sm" id="f_frjsh"></span>หุ้น</span></div>
       </div>
 
       <div class="sheet" id="page2">
@@ -407,11 +413,12 @@ function fillDirSelects(){
 }
 
 /* ---------- render onto dotted lines ---------- */
+function officeFull(){var o=val('i_office');var br=val('i_branch');return o+(br?' สาขา '+br:'');}
 function R(){
   setF('f_landid',val('i_landid'));setF('f_htambon',val('i_htambon'));
   setF('f_landno',val('i_landno'));setF('f_survey',val('i_survey'));setF('f_hamphoe',val('i_hamphoe'));
   setF('f_deedno',val('i_deedno'));setF('f_hprovince',val('i_hprovince'));
-  setF('f_office',val('i_office'));
+  setF('f_office',officeFull());
   setF('f_dd',val('i_dd'));setF('f_mm',val('i_mm'));setF('f_yyyy',val('i_yyyy'));
 
   var coname=val('i_coname');
@@ -426,7 +433,7 @@ function R(){
   setF('f_addrno',val('i_addrno'));setF('f_moo',val('i_moo'));
   setF('f_soi',val('i_soi'));setF('f_road',val('i_road'));
   setF('f_dtambon',val('i_dtambon'));setF('f_damphoe',val('i_damphoe'));setF('f_dprovince',val('i_dprovince'));
-  setF('f_officer',val('i_office'));
+  setF('f_officer',officeFull());
 
   setF('f_txncompany',coname);
   setF('f_action',val('i_action'));
@@ -495,7 +502,7 @@ function fitAll(){
 
 /* ---------- persistence of form ---------- */
 var ST_KEY='tordor16_state_v1';
-var INPUT_IDS=['i_landid','i_htambon','i_landno','i_survey','i_hamphoe','i_deedno','i_hprovince','i_office','i_dd','i_mm','i_yyyy','i_declarant','i_age','i_race','i_nat','i_child','i_addrno','i_moo','i_soi','i_road','i_dtambon','i_damphoe','i_dprovince','i_action','i_deedcount','i_seller','i_price','i_coname','i_conat','i_objclause','i_co_addrno','i_co_moo','i_co_tambon','i_co_amphoe','i_co_province','i_capital','i_shares','i_par','i_sharetype','i_natp','i_jur','i_thaip','i_thaish','i_frp','i_frsh','i_thjsh','i_frjsh','i_dircount','i_objclause2','i_dir1','i_dir2','i_dir3','i_dir4','i_sign2','i_sign3','i_purpose6','i_mtgno','i_thpct','i_thcnt','i_frpct','i_frcnt'];
+var INPUT_IDS=['i_landid','i_htambon','i_landno','i_survey','i_hamphoe','i_deedno','i_hprovince','i_office','i_branch','i_dd','i_mm','i_yyyy','i_declarant','i_age','i_race','i_nat','i_child','i_addrno','i_moo','i_soi','i_road','i_dtambon','i_damphoe','i_dprovince','i_action','i_deedcount','i_seller','i_price','i_coname','i_conat','i_objclause','i_co_addrno','i_co_moo','i_co_tambon','i_co_amphoe','i_co_province','i_capital','i_shares','i_par','i_sharetype','i_natp','i_jur','i_thaip','i_thaish','i_frp','i_frsh','i_thjsh','i_frjsh','i_dircount','i_objclause2','i_dir1','i_dir2','i_dir3','i_dir4','i_sign2','i_sign3','i_purpose6','i_mtgno','i_thpct','i_thcnt','i_frpct','i_frcnt'];
 function saveState(){
   var o={};var i;
   for(i=0;i<INPUT_IDS.length;i++){o[INPUT_IDS[i]]=val(INPUT_IDS[i]);}
@@ -604,7 +611,7 @@ function importFromKhaifak(){
   S('i_hamphoe',d.amphoe_land);
   S('i_deedno',d.chanote);
   S('i_hprovince',d.province_land);
-  S('i_office',d.office_province);
+  S('i_office',d.office_province);S('i_branch',d.office_branch);
   S('i_dd',d.date);S('i_mm',d.month);S('i_yyyy',d.year);
   S('i_age',d.age);
   S('i_race',d.nation);S('i_nat',d.nation);

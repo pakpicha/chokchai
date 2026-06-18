@@ -512,6 +512,32 @@ function fld(i,id,lb,fw,ph=''){return`<div class="${fw?'fw':''}""><label>${lb}</
 function ta(i,id,lb,fw,ph=''){return`<div class="${fw?'fw':''}""><label>${lb}</label><textarea id="ag${i}_${id}" placeholder="${ph}"></textarea></div>`}
 const DIRS=['นาย ชุณนเกียรติ จรัสบวรพันธ์','นาง ชญาน์นัทช์ จรัสบวรพันธ์','นาย กันตพัฒน์ จรัสบวรพันธ์','นางสาว ภัคฐ์พิชา จรัสบวรพันธ์'];
 
+// ── บล็อกมอบอำนาจ (ท.ด.21) ใช้ในวาระเกี่ยวกับที่ดิน ──
+function pwBlock(i){
+  var opts=DIRS.map(function(d){return '<option value="'+d+'">'+d+'</option>';}).join('');
+  return '<div class="fw" style="margin-top:8px">'
+    +'<label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:600;font-size:14px">'
+    +'<input type="checkbox" id="ag'+i+'_pwen" onchange="togglePw('+i+')" style="width:18px;height:18px;accent-color:#1a6a1a"> มีการมอบอำนาจ (ท.ด.21)</label>'
+    +'<div id="ag'+i+'_pwwrap" style="display:none;margin-top:8px;padding:10px 12px;background:#f5faf5;border:1px solid #cce0cc;border-radius:8px">'
+      +'<div class="fw" style="margin-bottom:8px"><label>กรรมการผู้มอบอำนาจ</label>'
+      +'<select id="ag'+i+'_pwgr" style="width:100%;padding:9px 10px;border:1px solid #ccc;border-radius:7px;font-family:inherit;font-size:14px;background:#fff">'+opts+'</select></div>'
+      +'<div class="fw"><label>ผู้รับมอบอำนาจ</label>'
+      +'<input type="text" id="ag'+i+'_pwte" placeholder="ชื่อ-นามสกุลผู้รับมอบอำนาจ"></div>'
+    +'</div></div>';
+}
+function togglePw(i){
+  var cb=document.getElementById('ag'+i+'_pwen');
+  var w=document.getElementById('ag'+i+'_pwwrap');
+  if(w)w.style.display=(cb&&cb.checked)?'':'none';
+}
+function pwRes(i,action){
+  var cb=document.getElementById('ag'+i+'_pwen');
+  if(!cb||!cb.checked)return null;
+  var gr=gv('ag'+i+'_pwgr')||'..........';
+  var te=gv('ag'+i+'_pwte')||'..........';
+  return gr+' ได้ทำหนังสือมอบอำนาจ (ท.ด.21) ให้กับ '+te+' ไปกระทำการ'+action+' ที่ดินแปลงดังกล่าวแทน';
+}
+
 
 function agFields(i,t){
   if(t==='mortgage'){
@@ -526,22 +552,27 @@ function agFields(i,t){
       ${ta(i,'bld','สิ่งปลูกสร้าง (ถ้ามี ข้ามได้)',true,'')}
       ${amtPair(i,'amt','วงเงิน')}
       ${fld(i,'rate','ดอกเบี้ย % ต่อปี',false,'เช่น 15')}
+      ${pwBlock(i)}
     </div>`;
   }
   if(t==='sellback')return`<div class="af-grid">
     ${fld(i,'cust','ชื่อ-นามสกุลลูกค้า (ผู้ขายฝาก)',true,'')}${fld(i,'period','กำหนด',false,'เช่น 1 ปี')}
     ${colBlock(i,'s_')}${ta(i,'bld','สิ่งปลูกสร้าง (ถ้ามี)',true,'')}
     ${amtPair(i,'amt','วงเงิน')}${amtPair(i,'rdm','ราคาสินไถ่')}
+    ${pwBlock(i)}
   </div>`;
   if(t==='extend')return`<div class="af-grid">
     ${fld(i,'cust','ชื่อ-นามสกุลลูกค้า',true,'')}${fld(i,'extno','ครั้งที่ขยาย',false,'เช่น 1')}${fld(i,'period','ขยายอีก',false,'เช่น 1 ปี')}
     ${colBlock(i,'e_')}${dateFld(i,'origdt','วันที่สัญญาเดิม',true)}
+    ${pwBlock(i)}
   </div>`;
   if(t==='rdm_mortgage')return`<div class="af-grid">
     ${fld(i,'cust','ชื่อ-นามสกุลลูกค้า',true,'')}${colBlock(i,'rm_')}${dateFld(i,'origdt','วันที่สัญญาจำนองเดิม',true)}
+    ${pwBlock(i)}
   </div>`;
   if(t==='rdm_sellback')return`<div class="af-grid">
     ${fld(i,'cust','ชื่อ-นามสกุลลูกค้า',true,'')}${colBlock(i,'rs_')}${dateFld(i,'origdt','วันที่สัญญาขายฝากเดิม',true)}
+    ${pwBlock(i)}
   </div>`;
   if(t==='dirloan'){
     // checkbox ให้เลือกหลายคน + จำนวนเงินแยกต่อคน
@@ -632,6 +663,7 @@ function buildAgContent(i){
     res.push(`จดทะเบียนรับจำนอง${docShort} เป็นเงิน ${m.num} บาท (${m.txt}) ตกลงดอกเบี้ยร้อยละ ${gfm(i,'rate')} ต่อปี ชำระดอกเบี้ยเดือนละครั้งเสมอไป`);
     res.push('ให้ถือสัญญาจำนองเป็นหลักฐานแห่งการกู้ยืมเงิน');
     res.push('ให้เงื่อนไขและข้อตกลงอื่นๆ ให้เป็นไปตามข้อตกลงต่อท้ายสัญญาจำนอง และให้ถือข้อตกลงต่อท้ายสัญญาจำนองเป็นส่วนหนึ่งของสัญญาจำนองด้วย');
+    var _pw=pwRes(i,'รับจำนอง');if(_pw)res.push(_pw);
   }else if(t==='sellback'){
     const bld=gv('ag'+i+'_bld');const m=moneyAg(i,'amt');const r=moneyAg(i,'rdm');const sc=getCol(i,'s_');const aw=sc.type==='ห้องชุด'?'ห้องชุด':'ที่ดิน';
     const bldSfx=bld?` พร้อมสิ่งปลูกสร้าง ${bld}`:""; 
@@ -642,21 +674,25 @@ function buildAgContent(i){
     const sbBldTxt=bld?` พร้อม${bld}`:'';
     body=`ประธานได้กล่าวแถลงต่อที่ประชุมว่า การที่เชิญประชุมครั้งนี้ก็เพื่อให้ที่ประชุมพิจารณาเรื่องอนุมัติรับซื้อฝาก${aw} มีกำหนด ${gfm(i,'period')} ให้แก่ ${gfm(i,'cust')} ในวงเงิน ${m.num} บาท (${m.txt}) กำหนดสินไถ่ในราคา ${r.num} บาท (${r.txt}) โดยรับซื้อฝาก${sc.long}${sbBldTxt} กับ ${gfm(i,'cust')}`;
     res.push(`ขอจดทะเบียนรับซื้อฝาก${sc.short} มีกำหนด ${gfm(i,'period')} กับ ${gfm(i,'cust')} จำนวนวงเงิน ${m.num} บาท (${m.txt}) กำหนดสินไถ่ในราคา ${r.num} บาท (${r.txt})`);
+    var _pw=pwRes(i,'รับซื้อฝาก');if(_pw)res.push(_pw);
   }else if(t==='extend'){
     const ec=getCol(i,'e_');const aw=ec.type==='ห้องชุด'?'ห้องชุด':'ที่ดิน';
     title=`พิจารณาเรื่องอนุมัติขยายระยะเวลาไถ่จากขายฝาก${aw}`;
     body=`ประธานได้กล่าวแถลงต่อที่ประชุมว่า การที่เชิญประชุมครั้งนี้ก็เพื่อให้ที่ประชุมพิจารณาเรื่องอนุมัติขยายระยะเวลาไถ่จากขายฝาก${aw}ครั้งที่ ${gfm(i,'extno')} ให้แก่ ${gfm(i,'cust')} กำหนดเพิ่มอีก ${gfm(i,'period')} ตามหนังสือสัญญาขายฝาก${aw} ฉบับลงวันที่ ${_tdpFmt(gv('ag'+i+'_origdt'))||'..........'} โดยขยายระยะเวลาไถ่จากขายฝาก${ec.long} ให้กับ ${gfm(i,'cust')}`;
     res.push(`ขอจดทะเบียนขยายระยะเวลาไถ่จากการขายฝาก${aw}ครั้งที่ ${gfm(i,'extno')} มีกำหนด ${gfm(i,'period')} ให้แก่ ${gfm(i,'cust')}`);
+    var _pw=pwRes(i,'ขยายระยะเวลาไถ่');if(_pw)res.push(_pw);
   }else if(t==='rdm_mortgage'){
     const rc=getCol(i,'rm_');const aw=rc.type==='ห้องชุด'?'ห้องชุด':'ที่ดิน';
     title=`พิจารณาเรื่องอนุมัติการไถ่ถอนจำนอง${aw}`;
     body=`ประธานได้กล่าวแถลงต่อที่ประชุมว่า การที่เชิญประชุมครั้งนี้ก็เพื่อให้ที่ประชุมพิจารณาเรื่องอนุมัติการไถ่ถอนจำนองให้แก่ ${gfm(i,'cust')} ตามสัญญาจำนอง${aw} ฉบับลงวันที่ ${_tdpFmt(gv('ag'+i+'_origdt'))||'..........'} เนื่องจากได้รับชำระหนี้เต็มจำนวนแล้ว โดยให้ไถ่ถอนจำนอง${rc.long} ของ ${gfm(i,'cust')} ได้`;
     res.push('ให้รับชำระเงินตามจำนวนหนี้ดังกล่าวและยินยอมให้ไถ่ถอนจำนองได้');
+    var _pw=pwRes(i,'ไถ่ถอนจำนอง');if(_pw)res.push(_pw);
   }else if(t==='rdm_sellback'){
     const rc=getCol(i,'rs_');const aw=rc.type==='ห้องชุด'?'ห้องชุด':'ที่ดิน';
     title=`พิจารณาเรื่องอนุมัติการไถ่ถอนขายฝาก${aw}`;
     body=`ประธานได้กล่าวแถลงต่อที่ประชุมว่า การที่เชิญประชุมครั้งนี้ก็เพื่อให้ที่ประชุมพิจารณาเรื่องอนุมัติการไถ่ถอนขายฝากให้แก่ ${gfm(i,'cust')} ตามสัญญาขายฝาก${aw} ฉบับลงวันที่ ${_tdpFmt(gv('ag'+i+'_origdt'))||'..........'} เนื่องจากได้รับชำระหนี้เต็มจำนวนแล้ว โดยให้ไถ่ถอนขายฝาก${rc.long} ของ ${gfm(i,'cust')} ได้`;
     res.push('ให้รับชำระเงินตามจำนวนสินไถ่และยินยอมให้ไถ่ถอนขายฝากได้');
+    var _pw=pwRes(i,'ไถ่ถอนขายฝาก');if(_pw)res.push(_pw);
   }else if(t==='dirloan'){
     const pur=gv('ag'+i+'_pur')||'การดำเนินการใช้จ่ายอื่นๆ ในบริษัท';
     const rate=gfm(i,'rate');

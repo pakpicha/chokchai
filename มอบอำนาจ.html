@@ -825,12 +825,12 @@ function genDoc(){
   var dd=gv('d_day'),dm=gv('d_month'),dy=gv('d_year');
   h+='<div class="dr" style="justify-content:flex-end;margin-left:8cm;margin-top:3pt"><span>วันที่</span>'+dot(dd,1)+'<span>เดือน</span>'+dot(dm,2)+'<span>พุทธศักราช</span>'+dot(dy,2)+'</div>';
 
-  // ผู้มอบ (บริษัท) — ไม่มีอายุ/เชื้อชาติ/สัญชาติ/บิดา/มารดา/ตรอกซอย/ถนน/โทรศัพท์ → ใส่ขีด -
+  // ผู้มอบ (บริษัท) — ไม่มีอายุ/เชื้อชาติ/บิดา/มารดา/ตรอกซอย/ถนน → ใส่ขีด - (สัญชาติ=ไทย, โทรศัพท์=เบอร์กรรมการที่เซ็น)
   h+='<div style="display:flex;align-items:flex-end;gap:6pt;line-height:1.5;margin-top:2pt"><span style="flex-shrink:0;white-space:nowrap">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;โดยหนังสือฉบับนี้ข้าพเจ้า บริษัท โชคชัย เงินด่วน จำกัด โดย</span><span class="dot" style="flex:1;text-align:center">'+esc(grantor)+'</span></div>';
   h+='<div class="dr"><span>เลขประจำตัวผู้เสียภาษีอากร</span>'+idBoxes(gv('grantor_id')||'0305568001941')+'<span>อายุ</span>'+dot('-',1)+'<span>ปี เชื้อชาติ</span>'+dot('-',2)+'</div>';
-  h+='<div class="dr"><span>สัญชาติ</span>'+dot('-',3)+'<span>บิดาชื่อ</span>'+dot('-',3)+'<span>มารดาชื่อ</span>'+dot('-',3)+'</div>';
+  h+='<div class="dr"><span>สัญชาติ</span>'+dot('ไทย',3)+'<span>บิดาชื่อ</span>'+dot('-',3)+'<span>มารดาชื่อ</span>'+dot('-',3)+'</div>';
   h+='<div class="dr"><span>บ้านเลขที่</span>'+dot('89/28',2)+'<span>หมู่ที่</span>'+dot('9',1)+'<span>ตรอก/ซอย</span>'+dot('-',2)+'<span>ถนน</span>'+dot('-',2)+'</div>';
-  h+='<div class="dr"><span>ตำบล</span>'+dot('ท่าเยี่ยม',3)+'<span>อำเภอ</span>'+dot('โชคชัย',3)+'<span>จังหวัด</span>'+dot('นครราชสีมา',5)+'<span>โทรศัพท์</span>'+dot('-',4)+'</div>';
+  h+='<div class="dr"><span>ตำบล</span>'+dot('ท่าเยี่ยม',3)+'<span>อำเภอ</span>'+dot('โชคชัย',3)+'<span>จังหวัด</span>'+dot('นครราชสีมา',5)+'<span>โทรศัพท์</span>'+dot(DIR_TEL[grantor]||'-',4)+'</div>';
 
   // ผู้รับมอบ — ใช้ช่องแยกที่กรอกในฟอร์ม (fallback ไป parseAddr ของ textarea ถ้าว่าง)
   var gNo=gv('grantee_no')||ga.no, gMoo=gv('grantee_moo')||ga.moo;

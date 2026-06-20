@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>คำนวณยอดชำระ — แชมป์ลิสซิ่ง</title>
+<style>
+:root{
+  --primary:#0f5132;--primary-soft:#d4e1d6;--accent:#8b4513;
+  --line:#e0e0e0;--field-bg:#fff;--field-border:#c8c8c8;
+  --ink:#222;--bg:#f5f7f5;--muted:#777;--danger:#c0392b;
+  --warn:#a86600;--info:#1e6091;
+}
+*{box-sizing:border-box}
+body{font-family:"Sarabun","TH Sarabun New",Arial,sans-serif;background:var(--bg);margin:0;padding:14px;color:var(--ink);font-size:15px}
+.container{max-width:900px;margin:0 auto}
+.back-home{display:inline-block;color:var(--primary);text-decoration:none;font-weight:500;margin-bottom:8px;font-size:14px}
+.back-home:hover{text-decoration:underline}
+h1{color:var(--primary);font-size:24px;margin:6px 0 14px;text-align:center}
+.tabs{display:flex;gap:8px;margin-bottom:14px}
+.tabs button{flex:1;padding:12px;border:1.5px solid var(--line);background:#fff;cursor:pointer;font-size:16px;font-weight:600;border-radius:8px;color:var(--ink);font-family:inherit;transition:all .15s}
+.tabs button.active{background:var(--primary);color:#fff;border-color:var(--primary);box-shadow:0 2px 8px rgba(15,46,33,.2)}
+.panel{display:none;background:#fff;padding:16px;border-radius:10px;border:1px solid var(--line);box-shadow:0 1px 6px rgba(0,0,0,.04)}
+.panel.active{display:block}
+.card{padding:12px 14px;border:1px solid var(--line);border-radius:8px;margin-bottom:12px;background:#fafafa}
+.card h3{margin:0 0 10px;color:var(--primary);font-size:16px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--primary-soft);padding-bottom:6px}
+.card h3 .n{background:var(--primary);color:#fff;width:24px;height:24px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.fg{flex:1;min-width:140px;display:flex;flex-direction:column}
+.fg label{display:block;font-size:13px;margin-bottom:3px;color:var(--ink);font-weight:500}
+.fg input,.fg select{width:100%;padding:8px 10px;border:1px solid var(--field-border);border-radius:6px;font-size:14px;background:var(--field-bg);font-family:inherit}
+.fg input:focus,.fg select:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 2px rgba(15,46,33,.1)}
+.hint{font-size:12px;color:var(--muted);margin-top:5px;font-style:italic}
+.result-box{background:linear-gradient(135deg,#fff,#fafdfa);border:2px solid var(--primary-soft);border-radius:8px;padding:12px;margin-top:10px}
+.result-row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px dashed #ddd;font-size:14px}
+.result-row:last-child{border-bottom:none}
+.result-row .label{color:var(--ink)}
+.result-row .val{font-weight:600;color:var(--primary);font-size:15px}
+.result-row.highlight{background:var(--primary-soft);margin:5px -8px;padding:7px 8px;border-radius:5px;border:none}
+.result-row.highlight .val{color:var(--primary);font-size:17px;font-weight:700}
+.result-row.warn .val{color:var(--warn)}
+.result-row.muted .val{color:var(--muted);font-weight:500}
+.result-section-title{font-weight:600;color:var(--accent);margin:10px 0 4px;font-size:14px}
+.btn{padding:10px 16px;border-radius:6px;border:1.5px solid var(--line);background:#fff;cursor:pointer;font-size:14px;font-weight:600;font-family:inherit}
+.btn.primary{background:var(--primary);color:#fff;border-color:var(--primary)}
+.btn.primary:hover{background:#0a3a23}
+.btn.danger{color:var(--danger);border-color:#fcc}
+.btn.danger:hover{background:var(--danger);color:#fff}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.no-data{text-align:center;color:var(--muted);font-style:italic;padding:18px}
+.summary-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-top:8px}
+.summary-grid .item{background:#fff;padding:9px 11px;border-radius:6px;border:1px solid var(--line)}
+.summary-grid .item .lbl{font-size:11px;color:var(--muted);font-weight:500;text-transform:uppercase}
+.summary-grid .item .val{font-size:18px;color:var(--primary);font-weight:700;margin-top:3px}
+.summary-grid .item.danger .val{color:var(--danger)}
+.summary-grid .item.warn .val{color:var(--warn)}
+.summary-grid .item.info .val{color:var(--info)}
+.note-box{background:#fff8e1;border-left:3px solid var(--warn);padding:8px 12px;border-radius:4px;font-size:13px;margin-top:8px;color:#7a4d00}
+@media print{
+  .actions,.tabs,.back-home,.no-print{display:none!important}
+  body{background:#fff;padding:0}
+  .panel{box-shadow:none;border:none;padding:0}
+  .panel:not(.active){display:none}
+}
+</style>
+</head>
+<body>
+<div class="container">
+<a href="index.html" class="back-home">← กลับหน้าหลัก</a>
+<h1>🧮 คำนวณยอดชำระ — แชมป์ลิสซิ่ง</h1>
+
+<div class="tabs">
+  <button id="tabBtn1" class="active" onclick="setTab(1)">ต้นลดดอกลด</button>
+  <button id="tabBtn2" onclick="setTab(2)">งวด</button>
+</div>
+
+<!-- ═════════ PANEL 1: ต้นลดดอกลด ═════════ -->
+<div id="panel1" class="panel active">
+
+  <div class="card">
+    <h3><span class="n">1</span>การตั้งค่าอัตรา</h3>
+    <div class="row">
+      <div class="fg"><label>อัตราดอกเบี้ย</label>
+        <select id="m1_rateSel" onchange="onRateSelChange(1)">
+          <option value="1.25|month">1.25% ต่อเดือน</option>
+          <option value="15|year">15% ต่อปี</option>
+          <option value="4|year">4% ต่อปี</option>
+          <option value="custom">กำหนดเอง...</option>
+        </select>
+      </div>
+      <div class="fg" id="m1_rateCustomWrap" style="display:none;max-width:200px">
+        <label>กำหนดเอง</label>
+        <div style="display:flex;gap:5px">
+          <input type="number" id="m1_rateCustom" value="1.25" step="0.01" style="flex:1">
+          <select id="m1_rateCustomPeriod" style="flex:0 0 90px">
+            <option value="month">ต่อเดือน</option>
+            <option value="year">ต่อปี</option>
+          </select>
+        </div>
+      </div>
+      <div class="fg"><label>อัตราค่าปรับ</label>
+        <select id="m1_lateSel" onchange="onLateSelChange(1)">
+          <option value="1.25">1.25% ต่อเดือน</option>
+          <option value="3">3% ต่อเดือน</option>
+          <option value="0">ไม่ปรับ (กรณีพิเศษ)</option>
+          <option value="custom">กำหนดเอง...</option>
+        </select>
+      </div>
+      <div class="fg" id="m1_lateCustomWrap" style="display:none;max-width:140px">
+        <label>กำหนดเอง (%)</label>
+        <input type="number" id="m1_lateCustom" value="1.25" step="0.01">
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="n">2</span>สถานะปัจจุบัน</h3>
+    <div class="row">
+      <div class="fg" style="max-width:200px"><label>วันที่คำนวณล่าสุด <span style="color:var(--muted);font-weight:400">(หรือวันกู้ถ้าครั้งแรก)</span></label><input type="date" id="m1_lastDate"></div>
+      <div class="fg" style="max-width:160px"><label>เงินต้นคงเหลือ</label><input type="text" id="m1_principal" placeholder="0"></div>
+    </div>
+    <div class="row" style="margin-top:8px">
+      <div class="fg" style="max-width:160px"><label>ดอกเบี้ยค้าง</label><input type="text" id="m1_carryInt" placeholder="0" value="0"></div>
+      <div class="fg" style="max-width:160px"><label>ค่าปรับค้าง</label><input type="text" id="m1_carryLate" placeholder="0" value="0"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="n">3</span>คำนวณการชำระ</h3>
+    <div class="row">
+      <div class="fg" style="max-width:200px"><label>วันที่ชำระ</label><input type="date" id="m1_payDate"></div>
+      <div class="fg" style="max-width:200px"><label>จำนวนเงินที่ชำระ</label><input type="text" id="m1_payAmt" placeholder="0"></div>
+    </div>
+    <div id="m1_result"></div>
+    <div class="actions">
+      <button class="btn primary" onclick="confirmPayment(1)">✓ ยืนยันการชำระ — อัปเดตสถานะ</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="n">4</span>💰 คำนวณยอดปิดบัญชี</h3>
+    <div class="row">
+      <div class="fg" style="max-width:200px"><label>วันที่ต้องการปิดบัญชี</label><input type="date" id="m1_closeDate"></div>
+    </div>
+    <div id="m1_closeResult"></div>
+  </div>
+
+  <div class="actions">
+    <button class="btn" onclick="window.print()">🖨️ พิมพ์ / PDF</button>
+    <button class="btn danger" onclick="resetMode(1)">🔄 ล้างทั้งหมด</button>
+  </div>
+</div>
+
+<!-- ═════════ PANEL 2: งวด ═════════ -->
+<div id="panel2" class="panel">
+
+  <div class="card">
+    <h3><span class="n">1</span>การตั้งค่าอัตรา</h3>
+    <div class="row">
+      <div class="fg"><label>อัตราค่าปรับ</label>
+        <select id="m2_lateSel" onchange="onLateSelChange(2)">
+          <option value="1.25">1.25% ต่อเดือน</option>
+          <option value="3">3% ต่อเดือน</option>
+          <option value="0">ไม่ปรับ (กรณีพิเศษ)</option>
+          <option value="custom">กำหนดเอง...</option>
+        </select>
+      </div>
+      <div class="fg" id="m2_lateCustomWrap" style="display:none;max-width:140px">
+        <label>กำหนดเอง (%)</label>
+        <input type="number" id="m2_lateCustom" value="1.25" step="0.01">
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="n">2</span>เงื่อนไขสัญญา</h3>
+    <div class="row">
+      <div class="fg" style="max-width:170px"><label>ยอดต่องวด (ปกติ)</label><input type="text" id="m2_perIns" placeholder="9,000"></div>
+      <div class="fg" style="max-width:160px"><label>ครบกำหนดทุกวันที่</label><input type="number" id="m2_dueDay" placeholder="5" min="1" max="31" value="5"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="n">3</span>งวดที่กำลังชำระ</h3>
+    <div class="row">
+      <div class="fg" style="max-width:100px"><label>งวดที่</label><input type="number" id="m2_insNo" placeholder="1" min="1" value="1"></div>
+      <div class="fg" style="max-width:140px"><label>ปี (พ.ศ.)</label>
+        <select id="m2_year"></select>
+      </div>
+      <div class="fg" style="max-width:140px"><label>เดือน</label>
+        <select id="m2_month">
+          <option value="1">มกราคม</option>
+          <option value="2">กุมภาพันธ์</option>
+          <option value="3">มีนาคม</option>
+          <option value="4">เมษายน</option>
+          <option value="5">พฤษภาคม</option>
+          <option value="6">มิถุนายน</option>
+          <option value="7">กรกฎาคม</option>
+          <option value="8">สิงหาคม</option>
+          <option value="9">กันยายน</option>
+          <option value="10">ตุลาคม</option>
+          <option value="11">พฤศจิกายน</option>
+          <option value="12">ธันวาคม</option>
+        </select>
+      </div>
+    </div>
+    <div class="hint" id="m2_dueDateDisplay" style="font-weight:600;color:var(--primary);margin-top:6px">วันครบกำหนดงวดนี้: -</div>
+    <div class="row" style="margin-top:10px">
+      <div class="fg" style="max-width:200px"><label>ยอดที่ยังต้องชำระงวดนี้</label><input type="text" id="m2_amtDue" placeholder="ยอดต่องวด"></div>
+      <div class="fg" style="max-width:200px"><label>ค่าปรับค้างจากงวดก่อน</label><input type="text" id="m2_carryLate" placeholder="0" value="0"></div>
+      <div class="fg" style="max-width:200px"><label>วันที่ลูกค้าจ่ายล่าสุด <span style="color:var(--muted);font-weight:400">(ถ้าเคยจ่าย)</span></label><input type="date" id="m2_lastPaidDate"></div>
+    </div>
+    <div class="hint">ถ้าเคยจ่ายงวดนี้บางส่วนแล้ว ใส่ "ยอดที่ยังต้องชำระ" — จ่ายข้ามงวดได้ในรอบเดียว (cascade)</div>
+  </div>
+
+  <div class="card">
+    <h3><span class="n">4</span>คำนวณการชำระ</h3>
+    <div class="row">
+      <div class="fg" style="max-width:200px"><label>วันที่ชำระ</label><input type="date" id="m2_payDate"></div>
+      <div class="fg" style="max-width:200px"><label>จำนวนเงินที่ชำระ</label><input type="text" id="m2_payAmt" placeholder="0"></div>
+    </div>
+    <div id="m2_result"></div>
+    <div class="actions">
+      <button class="btn primary" onclick="confirmPayment(2)">✓ ยืนยันการชำระ — อัปเดตสถานะ</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="n">5</span>💰 คำนวณยอดปิดบัญชี</h3>
+    <div class="row">
+      <div class="fg" style="max-width:160px"><label>งวดที่ยังเหลือ (ไม่รวมงวดนี้)</label><input type="number" id="m2_remIns" placeholder="0" min="0"></div>
+      <div class="fg" style="max-width:200px"><label>วันที่ต้องการปิดบัญชี</label><input type="date" id="m2_closeDate"></div>
+    </div>
+    <div id="m2_closeResult"></div>
+    <div class="hint">ยอดปิดบัญชี = (งวดที่ยังต้องชำระงวดนี้) + (งวดที่เหลือ × ยอดต่องวด) + ค่าปรับงวดนี้ + ค่าปรับค้าง</div>
+  </div>
+
+  <div class="actions">
+    <button class="btn" onclick="window.print()">🖨️ พิมพ์ / PDF</button>
+    <button class="btn danger" onclick="resetMode(2)">🔄 ล้างทั้งหมด</button>
+  </div>
+</div>
+
+</div>
+
+<script>
+// ═══════════ Helpers ═══════════
+function r(n){return Math.round(n||0)}
+function fmt(n){return r(n).toLocaleString('en-US')}
+function parseAmt(s){return parseFloat(String(s||'').replace(/,/g,''))||0}
+function daysBetween(d1,d2){
+  if(!d1||!d2)return 0;
+  const a=new Date(d1),b=new Date(d2);
+  return Math.round((b-a)/86400000);
+}
+function gv(id){return (document.getElementById(id)||{}).value||''}
+function sv(id,v){const e=document.getElementById(id);if(e)e.value=v}
+function todayISO(){return new Date().toISOString().slice(0,10)}
+
+// ═══════════ Rate helpers ═══════════
+function getRate(mode){
+  const sel=gv('m'+mode+'_rateSel');
+  if(sel==='custom'){
+    return {rate:parseFloat(gv('m'+mode+'_rateCustom'))||0, period:gv('m'+mode+'_rateCustomPeriod')||'month'};
+  }
+  const parts=sel.split('|');
+  return {rate:parseFloat(parts[0])||0, period:parts[1]||'month'};
+}
+function getLate(mode){
+  const sel=gv('m'+mode+'_lateSel');
+  if(sel==='custom')return parseFloat(gv('m'+mode+'_lateCustom'))||0;
+  return parseFloat(sel)||0;
+}
+function onRateSelChange(mode){
+  const wrap=document.getElementById('m'+mode+'_rateCustomWrap');
+  if(wrap)wrap.style.display=gv('m'+mode+'_rateSel')==='custom'?'flex':'none';
+  rerender(mode);
+}
+function onLateSelChange(mode){
+  const wrap=document.getElementById('m'+mode+'_lateCustomWrap');
+  if(wrap)wrap.style.display=gv('m'+mode+'_lateSel')==='custom'?'flex':'none';
+  rerender(mode);
+}
+
+
+// ═══════════ Mode 2 due date helper ═══════════
+function getDueDateISO(){
+  const day=parseInt(gv('m2_dueDay'))||5;
+  const year=parseInt(gv('m2_year'));
+  const month=parseInt(gv('m2_month'));
+  if(!year||!month)return '';
+  const ceYear=year-543;
+  const lastDay=new Date(ceYear,month,0).getDate();
+  const actualDay=Math.min(day,lastDay);
+  return ceYear+'-'+String(month).padStart(2,'0')+'-'+String(actualDay).padStart(2,'0');
+}
+function updateDueDateDisplay(){
+  const iso=getDueDateISO();
+  const el=document.getElementById('m2_dueDateDisplay');
+  if(!el)return;
+  if(!iso){el.textContent='วันครบกำหนดงวดนี้: -';return;}
+  const p=iso.split('-');
+  el.textContent='📅 วันครบกำหนดงวดนี้: '+parseInt(p[2])+'/'+parseInt(p[1])+'/'+(parseInt(p[0])+543);
+}
+function initYearDropdown(){
+  const sel=document.getElementById('m2_year');
+  if(!sel||sel.options.length>0)return;
+  const currentBE=new Date().getFullYear()+543;
+  for(let y=currentBE-3;y<=currentBE+15;y++){
+    const opt=document.createElement('option');
+    opt.value=y;opt.textContent=y;
+    if(y===currentBE)opt.selected=true;
+    sel.appendChild(opt);
+  }
+  // default month = current month
+  const sm=document.getElementById('m2_month');
+  if(sm&&!sm.value)sm.value=String(new Date().getMonth()+1);
+}
+
+// ═══════════ Mode 1 calc ═══════════
+function calcMode1(payDate,payAmt){
+  const principal=parseAmt(gv('m1_principal'));
+  const carryInt=parseAmt(gv('m1_carryInt'));
+  const carryLate=parseAmt(gv('m1_carryLate'));
+  const lastDate=gv('m1_lastDate');
+  const {rate,period}=getRate(1);
+  const lateRate=getLate(1);
+  
+  if(!payDate||!lastDate||principal<=0){
+    return null;
+  }
+  
+  const days=daysBetween(lastDate,payDate);
+  
+  let intNew=0;
+  if(days>0&&rate>0){
+    if(period==='month')intNew=principal*(rate/100)/30*days;
+    else intNew=principal*(rate/100)/365*days;
+  }
+  
+  let lateNew=0;
+  if(days>35&&lateRate>0&&intNew>0){
+    lateNew=intNew*(lateRate/100)/30*(days-30);
+  }
+  
+  const totalInt=carryInt+intNew;
+  const totalLate=carryLate+lateNew;
+  
+  // จัดสรรเงินที่จ่าย
+  let rem=payAmt||0;
+  const intPaid=Math.min(rem,totalInt);rem-=intPaid;
+  const latePaid=Math.min(rem,totalLate);rem-=latePaid;
+  const prinPaid=Math.min(rem,principal);rem-=prinPaid;
+  
+  return {
+    days,intNew,lateNew,totalInt,totalLate,
+    intPaid,latePaid,prinPaid,excess:rem,
+    newPrincipal:principal-prinPaid,
+    newCarryInt:totalInt-intPaid,
+    newCarryLate:totalLate-latePaid
+  };
+}
+
+function render1(){
+  // คำนวณการชำระ
+  const payDate=gv('m1_payDate');
+  const payAmt=parseAmt(gv('m1_payAmt'));
+  const res=calcMode1(payDate,payAmt);
+  const resBox=document.getElementById('m1_result');
+  
+  if(!res){
+    resBox.innerHTML='<div class="no-data">กรอกข้อมูลให้ครบ → วันที่ล่าสุด, เงินต้น, วันที่ชำระ</div>';
+  }else{
+    const {rate,period}=getRate(1);
+    const lateRate=getLate(1);
+    resBox.innerHTML=`
+    <div class="result-box">
+      <div class="result-section-title">📐 การคำนวณ</div>
+      <div class="result-row"><span class="label">จำนวนวันที่ผ่านไป</span><span class="val">${res.days} วัน</span></div>
+      <div class="result-row"><span class="label">ดอกเบี้ยงวดนี้ (${rate}% ${period==='month'?'/เดือน':'/ปี'})</span><span class="val">${fmt(res.intNew)} บาท</span></div>
+      <div class="result-row${res.lateNew>0?' warn':''}"><span class="label">ค่าปรับงวดนี้ ${res.days<=35?'(ไม่เกิน 35 วัน — ไม่ปรับ)':'('+lateRate+'% × '+(res.days-30)+' วัน)'}</span><span class="val">${fmt(res.lateNew)} บาท</span></div>
+      
+      <div class="result-section-title">💵 การจัดสรรเงินที่จ่าย ${fmt(payAmt)} บาท</div>
+      <div class="result-row"><span class="label">ตัดดอกเบี้ย (รวมค้างเก่า ${fmt(parseAmt(gv('m1_carryInt')))})</span><span class="val">${fmt(res.intPaid)} / ${fmt(res.totalInt)}</span></div>
+      <div class="result-row"><span class="label">ตัดค่าปรับ (รวมค้างเก่า ${fmt(parseAmt(gv('m1_carryLate')))})</span><span class="val">${fmt(res.latePaid)} / ${fmt(res.totalLate)}</span></div>
+      <div class="result-row highlight"><span class="label">ตัดเงินต้น</span><span class="val">${fmt(res.prinPaid)} บาท</span></div>
+      ${res.excess>0?'<div class="result-row muted"><span class="label">เงินที่จ่ายเกิน</span><span class="val">'+fmt(res.excess)+' บาท</span></div>':''}
+      
+      <div class="result-section-title">📊 สถานะใหม่หลังชำระ</div>
+      <div class="summary-grid">
+        <div class="item"><div class="lbl">เงินต้นคงเหลือ</div><div class="val">${fmt(res.newPrincipal)}</div></div>
+        <div class="item warn"><div class="lbl">ดอกเบี้ยค้าง</div><div class="val">${fmt(res.newCarryInt)}</div></div>
+        <div class="item warn"><div class="lbl">ค่าปรับค้าง</div><div class="val">${fmt(res.newCarryLate)}</div></div>
+      </div>
+    </div>`;
+  }
+  
+  // คำนวณยอดปิดบัญชี
+  const closeDate=gv('m1_closeDate');
+  const closeBox=document.getElementById('m1_closeResult');
+  if(!closeDate||!gv('m1_lastDate')||!gv('m1_principal')){
+    closeBox.innerHTML='<div class="no-data">กรอกวันที่ปิดบัญชีและสถานะปัจจุบันให้ครบ</div>';
+  }else{
+    const principal=parseAmt(gv('m1_principal'));
+    const carryInt=parseAmt(gv('m1_carryInt'));
+    const carryLate=parseAmt(gv('m1_carryLate'));
+    const lastDate=gv('m1_lastDate');
+    const {rate,period}=getRate(1);
+    const lateRate=getLate(1);
+    const days=daysBetween(lastDate,closeDate);
+    
+    let intNew=0;
+    if(days>0&&rate>0){
+      if(period==='month')intNew=principal*(rate/100)/30*days;
+      else intNew=principal*(rate/100)/365*days;
+    }
+    let lateNew=0;
+    if(days>35&&lateRate>0&&intNew>0){
+      lateNew=intNew*(lateRate/100)/30*(days-30);
+    }
+    const total=principal+carryInt+carryLate+intNew+lateNew;
+    
+    closeBox.innerHTML=`
+    <div class="result-box">
+      <div class="result-row"><span class="label">จำนวนวันจาก ${gv('m1_lastDate')} ถึง ${closeDate}</span><span class="val">${days} วัน</span></div>
+      <div class="result-row"><span class="label">เงินต้นคงเหลือ</span><span class="val">${fmt(principal)}</span></div>
+      <div class="result-row"><span class="label">ดอกเบี้ยถึงวันปิด (รวมค้าง)</span><span class="val">${fmt(carryInt+intNew)}</span></div>
+      <div class="result-row"><span class="label">ค่าปรับถึงวันปิด (รวมค้าง)</span><span class="val">${fmt(carryLate+lateNew)}</span></div>
+      <div class="result-row highlight"><span class="label">💰 รวมยอดต้องจ่ายเพื่อปิดบัญชี</span><span class="val">${fmt(total)} บาท</span></div>
+    </div>`;
+  }
+  saveState();
+}
+
+// ═══════════ Mode 2 calc ═══════════
+function calcMode2(payDate,payAmt){
+  const perIns=parseAmt(gv('m2_perIns'));
+  const amtDue=parseAmt(gv('m2_amtDue'));
+  const carryLate=parseAmt(gv('m2_carryLate'));
+  const lateRate=getLate(2);
+  const prevPaid=gv('m2_lastPaidDate');
+  
+  if(!payDate||perIns<=0||amtDue<=0)return null;
+  
+  const T=payDate;
+  let money=payAmt||0;
+  const cascade=[];
+  let prevPaymentDate=prevPaid||null;
+  
+  let curIns={
+    insNo:parseInt(gv('m2_insNo'))||1,
+    year:parseInt(gv('m2_year')),
+    month:parseInt(gv('m2_month')),
+    dueDate:getDueDateISO(),
+    amount:perIns,
+    outstanding:amtDue,
+    carryFee:carryLate
+  };
+  
+  let safety=36;
+  while(money>0&&safety-->0){
+    const isCarry=curIns.outstanding<curIns.amount;
+    let fee=0,days=0,catchUpEnd=null;
+    
+    if(isCarry){
+      catchUpEnd=T;
+      const base=prevPaymentDate||curIns.dueDate;
+      days=Math.max(0,daysBetween(base,T));
+      if(days>5&&lateRate>0)fee=curIns.outstanding*(lateRate/100)/30*days;
+    }else{
+      catchUpEnd=prevPaymentDate||T;
+      days=Math.max(0,daysBetween(curIns.dueDate,catchUpEnd));
+      if(days>5&&lateRate>0)fee=curIns.outstanding*(lateRate/100)/30*days;
+    }
+    
+    const totalFee=fee+curIns.carryFee;
+    const totalNeeded=totalFee+curIns.outstanding;
+    
+    if(money>=totalNeeded){
+      cascade.push({
+        insNo:curIns.insNo,year:curIns.year,month:curIns.month,
+        dueDate:curIns.dueDate,calcEnd:catchUpEnd,
+        days:days,fee:totalFee,
+        insPaid:curIns.outstanding,outstandingAfter:0,
+        newCarryFee:0,type:isCarry?'carry-cleared':'catchup-cleared'
+      });
+      money-=totalNeeded;
+      curIns.carryFee=0;
+      
+      let nextMonth=curIns.month+1, nextYear=curIns.year;
+      if(nextMonth>12){nextMonth=1;nextYear++;}
+      const ceY=nextYear-543;
+      const dueDay=parseInt(gv('m2_dueDay'))||5;
+      const lastDay=new Date(ceY,nextMonth,0).getDate();
+      const actualDay=Math.min(dueDay,lastDay);
+      const nextDueISO=ceY+'-'+String(nextMonth).padStart(2,'0')+'-'+String(actualDay).padStart(2,'0');
+      curIns={
+        insNo:curIns.insNo+1,year:nextYear,month:nextMonth,
+        dueDate:nextDueISO,amount:perIns,outstanding:perIns,carryFee:0
+      };
+    }else{
+      if(!isCarry&&prevPaymentDate){
+        const newDays=Math.max(0,daysBetween(curIns.dueDate,T));
+        const newFee=(newDays>5&&lateRate>0)?curIns.outstanding*(lateRate/100)/30*newDays:0;
+        fee=newFee;
+        days=newDays;
+        catchUpEnd=T;
+      }
+      const finalTotalFee=fee+curIns.carryFee;
+      const feePaid=Math.min(money,finalTotalFee);
+      money-=feePaid;
+      const newCarryFee=finalTotalFee-feePaid;
+      const insPaid=Math.min(money,curIns.outstanding);
+      money-=insPaid;
+      curIns.outstanding-=insPaid;
+      curIns.carryFee=newCarryFee;
+      
+      cascade.push({
+        insNo:curIns.insNo,year:curIns.year,month:curIns.month,
+        dueDate:curIns.dueDate,calcEnd:catchUpEnd,
+        days:days,fee:finalTotalFee,
+        feePaid:feePaid,insPaid:insPaid,
+        outstandingAfter:curIns.outstanding,
+        newCarryFee:newCarryFee,type:isCarry?'carry-partial':'current-partial'
+      });
+      break;
+    }
+  }
+  
+  const finalState={
+    insNo:curIns.insNo,year:curIns.year,month:curIns.month,
+    amtDue:curIns.outstanding,carryLate:curIns.carryFee,lastPaidDate:T
+  };
+  
+  return {cascade,excess:money,finalState};
+}
+
+function render2(){
+  updateDueDateDisplay();
+  const payDate=gv('m2_payDate');
+  const payAmt=parseAmt(gv('m2_payAmt'));
+  const res=calcMode2(payDate,payAmt);
+  const resBox=document.getElementById('m2_result');
+  
+  if(!res){
+    resBox.innerHTML='<div class="no-data">กรอกข้อมูลให้ครบ → ยอดต่องวด, ปี/เดือน, ยอดที่ยังต้องชำระ, วันที่ชำระ</div>';
+  }else{
+    const tLabels={
+      'carry-cleared':'จ่ายครบ (carry)',
+      'carry-partial':'ค้างต่อ (carry)',
+      'catchup-cleared':'จ่ายครบ (catch-up)',
+      'current-partial':'ปัจจุบัน (ค้าง)'
+    };
+    let html='<div class="result-box">';
+    html+='<div class="result-section-title">📐 รายละเอียดการชำระ (cascade)</div>';
+    html+='<div style="overflow-x:auto;-webkit-overflow-scrolling:touch"><table style="width:100%;border-collapse:collapse;font-size:13px;margin:6px 0"><thead><tr style="background:var(--primary-soft)">';
+    html+='<th style="padding:6px;border:1px solid var(--line);text-align:center">งวด</th>';
+    html+='<th style="padding:6px;border:1px solid var(--line);text-align:center">ครบกำหนด</th>';
+    html+='<th style="padding:6px;border:1px solid var(--line);text-align:center">คำนวณถึง</th>';
+    html+='<th style="padding:6px;border:1px solid var(--line);text-align:center">วัน</th>';
+    html+='<th style="padding:6px;border:1px solid var(--line);text-align:right">ค่าปรับ</th>';
+    html+='<th style="padding:6px;border:1px solid var(--line);text-align:right">ตัดงวด</th>';
+    html+='<th style="padding:6px;border:1px solid var(--line);text-align:right">คงค้างหลัง</th>';
+    html+='<th style="padding:6px;border:1px solid var(--line);text-align:center">สถานะ</th>';
+    html+='</tr></thead><tbody>';
+    if(res.cascade.length===0){
+      html+='<tr><td colspan="8" class="empty-row">เงินไม่พอจ่ายค่าปรับ</td></tr>';
+    }else{
+      res.cascade.forEach(function(row){
+        const typeLabel=tLabels[row.type]||row.type;
+        html+='<tr>';
+        html+='<td style="padding:6px;border:1px solid var(--line);text-align:center">'+row.insNo+'</td>';
+        html+='<td style="padding:6px;border:1px solid var(--line);text-align:center">'+fmtDateBE(row.dueDate)+'</td>';
+        html+='<td style="padding:6px;border:1px solid var(--line);text-align:center;color:var(--muted);font-size:12px">'+fmtDateBE(row.calcEnd)+'</td>';
+        html+='<td style="padding:6px;border:1px solid var(--line);text-align:center">'+row.days+'</td>';
+        html+='<td style="padding:6px;border:1px solid var(--line);text-align:right">'+fmt(row.fee)+'</td>';
+        html+='<td style="padding:6px;border:1px solid var(--line);text-align:right;font-weight:600">'+fmt(row.insPaid)+'</td>';
+        html+='<td style="padding:6px;border:1px solid var(--line);text-align:right">'+fmt(row.outstandingAfter)+'</td>';
+        html+='<td style="padding:6px;border:1px solid var(--line);text-align:center;font-size:11px">'+typeLabel+'</td>';
+        html+='</tr>';
+      });
+    }
+    html+='</tbody></table></div>';
+    
+    let totalFee=0,totalIns=0;
+    res.cascade.forEach(function(b){
+      totalFee+=(b.feePaid!==undefined?b.feePaid:b.fee);
+      totalIns+=(b.insPaid||0);
+    });
+    html+='<div class="result-section-title">💵 สรุปการจัดสรรเงิน '+fmt(payAmt)+' บาท</div>';
+    html+='<div class="result-row"><span class="label">รวมตัดค่าปรับ</span><span class="val">'+fmt(totalFee)+'</span></div>';
+    html+='<div class="result-row"><span class="label">รวมตัดงวด</span><span class="val">'+fmt(totalIns)+'</span></div>';
+    if(res.excess>0){
+      html+='<div class="result-row muted"><span class="label">เงินเหลือ</span><span class="val">'+fmt(res.excess)+'</span></div>';
+    }
+    
+    const ns=res.finalState;
+    const months=['','ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+    html+='<div class="result-section-title">📊 สถานะใหม่หลังกด "ยืนยัน"</div>';
+    html+='<div class="summary-grid">';
+    html+='<div class="item"><div class="lbl">งวดที่</div><div class="val">'+ns.insNo+'</div></div>';
+    html+='<div class="item info"><div class="lbl">ครบกำหนด</div><div class="val" style="font-size:14px">'+months[ns.month]+' '+ns.year+'</div></div>';
+    html+='<div class="item '+(ns.amtDue>0?'warn':'')+'"><div class="lbl">งวดนี้คงค้าง</div><div class="val">'+fmt(ns.amtDue)+'</div></div>';
+    html+='<div class="item warn"><div class="lbl">ค่าปรับค้าง</div><div class="val">'+fmt(ns.carryLate)+'</div></div>';
+    html+='</div></div>';
+    resBox.innerHTML=html;
+  }
+  
+  // คำนวณยอดปิดบัญชี
+  const remIns=parseInt(gv('m2_remIns'))||0;
+  const perIns=parseAmt(gv('m2_perIns'));
+  const closeDate=gv('m2_closeDate');
+  const closeBox=document.getElementById('m2_closeResult');
+  
+  const amtDue=parseAmt(gv('m2_amtDue'));
+  const carryLate=parseAmt(gv('m2_carryLate'));
+  const dueDate=getDueDateISO();
+  
+  if(!closeDate||(!remIns&&amtDue<=0)){
+    closeBox.innerHTML='<div class="no-data">กรอกจำนวนงวดที่เหลือ + วันที่ปิดบัญชี</div>';
+  }else{
+    const lateRate=getLate(2);
+    let lateCurrent=0;
+    if(dueDate&&amtDue>0){
+      const daysLate=daysBetween(dueDate,closeDate);
+      if(daysLate>5&&lateRate>0)lateCurrent=amtDue*(lateRate/100)/30*daysLate;
+    }
+    const remTotal=remIns*perIns;
+    const grand=amtDue+remTotal+lateCurrent+carryLate;
+    closeBox.innerHTML='<div class="result-box">'
+      +'<div class="result-row"><span class="label">งวดปัจจุบันที่ค้าง</span><span class="val">'+fmt(amtDue)+'</span></div>'
+      +'<div class="result-row"><span class="label">งวดที่เหลือ '+remIns+' งวด × '+fmt(perIns)+'</span><span class="val">'+fmt(remTotal)+'</span></div>'
+      +'<div class="result-row"><span class="label">ค่าปรับงวดปัจจุบันถึงวันปิด</span><span class="val">'+fmt(lateCurrent)+'</span></div>'
+      +'<div class="result-row"><span class="label">ค่าปรับค้างเก่า</span><span class="val">'+fmt(carryLate)+'</span></div>'
+      +'<div class="result-row highlight"><span class="label">💰 รวมยอดต้องจ่ายเพื่อปิดบัญชี</span><span class="val">'+fmt(grand)+' บาท</span></div>'
+      +'</div>';
+  }
+  saveState();
+}
+
+// ═══════════ Confirm payment ═══════════
+function confirmPayment(mode){
+  if(mode===1){
+    const payDate=gv('m1_payDate');
+    const payAmt=parseAmt(gv('m1_payAmt'));
+    const res=calcMode1(payDate,payAmt);
+    if(!res){alert('กรอกข้อมูลให้ครบก่อน');return;}
+    if(!confirm('ยืนยันอัปเดตสถานะใหม่?\n- เงินต้น: '+fmt(res.newPrincipal)+'\n- ดอกค้าง: '+fmt(res.newCarryInt)+'\n- ปรับค้าง: '+fmt(res.newCarryLate)+'\n- วันที่ล่าสุด: '+payDate))return;
+    sv('m1_lastDate',payDate);
+    sv('m1_principal',fmt(res.newPrincipal));
+    sv('m1_carryInt',fmt(res.newCarryInt));
+    sv('m1_carryLate',fmt(res.newCarryLate));
+    sv('m1_payAmt','');
+    sv('m1_payDate','');
+    render1();
+    }else{
+    const payDate=gv('m2_payDate');
+    const payAmt=parseAmt(gv('m2_payAmt'));
+    const res=calcMode2(payDate,payAmt);
+    if(!res){alert('กรอกข้อมูลให้ครบก่อน');return;}
+    const ns=res.finalState;
+    const cnt=res.cascade.length;
+    const months=['','ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+    const msg='ยืนยันอัปเดต?\n- ผ่านการชำระ '+cnt+' งวด\n- งวดใหม่: งวดที่ '+ns.insNo+' ('+months[ns.month]+' '+ns.year+')\n- ยอดงวดนี้คงค้าง: '+fmt(ns.amtDue)+'\n- ค่าปรับค้าง: '+fmt(ns.carryLate);
+    if(!confirm(msg))return;
+    sv('m2_insNo',String(ns.insNo));
+    sv('m2_year',String(ns.year));
+    sv('m2_month',String(ns.month));
+    sv('m2_amtDue',ns.amtDue?fmt(ns.amtDue):'');
+    sv('m2_carryLate',fmt(ns.carryLate));
+    sv('m2_lastPaidDate',ns.lastPaidDate);
+    sv('m2_payAmt','');
+    sv('m2_payDate','');
+    render2();
+  }
+}
+
+// ═══════════ Reset ═══════════
+function resetMode(mode){
+  if(!confirm('ยืนยันล้างข้อมูลทั้งหมด?'))return;
+  if(mode===1){
+    ['m1_lastDate','m1_principal','m1_payDate','m1_payAmt','m1_closeDate'].forEach(id=>sv(id,''));
+    sv('m1_carryInt','0');sv('m1_carryLate','0');
+    sv('m1_rateSel','1.25|month');sv('m1_lateSel','1.25');
+    onRateSelChange(1);onLateSelChange(1);
+  }else{
+    ['m2_insNo','m2_amtDue','m2_payDate','m2_payAmt','m2_closeDate','m2_remIns','m2_perIns','m2_lastPaidDate'].forEach(id=>sv(id,''));
+    sv('m2_carryLate','0');
+    sv('m2_lateSel','1.25');
+    sv('m2_dueDay','5');
+    sv('m2_insNo','1');
+    // reset to current year/month
+    const cy=new Date().getFullYear()+543;
+    sv('m2_year',String(cy));
+    sv('m2_month',String(new Date().getMonth()+1));
+    onLateSelChange(2);
+  }
+  rerender(mode);
+}
+
+// ═══════════ Tab ═══════════
+function setTab(n){
+  document.getElementById('tabBtn1').classList.toggle('active',n===1);
+  document.getElementById('tabBtn2').classList.toggle('active',n===2);
+  document.getElementById('panel1').classList.toggle('active',n===1);
+  document.getElementById('panel2').classList.toggle('active',n===2);
+  try{localStorage.setItem('calcChampTab',n)}catch(e){}
+}
+
+function rerender(mode){if(mode===1)render1();else render2();}
+
+// ═══════════ Save/Load state ═══════════
+const ALL_FIELDS=[
+  'm1_rateSel','m1_rateCustom','m1_rateCustomPeriod','m1_lateSel','m1_lateCustom',
+  'm1_lastDate','m1_principal','m1_carryInt','m1_carryLate',
+  'm1_payDate','m1_payAmt','m1_closeDate',
+  'm2_lateSel','m2_lateCustom',
+  'm2_perIns','m2_dueDay','m2_insNo','m2_year','m2_month',
+  'm2_amtDue','m2_carryLate','m2_lastPaidDate',
+  'm2_payDate','m2_payAmt','m2_closeDate','m2_remIns'
+];
+
+function saveState(){
+  try{
+    const data={};
+    ALL_FIELDS.forEach(id=>{data[id]=gv(id);});
+    localStorage.setItem('calcChampState',JSON.stringify(data));
+  }catch(e){}
+}
+
+function loadState(){
+  try{
+    const raw=localStorage.getItem('calcChampState');
+    if(!raw)return;
+    const data=JSON.parse(raw);
+    ALL_FIELDS.forEach(id=>{if(data[id]!==undefined)sv(id,data[id]);});
+    onRateSelChange(1);onLateSelChange(1);onLateSelChange(2);
+  }catch(e){console.warn(e);}
+}
+
+// ═══════════ Number formatting ═══════════
+function setupNumFormat(id){
+  const e=document.getElementById(id);
+  if(!e)return;
+  e.addEventListener('blur',function(){
+    const v=parseAmt(this.value);
+    this.value=v?fmt(v):'';
+  });
+}
+
+// ═══════════ Init ═══════════
+document.addEventListener('DOMContentLoaded',function(){
+  initYearDropdown();
+  loadState();
+  ALL_FIELDS.forEach(id=>{
+    const e=document.getElementById(id);
+    if(!e)return;
+    e.addEventListener('input',function(){
+      if(id.startsWith('m1_'))render1();
+      else render2();
+    });
+    e.addEventListener('change',function(){
+      if(id.startsWith('m1_'))render1();
+      else render2();
+    });
+  });
+  // format amount fields on blur
+  ['m1_principal','m1_carryInt','m1_carryLate','m1_payAmt',
+   'm2_amtDue','m2_carryLate','m2_payAmt','m2_perIns'].forEach(setupNumFormat);
+  try{const tab=parseInt(localStorage.getItem('calcChampTab'))||1;setTab(tab);}catch(e){}
+  render1();render2();
+});
+</script>
+</body>
+</html>

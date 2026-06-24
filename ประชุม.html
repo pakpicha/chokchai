@@ -108,7 +108,7 @@ body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;
 @media print{
   *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
   html,body{background:#fff!important;margin:0!important;padding:0!important}
-  .pbtns,.doc-tabs,.back-home,.print-tip,.gen-btn,.add-btn,.ped,.edit-banner,.fontctl{display:none!important}
+  .pbtns,.doc-tabs,.dtabs,.back-home,.print-tip,.gen-btn,.add-btn,.ped,.edit-banner,.fontctl{display:none!important}
   #meet-preview{display:block!important}
   .doc-wrap{padding:0!important}
   .doc{border:none!important;padding:0!important;margin:0!important;font-size:13pt!important;line-height:1.6!important}
@@ -135,9 +135,23 @@ body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;
   .doc-page:last-child{page-break-after:auto}
 }
 @page{size:A4;margin:0 1.8cm 1.5cm 1.8cm}
+#meet-doc-out:not(.view-cert):not(.view-back) .cert-page,
+#meet-doc-out:not(.view-cert):not(.view-back) .back-page{display:none!important}
+#meet-doc-out.view-cert .doc-page:not(.cert-page){display:none!important}
+#meet-doc-out.view-back .doc-page:not(.back-page){display:none!important}
+/* แท็บเลือกเอกสาร */
+.dtabs{display:flex;gap:4px;padding:8px 12px;background:#eaeae5;border-bottom:1px solid #ddd;overflow-x:auto}
+.dtab{flex:1;background:#fff;color:#555;border:1px solid #ccc;padding:11px 8px;border-radius:8px;cursor:pointer;font-size:14px;font-family:inherit;font-weight:600;white-space:nowrap;-webkit-tap-highlight-color:transparent;min-width:fit-content}
+.dtab:hover:not(:disabled){border-color:#1a3a2a;color:#1a3a2a}
+.dtab.on{background:#1a3a2a;color:#fff;border-color:#1a3a2a}
+.dtab:disabled{opacity:.4;cursor:not-allowed}
+/* ทำให้พรีวิวดูเหมือนกระดาษ A4 จริง */
+.doc-wrap{background:#e8e8e3;padding:18px 10px}
+.doc.doc-page{width:21cm;max-width:100%;min-height:29.7cm;margin:0 auto 16px;box-shadow:0 4px 14px rgba(0,0,0,.18);background:#fff;box-sizing:border-box;border:none}
+@media (max-width:760px){.doc.doc-page{width:100%;min-height:auto;box-shadow:0 2px 8px rgba(0,0,0,.12)}}
 @media print{
-  body.print-cert-only .doc-page:not(.cert-page){display:none!important}
-  body:not(.print-cert-only) .cert-page{display:none!important}
+  .doc.doc-page{box-shadow:none!important;margin:0!important;min-height:auto!important;width:auto!important}
+  .doc-wrap{background:#fff!important;padding:0!important}
 }
 
 .tdp-wrap{position:relative;display:inline-block;width:100%}
@@ -309,7 +323,7 @@ function formatAddr(tam,amp,prov){
       <div class="fg"><label>เวลาสิ้นสุด</label><input type="time" id="te" value="10:00"></div>
     </div>
     <div class="fg"><label>สถานที่ประชุม</label>
-      <input type="text" id="loc" value="สำนักงานบริษัทเลขที่ 89/28 หมู่ 9 ตำบล ท่าเยี่ยม อำเภอ โชคชัย จังหวัด นครราชสีมา">
+      <input type="text" id="loc" value="สำนักงานบริษัทเลขที่ 89/28 หมู่ 9 ตำบล ท่าเยี่ยม อำเภอ โชคชัย จังหวัด นครราชสีมา" readonly style="background:#f0f0eb;color:#555;cursor:not-allowed">
     </div>
   </div>
   <div class="card">
@@ -351,10 +365,15 @@ function formatAddr(tam,amp,prov){
       <span class="fsize" id="fsize-lb">13</span>
       <button class="fbtn" onclick="adjFont(0.5)" title="เพิ่มฟอนต์">A+</button>
     </div>
-    <button class="ppr" onclick="showPrintTip()">🖨️ พิมพ์</button>
-    <button class="ppr" style="background:#c00;flex:2" onclick="printCertOnly()">🖨️ พิมพ์หน้าสำเนา</button>
+    <button class="ppr" id="cur-word" style="background:#2a6c4a;flex:2;display:none" onclick="exportWord()">📄 Word</button>
+    <button class="ppr" id="cur-print" onclick="curPrint()">🖨️ พิมพ์</button>
   </div>
   <div class="edit-banner" id="edit-banner">✏️ โหมดแก้ไข: คลิกที่ข้อความสีเหลืองเพื่อแก้ไข • กด "✓ เสร็จ" เมื่อแก้เสร็จ</div>
+  <div class="dtabs">
+    <button class="dtab on" id="tab-main" onclick="setView('main')">📑 รายงานประชุม</button>
+    <button class="dtab" id="tab-cert" onclick="setView('cert')" disabled>📋 หน้าสำเนา</button>
+    <button class="dtab" id="tab-back" onclick="setView('back')" disabled>📃 หน้าสลักหลัง</button>
+  </div>
   <div class="doc-wrap" id="meet-doc-out"></div>
 </div>
 </div>
@@ -821,6 +840,27 @@ function genMeeting(){
       </div>
     </div>`;
   });
+
+  // ── สร้างหน้าสลักหลัง (เฉพาะวาระไถ่ถอน) ──
+  let backPageHTML='';
+  const chairPhone=DIR_PHONES[chairman]||'..........';
+  items.forEach(function(ag){
+    var t=ag.t;
+    if(t!=='rdm_mortgage'&&t!=='rdm_sellback')return;
+    var body=(t==='rdm_mortgage')
+      ?'ข้าพเจ้า บริษัท โชคชัย เงินด่วน จำกัด โดย '+chairman+' ได้รับชำระเงินค่าจำนองครบเต็มจำนวนแล้ว อนุมัติให้ ผู้จำนองไถ่ถอนจากจำนอง ที่ดินได้'
+      :'ข้าพเจ้า บริษัท โชคชัย เงินด่วน จำกัด โดย '+chairman+' ได้รับชำระเงินครบตามจำนวนสินไถ่แล้ว อนุมัติให้ ผู้ขายฝาก ทำการไถ่ถอนที่ดินจากการขายฝากที่ดินได้';
+    backPageHTML+=`<div class="doc doc-page back-page">
+      <div style="height:14cm"></div>
+      <p style="text-indent:2em;line-height:1.9;font-size:14pt;margin:0" data-edit>${body}</p>
+      <div style="margin-top:50pt;text-align:right;padding-right:1cm">
+        <div style="display:inline-block;text-align:center">
+          <p style="margin:6pt 0;font-size:14pt" data-edit>บริษัท โชคชัย เงินด่วน จำกัด โดย ${chairman}</p>
+          <p style="margin:0;font-size:14pt" data-edit>${chairPhone}</p>
+        </div>
+      </div>
+    </div>`;
+  });
   document.getElementById('meet-doc-out').innerHTML=`<div class="doc doc-page">
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:4pt;padding-top:1pt">
       ${headLogo}
@@ -851,9 +891,10 @@ function genMeeting(){
         <p>ประธานที่ประชุม, กรรมการบริษัท</p>
       </div>
     </div>
-  </div>${certPageHTML}`;
+  </div>${certPageHTML}${backPageHTML}`;
   document.getElementById('meet-form').style.display='none';
   document.getElementById('meet-preview').style.display='block';
+  setView('main');
   window.scrollTo(0,0);
 }
 function showMeetForm(){document.getElementById('meet-form').style.display='block';document.getElementById('meet-preview').style.display='none';window.scrollTo(0,0);}
@@ -866,11 +907,61 @@ function showPrintTip(){
   document.getElementById('print-modal').classList.add('show');
   try{window.print();}catch(e){}
 }
-function printCertOnly(){
-  if(!document.querySelector('.cert-page')){alert('ยังไม่มีหน้าสำเนา (ต้องมีวาระเกี่ยวกับที่ดินอย่างน้อย 1 วาระ)');return;}
-  document.body.classList.add('print-cert-only');
+// ── ระบบแท็บเลือกเอกสาร ──
+var _curView='main';
+function setView(v){
+  _curView=v;
+  var c=document.getElementById('meet-doc-out');
+  c.classList.remove('view-main','view-cert','view-back');
+  c.classList.add('view-'+v);
+  ['main','cert','back'].forEach(function(n){
+    var b=document.getElementById('tab-'+n);
+    if(b)b.classList.toggle('on',n===v);
+  });
+  // เปลี่ยนสีปุ่มพิมพ์ตามแท็บ + Word โผล่เฉพาะแท็บรายงาน
+  var pb=document.getElementById('cur-print'),wb=document.getElementById('cur-word');
+  if(pb){pb.style.background=v==='cert'?'#c00':v==='back'?'#1a4a7a':'#1a3a2a';}
+  if(wb){wb.style.display=v==='main'?'':'none';}
+  // อัปเดต tab disabled ตามมีเอกสารไหน
+  document.getElementById('tab-cert').disabled=!document.querySelector('.cert-page');
+  document.getElementById('tab-back').disabled=!document.querySelector('.back-page');
+  window.scrollTo(0,0);
+}
+function curPrint(){
+  // ตรวจว่าแท็บปัจจุบันมีเอกสารไหม
+  if(_curView==='cert'&&!document.querySelector('.cert-page')){alert('ยังไม่มีหน้าสำเนา');return;}
+  if(_curView==='back'&&!document.querySelector('.back-page')){alert('ยังไม่มีหน้าสลักหลัง');return;}
   try{window.print();}catch(e){}
-  setTimeout(function(){document.body.classList.remove('print-cert-only');},800);
+}
+function exportWord(){
+  var main=document.querySelector('#meet-doc-out .doc-page:not(.cert-page):not(.back-page)');
+  if(!main){alert('ยังไม่มีรายงาน — กรุณาสร้างรายงานก่อน');return;}
+  var docHTML=main.outerHTML.replace(/contenteditable="[^"]*"/g,'');
+  var html='<!DOCTYPE html><html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">'
+    +'<head><meta charset="utf-8"><title>รายงานการประชุม</title>'
+    +'<!--[if gte mso 9]><xml><w:WordDocument><w:View>Print</w:View><w:Zoom>100</w:Zoom></w:WordDocument></xml><![endif]-->'
+    +'<style>'
+    +'@page Section1{size:21cm 29.7cm;margin:1.5cm 1.8cm}'
+    +'div.Section1{page:Section1}'
+    +'body{font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;font-size:14pt;line-height:1.6;color:#000}'
+    +'.doc-h1{text-align:center;font-weight:bold;font-size:16pt;margin:6pt 0}'
+    +'.doc-meta p,.doc-start,.doc-close{margin:4pt 0}'
+    +'.doc-sec{margin:10pt 0}'
+    +'.doc-sec-title{font-weight:bold;margin:8pt 0 4pt}'
+    +'.doc-sec-body,.doc-sec-short,.doc-combined{margin:4pt 0;text-align:justify}'
+    +'.doc-list{margin:6pt 0;padding-left:3em}'
+    +'.doc-list li{margin-bottom:4pt;text-align:justify}'
+    +'.doc-role-table{width:100%;border-collapse:collapse}'
+    +'.doc-role-table td{padding:2pt 0;vertical-align:top}'
+    +'</style></head><body><div class="Section1">'+docHTML+'</div></body></html>';
+  var blob=new Blob(['\ufeff',html],{type:'application/msword'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');
+  a.href=url;
+  var no=gv('mtg_no')||'';var yr=gv('mtg_yr')||'';
+  a.download='รายงานการประชุม'+(no?' ครั้งที่ '+no:'')+(yr?'-'+yr:'')+'.doc';
+  document.body.appendChild(a);a.click();
+  setTimeout(function(){URL.revokeObjectURL(url);a.remove();},500);
 }
 function closePrintTip(){
   document.getElementById('print-modal').classList.remove('show');

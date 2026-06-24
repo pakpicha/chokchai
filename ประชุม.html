@@ -135,6 +135,10 @@ body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;
   .doc-page:last-child{page-break-after:auto}
 }
 @page{size:A4;margin:0 1.8cm 1.5cm 1.8cm}
+@media print{
+  body.print-cert-only .doc-page:not(.cert-page){display:none!important}
+  body:not(.print-cert-only) .cert-page{display:none!important}
+}
 
 .tdp-wrap{position:relative;display:inline-block;width:100%}
 .tdp-input{width:100%;padding:9px 36px 9px 11px;font-size:15px;border:1px solid #ccc;
@@ -348,6 +352,7 @@ function formatAddr(tam,amp,prov){
       <button class="fbtn" onclick="adjFont(0.5)" title="เพิ่มฟอนต์">A+</button>
     </div>
     <button class="ppr" onclick="showPrintTip()">🖨️ พิมพ์</button>
+    <button class="ppr" style="background:#c00;flex:2" onclick="printCertOnly()">🖨️ พิมพ์หน้าสำเนา</button>
   </div>
   <div class="edit-banner" id="edit-banner">✏️ โหมดแก้ไข: คลิกที่ข้อความสีเหลืองเพื่อแก้ไข • กด "✓ เสร็จ" เมื่อแก้เสร็จ</div>
   <div class="doc-wrap" id="meet-doc-out"></div>
@@ -511,6 +516,12 @@ function dateFld(i,id,lb,fw){
 function fld(i,id,lb,fw,ph=''){return`<div class="${fw?'fw':''}""><label>${lb}</label><input type="text" id="ag${i}_${id}" placeholder="${ph}"></div>`}
 function ta(i,id,lb,fw,ph=''){return`<div class="${fw?'fw':''}""><label>${lb}</label><textarea id="ag${i}_${id}" placeholder="${ph}"></textarea></div>`}
 const DIRS=['นาย ชุณนเกียรติ จรัสบวรพันธ์','นาง ชญาน์นัทช์ จรัสบวรพันธ์','นาย กันตพัฒน์ จรัสบวรพันธ์','นางสาว ภัคฐ์พิชา จรัสบวรพันธ์'];
+const DIR_PHONES={
+  'นาย ชุณนเกียรติ จรัสบวรพันธ์':'099-324-1635',
+  'นาง ชญาน์นัทช์ จรัสบวรพันธ์':'062-628-2324',
+  'นาย กันตพัฒน์ จรัสบวรพันธ์':'094-289-5345',
+  'นางสาว ภัคฐ์พิชา จรัสบวรพันธ์':'096-329-3624'
+};
 
 // ── บล็อกมอบอำนาจ (ท.ด.21) ใช้ในวาระเกี่ยวกับที่ดิน ──
 function pwBlock(i){
@@ -731,7 +742,33 @@ function buildAgContent(i){
       +' ดอกเบี้ยร้อยละ '+rate+' ต่อปี รวมเป็นเงินกู้ยืม '+totalFmt+' บาท ('+totalTxt+')'
       +' ให้ '+rep+' เป็นผู้ทำการแทนบริษัทในครั้งนี้ มีอำนาจลงนามในเอกสารต่าง ๆ แทนบริษัท ในการทำหนังสือสัญญาการกู้ยืมเงิน');
   }else if(t==='other'){title=gfm(i,'ttl');body=(gv('ag'+i+'_dtl')||'').replace(/\r\n|\r|\n/g,'<br>');const sumText=(gv('ag'+i+'_sum')||'').replace(/\r\n|\r|\n/g,'<br>');if(sumText)res.push(sumText);}
-  return{title,body,res,t};
+  return{title,body,res,t,i};
+}
+
+// ── บรรทัดสำหรับหน้าสำเนาถูกต้อง ──
+function buildCertLine(i,t){
+  if(['mortgage','sellback','extend','rdm_mortgage','rdm_sellback'].indexOf(t)<0)return null;
+  var cust=gv('ag'+i+'_cust')||'..........';
+  var action='';
+  if(t==='mortgage'){
+    var ct=gv('ag'+i+'_mct')||'โฉนด';
+    action='รับจำนอง'+(ct==='ห้องชุด'?'ห้องชุด':'ที่ดิน');
+  }else if(t==='sellback'){
+    var sc=getCol(i,'s_');action='รับซื้อฝาก'+(sc.type==='ห้องชุด'?'ห้องชุด':'ที่ดิน');
+  }else if(t==='extend'){
+    var ec=getCol(i,'e_');action='ขยายระยะเวลาไถ่จากขายฝาก'+(ec.type==='ห้องชุด'?'ห้องชุด':'ที่ดิน');
+  }else if(t==='rdm_mortgage'){
+    var rm=getCol(i,'rm_');action='ไถ่ถอนจำนอง'+(rm.type==='ห้องชุด'?'ห้องชุด':'ที่ดิน');
+  }else if(t==='rdm_sellback'){
+    var rs=getCol(i,'rs_');action='ไถ่ถอนขายฝาก'+(rs.type==='ห้องชุด'?'ห้องชุด':'ที่ดิน');
+  }
+  var cb=document.getElementById('ag'+i+'_pwen');
+  if(cb&&cb.checked){
+    var pwgr=gv('ag'+i+'_pwgr')||'..........';
+    var pwte=gv('ag'+i+'_pwte')||'..........';
+    return {line:'ใช้ในการมอบอำนาจจากบริษัท โชคชัย เงินด่วน จำกัด ให้ '+pwte+' ไปดำเนินการ '+action+' กับ '+cust+' เท่านั้น', signer:pwgr};
+  }
+  return {line:'ใช้ในการดำเนินเรื่องของบริษัท โชคชัย เงินด่วน จำกัด ในการ'+action+' ของ '+cust+' เท่านั้น', signer:null};
 }
 
 function genMeeting(){
@@ -765,6 +802,25 @@ function genMeeting(){
   const logoEl=document.getElementById('_vLogo');
   const logoSrc=logoEl?logoEl.src:'';
   const headLogo=logoSrc?`<img src="${logoSrc}" style="width:50px;height:50px;object-fit:contain;flex-shrink:0" alt="logo">`:'';
+  // ── สร้างข้อความสำหรับหน้าสำเนาถูกต้อง ──
+  const certEntries=[];
+  items.forEach(function(ag){var e=buildCertLine(ag.i,ag.t);if(e)certEntries.push(e);});
+  let certPageHTML='';
+  certEntries.forEach(function(e){
+    var signer=e.signer||chairman;
+    var phone=DIR_PHONES[signer]||'..........';
+    certPageHTML+=`<div class="doc doc-page cert-page" style="position:relative;overflow:hidden;min-height:27cm">
+      <div style="position:absolute;top:32%;left:50%;width:160%;height:0;border-top:2px solid #000;transform:translateX(-50%) rotate(-38deg);transform-origin:center"></div>
+      <div style="position:absolute;top:75%;left:50%;width:160%;height:0;border-top:2px solid #000;transform:translateX(-50%) rotate(-38deg);transform-origin:center"></div>
+      <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-38deg);text-align:center;width:55%">
+        <p style="font-size:24pt;font-weight:bold;margin:0 0 14pt">สำเนาถูกต้อง</p>
+        <p style="margin:6pt 0;font-size:14pt;line-height:1.7" data-edit>${e.line}</p>
+        <p style="margin:30pt 0 4pt;font-size:14pt">............................................</p>
+        <p style="margin:0;font-size:14pt" data-edit>บริษัท โชคชัย เงินด่วน จำกัด โดย ${signer}</p>
+        <p style="margin:0;font-size:14pt" data-edit>${phone}</p>
+      </div>
+    </div>`;
+  });
   document.getElementById('meet-doc-out').innerHTML=`<div class="doc doc-page">
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:4pt;padding-top:1pt">
       ${headLogo}
@@ -795,7 +851,7 @@ function genMeeting(){
         <p>ประธานที่ประชุม, กรรมการบริษัท</p>
       </div>
     </div>
-  </div>`;
+  </div>${certPageHTML}`;
   document.getElementById('meet-form').style.display='none';
   document.getElementById('meet-preview').style.display='block';
   window.scrollTo(0,0);
@@ -809,6 +865,12 @@ function showPrintTip(){
   document.querySelectorAll('[id^="mdoc-"],[id^="sbdoc-"],[id^="dldoc-"]').forEach(function(el){el.setAttribute('data-h',el.style.display==='none'?'1':'0');el.style.display='';});
   document.getElementById('print-modal').classList.add('show');
   try{window.print();}catch(e){}
+}
+function printCertOnly(){
+  if(!document.querySelector('.cert-page')){alert('ยังไม่มีหน้าสำเนา (ต้องมีวาระเกี่ยวกับที่ดินอย่างน้อย 1 วาระ)');return;}
+  document.body.classList.add('print-cert-only');
+  try{window.print();}catch(e){}
+  setTimeout(function(){document.body.classList.remove('print-cert-only');},800);
 }
 function closePrintTip(){
   document.getElementById('print-modal').classList.remove('show');

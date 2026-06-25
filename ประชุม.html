@@ -1016,12 +1016,13 @@ addAg('mortgage');
 
 
 // ── AUTO SAVE/RESTORE localStorage ──
-var LS_KEY = 'form_data_' + window.location.pathname.split('/').pop().replace('.html','');
+var LS_KEY = 'form_data_chokchai_' + window.location.pathname.split('/').pop().replace('.html','');
 
 function autoSave(){
   try {
     var data = {};
     document.querySelectorAll('input[id], select[id], textarea[id]').forEach(function(el){
+      if(el.readOnly||el.disabled) return;
       if(el.type === 'checkbox') data[el.id] = el.checked;
       else data[el.id] = el.value;
     });
@@ -1037,6 +1038,7 @@ function autoRestore(){
     Object.keys(data).forEach(function(k){
       var el = document.getElementById(k);
       if(!el) return;
+      if(el.readOnly||el.disabled) return;
       if(el.type === 'checkbox') el.checked = data[k];
       else el.value = data[k];
     });

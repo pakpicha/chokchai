@@ -1049,7 +1049,21 @@ function autoRestore(){
 setInterval(autoSave, 2000);
 window.addEventListener('beforeunload', autoSave);
 
+// ── ค่าฟิลด์ที่ล็อก (override ทุกครั้งหลัง restore) ──
+var LOCKED_FIELDS = {
+  'loc': 'สำนักงานบริษัทเลขที่ 89/28 หมู่ 9 ตำบล ท่าเยี่ยม อำเภอ โชคชัย จังหวัด นครราชสีมา'
+};
+function applyLocked(){
+  Object.keys(LOCKED_FIELDS).forEach(function(k){
+    var el=document.getElementById(k);
+    if(el)el.value=LOCKED_FIELDS[k];
+  });
+}
+// ลบ key เก่า (ก่อนใส่ prefix chokchai) ถ้ายังค้างอยู่
+try{localStorage.removeItem('form_data_ประชุม');}catch(e){}
+
 autoRestore();
+applyLocked();
 
 var THMONTHS=['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
 var _tdpOpen=null;

@@ -151,7 +151,8 @@ body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;
 @media (max-width:760px){.doc.doc-page{width:100%;min-height:auto;box-shadow:0 2px 8px rgba(0,0,0,.12)}}
 @media print{
   .doc.doc-page{box-shadow:none!important;margin:0!important;min-height:auto!important;width:auto!important}
-  .doc.doc-page.cert-page,.doc.doc-page.back-page{min-height:25cm!important}
+  .doc.doc-page.cert-page{height:25cm!important;min-height:25cm!important;width:100%!important;position:relative!important;overflow:visible!important}
+  .doc.doc-page.back-page{min-height:25cm!important}
   .doc-wrap{background:#fff!important;padding:0!important}
 }
 
@@ -829,10 +830,10 @@ function genMeeting(){
   certEntries.forEach(function(e){
     var signer=e.signer||chairman;
     var phone=DIR_PHONES[signer]||'..........';
-    certPageHTML+=`<div class="doc doc-page cert-page" style="position:relative;overflow:hidden;min-height:27cm">
-      <div style="position:absolute;top:32%;left:50%;width:160%;height:0;border-top:2px solid #000;transform:translateX(-50%) rotate(-38deg);transform-origin:center"></div>
-      <div style="position:absolute;top:75%;left:50%;width:160%;height:0;border-top:2px solid #000;transform:translateX(-50%) rotate(-38deg);transform-origin:center"></div>
-      <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-38deg);text-align:center;width:55%">
+    certPageHTML+=`<div class="doc doc-page cert-page" style="position:relative;height:25cm;min-height:25cm">
+      <div style="position:absolute;top:8cm;left:50%;width:170%;height:0;border-top:2px solid #000;transform:translateX(-50%) rotate(-38deg);transform-origin:center"></div>
+      <div style="position:absolute;top:19cm;left:50%;width:170%;height:0;border-top:2px solid #000;transform:translateX(-50%) rotate(-38deg);transform-origin:center"></div>
+      <div style="position:absolute;top:12.5cm;left:50%;transform:translate(-50%,-50%) rotate(-38deg);text-align:center;width:55%">
         <p style="font-size:24pt;font-weight:bold;margin:0 0 14pt">สำเนาถูกต้อง</p>
         <p style="margin:6pt 0;font-size:14pt;line-height:1.7" data-edit>${e.line}</p>
         <p style="margin:30pt 0 4pt;font-size:14pt">............................................</p>

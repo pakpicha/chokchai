@@ -32,6 +32,29 @@ body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;
 .chips label:hover{border-color:#1a6a1a;background:#f5faf5}
 .chips label:has(input:checked){background:#1a6a1a;border-color:#1a6a1a;color:#fff;box-shadow:0 2px 6px rgba(26,106,26,.25)}
 .chips input{width:22px;height:22px;flex-shrink:0;accent-color:#1a6a1a;cursor:pointer}
+/* Dynamic list สำหรับวาระแบ่งไถ่ถอน */
+.dyn-list{display:flex;flex-direction:column;gap:8px;margin-bottom:8px}
+.hist-row{display:flex;flex-direction:column;gap:6px;padding:8px;background:#fafafa;border:1px solid #e0e0d8;border-radius:8px}
+.hist-row input,.hist-row select{padding:8px;border:1px solid #ccc;border-radius:6px;font-family:inherit;font-size:13px;box-sizing:border-box}
+.hist-row .h-type{background:#fff;font-weight:600;color:#1a3a2a;flex:1}
+.hist-row .hist-top{display:flex;gap:6px;align-items:center}
+.hist-row .h-dt-wrap{flex:2;position:relative}
+.hist-row .h-dt-wrap .tdp-input{width:100%}
+.hist-row .hist-addr{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
+.hist-row .h-baht{font-size:12px;color:#1a6a1a;padding:0 4px;font-weight:600}
+.rem-row{display:flex;flex-direction:column;gap:6px;padding:8px;background:#fafafa;border:1px solid #e0e0d8;border-radius:8px}
+.rem-row input{padding:8px;border:1px solid #ccc;border-radius:6px;font-family:inherit;font-size:13px;box-sizing:border-box}
+.rem-row .rem-top{display:flex;gap:6px;align-items:center}
+.rem-row .r-desc{flex:1}
+.addr-sel{padding:8px;border:1px solid #ccc;border-radius:6px;font-family:inherit;font-size:13px;background:#fff;width:100%;box-sizing:border-box;-webkit-appearance:menulist;appearance:menulist}
+.addr-combo{display:flex;gap:0;position:relative;width:100%}
+.addr-combo .addr-in{flex:1;padding:8px;border:1px solid #ccc;border-right:none;border-radius:6px 0 0 6px;font-family:inherit;font-size:13px;background:#fff;min-width:0}
+.addr-combo .addr-pick{flex:0 0 42px;padding:8px 4px;border:1px solid #ccc;border-radius:0 6px 6px 0;font-family:inherit;font-size:13px;background:#f5f5f0;-webkit-appearance:menulist;appearance:menulist;color:#1a3a2a;font-weight:bold;text-align:center}
+.dyn-del{background:#fee;color:#c00;border:1px solid #f5c2c7;border-radius:6px;width:32px;height:32px;font-size:18px;cursor:pointer;font-weight:bold;padding:0}
+.dyn-del:hover{background:#c00;color:#fff}
+.dyn-add{background:#e8f5e8;color:#1a6a1a;border:1px dashed #1a6a1a;border-radius:8px;padding:10px;cursor:pointer;font-family:inherit;font-weight:600;width:100%;font-size:14px}
+.dyn-add:hover{background:#1a6a1a;color:#fff}
+@media (max-width:640px){.hist-row{grid-template-columns:1fr}}
 .add-btn{display:flex;align-items:center;justify-content:center;gap:5px;background:none;border:1.5px dashed #1a3a2a;color:#1a3a2a;padding:10px;border-radius:8px;cursor:pointer;font-size:14px;font-family:inherit;width:100%;margin-top:2px}
 .gen-btn{background:#1a3a2a;color:#fff;border:none;padding:15px;border-radius:10px;font-size:16px;cursor:pointer;font-family:inherit;font-weight:700;width:100%;margin-top:12px}
 .back-home{display:flex;align-items:center;gap:6px;background:none;border:none;color:#1a3a2a;font-size:14px;font-family:inherit;cursor:pointer;padding:6px 0;margin-bottom:8px;font-weight:600}
@@ -151,7 +174,7 @@ body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;
 @media (max-width:760px){.doc.doc-page{width:100%;min-height:auto;box-shadow:0 2px 8px rgba(0,0,0,.12)}}
 @media print{
   .doc.doc-page{box-shadow:none!important;margin:0!important;min-height:auto!important;width:auto!important}
-  .doc.doc-page.cert-page{height:25cm!important;min-height:25cm!important;width:100%!important;position:relative!important;overflow:visible!important}
+  .doc.doc-page.cert-page{height:25cm!important;min-height:25cm!important;width:100%!important;position:relative!important;overflow:hidden!important}
   .doc.doc-page.back-page{min-height:25cm!important}
   .doc-wrap{background:#fff!important;padding:0!important}
 }
@@ -454,9 +477,14 @@ function fmtTime(t){return t?t.replace(':','.')+' น.':'......'}
 // MEETING LOGIC
 // ══════════════════════════════
 const M_TYPES={
-  mortgage:'🏠 จดจำนองที่ดิน',sellback:'📋 รับซื้อฝากที่ดิน',
+  mortgage:'🏠 จดจำนองที่ดิน',mortgage_n:'🏠 จดจำนองที่ดินลำดับอื่น (เพื่อประกันหนี้ผู้อื่น)',
+  topup:'💰 ขึ้นเงินจากจำนอง',reloan:'💰 กู้เงินเท่าวงเงินเดิม',
+  sellback:'📋 รับซื้อฝากที่ดิน',
+  split_sellback:'📐 แบ่งแยกที่ดิน (ครอบซื้อฝาก)',
   extend:'⏳ ขยายระยะเวลาขายฝาก',rdm_mortgage:'✅ ไถ่ถอนจำนอง',
-  rdm_sellback:'✅ ไถ่ถอนขายฝาก',dirloan:'💼 กู้ยืมเงินกรรมการ',other:'📝 เรื่องอื่นๆ'
+  partial_rdm:'✅ แบ่งไถ่ถอนจำนอง',
+  rdm_sellback:'✅ ไถ่ถอนขายฝาก',partial_rdm_sellback:'✅ ไถ่ถอนจากขายฝากเฉพาะส่วน',
+  dirloan:'💼 กู้ยืมเงินกรรมการ',other:'📝 เรื่องอื่นๆ'
 };
 let agC=0;
 const COL_TYPES=[{v:'โฉนด',l:'โฉนดที่ดิน (น.ส.4)'},{v:'นส3ก',l:'น.ส.3 ก.'},{v:'นส3',l:'น.ส.3'},{v:'ห้องชุด',l:'ห้องชุด (คอนโด)'}];
@@ -497,7 +525,7 @@ function wireColAddr(i,px){
   var tb2=document.getElementById('ag'+i+'_'+px+'tb2');
   if(pv2) _wireAddrInput(pv2,ap2,tb2,null);
 }
-function refreshCol(i,px,ct){document.getElementById('ag'+i+'_'+px+'cf').innerHTML=colFieldsHTML(i,px,ct);setTimeout(function(){wireColAddr(i,px);},30);}
+function refreshCol(i,px,ct){document.getElementById('ag'+i+'_'+px+'cf').innerHTML=colFieldsHTML(i,px,ct);setTimeout(function(){wireColAddr(i,px);if(px==='pr_'||px==='prs_')upgradeColAddrToCombo(i,px);},30);}
 function getCol(i,px){
   const ct=gv('ag'+i+'_'+px+'ct')||'โฉนด';
   const g=(id)=>gv('ag'+i+'_'+px+id)||'..........';
@@ -570,17 +598,306 @@ function pwRes(i,action){
   return gr+' ได้ทำหนังสือมอบอำนาจ (ท.ด.21) ให้กับ '+te+' ไปกระทำการ'+action+' ที่ดินแปลงดังกล่าวแทน';
 }
 
+// ── Dynamic list สำหรับวาระแบ่งไถ่ถอนจำนอง ──
+var _histCnt={},_remainCnt={};
+function addHistRow(i){
+  _histCnt[i]=(_histCnt[i]||0)+1;var n=_histCnt[i];
+  var box=document.getElementById('ag'+i+'_histlist');
+  var row=document.createElement('div');row.className='hist-row';
+  var pfx='ag'+i+'_h'+n;
+  var fid=pfx+'_dt';
+  row.innerHTML=`<div class="hist-top">
+<select class="h-type" onchange="toggleHistType(this)">
+<option value="redeem">✅ ไถ่ถอน</option>
+<option value="split">📐 แบ่งแยก</option>
+</select>
+<div class="tdp-wrap h-dt-wrap" id="tdpw_${fid}" onclick="event.stopPropagation()">
+<input type="hidden" id="${fid}">
+<input type="text" id="tdpi_${fid}" class="tdp-input h-dt" placeholder="วว/ดด/ปปปป" onfocus="tdpFocus('${fid}')" onkeydown="tdpKeydown('${fid}',event)" autocomplete="off">
+<span class="tdp-icon" onclick="tdpOpen('${fid}')">📅</span>
+<div class="tdp-drop" id="tdpd_${fid}">
+<div class="tdp-nav"><button type="button" onclick="tdpNav('${fid}',-1,event)">‹</button>
+<span class="tdp-my" onclick="tdpToggleYM('${fid}');event.stopPropagation()">...</span>
+<button type="button" onclick="tdpNav('${fid}',1,event)">›</button></div>
+<div class="tdp-ym"></div>
+<div class="tdp-days-hdr"><span>อา</span><span>จ</span><span>อ</span><span>พ</span><span>พฤ</span><span>ศ</span><span>ส</span></div>
+<div class="tdp-days"></div>
+</div>
+</div>
+<button type="button" class="dyn-del" onclick="this.closest('.hist-row').remove()">×</button>
+</div>
+<div class="hist-titles" style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+<input class="h-tno" placeholder="โฉนดเลขที่...">
+<input class="h-lno" placeholder="เลขที่ดิน...">
+</div>
+<div class="hist-addr">
+<div class="addr-combo"><input id="${pfx}_pv" class="h-pv addr-in" placeholder="จังหวัด" autocomplete="off"><select id="${pfx}_pv_pick" class="addr-pick"><option value="">▼</option></select></div>
+<div class="addr-combo"><input id="${pfx}_ap" class="h-ap addr-in" placeholder="อำเภอ/เขต" autocomplete="off"><select id="${pfx}_ap_pick" class="addr-pick"><option value="">▼</option></select></div>
+<div class="addr-combo"><input id="${pfx}_tb" class="h-tb addr-in" placeholder="ตำบล/แขวง" autocomplete="off"><select id="${pfx}_tb_pick" class="addr-pick"><option value="">▼</option></select></div>
+</div>
+<input class="h-amt" placeholder="จำนวนเงิน" oninput="fmtHistAmt(this)">
+<span class="h-baht"></span>`;
+  box.appendChild(row);
+  setTimeout(function(){
+    try{tdpInit(fid);_tdpWireEvents(fid);}catch(e){console.warn('TDP init',e);}
+    wireAddrCascade(pfx+'_pv', pfx+'_ap', pfx+'_tb');
+  },30);
+}
+function toggleHistType(sel){
+  var row=sel.parentNode;
+  var isSplit=sel.value==='split';
+  row.querySelector('.h-amt').style.display=isSplit?'none':'';
+  row.querySelector('.h-baht').style.display=isSplit?'none':'';
+  row.querySelector('.h-desc').placeholder=isSplit
+    ?'รายละเอียดการแบ่งแยก เช่น แบ่งแยกในนามเดิม โฉนดเลขที่ 14034 ได้แปลงย่อย โฉนดเลขที่ 66041'
+    :'โฉนด/รายละเอียด เช่น โฉนดเลขที่ 64017 เลขที่ดิน 1684';
+}
+function fmtHistAmt(el){
+  var v=el.value.replace(/[^0-9]/g,'');
+  el.value=v?Number(v).toLocaleString():'';
+  var b=el.parentNode.querySelector('.h-baht');
+  if(b)b.textContent=v?('('+toBaht(parseInt(v))+')'):'';
+}
+function addRemainRow(i){
+  _remainCnt[i]=(_remainCnt[i]||0)+1;var n=_remainCnt[i];
+  var box=document.getElementById('ag'+i+'_remainlist');
+  var row=document.createElement('div');row.className='rem-row';
+  var pfx='ag'+i+'_r'+n;
+  row.innerHTML=`<div class="rem-top">
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;flex:1">
+<input class="r-tno" placeholder="โฉนดเลขที่...">
+<input class="r-lno" placeholder="เลขที่ดิน...">
+</div>
+<button type="button" class="dyn-del" onclick="this.closest('.rem-row').remove()">×</button>
+</div>
+<div class="hist-addr">
+<div class="addr-combo"><input id="${pfx}_pv" class="r-pv addr-in" placeholder="จังหวัด" autocomplete="off"><select id="${pfx}_pv_pick" class="addr-pick"><option value="">▼</option></select></div>
+<div class="addr-combo"><input id="${pfx}_ap" class="r-ap addr-in" placeholder="อำเภอ/เขต" autocomplete="off"><select id="${pfx}_ap_pick" class="addr-pick"><option value="">▼</option></select></div>
+<div class="addr-combo"><input id="${pfx}_tb" class="r-tb addr-in" placeholder="ตำบล/แขวง" autocomplete="off"><select id="${pfx}_tb_pick" class="addr-pick"><option value="">▼</option></select></div>
+</div>`;
+  box.appendChild(row);
+  setTimeout(function(){
+    wireAddrCascade(pfx+'_pv', pfx+'_ap', pfx+'_tb');
+  },30);
+}
+function getHistRows(i){
+  var rows=document.querySelectorAll('#ag'+i+'_histlist .hist-row');
+  return Array.prototype.slice.call(rows).map(function(r){
+    var amt=parseInt((r.querySelector('.h-amt').value||'').replace(/[,\s]/g,''))||0;
+    var dtInput=r.querySelector('input[type="hidden"]');
+    var dtIso=dtInput?dtInput.value:'';
+    var dtTxt=dtIso?(_tdpFmt(dtIso)||''):(r.querySelector('.tdp-input')?r.querySelector('.tdp-input').value.trim():'');
+    var tno=(r.querySelector('.h-tno')||{}).value?r.querySelector('.h-tno').value.trim():'';
+    var lno=(r.querySelector('.h-lno')||{}).value?r.querySelector('.h-lno').value.trim():'';
+    var desc=(tno||lno)?('โฉนดเลขที่ '+(tno||'..........')+' เลขที่ดิน '+(lno||'..........')):'';
+    return{
+      type:r.querySelector('.h-type').value,
+      dt:dtTxt,
+      desc:desc,
+      tb:(r.querySelector('.h-tb')||{}).value?r.querySelector('.h-tb').value.trim():'',
+      ap:(r.querySelector('.h-ap')||{}).value?r.querySelector('.h-ap').value.trim():'',
+      pv:(r.querySelector('.h-pv')||{}).value?r.querySelector('.h-pv').value.trim():'',
+      amt:amt
+    };
+  });
+}
+function getRemainRows(i){
+  var rows=document.querySelectorAll('#ag'+i+'_remainlist .rem-row');
+  return Array.prototype.slice.call(rows).map(function(r){
+    var tno=(r.querySelector('.r-tno')||{}).value?r.querySelector('.r-tno').value.trim():'';
+    var lno=(r.querySelector('.r-lno')||{}).value?r.querySelector('.r-lno').value.trim():'';
+    var desc=(tno||lno)?('โฉนดเลขที่ '+(tno||'..........')+' เลขที่ดิน '+(lno||'..........')):'';
+    return{
+      desc:desc,
+      tb:(r.querySelector('.r-tb')||{}).value?r.querySelector('.r-tb').value.trim():'',
+      ap:(r.querySelector('.r-ap')||{}).value?r.querySelector('.r-ap').value.trim():'',
+      pv:(r.querySelector('.r-pv')||{}).value?r.querySelector('.r-pv').value.trim():''
+    };
+  });
+}
+function rowLoc(row){
+  if(!row.tb && !row.ap && !row.pv) return '';
+  return 'ตำบล '+(row.tb||'..........')+' อำเภอ '+(row.ap||'..........')+' จังหวัด '+(row.pv||'..........');
+}
+function toggleSameLoc(i,checked){
+  var gl=document.getElementById('ag'+i+'_globloc');
+  if(gl){
+    gl.style.display=checked?'grid':'none';
+    if(checked){wireAddrCascade('ag'+i+'_glob_pv','ag'+i+'_glob_ap','ag'+i+'_glob_tb');}
+  }
+  var lists=[document.getElementById('ag'+i+'_histlist'),document.getElementById('ag'+i+'_remainlist')];
+  lists.forEach(function(box){
+    if(!box)return;
+    var addrs=box.querySelectorAll('.hist-addr');
+    addrs.forEach(function(a){a.style.display=checked?'none':'grid';});
+  });
+}
+function _purpPick(sel){
+  if(sel.value){
+    var input=sel.parentNode.querySelector('.addr-in');
+    if(input)input.value=sel.value;
+  }
+  sel.value='';
+}
+function purpCombo(i){
+  return '<div class="fw"><label>วัตถุประสงค์/ประเภทที่ดิน</label>'
+    +'<div class="addr-combo">'
+    +'<input id="ag'+i+'_purp" class="addr-in" placeholder="เช่น เกษตรกรรม, พาณิชยกรรม, ที่อยู่อาศัย" autocomplete="off">'
+    +'<select class="addr-pick" onchange="_purpPick(this)">'
+    +'<option value="">▼</option>'
+    +'<option>เกษตรกรรม</option>'
+    +'<option>พาณิชยกรรม</option>'
+    +'<option>ที่อยู่อาศัย</option>'
+    +'<option>อุตสาหกรรม</option>'
+    +'<option>ปศุสัตว์</option>'
+    +'</select></div></div>';
+}
+// ── Address combo: พิมพ์ก็ได้ เลือกก็ได้ (input + picker select ข้างๆ) ──
+function addrCombo(id, ph){
+  return '<div class="addr-combo">'
+    +'<input id="'+id+'" class="addr-in" placeholder="'+ph+'" autocomplete="off">'
+    +'<select id="'+id+'_pick" class="addr-pick"><option value="">▼</option></select>'
+    +'</div>';
+}
+function _fillPicker(sel, opts){
+  if(!sel) return;
+  var html = '<option value="">▼</option>';
+  opts.forEach(function(o){ html += '<option value="'+o+'">'+o+'</option>'; });
+  sel.innerHTML = html;
+}
+function wireAddrCascade(pvId, apId, tbId){
+  var pv = document.getElementById(pvId), ap = document.getElementById(apId), tb = document.getElementById(tbId);
+  if(!pv || pv._cascWired) return;
+  pv._cascWired = true;
+  var pvPick = document.getElementById(pvId+'_pick');
+  var apPick = document.getElementById(apId+'_pick');
+  var tbPick = document.getElementById(tbId+'_pick');
+  _fillPicker(pvPick, Object.keys(ADDR).sort());
+  _fillPicker(apPick, []);
+  _fillPicker(tbPick, []);
+  if(pvPick){
+    pvPick.addEventListener('change', function(){
+      if(pvPick.value){
+        pv.value = pvPick.value;
+        _fillPicker(apPick, ADDR[pv.value] ? Object.keys(ADDR[pv.value]).sort() : []);
+        _fillPicker(tbPick, []);
+        ap.value = ''; tb.value = '';
+      }
+      pvPick.value = '';
+    });
+  }
+  pv.addEventListener('input', function(){
+    var p = pv.value.trim();
+    _fillPicker(apPick, (p && ADDR[p]) ? Object.keys(ADDR[p]).sort() : []);
+    _fillPicker(tbPick, []);
+  });
+  if(apPick){
+    apPick.addEventListener('change', function(){
+      if(apPick.value){
+        ap.value = apPick.value;
+        var p = pv.value.trim();
+        _fillPicker(tbPick, (p && ap.value && ADDR[p] && ADDR[p][ap.value]) ? ADDR[p][ap.value] : []);
+        tb.value = '';
+      }
+      apPick.value = '';
+    });
+  }
+  ap.addEventListener('input', function(){
+    var p = pv.value.trim(), a = ap.value.trim();
+    _fillPicker(tbPick, (p && a && ADDR[p] && ADDR[p][a]) ? ADDR[p][a] : []);
+  });
+  if(tbPick){
+    tbPick.addEventListener('change', function(){
+      if(tbPick.value){ tb.value = tbPick.value; }
+      tbPick.value = '';
+    });
+  }
+}
+function isSameLoc(i){
+  var cb=document.getElementById('ag'+i+'_sameloc');
+  return cb?cb.checked:false;
+}
+function isColSame(i){
+  var cb=document.getElementById('ag'+i+'_colsame');
+  return cb?cb.checked:false;
+}
+function isRemSame(i){
+  var cb=document.getElementById('ag'+i+'_remsame');
+  return cb?cb.checked:false;
+}
+function toggleRemSame(i,checked){
+  var box=document.getElementById('ag'+i+'_remainlist');
+  if(!box)return;
+  var addrs=box.querySelectorAll('.hist-addr');
+  addrs.forEach(function(a){a.style.display=checked?'none':'grid';});
+}
+function toggleColSame(i,checked,px){
+  ['tb','ap','pv'].forEach(function(k){
+    var el=document.getElementById('ag'+i+'_'+px+k);
+    if(!el)return;
+    var wrap=el.closest('.addr-combo');
+    var parent=(wrap?wrap.parentNode:el.parentNode);
+    if(parent)parent.style.display=checked?'none':'';
+  });
+}
+// Upgrade colBlock's ต/อ/จ inputs to combo (input + picker)
+function upgradeColAddrToCombo(i,px){
+  ['tb','ap','pv'].forEach(function(k){
+    var input=document.getElementById('ag'+i+'_'+px+k);
+    if(!input||input._combo)return;
+    input._combo=true;
+    var parentDiv=input.parentNode;
+    var combo=document.createElement('div');
+    combo.className='addr-combo';
+    parentDiv.appendChild(combo);
+    combo.appendChild(input);
+    input.classList.add('addr-in');
+    input.setAttribute('autocomplete','off');
+    input.removeAttribute('list');
+    var pick=document.createElement('select');
+    pick.id=input.id+'_pick';
+    pick.className='addr-pick';
+    pick.innerHTML='<option value="">▼</option>';
+    combo.appendChild(pick);
+  });
+  wireAddrCascade('ag'+i+'_'+px+'pv','ag'+i+'_'+px+'ap','ag'+i+'_'+px+'tb');
+}
+function getGlobLoc(i){
+  var tb=gv('ag'+i+'_glob_tb');
+  var ap=gv('ag'+i+'_glob_ap');
+  var pv=gv('ag'+i+'_glob_pv');
+  if(!tb && !ap && !pv) return '';
+  return 'ตำบล '+(tb||'..........')+' อำเภอ '+(ap||'..........')+' จังหวัด '+(pv||'..........');
+}
+// ต่อ ตำบล/อำเภอ/จังหวัด ให้ desc ถ้ายังไม่ระบุ (ใช้กับ partial_rdm/partial_rdm_sellback)
+function appendLoc(desc, loc){
+  if(!desc) return '..........';
+  if(!loc) return desc;
+  if(/ตำบล|อำเภอ|จังหวัด/.test(desc)) return desc;
+  return desc + ' ' + loc;
+}
+function getCommonLoc(i, px){
+  var tb=gv('ag'+i+'_'+px+'tb');
+  var ap=gv('ag'+i+'_'+px+'ap');
+  var pv=gv('ag'+i+'_'+px+'pv');
+  if(!tb && !ap && !pv) return '';
+  return 'ตำบล '+(tb||'..........')+' อำเภอ '+(ap||'..........')+' จังหวัด '+(pv||'..........');
+}
+
 
 function agFields(i,t){
-  if(t==='mortgage'){
+  if(t==='mortgage'||t==='mortgage_n'){
     const cOpts=COL_TYPES.map(c=>`<option value="${c.v}">${c.l}</option>`).join('');
+    const nExtra=(t==='mortgage_n')
+      ?`${fld(i,'ord','ลำดับที่จำนอง',false,'เช่น 2, 3')}${fld(i,'debtor','ชื่อลูกหนี้ที่ค้ำหนี้',true,'นาย/นาง/นางสาว...')}`
+      :'';
     return`<div class="af-grid">
       <div class="fw"><label>ประเภทหลักทรัพย์</label>
         <select id="ag${i}_mct" onchange="refreshMortCol(${i},this.value)"
           style="width:100%;padding:9px 10px;font-size:14px;border:1px solid #ccc;border-radius:7px;font-family:inherit;-webkit-appearance:none;background:#fff">${cOpts}</select></div>
       <div class="fw" id="ag${i}_mcf">${colFieldsHTML(i,'m_','โฉนด')}</div>
       ${fld(i,'cust','ชื่อ-นามสกุลลูกค้า (ผู้จำนอง)',true,'นาย/นาง/นางสาว...')}
-      
+      ${nExtra}
       ${ta(i,'bld','สิ่งปลูกสร้าง (ถ้ามี ข้ามได้)',true,'')}
       ${amtPair(i,'amt','วงเงิน')}
       ${fld(i,'rate','ดอกเบี้ย % ต่อปี',false,'เช่น 15')}
@@ -591,6 +908,96 @@ function agFields(i,t){
     ${fld(i,'cust','ชื่อ-นามสกุลลูกค้า (ผู้ขายฝาก)',true,'')}${fld(i,'period','กำหนด',false,'เช่น 1 ปี')}
     ${colBlock(i,'s_')}${ta(i,'bld','สิ่งปลูกสร้าง (ถ้ามี)',true,'')}
     ${amtPair(i,'amt','วงเงิน')}${amtPair(i,'rdm','ราคาสินไถ่')}
+    ${pwBlock(i)}
+  </div>`;
+  if(t==='split_sellback')return`<div class="af-grid">
+    ${fld(i,'cust','ชื่อ-นามสกุลผู้ขายฝาก',true,'')}
+    ${purpCombo(i)}
+    ${fld(i,'period','กำหนดขายฝาก',false,'เช่น 1 ปี')}
+    ${dateFld(i,'origdt','วันที่สัญญาขายฝากเดิม',true)}
+    ${colBlock(i,'sp_')}
+    ${fld(i,'nparts','จำนวนแปลงที่แบ่งแยก',false,'เช่น 3')}
+    ${pwBlock(i)}
+  </div>`;
+  if(t==='topup')return`<div class="af-grid">
+    ${fld(i,'cust','ชื่อ-นามสกุลลูกค้า (ผู้จำนอง)',true,'')}${fld(i,'topno','ครั้งที่ขึ้นเงิน',false,'เช่น 1, 2')}
+    ${colBlock(i,'tu_')}${dateFld(i,'origdt','วันที่สัญญาจำนองเดิม',true)}
+    ${amtPair(i,'amt','จำนวนเงินที่ขึ้นใหม่')}${amtPair(i,'total','ยอดจำนองรวมทั้งสิ้น')}
+    ${fld(i,'rate','ดอกเบี้ย % ต่อปี',false,'เช่น 15')}
+    ${pwBlock(i)}
+  </div>`;
+  if(t==='reloan')return`<div class="af-grid">
+    ${fld(i,'cust','ชื่อ-นามสกุลผู้จำนอง',true,'')}
+    ${dateFld(i,'origdt','วันที่สัญญาจำนองเดิม',true)}
+    ${colBlock(i,'rl_')}
+    ${amtPair(i,'balance','เงินต้นที่เหลืออยู่')}
+    ${amtPair(i,'amt','วงเงินเดิม')}
+    ${pwBlock(i)}
+  </div>`;
+  if(t==='partial_rdm')return`<div class="af-grid">
+    ${fld(i,'cust','ชื่อ-นามสกุลผู้จำนอง',true,'')}
+    ${dateFld(i,'origdt','วันที่สัญญาจำนองเดิม',true)}
+    ${amtPair(i,'initamt','ยอดจดจำนองเริ่มต้น')}
+    <div class="fw"><label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+      <input type="checkbox" id="ag${i}_sameloc" onchange="toggleSameLoc(${i},this.checked)" style="width:20px;height:20px;accent-color:#1a6a1a">
+      <span>📌 โฉนดทุกอันอยู่ที่เดียวกัน (ไม่ต้องกรอก ต./อ./จ. ในแต่ละ row)</span>
+    </label>
+    <div id="ag${i}_globloc" class="hist-addr" style="display:none;margin-top:8px">
+      ${addrCombo(`ag${i}_glob_pv`,"จังหวัด")}
+      ${addrCombo(`ag${i}_glob_ap`,"อำเภอ/เขต")}
+      ${addrCombo(`ag${i}_glob_tb`,"ตำบล/แขวง")}
+    </div></div>
+    <div class="fw"><label>ประวัติการแบ่งไถ่/แบ่งแยกที่ผ่านมา (กด + เพื่อเพิ่มทีละครั้ง)</label>
+      <div id="ag${i}_histlist" class="dyn-list"></div>
+      <button type="button" class="dyn-add" onclick="addHistRow(${i})">+ เพิ่มครั้งที่ไถ่/แบ่งแยก</button>
+    </div>
+    ${colBlock(i,'pr_')}
+    <div class="fw" style="margin-top:-4px"><label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+      <input type="checkbox" id="ag${i}_colsame" onchange="toggleColSame(${i},this.checked,'pr_')" style="width:20px;height:20px;accent-color:#1a6a1a">
+      <span>🔗 จังหวัด/อำเภอ/ตำบล ของโฉนดนี้ เหมือนกับข้อมูล ต./อ./จ. ข้างบน</span>
+    </label></div>
+    ${amtPair(i,'amt','จำนวนเงินไถ่ถอนครั้งนี้')}
+    <div class="fw"><label>หลักทรัพย์ที่ยังคงจำนองอยู่หลังการไถ่ (กด + เพื่อเพิ่มทีละแปลง)</label>
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:normal;margin:6px 0"><input type="checkbox" id="ag${i}_remsame" onchange="toggleRemSame(${i},this.checked)" style="width:18px;height:18px;accent-color:#1a6a1a"><span style="font-size:13px">🔗 จังหวัด/อำเภอ/ตำบล ของแปลงคงเหลือทุกอัน เหมือนข้างบน</span></label>
+      <div id="ag${i}_remainlist" class="dyn-list"></div>
+      <button type="button" class="dyn-add" onclick="addRemainRow(${i})">+ เพิ่มแปลงคงเหลือ</button>
+    </div>
+    ${amtPair(i,'total','ยอดหนี้จำนองคงเหลือสุทธิ')}
+    ${pwBlock(i)}
+  </div>`;
+  if(t==='partial_rdm_sellback')return`<div class="af-grid">
+    ${fld(i,'cust','ชื่อ-นามสกุลผู้ขายฝาก',true,'')}
+    ${purpCombo(i)}
+    ${fld(i,'period','กำหนดขายฝาก',false,'เช่น หนึ่งปี, 1 ปี')}
+    ${dateFld(i,'origdt','วันที่สัญญาขายฝากเดิม',true)}
+    ${fld(i,'initparts','จำนวนแปลงเริ่มต้น',false,'เช่น 7')}
+    ${amtPair(i,'initamt','ราคาสินไถ่เริ่มต้น')}
+    <div class="fw"><label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+      <input type="checkbox" id="ag${i}_sameloc" onchange="toggleSameLoc(${i},this.checked)" style="width:20px;height:20px;accent-color:#1a6a1a">
+      <span>📌 โฉนดทุกอันอยู่ที่เดียวกัน (ไม่ต้องกรอก ต./อ./จ. ในแต่ละ row)</span>
+    </label>
+    <div id="ag${i}_globloc" class="hist-addr" style="display:none;margin-top:8px">
+      ${addrCombo(`ag${i}_glob_pv`,"จังหวัด")}
+      ${addrCombo(`ag${i}_glob_ap`,"อำเภอ/เขต")}
+      ${addrCombo(`ag${i}_glob_tb`,"ตำบล/แขวง")}
+    </div></div>
+    <div class="fw"><label>ประวัติการแบ่งไถ่ที่ผ่านมา (กด + เพื่อเพิ่มทีละครั้ง)</label>
+      <div id="ag${i}_histlist" class="dyn-list"></div>
+      <button type="button" class="dyn-add" onclick="addHistRow(${i})">+ เพิ่มครั้งที่ไถ่</button>
+    </div>
+    ${amtPair(i,'balbef','ยอดสินไถ่คงเหลือก่อนไถ่ครั้งนี้')}
+    ${colBlock(i,'prs_')}
+    <div class="fw" style="margin-top:-4px"><label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+      <input type="checkbox" id="ag${i}_colsame" onchange="toggleColSame(${i},this.checked,'prs_')" style="width:20px;height:20px;accent-color:#1a6a1a">
+      <span>🔗 จังหวัด/อำเภอ/ตำบล ของโฉนดนี้ เหมือนกับข้อมูล ต./อ./จ. ข้างบน</span>
+    </label></div>
+    ${amtPair(i,'amt','จำนวนเงินไถ่ครั้งนี้')}
+    ${amtPair(i,'total','ยอดสินไถ่คงเหลือสุทธิ')}
+    <div class="fw"><label>โฉนดที่ยังคงขายฝากอยู่หลังการไถ่ (กด + เพื่อเพิ่มทีละแปลง)</label>
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:normal;margin:6px 0"><input type="checkbox" id="ag${i}_remsame" onchange="toggleRemSame(${i},this.checked)" style="width:18px;height:18px;accent-color:#1a6a1a"><span style="font-size:13px">🔗 จังหวัด/อำเภอ/ตำบล ของแปลงคงเหลือทุกอัน เหมือนข้างบน</span></label>
+      <div id="ag${i}_remainlist" class="dyn-list"></div>
+      <button type="button" class="dyn-add" onclick="addRemainRow(${i})">+ เพิ่มแปลงคงเหลือ</button>
+    </div>
     ${pwBlock(i)}
   </div>`;
   if(t==='extend')return`<div class="af-grid">
@@ -625,7 +1032,7 @@ function agFields(i,t){
           document.getElementById('dl-amt-wrap-'+i+'-'+idx).style.display=this.checked?'':'none';
         });
       });
-          ['m_','s_','e_','rm_','rs_'].forEach(function(px){ wireColAddr(i,px); });
+          ['m_','s_','e_','rm_','rs_','tu_','rl_','pr_','prs_','sp_'].forEach(function(px){ wireColAddr(i,px); });
     },100);
     return`<div class="af-grid">
       <div class="fw"><label>กรรมการผู้ให้กู้ (เลือกได้หลายคน)</label><div style="margin-top:6px">${dirRows}</div></div>
@@ -642,7 +1049,7 @@ function agFields(i,t){
       </div>
     </div>`;
   }
-  if(t==='other')return`<div class="af-grid">${fld(i,'ttl','หัวข้อวาระ',true,'')}${ta(i,'dtl','รายละเอียด',true,'')}${ta(i,'sum','สรุปวาระ (แสดงเป็นข้อสรุปท้ายประชุม — ไม่บังคับ)',true,'เช่น ที่ประชุมได้รับทราบ...')}</div>`;
+  if(t==='other')return`<div class="af-grid">${fld(i,'ttl','หัวข้อวาระ',true,'')}${ta(i,'dtl','รายละเอียด',true,'')}${ta(i,'sum','สรุปวาระ (แสดงเป็นข้อสรุปท้ายประชุม — ไม่บังคับ)',true,'เช่น ที่ประชุมได้รับทราบ...')}${fld(i,'act','การกระทำ (สำหรับหน้าสำเนา + มอบอำนาจ ถ้าใช้)',true,'เช่น รับจำนอง, ไถ่ถอน, ...')}${pwBlock(i)}</div>`;
   return'';
 }
 function refreshMortCol(i,ct){document.getElementById('ag'+i+'_mcf').innerHTML=colFieldsHTML(i,'m_',ct);setTimeout(function(){wireColAddr(i,'m_');},30);}
@@ -655,9 +1062,9 @@ function addAg(t='mortgage'){
     <button class="rb" onclick="removeAg(${i})">ลบ</button>
   </div><div id="agf-${i}">${agFields(i,t)}</div>`;
   document.getElementById('agenda-box').appendChild(d);
-  setTimeout(function(){if(typeof wireColAddr==='function'){['m_','s_','e_','rm_','rs_',''].forEach(function(px){wireColAddr(i,px);});var _od='ag'+i+'_origdt';if(document.getElementById(_od)){try{tdpInit(_od);_tdpWireEvents(_od);}catch(e){}}}},60);
+  setTimeout(function(){if(typeof wireColAddr==='function'){['m_','s_','e_','rm_','rs_','tu_','rl_','pr_','prs_','sp_',''].forEach(function(px){wireColAddr(i,px);});['pr_','prs_'].forEach(function(px){if(document.getElementById('ag'+i+'_'+px+'pv'))upgradeColAddrToCombo(i,px);});var _od='ag'+i+'_origdt';if(document.getElementById(_od)){try{tdpInit(_od);_tdpWireEvents(_od);}catch(e){}}}},60);
 }
-function changeAg(i,t){document.getElementById('agf-'+i).innerHTML=agFields(i,t);setTimeout(function(){if(typeof wireColAddr==='function'){['m_','s_','e_','rm_','rs_',''].forEach(function(px){wireColAddr(i,px);});var _od='ag'+i+'_origdt';if(document.getElementById(_od)){try{tdpInit(_od);_tdpWireEvents(_od);}catch(e){}}}},60);}
+function changeAg(i,t){document.getElementById('agf-'+i).innerHTML=agFields(i,t);setTimeout(function(){if(typeof wireColAddr==='function'){['m_','s_','e_','rm_','rs_','tu_','rl_','pr_','prs_','sp_',''].forEach(function(px){wireColAddr(i,px);});['pr_','prs_'].forEach(function(px){if(document.getElementById('ag'+i+'_'+px+'pv'))upgradeColAddrToCombo(i,px);});var _od='ag'+i+'_origdt';if(document.getElementById(_od)){try{tdpInit(_od);_tdpWireEvents(_od);}catch(e){}}}},60);}
 function removeAg(i){const e=document.getElementById('agi-'+i);if(e)e.remove()}
 function toggleOther(){document.getElementById('other-wrap').style.display=document.getElementById('chairman').value==='other'?'':'none'}
 function ch(){const v=gv('chairman');return v==='other'?gv('chairman-other'):v}
@@ -669,33 +1076,38 @@ function moneyAg(i,id){const n=parseInt((gv('ag'+i+'_'+id)||'').replace(/[,\s]/g
 function buildAgContent(i){
   const el=document.querySelector('#agi-'+i+' .at');if(!el)return null;
   const t=el.value;const res=[];let title='',body='';
-  if(t==='mortgage'){
+  if(t==='mortgage'||t==='mortgage_n'){
+    const isN=(t==='mortgage_n');
+    const ord=isN?(gv('ag'+i+'_ord')||'..........'):'';
+    const debtor=isN?(gv('ag'+i+'_debtor')||'..........'):'';
+    const ordTxt=isN?`ลำดับที่ ${ord}`:'';
     const bld=gv('ag'+i+'_bld');const m=moneyAg(i,'amt');const ct=gv('ag'+i+'_mct')||'โฉนด';
     const g2=(id)=>gv('ag'+i+'_m_'+id)||'..........';
     let asset='',docShort='';
     if(ct==='ห้องชุด'){
-      asset=`ห้องชุด เลขที่ ${g2('cno')} ชั้นที่ ${g2('cfl')} อาคารเลขที่ ${g2('cbn')} ชื่ออาคารชุด ${g2('cname')} ทะเบียนอาคารชุดเลขที่ ${g2('creg')} ตำบล ${g2('tb')} อำเภอ ${g2('ap')} จังหวัด ${g2('pv')} ตั้งอยู่บนโฉนดเลขที่ ${g2('tno')} ตำบล ${g2('tb2')} อำเภอ ${g2('ap2')} จังหวัด ${g2('pv2')}`;
-      docShort='ห้องชุด';
-      title=bld?`เรื่องการจดทะเบียนและทำนิติกรรมรับจำนองห้องชุดพร้อมสิ่งปลูกสร้าง ของบริษัท โชคชัย เงินด่วน จำกัด`
-               :`เรื่องการจดทะเบียนและทำนิติกรรมรับจำนองห้องชุด ของบริษัท โชคชัย เงินด่วน จำกัด`;
+      asset=`ห้องชุด${isN?ordTxt:''} เลขที่ ${g2('cno')} ชั้นที่ ${g2('cfl')} อาคารเลขที่ ${g2('cbn')} ชื่ออาคารชุด ${g2('cname')} ทะเบียนอาคารชุดเลขที่ ${g2('creg')} ตำบล ${g2('tb')} อำเภอ ${g2('ap')} จังหวัด ${g2('pv')} ตั้งอยู่บนโฉนดเลขที่ ${g2('tno')} ตำบล ${g2('tb2')} อำเภอ ${g2('ap2')} จังหวัด ${g2('pv2')}`;
+      docShort=isN?`ห้องชุด${ordTxt}`:'ห้องชุด';
+      const t1=isN?`เรื่องการจดทะเบียนและทำนิติกรรมรับจำนองห้องชุด${ordTxt}`:`เรื่องการจดทะเบียนและทำนิติกรรมรับจำนองห้องชุด`;
+      title=bld?`${t1}พร้อมสิ่งปลูกสร้าง ของบริษัท โชคชัย เงินด่วน จำกัด`
+               :`${t1} ของบริษัท โชคชัย เงินด่วน จำกัด`;
     } else {
       const full=ct==='โฉนด'?'โฉนดที่ดิน':ct==='นส3ก'?'หนังสือรับรองการทำประโยชน์ (น.ส.3 ก.)':'หนังสือรับรองการทำประโยชน์ (น.ส.3)';
       docShort=ct==='โฉนด'?'โฉนดที่ดิน':ct==='นส3ก'?'น.ส.3 ก.':'น.ส.3';
-      asset=`${full} เลขที่ ${g2('tno')} เลขที่ดิน ${g2('lno')} ตำบล ${g2('tb')} อำเภอ ${g2('ap')} จังหวัด ${g2('pv')}`;
-      // หัวข้อ: มีสิ่งปลูกสร้าง → ใส่ "พร้อมสิ่งปลูกสร้าง"
-      title=bld?`เรื่องการจดทะเบียนและทำนิติกรรมรับจำนองที่ดินพร้อมสิ่งปลูกสร้าง ของบริษัท โชคชัย เงินด่วน จำกัด`
-               :`เรื่องการจดทะเบียนและทำนิติกรรมรับจำนองที่ดิน ของบริษัท โชคชัย เงินด่วน จำกัด`;
+      if(isN)docShort=`${docShort}${ordTxt}`;
+      asset=`${full}${isN?ordTxt:''} เลขที่ ${g2('tno')} เลขที่ดิน ${g2('lno')} ตำบล ${g2('tb')} อำเภอ ${g2('ap')} จังหวัด ${g2('pv')}`;
+      const t1=isN?`เรื่องการจดทะเบียนและทำนิติกรรมรับจำนองที่ดิน${ordTxt}`:`เรื่องการจดทะเบียนและทำนิติกรรมรับจำนองที่ดิน`;
+      title=bld?`${t1}พร้อมสิ่งปลูกสร้าง ของบริษัท โชคชัย เงินด่วน จำกัด`
+               :`${t1} ของบริษัท โชคชัย เงินด่วน จำกัด`;
     }
-    // เนื้อหา: มีสิ่งปลูกสร้าง → "พร้อม[ชื่อ]รวมถึงสิ่งปลูกสร้างที่มีอยู่และจะเกิดขึ้นในอนาคต"
-    //         ไม่มี → "พร้อมสิ่งปลูกสร้างที่มีอยู่และที่จะเกิดขึ้นในอนาคต"
     const bldTxt=bld
       ?` พร้อม${bld} รวมถึงสิ่งปลูกสร้างที่มีอยู่และจะเกิดขึ้นในอนาคต`
       :` พร้อมสิ่งปลูกสร้างที่มีอยู่และที่จะเกิดขึ้นในอนาคต`;
-    body=`ประธาน ได้กล่าวแถลงต่อที่ประชุมว่า การที่เชิญประชุมครั้งนี้ก็เพื่อให้ที่ประชุม พิจารณาเรื่อง การรับจำนอง${asset}${bldTxt} กับ ${gfm(i,'cust')} ในวงเงิน ${m.num} บาท (${m.txt}) ตกลงดอกเบี้ยร้อยละ ${gfm(i,'rate')} ต่อปี ชำระดอกเบี้ยเดือนละครั้งเสมอไป`;
+    const guarantTxt=isN?` เพื่อเป็นการประกันหนี้ ${debtor}`:'';
+    body=`ประธาน ได้กล่าวแถลงต่อที่ประชุมว่า การที่เชิญประชุมครั้งนี้ก็เพื่อให้ที่ประชุม พิจารณาเรื่อง การรับจำนอง${asset}${bldTxt} กับ ${gfm(i,'cust')}${guarantTxt} ในวงเงิน ${m.num} บาท (${m.txt}) ตกลงดอกเบี้ยร้อยละ ${gfm(i,'rate')} ต่อปี ชำระดอกเบี้ยเดือนละครั้งเสมอไป`;
     res.push(`จดทะเบียนรับจำนอง${docShort} เป็นเงิน ${m.num} บาท (${m.txt}) ตกลงดอกเบี้ยร้อยละ ${gfm(i,'rate')} ต่อปี ชำระดอกเบี้ยเดือนละครั้งเสมอไป`);
     res.push('ให้ถือสัญญาจำนองเป็นหลักฐานแห่งการกู้ยืมเงิน');
     res.push('ให้เงื่อนไขและข้อตกลงอื่นๆ ให้เป็นไปตามข้อตกลงต่อท้ายสัญญาจำนอง และให้ถือข้อตกลงต่อท้ายสัญญาจำนองเป็นส่วนหนึ่งของสัญญาจำนองด้วย');
-    var _pw=pwRes(i,'รับจำนอง');if(_pw)res.push(_pw);
+    var _pw=pwRes(i,isN?`รับจำนอง${ordTxt}`:'รับจำนอง');if(_pw)res.push(_pw);
   }else if(t==='sellback'){
     const bld=gv('ag'+i+'_bld');const m=moneyAg(i,'amt');const r=moneyAg(i,'rdm');const sc=getCol(i,'s_');const aw=sc.type==='ห้องชุด'?'ห้องชุด':'ที่ดิน';
     const bldSfx=bld?` พร้อมสิ่งปลูกสร้าง ${bld}`:""; 
@@ -707,6 +1119,36 @@ function buildAgContent(i){
     body=`ประธานได้กล่าวแถลงต่อที่ประชุมว่า การที่เชิญประชุมครั้งนี้ก็เพื่อให้ที่ประชุมพิจารณาเรื่องอนุมัติรับซื้อฝาก${aw} มีกำหนด ${gfm(i,'period')} ให้แก่ ${gfm(i,'cust')} ในวงเงิน ${m.num} บาท (${m.txt}) กำหนดสินไถ่ในราคา ${r.num} บาท (${r.txt}) โดยรับซื้อฝาก${sc.long}${sbBldTxt} กับ ${gfm(i,'cust')}`;
     res.push(`ขอจดทะเบียนรับซื้อฝาก${sc.short} มีกำหนด ${gfm(i,'period')} กับ ${gfm(i,'cust')} จำนวนวงเงิน ${m.num} บาท (${m.txt}) กำหนดสินไถ่ในราคา ${r.num} บาท (${r.txt})`);
     var _pw=pwRes(i,'รับซื้อฝาก');if(_pw)res.push(_pw);
+  }else if(t==='split_sellback'){
+    const spc=getCol(i,'sp_');const aw=spc.type==='ห้องชุด'?'ห้องชุด':'ที่ดิน';
+    const purp=gv('ag'+i+'_purp')||'..........';
+    const period=gv('ag'+i+'_period')||'..........';
+    const nparts=gv('ag'+i+'_nparts')||'..........';
+    title=`พิจารณาอนุมัติแบ่งแยก${aw}(ครอบซื้อฝาก)`;
+    body=`แบ่งแยกในนามเดิม (ครอบซื้อฝาก) ตามหนังสือสัญญาขายฝาก${aw} ที่ดินเพื่อ ${purp} มีกำหนด ${period} ลงวันที่ ${_tdpFmt(gv('ag'+i+'_origdt'))||'..........'} ${spc.long} ซึ่ง ${gfm(i,'cust')} ได้ขายฝากไว้กับ บริษัท โชคชัย เงินด่วน จำกัด นั้น บัดนี้ บริษัท โชคชัย เงินด่วน จำกัด มีความประสงค์ขอรังวัดแบ่งแยกในนามเดิม (ครอบซื้อฝาก) ออกเป็น ${nparts} แปลง โดยให้ แปลงที่ดินแปลงที่แบ่งแยกออกไปทุกแปลง รวมทั้งแปลงคงเหลือยังคงมีการซื้อฝากครอบอยู่ตามเดิม และถ้าหากการรังวัดแบ่งแยกครั้งนี้เนื้อที่และรูปแผนที่เปลี่ยนแปลงไปให้แก้ไขตามนั้น`;
+    res.push(`อนุมัติให้มีการแบ่งแยก${aw}(ครอบซื้อฝาก)ออกเป็น ${nparts} แปลง โดยให้ แปลงที่ดินแปลงที่แบ่งแยกออกไปทุกแปลง รวมทั้งแปลงคงเหลือยังคงมีการซื้อฝากครอบอยู่ตามเดิม และถ้าหากการรังวัดแบ่งแยกครั้งนี้เนื้อที่และรูปแผนที่เปลี่ยนแปลงไปให้แก้ไขตามนั้น`);
+    var _pwss=pwRes(i,'แบ่งแยกที่ดิน(ครอบซื้อฝาก)');if(_pwss)res.push(_pwss);
+  }else if(t==='topup'){
+    const m=moneyAg(i,'amt');const tot=moneyAg(i,'total');const tc=getCol(i,'tu_');
+    const aw=tc.type==='ห้องชุด'?'ห้องชุด':'ที่ดิน';
+    const topno=gfm(i,'topno');
+    title=`เรื่องการจดทะเบียนและทำนิติกรรมรับขึ้นเงินจากจำนองครั้งที่ ${topno} ของบริษัท โชคชัย เงินด่วน จำกัด`;
+    body=`ประธาน ได้กล่าวแถลงต่อที่ประชุมว่า การที่เชิญประชุมครั้งนี้ก็เพื่อให้ที่ประชุมพิจารณาเรื่อง การรับขึ้นเงินจำนองครั้งที่ ${topno} โดยขึ้นเงินจำนองของ${tc.long} ของ ${gfm(i,'cust')} ตามสัญญาจำนอง ฉบับลงวันที่ ${_tdpFmt(gv('ag'+i+'_origdt'))||'..........'} ขึ้นจำนองอีกจำนวนเงิน ${m.num} บาท (${m.txt}) รวมเป็นเงินจำนองทั้งสิ้น ${tot.num} บาท (${tot.txt}) เงื่อนไขข้อตกลงต่างๆ เป็นไปตามสัญญาจำนองเดิมทุกประการ`;
+    res.push(`ขอจดทะเบียนขึ้นเงินจากจำนองครั้งที่ ${topno} ${aw}พร้อมสิ่งปลูกสร้างที่มีในปัจจุบันและที่จะมีเกิดขึ้นในอนาคต แปลงดังกล่าวข้างต้น เป็นจำนวนเงิน ${m.num} บาท (${m.txt}) รวมเป็นเงินจำนองทั้งสิ้น ${tot.num} บาท (${tot.txt}) ตกลงดอกเบี้ยร้อยละ ${gfm(i,'rate')} ต่อปี ชำระดอกเบี้ยเดือนละครั้งเสมอไป`);
+    res.push('ให้ถือสัญญาจำนองเป็นหลักฐานแห่งการกู้ยืมเงิน เงื่อนไขข้อตกลงต่างๆ เป็นไปตามสัญญาจำนองเดิมทุกประการ');
+    var _pwt=pwRes(i,`ขึ้นเงินจากจำนองครั้งที่ ${topno}`);if(_pwt)res.push(_pwt);
+  }else if(t==='reloan'){
+    const rlc=getCol(i,'rl_');
+    const bal=moneyAg(i,'balance');const orig=moneyAg(i,'amt');
+    const balN=parseInt((gv('ag'+i+'_balance')||'').replace(/[,\s]/g,''))||0;
+    const origN=parseInt((gv('ag'+i+'_amt')||'').replace(/[,\s]/g,''))||0;
+    const diff=Math.max(0,origN-balN);
+    const dNum=diff?diff.toLocaleString('th-TH'):'..........';
+    const dTxt=diff?toBaht(diff):'..........';
+    title=`พิจารณาเรื่องอนุมัติการกู้เงินเท่าวงเงินเดิม`;
+    body=`ประธานได้กล่าวแถลงต่อที่ประชุมว่า การที่เชิญประชุมครั้งนี้ก็เพื่อให้ที่ประชุมพิจารณาเรื่องอนุมัติการกู้เงินเท่าวงเงินเดิมให้แก่ ${gfm(i,'cust')} เนื่องจากได้รับชำระหนี้จนเงินต้นเหลือ ${bal.num} บาท (${bal.txt}) ทางผู้จำนองต้องการเพิ่มวงเงินให้เป็นยอดเท่าเดิม คือ ${orig.num} บาท (${orig.txt}) ตามสัญญาจำนองลงวันที่ ${_tdpFmt(gv('ag'+i+'_origdt'))||'..........'} ${rlc.long} กับ ${gfm(i,'cust')}`;
+    res.push(`ให้จ่ายเงินให้ผู้จำนองจำนวนเงิน ${dNum} บาท (${dTxt})`);
+    var _pwrl=pwRes(i,'กู้เงินเท่าวงเงินเดิม');if(_pwrl)res.push(_pwrl);
   }else if(t==='extend'){
     const ec=getCol(i,'e_');const aw=ec.type==='ห้องชุด'?'ห้องชุด':'ที่ดิน';
     title=`พิจารณาเรื่องอนุมัติขยายระยะเวลาไถ่จากขายฝาก${aw}`;
@@ -725,6 +1167,74 @@ function buildAgContent(i){
     body=`ประธานได้กล่าวแถลงต่อที่ประชุมว่า การที่เชิญประชุมครั้งนี้ก็เพื่อให้ที่ประชุมพิจารณาเรื่องอนุมัติการไถ่ถอนขายฝากให้แก่ ${gfm(i,'cust')} ตามสัญญาขายฝาก${aw} ฉบับลงวันที่ ${_tdpFmt(gv('ag'+i+'_origdt'))||'..........'} เนื่องจากได้รับชำระหนี้เต็มจำนวนแล้ว โดยให้ไถ่ถอนขายฝาก${rc.long} ของ ${gfm(i,'cust')} ได้`;
     res.push('ให้รับชำระเงินตามจำนวนสินไถ่และยินยอมให้ไถ่ถอนขายฝากได้');
     var _pw=pwRes(i,'ไถ่ถอนขายฝาก');if(_pw)res.push(_pw);
+  }else if(t==='partial_rdm'){
+    if(isColSame(i)){
+      ['pv','ap','tb'].forEach(function(k){
+        var el=document.getElementById('ag'+i+'_pr_'+k);
+        if(el)el.value=gv('ag'+i+'_glob_'+k)||'';
+      });
+    }
+    const pc=getCol(i,'pr_');const aw=pc.type==='ห้องชุด'?'ห้องชุด':'ที่ดิน';
+    const ia=moneyAg(i,'initamt');const m=moneyAg(i,'amt');const tot=moneyAg(i,'total');
+    const commLocPR=isSameLoc(i)?(getGlobLoc(i)||getCommonLoc(i,'pr_')):getCommonLoc(i,'pr_');
+    const same=isSameLoc(i);
+    const histRows=getHistRows(i);
+    var _rdmN=0;
+    const histLines=histRows.length?histRows.map(function(h){
+      var loc=same?commLocPR:(rowLoc(h)||commLocPR);
+      if(h.type==='split'){
+        return '• วันที่ '+(h.dt||'..........')+' (การแบ่งแยกในนามเดิมครอบจำนอง): '+appendLoc(h.desc,loc);
+      }
+      _rdmN++;
+      var mn=h.amt?h.amt.toLocaleString('th-TH'):'..........';
+      var mt=h.amt?toBaht(h.amt):'..........';
+      return '• วันที่ '+(h.dt||'..........')+' (การไถ่ถอนครั้งที่ '+_rdmN+'): ผู้จำนองได้ดำเนินการแบ่งไถ่ถอนจำนอง'+aw+'เฉพาะส่วน คือ '+appendLoc(h.desc,loc)+' โดยชำระเงินจำนวน '+mn+' บาท ('+mt+')';
+    }).join('<br>'):'..........';
+    const remainRows=getRemainRows(i).filter(function(x){return x.desc;});
+    const remSame=isRemSame(i);
+    const remainTxt=remainRows.length
+      ?('จำนวน '+remainRows.length+' แปลง ดังนี้<br>'+remainRows.map(function(r){var loc=(same||remSame)?commLocPR:(rowLoc(r)||commLocPR);return '• '+appendLoc(r.desc,loc);}).join('<br>'))
+      :'..........';
+    title=`พิจารณาเรื่องการอนุมัติแบ่งไถ่ถอนจำนอง${aw}`;
+    body=`ประธานได้กล่าวแถลงต่อที่ประชุมว่า การเชิญประชุมในครั้งนี้เพื่อให้ที่ประชุมร่วมกันพิจารณาอนุมัติการแบ่งไถ่ถอนจำนอง${aw} โดยมีลำดับความเป็นมาและรายละเอียดข้อเท็จจริงตามที่ปรากฏในสัญญาจำนองและทะเบียนที่ดิน ดังต่อไปนี้<br>1. ข้อมูลการจดจำนองเริ่มต้น<br>ผู้จำนอง: ${gfm(i,'cust')}<br>สัญญาจำนอง: ฉบับลงวันที่ ${_tdpFmt(gv('ag'+i+'_origdt'))||'..........'}<br>ยอดหนี้จดจำนองเริ่มต้น: ${ia.num} บาท (${ia.txt})<br>2. ประวัติการแบ่งไถ่ถอนจำนองและการแบ่งแยกที่ดินย่อยที่ผ่านมา<br>${histLines}<br>3. การเสนอขอแบ่งไถ่ถอนจำนองในการประชุมวันนี้<br>ในการประชุมครั้งนี้ ผู้จำนองมีความประสงค์ขออนุมัติแบ่งไถ่ถอนจำนอง${pc.long} โดยตกลงชำระเงินจำนวน ${m.num} บาท (${m.txt})<br>การไถ่ถอนในครั้งนี้จะส่งผลให้คงเหลือหลักทรัพย์ที่ยังคงจำนองค้ำประกันอยู่ ${remainTxt}<br>และทำให้ยอดหนี้จำนองคงเหลือสุทธิเท่ากับ ${tot.num} บาท (${tot.txt})`;
+    res.push('ให้รับชำระเงินตามจำนวนหนี้จำนวนดังกล่าวและยินยอมให้แบ่งไถ่ถอนจำนอง');
+    var _pwp=pwRes(i,'แบ่งไถ่ถอนจำนอง');if(_pwp)res.push(_pwp);
+  }else if(t==='partial_rdm_sellback'){
+    if(isColSame(i)){
+      ['pv','ap','tb'].forEach(function(k){
+        var el=document.getElementById('ag'+i+'_prs_'+k);
+        if(el)el.value=gv('ag'+i+'_glob_'+k)||'';
+      });
+    }
+    const psc=getCol(i,'prs_');const aw=psc.type==='ห้องชุด'?'ห้องชุด':'ที่ดิน';
+    const purp=gv('ag'+i+'_purp')||'..........';
+    const period=gv('ag'+i+'_period')||'..........';
+    const initparts=gv('ag'+i+'_initparts')||'..........';
+    const ia=moneyAg(i,'initamt');
+    const bal=moneyAg(i,'balbef');
+    const m=moneyAg(i,'amt');
+    const tot=moneyAg(i,'total');
+    const commLocPRS=isSameLoc(i)?(getGlobLoc(i)||getCommonLoc(i,'prs_')):getCommonLoc(i,'prs_');
+    const sameS=isSameLoc(i);
+    const histRows=getHistRows(i);
+    var _rN=0;
+    const histLines=histRows.length?histRows.map(function(h){
+      _rN++;
+      var loc=sameS?commLocPRS:(rowLoc(h)||commLocPRS);
+      var mn=h.amt?h.amt.toLocaleString('th-TH'):'..........';
+      var mt=h.amt?toBaht(h.amt):'..........';
+      return '• วันที่ '+(h.dt||'..........')+' (การแบ่งไถ่ครั้งที่ '+_rN+'): '+appendLoc(h.desc,loc)+' โดยชำระสินไถ่จำนวน '+mn+' บาท ('+mt+')';
+    }).join('<br>'):'';
+    const remainRows=getRemainRows(i).filter(function(x){return x.desc;});
+    const remSameS=isRemSame(i);
+    const remainTxt=remainRows.length?remainRows.map(function(r){var loc=(sameS||remSameS)?commLocPRS:(rowLoc(r)||commLocPRS);return '• '+appendLoc(r.desc,loc);}).join('<br>'):'..........';
+    const histSection=histLines
+      ?`<br>ประวัติการแบ่งไถ่ที่ผ่านมา:<br>${histLines}<br>คงเหลือกำหนดสินไถ่เป็นจำนวนเงิน ${bal.num} บาท (${bal.txt})`
+      :'';
+    title=`พิจารณาเรื่องอนุมัติการไถ่ถอนจากขายฝากเฉพาะส่วน`;
+    body=`ประธานได้กล่าวแถลงต่อที่ประชุมว่า การที่เชิญประชุมครั้งนี้ก็เพื่อให้ที่ประชุมพิจารณาเรื่องอนุมัติการแบ่งไถ่จากขายฝาก${aw} ตามหนังสือสัญญาขายฝาก${aw} ที่ดินเพื่อ ${purp} มีกำหนด ${period} ฉบับลงวันที่ ${_tdpFmt(gv('ag'+i+'_origdt'))||'..........'} รวม ${initparts} แปลง กำหนดสินไถ่ในราคาที่ ${ia.num} บาท (${ia.txt}) ของ ${gfm(i,'cust')} (ผู้ขายฝาก)${histSection}<br>บัดนี้ผู้ขายฝากมีความประสงค์แบ่งไถ่จากขายฝากจำนวน 1 แปลง คือ ${psc.long} โดยตกลงชำระสินไถ่เป็นเงิน ${m.num} บาท (${m.txt}) คงเหลือค่าสินไถ่ ${tot.num} บาท (${tot.txt})<br>และให้ที่ดินคงเหลือดังต่อไปนี้ยังคงขายฝากอยู่ตามเดิม:<br>${remainTxt}<br>โดยให้ค่าสินไถ่จากขายฝากคงเหลือ ${tot.num} บาท (${tot.txt})`;
+    res.push('ให้รับชำระเงินตามจำนวนหนี้จำนวนดังกล่าวและยินยอมให้ไถ่ถอนจากขายฝากเฉพาะส่วนได้');
+    var _pwps=pwRes(i,'ไถ่ถอนจากขายฝากเฉพาะส่วน');if(_pwps)res.push(_pwps);
   }else if(t==='dirloan'){
     const pur=gv('ag'+i+'_pur')||'การดำเนินการใช้จ่ายอื่นๆ ในบริษัท';
     const rate=gfm(i,'rate');
@@ -762,18 +1272,53 @@ function buildAgContent(i){
     res.push('กู้ยืมเงินจาก '+loanPartsRes
       +' ดอกเบี้ยร้อยละ '+rate+' ต่อปี รวมเป็นเงินกู้ยืม '+totalFmt+' บาท ('+totalTxt+')'
       +' ให้ '+rep+' เป็นผู้ทำการแทนบริษัทในครั้งนี้ มีอำนาจลงนามในเอกสารต่าง ๆ แทนบริษัท ในการทำหนังสือสัญญาการกู้ยืมเงิน');
-  }else if(t==='other'){title=gfm(i,'ttl');body=(gv('ag'+i+'_dtl')||'').replace(/\r\n|\r|\n/g,'<br>');const sumText=(gv('ag'+i+'_sum')||'').replace(/\r\n|\r|\n/g,'<br>');if(sumText)res.push(sumText);}
+  }else if(t==='other'){title=gfm(i,'ttl');body=(gv('ag'+i+'_dtl')||'').replace(/\r\n|\r|\n/g,'<br>');const sumText=(gv('ag'+i+'_sum')||'').replace(/\r\n|\r|\n/g,'<br>');if(sumText)res.push(sumText);var _pwo=pwRes(i,gv('ag'+i+'_act')||'..........');if(_pwo)res.push(_pwo);}
   return{title,body,res,t,i};
 }
 
 // ── บรรทัดสำหรับหน้าสำเนาถูกต้อง ──
 function buildCertLine(i,t){
-  if(['mortgage','sellback','extend','rdm_mortgage','rdm_sellback'].indexOf(t)<0)return null;
+  if(t==='other'){
+    var actO=gv('ag'+i+'_act');
+    if(!actO)return null;
+    var custO=gv('ag'+i+'_cust')||'..........';
+    var pwenO=document.getElementById('ag'+i+'_pwen');
+    var signerO=chairman,lineO='';
+    if(pwenO&&pwenO.checked){
+      signerO=gv('ag'+i+'_pwgr')||chairman;
+      var pwteO=gv('ag'+i+'_pwte')||'..........';
+      lineO='ใช้ในการมอบอำนาจจากบริษัท โชคชัย เงินด่วน จำกัด ให้ '+pwteO+' ไปดำเนินการ '+actO+' เท่านั้น';
+    }else{
+      lineO='ใช้ในการดำเนินเรื่องของบริษัท โชคชัย เงินด่วน จำกัด ในการ'+actO+' เท่านั้น';
+    }
+    return{line:lineO,signer:signerO};
+  }
+  if(['mortgage','mortgage_n','topup','reloan','sellback','split_sellback','extend','rdm_mortgage','rdm_sellback','partial_rdm','partial_rdm_sellback'].indexOf(t)<0)return null;
   var cust=gv('ag'+i+'_cust')||'..........';
   var action='';
   if(t==='mortgage'){
     var ct=gv('ag'+i+'_mct')||'โฉนด';
     action='รับจำนอง'+(ct==='ห้องชุด'?'ห้องชุด':'ที่ดิน');
+  }else if(t==='mortgage_n'){
+    var ct2=gv('ag'+i+'_mct')||'โฉนด';
+    var ord=gv('ag'+i+'_ord')||'..........';
+    action='รับจำนอง'+(ct2==='ห้องชุด'?'ห้องชุด':'ที่ดิน')+'ลำดับที่ '+ord;
+  }else if(t==='topup'){
+    var tc=getCol(i,'tu_');
+    var tno=gv('ag'+i+'_topno')||'..........';
+    action='รับขึ้นเงินจากจำนองครั้งที่ '+tno+' '+(tc.type==='ห้องชุด'?'ห้องชุด':'ที่ดิน');
+  }else if(t==='reloan'){
+    var rlc=getCol(i,'rl_');
+    action='กู้เงินเท่าวงเงินเดิม '+(rlc.type==='ห้องชุด'?'ห้องชุด':'ที่ดิน');
+  }else if(t==='partial_rdm'){
+    var pc=getCol(i,'pr_');
+    action='แบ่งไถ่ถอนจำนอง'+(pc.type==='ห้องชุด'?'ห้องชุด':'ที่ดิน');
+  }else if(t==='partial_rdm_sellback'){
+    var psc=getCol(i,'prs_');
+    action='ไถ่ถอนจากขายฝากเฉพาะส่วน'+(psc.type==='ห้องชุด'?'ห้องชุด':'ที่ดิน');
+  }else if(t==='split_sellback'){
+    var spc=getCol(i,'sp_');
+    action='แบ่งแยก'+(spc.type==='ห้องชุด'?'ห้องชุด':'ที่ดิน')+' (ครอบซื้อฝาก)';
   }else if(t==='sellback'){
     var sc=getCol(i,'s_');action='รับซื้อฝาก'+(sc.type==='ห้องชุด'?'ห้องชุด':'ที่ดิน');
   }else if(t==='extend'){
@@ -830,7 +1375,7 @@ function genMeeting(){
   certEntries.forEach(function(e){
     var signer=e.signer||chairman;
     var phone=DIR_PHONES[signer]||'..........';
-    certPageHTML+=`<div class="doc doc-page cert-page" style="position:relative;height:25cm;min-height:25cm">
+    certPageHTML+=`<div class="doc doc-page cert-page" style="position:relative;height:25cm;min-height:25cm;overflow:hidden">
       <div style="position:absolute;top:8cm;left:50%;width:170%;height:0;border-top:2px solid #000;transform:translateX(-50%) rotate(-38deg);transform-origin:center"></div>
       <div style="position:absolute;top:19cm;left:50%;width:170%;height:0;border-top:2px solid #000;transform:translateX(-50%) rotate(-38deg);transform-origin:center"></div>
       <div style="position:absolute;top:12.5cm;left:50%;transform:translate(-50%,-50%) rotate(-38deg);text-align:center;width:55%">
@@ -920,11 +1465,9 @@ function setView(v){
     var b=document.getElementById('tab-'+n);
     if(b)b.classList.toggle('on',n===v);
   });
-  // เปลี่ยนสีปุ่มพิมพ์ตามแท็บ + Word โผล่เฉพาะแท็บรายงาน
   var pb=document.getElementById('cur-print'),wb=document.getElementById('cur-word');
   if(pb){pb.style.background=v==='cert'?'#c00':v==='back'?'#1a4a7a':'#1a3a2a';}
-  if(wb){wb.style.display=v==='main'?'':'none';}
-  // อัปเดต tab disabled ตามมีเอกสารไหน
+  if(wb){wb.style.display='';}
   document.getElementById('tab-cert').disabled=!document.querySelector('.cert-page');
   document.getElementById('tab-back').disabled=!document.querySelector('.back-page');
   window.scrollTo(0,0);
@@ -936,34 +1479,63 @@ function curPrint(){
   try{window.print();}catch(e){}
 }
 function exportWord(){
-  var main=document.querySelector('#meet-doc-out .doc-page:not(.cert-page):not(.back-page)');
-  if(!main){alert('ยังไม่มีรายงาน — กรุณาสร้างรายงานก่อน');return;}
-  var docHTML=main.outerHTML.replace(/contenteditable="[^"]*"/g,'');
-  var html='<!DOCTYPE html><html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">'
-    +'<head><meta charset="utf-8"><title>รายงานการประชุม</title>'
-    +'<!--[if gte mso 9]><xml><w:WordDocument><w:View>Print</w:View><w:Zoom>100</w:Zoom></w:WordDocument></xml><![endif]-->'
-    +'<style>'
-    +'@page Section1{size:21cm 29.7cm;margin:1.5cm 1.8cm}'
-    +'div.Section1{page:Section1}'
-    +'body{font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;font-size:14pt;line-height:1.6;color:#000}'
-    +'.doc-h1{text-align:center;font-weight:bold;font-size:16pt;margin:6pt 0}'
-    +'.doc-meta p,.doc-start,.doc-close{margin:4pt 0}'
-    +'.doc-sec{margin:10pt 0}'
-    +'.doc-sec-title{font-weight:bold;margin:8pt 0 4pt}'
-    +'.doc-sec-body,.doc-sec-short,.doc-combined{margin:4pt 0;text-align:justify}'
-    +'.doc-list{margin:6pt 0;padding-left:3em}'
-    +'.doc-list li{margin-bottom:4pt;text-align:justify}'
-    +'.doc-role-table{width:100%;border-collapse:collapse}'
-    +'.doc-role-table td{padding:2pt 0;vertical-align:top}'
-    +'</style></head><body><div class="Section1">'+docHTML+'</div></body></html>';
-  var blob=new Blob(['\ufeff',html],{type:'application/msword'});
-  var url=URL.createObjectURL(blob);
-  var a=document.createElement('a');
-  a.href=url;
-  var no=gv('mtg_no')||'';var yr=gv('mtg_yr')||'';
-  a.download='รายงานการประชุม'+(no?' ครั้งที่ '+no:'')+(yr?'-'+yr:'')+'.doc';
-  document.body.appendChild(a);a.click();
-  setTimeout(function(){URL.revokeObjectURL(url);a.remove();},500);
+  try {
+    var view=_curView||'main';
+    var selector,suffix='';
+    if(view==='cert'){selector='#meet-doc-out .cert-page';suffix=' หน้าสำเนา';}
+    else if(view==='back'){selector='#meet-doc-out .back-page';suffix=' หน้าสลักหลัง';}
+    else{selector='#meet-doc-out .doc-page:not(.cert-page):not(.back-page)';suffix='';}
+    var pages=document.querySelectorAll(selector);
+    if(!pages.length){alert('ยังไม่มีเอกสารในแท็บนี้');return;}
+    var docHTML='';
+    pages.forEach(function(p,idx){
+      var html=p.outerHTML
+        .replace(/contenteditable="[^"]*"/g,'')
+        .replace(/data-edit="[^"]*"/g,'')
+        .replace(/<img[^>]*>/g,'')
+        .replace(/onclick="[^"]*"/g,'');
+      docHTML+=html;
+      if(idx<pages.length-1)docHTML+='<br style="page-break-after:always;mso-special-character:line-break;mso-break-type:page-break">';
+    });
+    var innerHTML='<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">'
+      +'<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8">'
+      +'<title>Meeting Report</title>'
+      +'<style>'
+      +'@page{size:21cm 29.7cm;margin:1.5cm 1.8cm}'
+      +'body{font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;font-size:14pt;line-height:1.6;color:#000}'
+      +'.doc-h1{text-align:center;font-weight:bold;font-size:16pt;margin:6pt 0}'
+      +'.doc-meta p,.doc-start,.doc-close{margin:4pt 0}'
+      +'.doc-sec{margin:10pt 0}'
+      +'.doc-sec-title{font-weight:bold;margin:8pt 0 4pt}'
+      +'.doc-sec-body,.doc-sec-short,.doc-combined{margin:4pt 0;text-align:justify}'
+      +'.doc-list{margin:6pt 0;padding-left:3em}'
+      +'.doc-list li{margin-bottom:4pt;text-align:justify}'
+      +'.doc-role-table{width:100%;border-collapse:collapse}'
+      +'.doc-role-table td{padding:2pt 0;vertical-align:top}'
+      +'.cert-page,.back-page{page-break-inside:avoid}'
+      +'</style></head><body>'+docHTML+'</body></html>';
+    var boundary='----=_NextPart_ChokChai_'+Date.now();
+    var mht='MIME-Version: 1.0\r\n'
+      +'Content-Type: multipart/related; boundary="'+boundary+'"; type="text/html"\r\n'
+      +'X-MimeOLE: ChokChai Meeting Generator\r\n\r\n'
+      +'--'+boundary+'\r\n'
+      +'Content-Type: text/html; charset="utf-8"\r\n'
+      +'Content-Transfer-Encoding: 8bit\r\n'
+      +'Content-Location: file:///C:/meeting.htm\r\n\r\n'
+      +innerHTML+'\r\n\r\n'
+      +'--'+boundary+'--\r\n';
+    var blob=new Blob([mht],{type:'message/rfc822'});
+    var url=URL.createObjectURL(blob);
+    var a=document.createElement('a');
+    a.href=url;
+    var no=gv('mno')||'';var yr=gv('myr')||'';
+    a.download='ประชุม โชคชัย ครั้งที่ '+(no||'-')+'-'+(yr||'-')+suffix+'.doc';
+    document.body.appendChild(a);a.click();
+    setTimeout(function(){URL.revokeObjectURL(url);a.remove();},500);
+  } catch(err){
+    console.error('Word export error:',err);
+    alert('เกิดข้อผิดพลาดในการสร้างไฟล์ Word: '+err.message);
+  }
 }
 function closePrintTip(){
   document.getElementById('print-modal').classList.remove('show');
@@ -999,16 +1571,18 @@ applyFont();
 var _editOn=false;
 function toggleEdit(){
   _editOn=!_editOn;
-  var doc=document.querySelector('#meet-doc-out .doc');
-  if(!doc)return;
-  doc.classList.toggle('editing',_editOn);
-  doc.querySelectorAll('[data-edit]').forEach(function(el){
+  var container=document.getElementById('meet-doc-out');
+  if(!container)return;
+  container.querySelectorAll('.doc').forEach(function(doc){
+    doc.classList.toggle('editing',_editOn);
+  });
+  container.querySelectorAll('[data-edit]').forEach(function(el){
     el.setAttribute('contenteditable',_editOn?'true':'false');
   });
   document.getElementById('edit-banner').style.display=_editOn?'block':'none';
   var btn=document.getElementById('edit-btn');
   if(btn){btn.textContent=_editOn?'✓ เสร็จ':'✏️ แก้เนื้อหา';btn.classList.toggle('on',_editOn);}
-  if(_editOn){var f=doc.querySelector('[data-edit]');if(f)f.focus();}
+  if(_editOn){var f=container.querySelector('[data-edit]');if(f)f.focus();}
 }
 // ปิดโหมดแก้ก่อนกลับไปแก้ฟอร์ม (กันงงตอนกลับมา)
 var _origShowMeetForm=showMeetForm;

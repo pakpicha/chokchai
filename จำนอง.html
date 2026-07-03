@@ -27,7 +27,11 @@ body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;background:#f0f0eb;
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .chips{display:flex;flex-wrap:wrap;gap:6px}
 .chips label{display:flex;align-items:center;gap:6px;font-size:14px;cursor:pointer;background:#f5faf5;border:1px solid #cce0cc;padding:7px 11px;border-radius:8px;-webkit-tap-highlight-color:transparent}
-.chips input{width:16px;height:16px;flex-shrink:0}
+.chips input{width:18px;height:18px;flex-shrink:0;accent-color:#2e7d32}
+.chips label:has(input:checked){background:#d7efd7;border-color:#2e7d32;box-shadow:0 0 0 2px rgba(46,125,50,.35);font-weight:700;color:#1b5e20}
+.cbtoggle{display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:normal;background:#f5faf5;border:1px solid #cce0cc;padding:11px 12px;border-radius:8px;-webkit-tap-highlight-color:transparent}
+.cbtoggle input{width:18px;height:18px;flex-shrink:0;accent-color:#2e7d32}
+.cbtoggle:has(input:checked){background:#d7efd7;border-color:#2e7d32;box-shadow:0 0 0 2px rgba(46,125,50,.35);font-weight:700;color:#1b5e20}
 .pay-row{background:#f6faf6;border:1px solid #cce0cc;border-radius:8px;padding:10px 12px;margin-bottom:8px}
 .pay-row .ph{display:flex;align-items:center;gap:8px;margin-bottom:8px}
 .pay-row .ph select{flex:1;padding:8px 9px;font-size:14px;border:1px solid #bcd0bc;border-radius:6px;font-family:inherit;background:#fff;-webkit-appearance:none}
@@ -263,7 +267,7 @@ function _voucherLogoBig(){
   <div class="card">
     <div class="ct"><span class="n">1</span> ข้อมูลทั่วไป</div>
     <div class="row2">
-      <div class="fg"><label>วันที่ทำเอกสาร</label><div class="tdp-wrap" id="tdpw_doc_date" onclick="event.stopPropagation()"><input type="hidden" id="doc_date"><input type="text" id="tdpi_doc_date" class="tdp-input" placeholder="เลือกหรือพิมพ์วว/ดด/ปปปป" onfocus="tdpFocus('doc_date')" onkeydown="tdpKeydown('doc_date',event)" autocomplete="off"><span class="tdp-icon" onclick="tdpOpen('doc_date')">📅</span><div class="tdp-drop" id="tdpd_doc_date"><div class="tdp-nav"><button onclick="tdpNav('doc_date',-1,event)">‹</button><span class="tdp-my" onclick="tdpToggleYM('doc_date');event.stopPropagation()">...</span><button onclick="tdpNav('doc_date',1,event)">›</button></div><div class="tdp-ym"></div><div class="tdp-days-hdr"><span>อา</span><span>จ</span><span>อ</span><span>พ</span><span>พฤ</span><span>ศ</span><span>ส</span></div><div class="tdp-days"></div></div></div></div>
+      <div class="fg"><label>วันที่ทำเอกสาร / สัญญาจำนอง</label><div class="tdp-wrap" id="tdpw_doc_date" onclick="event.stopPropagation()"><input type="hidden" id="doc_date"><input type="text" id="tdpi_doc_date" class="tdp-input" placeholder="เลือกหรือพิมพ์วว/ดด/ปปปป" onfocus="tdpFocus('doc_date')" onkeydown="tdpKeydown('doc_date',event)" autocomplete="off"><span class="tdp-icon" onclick="tdpOpen('doc_date')">📅</span><div class="tdp-drop" id="tdpd_doc_date"><div class="tdp-nav"><button onclick="tdpNav('doc_date',-1,event)">‹</button><span class="tdp-my" onclick="tdpToggleYM('doc_date');event.stopPropagation()">...</span><button onclick="tdpNav('doc_date',1,event)">›</button></div><div class="tdp-ym"></div><div class="tdp-days-hdr"><span>อา</span><span>จ</span><span>อ</span><span>พ</span><span>พฤ</span><span>ศ</span><span>ส</span></div><div class="tdp-days"></div></div></div></div>
       <div class="fg"><label>บิลที่ของวัน</label><input type="text" id="bill_seq" placeholder="01" maxlength="2" inputmode="numeric"></div>
     </div>
     <div class="fg"><label>สำนักงานที่ดิน จังหวัด</label>
@@ -295,8 +299,28 @@ function _voucherLogoBig(){
     <div class="fg"><label>ดอกเบี้ย % ต่อปี</label>
       <input type="text" id="m_rate" placeholder="เช่น 15" inputmode="decimal">
     </div>
-    <div class="fg"><label>วันที่สัญญาจำนอง</label>
-      <div class="tdp-wrap" id="tdpw_contract_date" onclick="event.stopPropagation()"><input type="hidden" id="contract_date"><input type="text" id="tdpi_contract_date" class="tdp-input" placeholder="เลือกหรือพิมพ์วว/ดด/ปปปป" onfocus="tdpFocus('contract_date')" onkeydown="tdpKeydown('contract_date',event)" autocomplete="off"><span class="tdp-icon" onclick="tdpOpen('contract_date')">📅</span><div class="tdp-drop" id="tdpd_contract_date"><div class="tdp-nav"><button onclick="tdpNav('contract_date',-1,event)">‹</button><span class="tdp-my" onclick="tdpToggleYM('contract_date');event.stopPropagation()">...</span><button onclick="tdpNav('contract_date',1,event)">›</button></div><div class="tdp-ym"></div><div class="tdp-days-hdr"><span>อา</span><span>จ</span><span>อ</span><span>พ</span><span>พฤ</span><span>ศ</span><span>ส</span></div><div class="tdp-days"></div></div></div>
+    <div class="fg">
+      <label class="cbtoggle"><input type="checkbox" id="m_otherrank" onchange="toggleDebtor()"> จำนองลำดับอื่น (ไม่ใช่ลำดับที่ 1)</label>
+    </div>
+    <div id="rank_wrap" style="display:none">
+      <div class="fg"><label>ลำดับจำนอง</label>
+        <input type="number" id="m_rank" min="2" step="1" inputmode="numeric" placeholder="เช่น 2, 3, 4 ...">
+      </div>
+      <div class="fg"><label>ชื่อลูกหนี้ / ผู้กู้</label>
+        <input type="text" id="m_debtor" placeholder="เช่น นาย จิตริน โดกระโทก">
+      </div>
+      <div class="fg"><label>ที่อยู่ผู้กู้ (บ้านเลขที่ หมู่)</label>
+        <input type="text" id="m_debtor_addr" placeholder="เช่น 123/4 หมู่ 5">
+      </div>
+      <div class="fg"><label>จังหวัด</label>
+        <input type="text" id="m_debtor_prov" placeholder="พิมพ์หรือเลือกจังหวัด..." style="padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fff;width:100%">
+      </div>
+      <div class="fg"><label>อำเภอ/เขต</label>
+        <input type="text" id="m_debtor_amp" placeholder="พิมพ์หรือเลือก..." style="padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fff;width:100%">
+      </div>
+      <div class="fg"><label>ตำบล/แขวง</label>
+        <input type="text" id="m_debtor_tam" placeholder="พิมพ์หรือเลือก..." style="padding:10px 11px;font-size:15px;border:1px solid #ccc;border-radius:8px;font-family:inherit;background:#fff;width:100%">
+      </div>
     </div>
   </div>
 
@@ -318,10 +342,10 @@ function _voucherLogoBig(){
     </div>
     <div class="fg"><label>เลือกข้อที่ต้องการปริ้น</label>
       <div class="chips" style="margin-top:6px;flex-direction:column;gap:8px">
-        <label><input type="radio" name="memo_mode" value="12" checked> ข้อ 1-2 (พิมพ์ 1-2 เว้นที่ 3-4-5)</label>
+        <label><input type="radio" name="memo_mode" value="1234" checked> ข้อ 1-4 ทั้งหมด</label>
+        <label><input type="radio" name="memo_mode" value="12"> ข้อ 1-2 (พิมพ์ 1-2 เว้นที่ 3-4-5)</label>
         <label><input type="radio" name="memo_mode" value="34"> ข้อ 3-4 (พิมพ์เฉพาะ 3-4 เว้นที่อื่น)</label>
         <label><input type="radio" name="memo_mode" value="5"> ข้อ 5 เท่านั้น (ต้องกรอกข้อ 5 ด้านบน)</label>
-        <label><input type="radio" name="memo_mode" value="1234"> ข้อ 1-4 ทั้งหมด</label>
         <label><input type="radio" name="memo_mode" value="12345"> ข้อ 1-5 ทั้งหมด</label>
       </div>
     </div>
@@ -374,7 +398,7 @@ function closePrintTip(){document.getElementById('print-modal').classList.remove
 function showMortForm(){document.getElementById('mort-form').style.display='block';document.getElementById('mort-preview').style.display='none';window.scrollTo(0,0);}
 
 // ── ADDENDUM FONT SIZE (เพิ่ม/ลดฟอนต์) ──
-function afsGet(){var v=parseFloat(localStorage.getItem('mort_afs'));return (v&&v>0)?v:1;}
+function afsGet(){try{var v=parseFloat(localStorage.getItem('mort_afs'));return (v&&v>0)?v:1;}catch(e){return 1;}}
 function afsApply(v){
   var doc=document.getElementById('addendum-doc');
   if(doc)doc.style.setProperty('--afs',''+v);
@@ -390,6 +414,13 @@ function afsStep(delta){
   afsApply(v);
 }
 function afsReset(){afsApply(1);}
+
+// ── จำนองค้ำหนี้ให้บุคคลอื่น: เปิด/ปิดช่องชื่อลูกหนี้ ──
+function toggleDebtor(){
+  var cb=document.getElementById('m_otherrank');
+  var w=document.getElementById('rank_wrap');
+  if(w)w.style.display=(cb&&cb.checked)?'block':'none';
+}
 
 // ── THAI BAHT ──
 function toBaht(v){
@@ -539,7 +570,9 @@ function buildMemo(d){
     return '<div style="height:'+h+';'+vis+'font-size:'+FS+';line-height:'+LH+';overflow:hidden">'+content+'</div>';
   }
 
-  var i1='<strong>1)</strong> รับจำนอง '+col+' เป็นเงิน &nbsp;<strong>'+d.amtFmt+'</strong>&nbsp; บาท &nbsp;<strong>'+d.amtT+'</strong><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;โดยคิดอัตราดอกเบี้ยร้อยละ <strong>'+d.rate+'</strong> ต่อปี';
+  var rankTxt=(d.rank&&d.rank>1)?('ลำดับที่ '+d.rank+' '):'';
+  var debtorTxt=(d.thirdParty&&d.debtorName)?(' &nbsp;เพื่อเป็นการประกันหนี้ให้แก่ &nbsp;<strong>'+d.debtorName+'</strong>'):'';
+  var i1='<strong>1)</strong> รับจำนอง '+rankTxt+col+' เป็นเงิน &nbsp;<strong>'+d.amtFmt+'</strong>&nbsp; บาท &nbsp;<strong>'+d.amtT+'</strong>'+debtorTxt+'<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;โดยคิดอัตราดอกเบี้ยร้อยละ <strong>'+d.rate+'</strong> ต่อปี';
   var i2='<strong>2)</strong> ผู้จำนองได้รับเงินจำนองครบเต็มจำนวนแล้ว';
   var i3='<strong>3)</strong> ค่าธรรมเนียมการจดจำนอง ให้ผู้รับจำนอง เป็นผู้ออกค่าใช้จ่าย';
   var i4='<strong>4)</strong> ค่าธรรมเนียมอื่น ๆ เกี่ยวข้องให้ผู้รับจำนองเป็นผู้ออกค่าใช้จ่าย';
@@ -565,17 +598,37 @@ function buildMemo(d){
 
   var SL='border-top:1px solid #000;display:inline-block;width:160px;vertical-align:middle';
   var morts=d.mortgagors&&d.mortgagors.length?d.mortgagors:[{name:d.custName}];
-  var _sr='<tr>'
-    +'<td style="width:50%;text-align:center;vertical-align:top;padding-bottom:0.4cm">'
-    +'<p style="white-space:nowrap">ลงชื่อ&nbsp;<span style="'+SL+'"></span>&nbsp; ผู้รับจำนอง</p>'
-    +'<p>( บริษัท โชคชัย เงินด่วน จำกัด )</p></td>'
-    +'<td style="width:50%;text-align:center;vertical-align:top;padding-bottom:0.4cm">'
-    +'<p style="white-space:nowrap">ลงชื่อ&nbsp;<span style="'+SL+'"></span>&nbsp; ผู้จำนอง</p>'
-    +'<p>( '+morts[0].name+' )</p></td></tr>';
-  for(var _ci=1;_ci<morts.length;_ci++){
-    _sr+='<tr><td></td><td style="text-align:center;vertical-align:top;padding-bottom:0.4cm">'
+  var _sr;
+  if(d.thirdParty){
+    // ผู้จำนอง (เจ้าของหลักทรัพย์) คู่กับ ผู้กู้ แล้วตามด้วย ผู้รับจำนอง
+    _sr='<tr>'
+      +'<td style="width:50%;text-align:center;vertical-align:top;padding-bottom:0.4cm">'
       +'<p style="white-space:nowrap">ลงชื่อ&nbsp;<span style="'+SL+'"></span>&nbsp; ผู้จำนอง</p>'
-      +'<p>( '+morts[_ci].name+' )</p></td></tr>';
+      +'<p>( '+morts[0].name+' )</p></td>'
+      +'<td style="width:50%;text-align:center;vertical-align:top;padding-bottom:0.4cm">'
+      +'<p style="white-space:nowrap">ลงชื่อ&nbsp;<span style="'+SL+'"></span>&nbsp; ผู้กู้</p>'
+      +'<p>( '+(d.debtorName||'')+' )</p></td></tr>';
+    for(var _ci=1;_ci<morts.length;_ci++){
+      _sr+='<tr><td style="text-align:center;vertical-align:top;padding-bottom:0.4cm">'
+        +'<p style="white-space:nowrap">ลงชื่อ&nbsp;<span style="'+SL+'"></span>&nbsp; ผู้จำนอง</p>'
+        +'<p>( '+morts[_ci].name+' )</p></td><td></td></tr>';
+    }
+    _sr+='<tr><td style="text-align:center;vertical-align:top;padding-bottom:0.4cm">'
+      +'<p style="white-space:nowrap">ลงชื่อ&nbsp;<span style="'+SL+'"></span>&nbsp; ผู้รับจำนอง</p>'
+      +'<p>( บริษัท โชคชัย เงินด่วน จำกัด )</p></td><td></td></tr>';
+  }else{
+    _sr='<tr>'
+      +'<td style="width:50%;text-align:center;vertical-align:top;padding-bottom:0.4cm">'
+      +'<p style="white-space:nowrap">ลงชื่อ&nbsp;<span style="'+SL+'"></span>&nbsp; ผู้รับจำนอง</p>'
+      +'<p>( บริษัท โชคชัย เงินด่วน จำกัด )</p></td>'
+      +'<td style="width:50%;text-align:center;vertical-align:top;padding-bottom:0.4cm">'
+      +'<p style="white-space:nowrap">ลงชื่อ&nbsp;<span style="'+SL+'"></span>&nbsp; ผู้จำนอง</p>'
+      +'<p>( '+morts[0].name+' )</p></td></tr>';
+    for(var _ci=1;_ci<morts.length;_ci++){
+      _sr+='<tr><td></td><td style="text-align:center;vertical-align:top;padding-bottom:0.4cm">'
+        +'<p style="white-space:nowrap">ลงชื่อ&nbsp;<span style="'+SL+'"></span>&nbsp; ผู้จำนอง</p>'
+        +'<p>( '+morts[_ci].name+' )</p></td></tr>';
+    }
   }
   var SIGN='<table style="width:100%;border-collapse:collapse;margin-top:1cm">'+_sr
     +'<tr>'
@@ -703,11 +756,11 @@ function buildVoucher(d,payRows){
       +'<table style="width:100%;border-collapse:collapse;border-bottom:none">'
       +'<tr>'
       +'<td style="border:1px solid #999;border-bottom:none;'+CELL+'white-space:nowrap;font-weight:bold">ชื่อ-นามสกุล ลูกค้า</td>'
-      +'<td style="border:1px solid #999;border-left:none;border-bottom:none;'+CELL+'word-break:break-word">'+(d.mortgagors&&d.mortgagors.length?d.mortgagors.map(function(m){return m.name;}).join(' , '):d.custName)+'</td>'
+      +'<td style="border:1px solid #999;border-left:none;border-bottom:none;'+CELL+'word-break:break-word">'+((d.thirdParty&&d.debtorName)?d.debtorName:(d.mortgagors&&d.mortgagors.length?d.mortgagors.map(function(m){return m.name;}).join(' , '):d.custName))+'</td>'
       +'</tr>'
       +'<tr>'
       +'<td style="border:1px solid #999;border-top:none;'+CELL+'white-space:nowrap;font-weight:bold">ที่อยู่ ลูกค้า</td>'
-      +'<td style="border:1px solid #999;border-left:none;border-top:none;'+CELL+'word-break:break-word">'+(d.mortgagors&&d.mortgagors.length?d.mortgagors.map(function(m){return m.addr;}).filter(Boolean).join(' / '):d.custAddr)+'</td>'
+      +'<td style="border:1px solid #999;border-left:none;border-top:none;'+CELL+'word-break:break-word">'+(d.thirdParty?(d.debtorAddr||''):(d.mortgagors&&d.mortgagors.length?d.mortgagors.map(function(m){return m.addr;}).filter(Boolean).join(' / '):d.custAddr))+'</td>'
       +'</tr>'
       +'</table>'
 
@@ -727,7 +780,7 @@ function buildVoucher(d,payRows){
 
       // ลายเซ็น (ดันชิดขอบล่างของชุด)
       +(function(){
-        var mv=d.mortgagors&&d.mortgagors.length?d.mortgagors:[{name:d.custName}];
+        var mv=(d.thirdParty&&d.debtorName)?[{name:d.debtorName}]:(d.mortgagors&&d.mortgagors.length?d.mortgagors:[{name:d.custName}]);
         var cw=Math.floor(100/(mv.length+1));
         var rc=mv.map(function(m){
           return '<td style="text-align:center;vertical-align:bottom;padding:0 2px">'
@@ -758,13 +811,15 @@ function buildVoucher(d,payRows){
 function buildAddendum(d){
   var lb=d.landBranch||'......';
   var lbSub=d.landBranchSub?(' สาขา '+d.landBranchSub):'';
+  var rankSuffix=(d.rank&&d.rank>1)?('ลำดับที่ '+d.rank):'';
+  var debtorRef=(d.thirdParty&&d.debtorName)?d.debtorName:'ผู้จำนอง';
   return'<div class="afs-bar"><span class="afs-lbl">ขนาดตัวอักษร</span>'
     +'<button type="button" onclick="afsStep(-0.1)">A&minus;</button>'
     +'<span id="afs-val" class="afs-lbl">100%</span>'
     +'<button type="button" onclick="afsStep(0.1)">A+</button>'
     +'<button type="button" onclick="afsReset()">รีเซ็ต</button></div>'
     +'<div id="addendum-doc" class="doc doc-page addendum" style="font-size:calc(13pt * var(--afs,1));line-height:1.5;padding:0.5cm">'
-    +'<p style="text-align:center;font-weight:bold;text-decoration:underline;font-size:1.15em;margin-bottom:6pt">ข้อตกลงต่อท้ายหนังสือสัญญาจำนอง</p>'
+    +'<p style="text-align:center;font-weight:bold;text-decoration:underline;font-size:1.15em;margin-bottom:6pt">ข้อตกลงต่อท้ายหนังสือสัญญาจำนอง'+(rankSuffix?(' '+rankSuffix):'')+'</p>'
     +'<p style="text-align:center;margin-bottom:4pt">89/28 หมู่ 9 ต.ท่าเยี่ยม อ.โชคชัย จ.นครราชสีมา</p>'
     +'<p style="text-align:center;font-weight:bold;margin-bottom:10pt;font-size:1.15em">'+thaiDate(d.docDate)+'</p>'
     +(function(){
@@ -773,9 +828,9 @@ function buildAddendum(d){
     return '<p style="text-align:center;margin-bottom:4pt">ระหว่าง &nbsp;&nbsp; '+names+' &nbsp;&nbsp; ผู้จำนอง</p>';
   })()
     +'<p style="text-align:center;margin-bottom:4pt">กับ &nbsp;&nbsp; บริษัท โชคชัย เงินด่วน จำกัด &nbsp;&nbsp; ผู้รับจำนอง</p>'
-    +'<p style="text-align:center;font-size:1em;color:#333;margin-bottom:4pt">( สัญญาจำนองลงวันที่ '+thaiDate(d.contractDate)+' )</p>'
+    +'<p style="text-align:center;font-size:1em;color:#333;margin-bottom:4pt">( สัญญาจำนอง'+(rankSuffix?('เป็น'+rankSuffix+' '):'')+'ลงวันที่ '+thaiDate(d.contractDate)+' )</p>'
     +'<p style="text-align:center;margin-bottom:14pt">ทำ ณ สำนักงานที่ดิน &nbsp; จังหวัด '+lb+lbSub+'</p>'
-    +'<p style="margin-bottom:6pt;padding-left:1.5cm;text-indent:-1.5cm;text-align:justify"><strong>ข้อ 1.</strong> ผู้จำนองเป็นเจ้าของทรัพย์สินซึ่งจำนองเป็นประกันการชำระหนี้เงินกู้ทั้งหลายซึ่ง ผู้จำนอง เป็นหนี้ผู้รับจำนองอยู่เป็นจำนวนเงิน '+d.amtFmt+' บาท ('+d.amtT+') ตลอดจนประกันการชำระหนี้อุปกรณ์แห่งหนี้คือดอกเบี้ยค่าสินไหมทดแทนในการไม่ชำระหนี้ และค่าฤชาธรรมเนียมในการบังคับจำนองด้วย</p>'
+    +'<p style="margin-bottom:6pt;padding-left:1.5cm;text-indent:-1.5cm;text-align:justify"><strong>ข้อ 1.</strong> ผู้จำนองเป็นเจ้าของทรัพย์สินซึ่งจำนองเป็นประกันการชำระหนี้เงินกู้ทั้งหลายซึ่ง '+debtorRef+' เป็นหนี้ผู้รับจำนองอยู่เป็นจำนวนเงิน '+d.amtFmt+' บาท ('+d.amtT+') ตลอดจนประกันการชำระหนี้อุปกรณ์แห่งหนี้คือดอกเบี้ยค่าสินไหมทดแทนในการไม่ชำระหนี้ และค่าฤชาธรรมเนียมในการบังคับจำนองด้วย</p>'
     +'<p style="margin-bottom:6pt;padding-left:1.5cm;text-indent:-1.5cm;text-align:justify"><strong>ข้อ 2.</strong> เมื่อผู้รับจำนองบังคับจำนอง เอาทรัพย์สินจำนองรายนี้ออกขายทอดตลาดได้เงินจำนวนสุทธิน้อยกว่าจำนวนเงินที่ค้างชำระ และค่าอุปกรณ์หรือเอาทรัพย์สินที่หลุดจำนองหลุดเป็นสิทธิและทรัพย์สินนั้นมีราคาต่ำกว่าจำนวนเงินที่ค้างชำระและค่าอุปกรณ์ เงินยังขาดจำนวนอยู่เท่าใด ผู้จำนองและหรือลูกหนี้ของผู้รับจำนองยอมรับใช้เงินที่ขาดจำนวนนั้นให้แก่ผู้รับจำนองจนครบ</p>'
     +'<p style="margin-bottom:6pt;padding-left:1.5cm;text-indent:-1.5cm;text-align:justify"><strong>ข้อ 3.</strong> ถึงแม้จะมีการกระทำอย่างใดอย่างหนึ่งของผู้รับจำนอง เป็นเหตุให้ผู้จำนองไม่อาจเข้ารับช่วงได้ทั้งหมดหรือแต่บางส่วนในสิทธิใดๆ อันได้ให้ไว้แก่ผู้รับจำนองแต่ก่อน หรือในขณะหรือภายหลังที่ผู้จำนองเข้าทำหนังสือสัญญาจำนองรายนี้ ผู้จำนองก็ไม่หลุดพ้นจากความรับผิดในการจำนองรายนี้แต่ประการใด</p>'
     +'<p style="margin-bottom:6pt;padding-left:1.5cm;text-indent:-1.5cm;text-align:justify"><strong>ข้อ 4.</strong> ในกรณีที่ผู้รับจำนองยอมผ่อนเวลาให้แก่ลูกหนี้สำหรับการชำระหนี้เงินกู้รายใดก็ตาม ผู้จำนองขอยืนยันไว้ล่วงหน้าว่าผู้จำนองเป็นอันตกลงด้วยในการผ่อนเวลาทุกคราว จึงไม่เป็นเหตุให้ผู้จำนองหลุดพ้นจากความรับผิดในการจำนองรายนี้</p>'
@@ -785,17 +840,37 @@ function buildAddendum(d){
     +(function(){
       var m2=d.mortgagors&&d.mortgagors.length?d.mortgagors:[{name:d.custName}];
       var SL2='border-top:1px solid #000;display:inline-block;width:160px;vertical-align:middle';
-      var r='<tr>'
-        +'<td style="width:50%;text-align:center;vertical-align:top;padding-bottom:0.3cm">'
-        +'<p style="white-space:nowrap">ลงชื่อ&nbsp;<span style="'+SL2+'"></span>&nbsp; ผู้จำนอง/ลูกหนี้</p>'
-        +'<p>( '+m2[0].name+' )</p></td>'
-        +'<td style="width:50%;text-align:center;vertical-align:top;padding-bottom:0.3cm">'
-        +'<p style="white-space:nowrap">ลงชื่อ&nbsp;<span style="'+SL2+'"></span>&nbsp; ผู้รับจำนอง</p>'
-        +'<p>( บริษัท โชคชัย เงินด่วน จำกัด )</p></td></tr>';
-      for(var _i=1;_i<m2.length;_i++){
+      var r;
+      if(d.thirdParty){
+        var mLabel='ผู้จำนอง/เจ้าของหลักทรัพย์';
+        r='<tr>'
+          +'<td style="width:50%;text-align:center;vertical-align:top;padding-bottom:0.3cm">'
+          +'<p style="white-space:nowrap">ลงชื่อ&nbsp;<span style="'+SL2+'"></span>&nbsp; '+mLabel+'</p>'
+          +'<p>( '+m2[0].name+' )</p></td>'
+          +'<td style="width:50%;text-align:center;vertical-align:top;padding-bottom:0.3cm">'
+          +'<p style="white-space:nowrap">ลงชื่อ&nbsp;<span style="'+SL2+'"></span>&nbsp; ผู้กู้</p>'
+          +'<p>( '+(d.debtorName||'')+' )</p></td></tr>';
+        for(var _i=1;_i<m2.length;_i++){
+          r+='<tr><td style="text-align:center;vertical-align:top;padding-bottom:0.3cm">'
+            +'<p style="white-space:nowrap">ลงชื่อ&nbsp;<span style="'+SL2+'"></span>&nbsp; '+mLabel+'</p>'
+            +'<p>( '+m2[_i].name+' )</p></td><td></td></tr>';
+        }
         r+='<tr><td style="text-align:center;vertical-align:top;padding-bottom:0.3cm">'
+          +'<p style="white-space:nowrap">ลงชื่อ&nbsp;<span style="'+SL2+'"></span>&nbsp; ผู้รับจำนอง</p>'
+          +'<p>( บริษัท โชคชัย เงินด่วน จำกัด )</p></td><td></td></tr>';
+      }else{
+        r='<tr>'
+          +'<td style="width:50%;text-align:center;vertical-align:top;padding-bottom:0.3cm">'
           +'<p style="white-space:nowrap">ลงชื่อ&nbsp;<span style="'+SL2+'"></span>&nbsp; ผู้จำนอง/ลูกหนี้</p>'
-          +'<p>( '+m2[_i].name+' )</p></td><td></td></tr>';
+          +'<p>( '+m2[0].name+' )</p></td>'
+          +'<td style="width:50%;text-align:center;vertical-align:top;padding-bottom:0.3cm">'
+          +'<p style="white-space:nowrap">ลงชื่อ&nbsp;<span style="'+SL2+'"></span>&nbsp; ผู้รับจำนอง</p>'
+          +'<p>( บริษัท โชคชัย เงินด่วน จำกัด )</p></td></tr>';
+        for(var _i=1;_i<m2.length;_i++){
+          r+='<tr><td style="text-align:center;vertical-align:top;padding-bottom:0.3cm">'
+            +'<p style="white-space:nowrap">ลงชื่อ&nbsp;<span style="'+SL2+'"></span>&nbsp; ผู้จำนอง/ลูกหนี้</p>'
+            +'<p>( '+m2[_i].name+' )</p></td><td></td></tr>';
+        }
       }
       return r+'<tr>'
         +'<td style="padding:0.9cm 0 0 0;text-align:center">'
@@ -826,7 +901,11 @@ function genMortgage(){
     amtT:gv('m_amt_t')||toBaht(gv('m_amt').replace(/[,\s]/g,'')),
     rate:gv('m_rate')||'......',
     item5:gv('memo_item5')||'',
-    contractDate:gv('contract_date'),
+    contractDate:gv('doc_date'),
+    rank:(function(){var cb=document.getElementById('m_otherrank');if(!cb||!cb.checked)return 1;var e=document.getElementById('m_rank');var v=e?(parseInt(e.value,10)||0):0;return v>1?v:2;})(),
+    thirdParty:(function(){var cb=document.getElementById('m_otherrank');var deb=gv('m_debtor');return !!(cb&&cb.checked&&deb!=='');})(),
+    debtorName:gv('m_debtor'),
+    debtorAddr:(function(){var ad=gv('m_debtor_addr');var pv=gv('m_debtor_prov'),ap=gv('m_debtor_amp'),tm=gv('m_debtor_tam');return [ad,formatAddr(tm,ap,pv)].filter(Boolean).join(' ');})(),
   };
   var payRows=getPayRows();
   var wanted=Array.prototype.slice.call(document.querySelectorAll('.doc-cb:checked')).map(function(c){return c.value;});
@@ -862,6 +941,8 @@ function showDoc(key,docs){
 document.addEventListener('DOMContentLoaded',function(){
   var _cp=document.getElementById('cust_province');if(_cp&&typeof onProvChange==='function')onProvChange(_cp.value);
   addPay('cash');
+  try{toggleDebtor();}catch(e){}
+  try{initDebtorGeo();}catch(e){}
 });
 
 function formatAddr(t,a,p){
@@ -960,6 +1041,19 @@ function addMortgagor(){
   makeCombo('mort_tam_'+n,[],null);
 }
 function removeMortgagor(n){var el=document.getElementById('mort-'+n);if(el)el.remove();}
+function initDebtorGeo(){
+  if(typeof makeCombo!=='function'||typeof ADDR==='undefined')return;
+  makeCombo('m_debtor_prov',Object.keys(ADDR).sort(),function(v){
+    if(ADDR[v]){
+      var amps=Object.keys(ADDR[v]);
+      makeCombo('m_debtor_amp',amps,function(a){
+        if(ADDR[v]&&ADDR[v][a])makeCombo('m_debtor_tam',ADDR[v][a],null);
+      });
+    }
+  });
+  makeCombo('m_debtor_amp',[],null);
+  makeCombo('m_debtor_tam',[],null);
+}
 function getMortgagors(){
   var list=[];
   document.querySelectorAll('#mortgagors-wrap > div').forEach(function(div){
@@ -1216,7 +1310,7 @@ function _tdpWireEvents(did){
   }
 }
 
-document.addEventListener("DOMContentLoaded",function(){try{tdpInit('doc_date');_tdpWireEvents('doc_date');}catch(e){}try{tdpInit('contract_date');_tdpWireEvents('contract_date');}catch(e){}});
+document.addEventListener("DOMContentLoaded",function(){try{tdpInit('doc_date');_tdpWireEvents('doc_date');}catch(e){}});
 
 </script>
 </body>

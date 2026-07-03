@@ -193,6 +193,7 @@ body{font-family:"TH Sarabun New","Sarabun",Arial,sans-serif;font-size:15px;back
         <option value="rent">ให้เช่าที่ดิน</option>
         <option value="rent_part">ให้แบ่งเช่าที่ดินเฉพาะส่วน</option>
         <option value="mortgage">รับจำนองที่ดิน</option>
+        <option value="mortgage_rank">รับจำนองที่ดิน (ลำดับที่ 2,3,...)</option>
         <option value="redeem_mortgage">ไถ่ถอนจากจำนอง</option>
         <option value="sellback">รับซื้อฝากที่ดิน</option>
         <option value="sellback_part">รับซื้อฝากที่ดินเฉพาะส่วน</option>
@@ -520,19 +521,32 @@ var TPL={
       {id:'t_amount',label:'วงเงิน (บาท)',placeholder:'500000'},
       {id:'t_amount_text',label:'วงเงิน (ตัวอักษร)',placeholder:'ห้าแสนบาทถ้วน'},
       {id:'t_interest',label:'อัตราดอกเบี้ยร้อยละ',placeholder:'15'},
-      {id:'t_per',label:'ต่อ',placeholder:'',type:'select',opts:['เดือน','ปี']},
-      {id:'t_debtor',label:'ผู้กู้ (นาย/นาง/นางสาว...)',placeholder:'นายสมชาย ใจดี'},
-      {id:'t_annex',label:'สัญญาแนบท้าย/ข้อตกลงต่อท้าย',type:'select',opts:['ไม่มี','มี']}
+      {id:'t_per',label:'ต่อ',placeholder:'',type:'select',opts:['ปี','เดือน']},
+      {id:'t_debtor',label:'ผู้กู้ (นาย/นาง/นางสาว...)',placeholder:'นายสมชาย ใจดี'}
     ],
     build:function(f,ctx){
-      var base='รับจำนองที่ดิน'+ctx.plotPhrase+ctx.bldgInDetail+
+      return 'รับจำนองที่ดิน'+ctx.plotPhrase+ctx.bldgInDetail+
         ' ของ'+(f.t_owner||'………………')+' ในวงเงิน '+(f.t_amount||'………')+
-        ' บาท ('+(f.t_amount_text||'………………')+') อัตราดอกเบี้ยร้อยละ '+(f.t_interest||'……')+
-        ' บาท ต่อ'+(f.t_per||'ปี')+' เพื่อประกันหนี้เงินกู้'+(f.t_debtor||'………………');
-      if(f.t_annex==='มี'){
-        return base+' และ ให้ถือสัญญาจำนองเป็นหลักฐานการกู้ยืมเงิน และ เงื่อนไขข้อตกลงอื่น ๆ ให้เป็นไปตามสัญญาแนบท้ายสัญญาจำนอง และ ให้ถือข้อตกลงต่อท้ายสัญญาจำนองเป็นส่วนหนึ่งของสัญญาจำนองด้วย ตลอดจนให้ถ้อยคำต่าง ๆ ต่อพนักงานเจ้าหน้าที่';
-      }
-      return base+' ตลอดจนให้ถ้อยคำต่าง ๆ ต่อพนักงานเจ้าหน้าที่';
+        ' บาท ('+(f.t_amount_text||'………………')+') เพื่อประกันหนี้เงินกู้'+(f.t_debtor||'………………')+
+        ' ตกลงดอกเบี้ยร้อยละ '+(f.t_interest||'……')+' ต่อ'+(f.t_per||'ปี')+' ชำระดอกเบี้ยเดือนละครั้งเสมอไป ให้ถือสัญญาจำนองเป็นหลักฐานแห่งการกู้ยืมเงิน ให้เงื่อนไขและข้อตกลงอื่น ๆ ให้เป็นไปตามข้อตกลงต่อท้ายสัญญาจำนอง และให้ถือข้อตกลงต่อท้ายสัญญาจำนองเป็นส่วนหนึ่งของสัญญาจำนองด้วย ตลอดจนให้ถ้อยคำต่าง ๆ ต่อพนักงานเจ้าหน้าที่';
+    }
+  },
+  'mortgage_rank':{
+    subject:'รับจำนองที่ดินลำดับที่ {rank}{bldg}',
+    fields:[
+      {id:'t_rank',label:'ลำดับที่ (2, 3, ...)',placeholder:'2'},
+      {id:'t_owner',label:'ของ (เจ้าของโฉนด/ผู้จำนอง นาย/นาง/นางสาว...)',placeholder:'นายสมชาย ใจดี'},
+      {id:'t_amount',label:'วงเงิน (บาท)',placeholder:'500000'},
+      {id:'t_amount_text',label:'วงเงิน (ตัวอักษร)',placeholder:'ห้าแสนบาทถ้วน'},
+      {id:'t_interest',label:'อัตราดอกเบี้ยร้อยละ',placeholder:'15'},
+      {id:'t_per',label:'ต่อ',placeholder:'',type:'select',opts:['ปี','เดือน']},
+      {id:'t_debtor',label:'ผู้กู้ (นาย/นาง/นางสาว...)',placeholder:'นายสมชาย ใจดี'}
+    ],
+    build:function(f,ctx){
+      return 'รับจำนองที่ดินลำดับที่ '+(f.t_rank||'…')+' '+ctx.plotPhrase+ctx.bldgInDetail+
+        ' ของ'+(f.t_owner||'………………')+' ในวงเงิน '+(f.t_amount||'………')+
+        ' บาท ('+(f.t_amount_text||'………………')+') เพื่อประกันหนี้เงินกู้'+(f.t_debtor||'………………')+
+        ' ตกลงดอกเบี้ยร้อยละ '+(f.t_interest||'……')+' ต่อ'+(f.t_per||'ปี')+' ชำระดอกเบี้ยเดือนละครั้งเสมอไป ให้ถือสัญญาจำนองเป็นหลักฐานแห่งการกู้ยืมเงิน ให้เงื่อนไขและข้อตกลงอื่น ๆ ให้เป็นไปตามข้อตกลงต่อท้ายสัญญาจำนอง และให้ถือข้อตกลงต่อท้ายสัญญาจำนองเป็นส่วนหนึ่งของสัญญาจำนองด้วย ตลอดจนให้ถ้อยคำต่าง ๆ ต่อพนักงานเจ้าหน้าที่';
     }
   },
   'redeem_mortgage':{
@@ -789,6 +803,7 @@ function applyTpl(){
   var subj=tpl.subject.replace('{bldg}', bldgPhrase);
   // ใส่ปี (กรณี rent, sellback)
   subj=subj.replace('{years}', f.t_years||'…');
+  subj=subj.replace('{rank}', f.t_rank||'…');
   document.getElementById('subject').value=subj;
 
   // สร้าง powers

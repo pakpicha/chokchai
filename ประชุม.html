@@ -479,6 +479,7 @@ function fmtTime(t){return t?t.replace(':','.')+' น.':'......'}
 const M_TYPES={
   mortgage:'🏠 จดจำนองที่ดิน',mortgage_n:'🏠 จดจำนองที่ดินลำดับอื่น (เพื่อประกันหนี้ผู้อื่น)',
   topup:'💰 ขึ้นเงินจากจำนอง',reloan:'💰 กู้เงินเท่าวงเงินเดิม',
+  reducerate:'📉 ลดอัตราดอกเบี้ยจำนอง',
   sellback:'📋 รับซื้อฝากที่ดิน',
   split_sellback:'📐 แบ่งแยกที่ดิน (ครอบซื้อฝาก)',
   extend:'⏳ ขยายระยะเวลาขายฝาก',rdm_mortgage:'✅ ไถ่ถอนจำนอง',
@@ -934,6 +935,16 @@ function agFields(i,t){
     ${amtPair(i,'amt','วงเงินเดิม')}
     ${pwBlock(i)}
   </div>`;
+  if(t==='reducerate')return`<div class="af-grid">
+    ${fld(i,'cust','ชื่อ-นามสกุลผู้จำนอง',true,'')}
+    ${dateFld(i,'origdt','วันที่สัญญาจำนองเดิม',true)}
+    ${fld(i,'oldrate','อัตราดอกเบี้ยเดิม (%)',false,'เช่น 15')}
+    ${fld(i,'newrate','อัตราดอกเบี้ยใหม่ (%)',false,'เช่น 13.95')}
+    ${fld(i,'period','ระยะเวลาลดชั่วคราว',false,'เช่น 6 เดือน')}
+    ${dateFld(i,'startdt','วันที่เริ่มต้นลดดอกเบี้ย',false)}
+    ${dateFld(i,'enddt','วันที่สิ้นสุด',false)}
+    ${pwBlock(i)}
+  </div>`;
   if(t==='partial_rdm')return`<div class="af-grid">
     ${fld(i,'cust','ชื่อ-นามสกุลผู้จำนอง',true,'')}
     ${dateFld(i,'origdt','วันที่สัญญาจำนองเดิม',true)}
@@ -1062,9 +1073,9 @@ function addAg(t='mortgage'){
     <button class="rb" onclick="removeAg(${i})">ลบ</button>
   </div><div id="agf-${i}">${agFields(i,t)}</div>`;
   document.getElementById('agenda-box').appendChild(d);
-  setTimeout(function(){if(typeof wireColAddr==='function'){['m_','s_','e_','rm_','rs_','tu_','rl_','pr_','prs_','sp_',''].forEach(function(px){wireColAddr(i,px);});['pr_','prs_'].forEach(function(px){if(document.getElementById('ag'+i+'_'+px+'pv'))upgradeColAddrToCombo(i,px);});var _od='ag'+i+'_origdt';if(document.getElementById(_od)){try{tdpInit(_od);_tdpWireEvents(_od);}catch(e){}}}},60);
+  setTimeout(function(){if(typeof wireColAddr==='function'){['m_','s_','e_','rm_','rs_','tu_','rl_','pr_','prs_','sp_',''].forEach(function(px){wireColAddr(i,px);});['pr_','prs_'].forEach(function(px){if(document.getElementById('ag'+i+'_'+px+'pv'))upgradeColAddrToCombo(i,px);});['origdt','startdt','enddt'].forEach(function(dk){var _od='ag'+i+'_'+dk;if(document.getElementById(_od)){try{tdpInit(_od);_tdpWireEvents(_od);}catch(e){}}});}},60);
 }
-function changeAg(i,t){document.getElementById('agf-'+i).innerHTML=agFields(i,t);setTimeout(function(){if(typeof wireColAddr==='function'){['m_','s_','e_','rm_','rs_','tu_','rl_','pr_','prs_','sp_',''].forEach(function(px){wireColAddr(i,px);});['pr_','prs_'].forEach(function(px){if(document.getElementById('ag'+i+'_'+px+'pv'))upgradeColAddrToCombo(i,px);});var _od='ag'+i+'_origdt';if(document.getElementById(_od)){try{tdpInit(_od);_tdpWireEvents(_od);}catch(e){}}}},60);}
+function changeAg(i,t){document.getElementById('agf-'+i).innerHTML=agFields(i,t);setTimeout(function(){if(typeof wireColAddr==='function'){['m_','s_','e_','rm_','rs_','tu_','rl_','pr_','prs_','sp_',''].forEach(function(px){wireColAddr(i,px);});['pr_','prs_'].forEach(function(px){if(document.getElementById('ag'+i+'_'+px+'pv'))upgradeColAddrToCombo(i,px);});['origdt','startdt','enddt'].forEach(function(dk){var _od='ag'+i+'_'+dk;if(document.getElementById(_od)){try{tdpInit(_od);_tdpWireEvents(_od);}catch(e){}}});}},60);}
 function removeAg(i){const e=document.getElementById('agi-'+i);if(e)e.remove()}
 function toggleOther(){document.getElementById('other-wrap').style.display=document.getElementById('chairman').value==='other'?'':'none'}
 function ch(){const v=gv('chairman');return v==='other'?gv('chairman-other'):v}
@@ -1149,6 +1160,18 @@ function buildAgContent(i){
     body=`ประธานได้กล่าวแถลงต่อที่ประชุมว่า การที่เชิญประชุมครั้งนี้ก็เพื่อให้ที่ประชุมพิจารณาเรื่องอนุมัติการกู้เงินเท่าวงเงินเดิมให้แก่ ${gfm(i,'cust')} เนื่องจากได้รับชำระหนี้จนเงินต้นเหลือ ${bal.num} บาท (${bal.txt}) ทางผู้จำนองต้องการเพิ่มวงเงินให้เป็นยอดเท่าเดิม คือ ${orig.num} บาท (${orig.txt}) ตามสัญญาจำนองลงวันที่ ${_tdpFmt(gv('ag'+i+'_origdt'))||'..........'} ${rlc.long} กับ ${gfm(i,'cust')}`;
     res.push(`ให้จ่ายเงินให้ผู้จำนองจำนวนเงิน ${dNum} บาท (${dTxt})`);
     var _pwrl=pwRes(i,'กู้เงินเท่าวงเงินเดิม');if(_pwrl)res.push(_pwrl);
+  }else if(t==='reducerate'){
+    const cust=gfm(i,'cust');
+    const oldr=gfm(i,'oldrate');
+    const newr=gfm(i,'newrate');
+    const period=gfm(i,'period');
+    const origdt=_tdpFmt(gv('ag'+i+'_origdt'))||'..........';
+    const startdt=_tdpFmt(gv('ag'+i+'_startdt'))||'..........';
+    const enddt=_tdpFmt(gv('ag'+i+'_enddt'))||'..........';
+    title=`การพิจารณาลดอัตราดอกเบี้ยจำนองให้แก่ ${cust}`;
+    body=`ประธานได้แถลงต่อที่ประชุม พิจารณาลดอัตราดอกเบี้ยจำนองของ ${cust} สัญญาจำนองฉบับลงวันที่ ${origdt} ให้ลดอัตราดอกเบี้ยจากเดิม ${oldr}% ต่อปี เหลือ ${newr}% ต่อปี โดยมีผลเป็นการชั่วคราว เป็นระยะเวลา ${period} นับตั้งแต่วันที่ ${startdt} ถึงวันที่ ${enddt} หลังจากสิ้นสุดระยะเวลาดังกล่าว จะกลับมาใช้อัตราดอกเบี้ยเดิม ${oldr}% ต่อปี โดยอัตโนมัติ`;
+    res.push(`ลดอัตราดอกเบี้ยจำนองให้แก่ ${cust} จากเดิม ${oldr}% ต่อปี เหลือ ${newr}% ต่อปี เป็นเวลา ${period} ตั้งแต่ วันที่ ${startdt} ถึงวันที่ ${enddt}`);
+    var _pwrr=pwRes(i,'ลดอัตราดอกเบี้ยจำนอง');if(_pwrr)res.push(_pwrr);
   }else if(t==='extend'){
     const ec=getCol(i,'e_');const aw=ec.type==='ห้องชุด'?'ห้องชุด':'ที่ดิน';
     title=`พิจารณาเรื่องอนุมัติขยายระยะเวลาไถ่จากขายฝาก${aw}`;
@@ -1293,7 +1316,7 @@ function buildCertLine(i,t){
     }
     return{line:lineO,signer:signerO};
   }
-  if(['mortgage','mortgage_n','topup','reloan','sellback','split_sellback','extend','rdm_mortgage','rdm_sellback','partial_rdm','partial_rdm_sellback'].indexOf(t)<0)return null;
+  if(['mortgage','mortgage_n','topup','reloan','reducerate','sellback','split_sellback','extend','rdm_mortgage','rdm_sellback','partial_rdm','partial_rdm_sellback'].indexOf(t)<0)return null;
   var cust=gv('ag'+i+'_cust')||'..........';
   var action='';
   if(t==='mortgage'){
@@ -1310,6 +1333,8 @@ function buildCertLine(i,t){
   }else if(t==='reloan'){
     var rlc=getCol(i,'rl_');
     action='กู้เงินเท่าวงเงินเดิม '+(rlc.type==='ห้องชุด'?'ห้องชุด':'ที่ดิน');
+  }else if(t==='reducerate'){
+    action='ลดอัตราดอกเบี้ยจำนอง';
   }else if(t==='partial_rdm'){
     var pc=getCol(i,'pr_');
     action='แบ่งไถ่ถอนจำนอง'+(pc.type==='ห้องชุด'?'ห้องชุด':'ที่ดิน');

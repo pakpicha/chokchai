@@ -230,7 +230,8 @@ function getRecipients(){
     var tm=(document.getElementById('r_tam_'+n)||{value:''}).value.trim();
     var zip=(document.getElementById('r_zip_'+n)||{value:''}).value.trim();
     var tel=(document.getElementById('r_tel_'+n)||{value:''}).value.trim();
-    var addr=[a1,tm?'ต.'+tm:'',ap?'อ.'+ap:'',pv?'จ.'+pv:''].filter(Boolean).join(' ');
+    var _bkk=(pv==='กรุงเทพมหานคร');
+    var addr=[a1,tm?(_bkk?'แขวง'+tm:'ต.'+tm):'',ap?(_bkk?'เขต'+ap:'อ.'+ap):'',pv?'จ.'+pv:''].filter(Boolean).join(' ');
     if(name||addr)list.push({name:name,addr:addr,zip:zip,tel:tel,_a1:a1,_pv:pv,_ap:ap,_tm:tm});
   });
   return list;
@@ -328,7 +329,8 @@ function _senderRcptData(){
 }
 function _rcvRcptData(r){
   // r._a1 = บรรทัด 1, ส่วนที่เหลือต./อ./จ. ใส่บรรทัด 2
-  var ra2=[r._tm?'ต.'+r._tm:'',r._ap?'อ.'+r._ap:'',r._pv?'จ.'+r._pv:''].filter(Boolean).join(' ');
+  var _bkk2=(r._pv==='กรุงเทพมหานคร');
+  var ra2=[r._tm?(_bkk2?'แขวง'+r._tm:'ต.'+r._tm):'',r._ap?(_bkk2?'เขต'+r._ap:'อ.'+r._ap):'',r._pv?'จ.'+r._pv:''].filter(Boolean).join(' ');
   return{rn:r.name||'',ra1:r._a1||'',ra2:ra2,rzip:r.zip||''};
 }
 

@@ -196,7 +196,8 @@ function _autoFillZipFromAddr(addrEl,zipId){
 
 
 function formatAddr(tam,amp,prov){
-  var p=[];if(tam)p.push('ต.'+tam);if(amp)p.push('อ.'+amp);if(prov)p.push('จ.'+prov);return p.join(' ');
+  var bkk=(prov==='กรุงเทพมหานคร');
+  var p=[];if(tam)p.push(bkk?'แขวง'+tam:'ต.'+tam);if(amp)p.push(bkk?'เขต'+amp:'อ.'+amp);if(prov)p.push('จ.'+prov);return p.join(' ');
 }
 </script>
 
@@ -498,7 +499,8 @@ function getDebtors(){
                  var tm=(document.getElementById('db_tam_'+n)||{value:''}).value.trim();
                  var ap=(document.getElementById('db_amp_'+n)||{value:''}).value.trim();
                  var pv=(document.getElementById('db_prov_'+n)||{value:''}).value.trim();
-                 return [a1,tm?'ต.'+tm:'',ap?'อ.'+ap:'',pv?'จ.'+pv:''].filter(Boolean).join(' ');
+                 var pvbkk=(pv==='กรุงเทพมหานคร');
+                 return [a1,tm?(pvbkk?'แขวง'+tm:'ต.'+tm):'',ap?(pvbkk?'เขต'+ap:'อ.'+ap):'',pv?'จ.'+pv:''].filter(Boolean).join(' ');
                })(),
                zip:(document.getElementById('db_zip_'+n)||{value:''}).value.trim(),
                tel:(document.getElementById('db_tel_'+n)||{value:''}).value.trim()});

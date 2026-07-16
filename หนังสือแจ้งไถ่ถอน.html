@@ -183,7 +183,8 @@ function _autoFillZipFromAddr(addrEl,zipId){
 
 
 function formatAddr(tam,amp,prov){
-  var p=[];if(tam)p.push('ต.'+tam);if(amp)p.push('อ.'+amp);if(prov)p.push('จ.'+prov);return p.join(' ');
+  var bkk=(prov==='กรุงเทพมหานคร');
+  var p=[];if(tam)p.push(bkk?'แขวง'+tam:'ต.'+tam);if(amp)p.push(bkk?'เขต'+amp:'อ.'+amp);if(prov)p.push('จ.'+prov);return p.join(' ');
 }
 </script>
 
@@ -485,7 +486,8 @@ function getRecipients(){
     var tm=(document.getElementById('rcp_tam_'+n)||{value:''}).value.trim();
     var zp=(document.getElementById('rcp_zip_'+n)||{value:''}).value.trim();
     var tl=(document.getElementById('rcp_tel_'+n)||{value:''}).value.trim();
-    var fa=[a1,tm?'ต.'+tm:'',ap?'อ.'+ap:'',pv?'จ.'+pv:''].filter(Boolean).join(' ');
+    var pvbkk=(pv==='กรุงเทพมหานคร');
+    var fa=[a1,tm?(pvbkk?'แขวง'+tm:'ต.'+tm):'',ap?(pvbkk?'เขต'+ap:'อ.'+ap):'',pv?'จ.'+pv:''].filter(Boolean).join(' ');
     if(nm||fa) list.push({name:nm,addr:fa,zip:zp,tel:tl});
   });
   return list;

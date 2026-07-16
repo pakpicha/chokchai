@@ -342,6 +342,10 @@ function _autoFillZipFromAddr(addrEl,zipId){
 </div>
 
 <script>
+// กรุงเทพฯ ใช้ "แขวง/เขต" แทน "ตำบล/อำเภอ"
+function _isBKK(prov){ return (prov||'').trim()==='กรุงเทพมหานคร'; }
+function _subLabel(prov){ return _isBKK(prov)?'แขวง':'ตำบล'; }
+function _distLabel(prov){ return _isBKK(prov)?'เขต':'อำเภอ'; }
 var sellerC=0;
 var _tdpOpen=null;
 var THMONTHS_F=['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
@@ -477,7 +481,7 @@ function genDoc(){
       '<div style="border-top:1px solid #ccc;margin-bottom:8pt"></div>'+
 
       // เนื้อหา
-      '<p class="indent">ข้าพเจ้า <b>บริษัท โชคชัย เงินด่วน จำกัด</b> โดย <b>'+signer+'</b> ในฐานะผู้รับซื้อฝาก กับ <b>'+sellersText+'</b> ในฐานะผู้ขายฝาก เมื่อวันที่ <b>'+origDate+'</b> ได้ทำสัญญาขายฝากที่ดิน มีกำหนด <b>'+origPeriod+' '+origPeriodUnit+'</b> ตาม'+landDesc+' ตำบล <b>'+tambon+'</b> อำเภอ <b>'+amphoe+'</b> จังหวัด <b>'+province+'</b> เป็นจำนวนเงิน <b>'+priceAmt+'</b> บาท (<b>'+priceAmtT+'</b>) และกำหนดสินไถ่ไว้เป็นเงิน <b>'+redeemAmt+'</b> บาท (<b>'+redeemAmtT+'</b>)</p>'+
+      '<p class="indent">ข้าพเจ้า <b>บริษัท โชคชัย เงินด่วน จำกัด</b> โดย <b>'+signer+'</b> ในฐานะผู้รับซื้อฝาก กับ <b>'+sellersText+'</b> ในฐานะผู้ขายฝาก เมื่อวันที่ <b>'+origDate+'</b> ได้ทำสัญญาขายฝากที่ดิน มีกำหนด <b>'+origPeriod+' '+origPeriodUnit+'</b> ตาม'+landDesc+' '+_subLabel(province)+' <b>'+tambon+'</b> '+_distLabel(province)+' <b>'+amphoe+'</b> จังหวัด <b>'+province+'</b> เป็นจำนวนเงิน <b>'+priceAmt+'</b> บาท (<b>'+priceAmtT+'</b>) และกำหนดสินไถ่ไว้เป็นเงิน <b>'+redeemAmt+'</b> บาท (<b>'+redeemAmtT+'</b>)</p>'+
 
       '<p class="indent">บัดนี้ ข้าพเจ้าทั้งสองฝ่ายได้ตกลงขยายระยะเวลาไถ่จากขายฝากออกไปเป็นครั้งที่ <b>'+extRound+'</b> โดยมีกำหนด <b>'+extPeriodWord+' '+extPeriodUnit+'</b> และข้าพเจ้าทั้งสองฝ่ายจะมาดำเนินการจดทะเบียนขยายขายฝาก ณ <b>'+officeText+'</b> ในภายหลัง จึงได้ลงลายมือชื่อไว้เป็นหลักฐาน</p>'+
 
@@ -651,7 +655,7 @@ function genDoc(){
       '<div style="border-top:1px solid #ccc;margin-bottom:8pt"></div>'+
 
       // เนื้อหา
-      '<p class="indent">ข้าพเจ้า <b>บริษัท โชคชัย เงินด่วน จำกัด</b> โดย <b>'+signer+'</b> ในฐานะผู้รับซื้อฝาก กับ <b>'+sellersText+'</b> ในฐานะผู้ขายฝาก เมื่อวันที่ <b>'+origDate+'</b> ได้ทำสัญญาขายฝากที่ดิน มีกำหนด <b>'+origPeriod+' '+origPeriodUnit+'</b> ตาม'+landDesc+' ตำบล <b>'+tambon+'</b> อำเภอ <b>'+amphoe+'</b> จังหวัด <b>'+province+'</b> เป็นจำนวนเงิน <b>'+priceAmt+'</b> บาท (<b>'+priceAmtT+'</b>) และกำหนดสินไถ่ไว้เป็นเงิน <b>'+redeemAmt+'</b> บาท (<b>'+redeemAmtT+'</b>)</p>'+
+      '<p class="indent">ข้าพเจ้า <b>บริษัท โชคชัย เงินด่วน จำกัด</b> โดย <b>'+signer+'</b> ในฐานะผู้รับซื้อฝาก กับ <b>'+sellersText+'</b> ในฐานะผู้ขายฝาก เมื่อวันที่ <b>'+origDate+'</b> ได้ทำสัญญาขายฝากที่ดิน มีกำหนด <b>'+origPeriod+' '+origPeriodUnit+'</b> ตาม'+landDesc+' '+_subLabel(province)+' <b>'+tambon+'</b> '+_distLabel(province)+' <b>'+amphoe+'</b> จังหวัด <b>'+province+'</b> เป็นจำนวนเงิน <b>'+priceAmt+'</b> บาท (<b>'+priceAmtT+'</b>) และกำหนดสินไถ่ไว้เป็นเงิน <b>'+redeemAmt+'</b> บาท (<b>'+redeemAmtT+'</b>)</p>'+
 
       '<p class="indent">บัดนี้ ข้าพเจ้าทั้งสองฝ่ายได้ตกลงขยายระยะเวลาไถ่จากขายฝากออกไปเป็นครั้งที่ <b>'+extRound+'</b> โดยมีกำหนด <b>'+extPeriodWord+' '+extPeriodUnit+'</b> และข้าพเจ้าทั้งสองฝ่ายจะมาดำเนินการจดทะเบียนขยายขายฝาก ณ <b>'+officeText+'</b> ในภายหลัง จึงได้ลงลายมือชื่อไว้เป็นหลักฐาน</p>'+
 

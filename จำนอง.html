@@ -500,9 +500,8 @@ function getCustAddr(){
   var tam=document.getElementById('cust_tambon').value;
   var parts=[];
   if(addr1)parts.push(addr1);
-  if(tam)parts.push('ต.'+tam);
-  if(amp)parts.push('อ.'+amp);
-  if(prov)parts.push('จ.'+prov);
+  var loc=formatAddr(tam,amp,prov);
+  if(loc)parts.push(loc);
   return parts.join(' ')||'..........';
 }
 

@@ -368,6 +368,10 @@ window.addEventListener('DOMContentLoaded',function(){
 function gv(id){var e=document.getElementById(id);return e?e.value.trim():'';}
 function esc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function dot(v,fl){var t=esc(v||'');return '<span class="dot" style="flex:'+(fl||1)+' 1 0;min-width:'+((fl||1)*0.6)+'cm">'+(t?t:'')+'</span>';}
+// กรุงเทพฯ ใช้ "แขวง/เขต" แทน "ตำบล/อำเภอ"
+function _isBKK(prov){ return (prov||'').trim()==='กรุงเทพมหานคร'; }
+function _subLabel(prov){ return _isBKK(prov)?'แขวง':'ตำบล'; }
+function _distLabel(prov){ return _isBKK(prov)?'เขต':'อำเภอ'; }
 
 function onGranteeSel(){
   var sel=gv('grantee_sel');
@@ -833,9 +837,9 @@ function genDoc(){
   h+='<div class="f-sub">ที่ดิน</div>';
   h+='<div class="land-grid">';
   h+='  <div class="dr lg-left"><span>ระวาง</span>'+dot(gv('rawang'),5)+'</div>';
-  h+='  <div class="dr lg-right"><span>ตำบล</span>'+dot(gv('land_tambon'),5)+'</div>';
+  h+='  <div class="dr lg-right"><span>'+_subLabel(gv('land_province'))+'</span>'+dot(gv('land_tambon'),5)+'</div>';
   h+='  <div class="dr lg-left"><span>เลขที่ดิน</span>'+dot(gv('land_no'),3)+'<span>หน้าสำรวจ</span>'+dot(gv('survey_no'),3)+'</div>';
-  h+='  <div class="dr lg-right"><span>อำเภอ</span>'+dot(gv('land_amphoe'),5)+'</div>';
+  h+='  <div class="dr lg-right"><span>'+_distLabel(gv('land_province'))+'</span>'+dot(gv('land_amphoe'),5)+'</div>';
   h+='  <div class="dr lg-left"><span>โฉนดหมายเลขที่</span>'+dot(gv('title_no'),5)+'</div>';
   h+='  <div class="dr lg-right"><span>จังหวัด</span>'+dot(gv('land_province'),5)+'</div>';
   h+='</div>';
@@ -859,7 +863,7 @@ function genDoc(){
   h+='<div class="dr"><span>เลขประจำตัวประชาชน</span>'+idBoxes(gv('grantee_id'))+'<span>อายุ</span>'+dot(gv('grantee_age'),1)+'<span>ปี เชื้อชาติ</span>'+dot(gv('grantee_race')||'ไทย',2)+'</div>';
   h+='<div class="dr"><span>สัญชาติ</span>'+dot(gv('grantee_nat')||'ไทย',3)+'<span>บิดาชื่อ</span>'+dot(gv('grantee_father'),3)+'<span>มารดาชื่อ</span>'+dot(gv('grantee_mother'),3)+'</div>';
   h+='<div class="dr"><span>บ้านเลขที่</span>'+dot(gNo,2)+'<span>หมู่ที่</span>'+dot(gMoo,1)+'<span>ตรอก/ซอย</span>'+dot(gSoi,2)+'<span>ถนน</span>'+dot(gRd,2)+'</div>';
-  h+='<div class="dr"><span>ตำบล/แขวง</span>'+dot(gTam,3)+'<span>อำเภอ/เขต</span>'+dot(gAmp,3)+'<span>จังหวัด</span>'+dot(gPv,4)+'<span>โทร.</span>'+dot(gv('grantee_tel'),5)+'</div>';
+  h+='<div class="dr"><span>'+_subLabel(gPv)+'</span>'+dot(gTam,3)+'<span>'+_distLabel(gPv)+'</span>'+dot(gAmp,3)+'<span>จังหวัด</span>'+dot(gPv,4)+'<span>โทร.</span>'+dot(gv('grantee_tel'),5)+'</div>';
 
   // อำนาจ - 6 บรรทัดเส้นจุด ข้อความวางบนเส้น ไหลลงบรรทัดถัดไปอัตโนมัติ
   h+='<div class="f-sub" style="margin-top:3pt">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;เป็นผู้มีอำนาจจัดการ</div>';

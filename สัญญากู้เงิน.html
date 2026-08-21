@@ -1684,7 +1684,9 @@ function monthsBetween(d1,d2){
   return m;
 }
 function formatMoney(n){
-  return n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+  // ปัดจุดทศนิยม "ขึ้น" เป็นจำนวนเต็มบาทเสมอ (ceiling) — ไม่มีเศษสตางค์
+  var rounded=n<0?-Math.ceil(-n):Math.ceil(n);
+  return rounded.toLocaleString('en-US',{maximumFractionDigits:0});
 }
 
 function calcSchedule(principal,annualRate,startDate,months,style){
@@ -1693,8 +1695,8 @@ function calcSchedule(principal,annualRate,startDate,months,style){
   const rows=[];
   
   if(style==='interest_only'){
-    // ดอกเบี้ยรายเดือน + เงินต้นงวดสุดท้าย
-    const interest=principal*monthlyRate;
+    // ดอกเบี้ยรายเดือน + เงินต้นงวดสุดท้าย (ปัดดอกเบี้ยขึ้นเต็มบาท)
+    const interest=Math.ceil(principal*monthlyRate);
     for(let i=1;i<=months;i++){
       const date=addMonths(startDate,i);
       const isLast=(i===months);
@@ -1709,13 +1711,14 @@ function calcSchedule(principal,annualRate,startDate,months,style){
     }
   }else{
     // Amortized — ผ่อนเท่ากันทุกงวด
-    const pmt=Math.ceil(monthlyRate>0
+    const rawPmt=monthlyRate>0
       ?principal*monthlyRate*Math.pow(1+monthlyRate,months)/(Math.pow(1+monthlyRate,months)-1)
-      :principal/months);
+      :principal/months;
+    const pmt=Math.ceil(rawPmt); // ปัดยอดผ่อนต่องวดขึ้นเป็นจำนวนเต็มบาท
     let balance=principal;
     for(let i=1;i<=months;i++){
       const date=addMonths(startDate,i);
-      const interest=balance*monthlyRate;
+      const interest=Math.ceil(balance*monthlyRate); // ปัดดอกเบี้ยขึ้นเต็มบาท
       let principalPaid=pmt-interest;
       let payment=pmt;
       // งวดสุดท้ายปรับให้พอดี
@@ -1764,34 +1767,93 @@ function printSchedule(){
 
   var css=`
     *{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:'Sarabun','TH Sarabun New',Arial,sans-serif;padding:24px;color:#000;background:#fff}
-    h1{font-size:20pt;margin-bottom:6pt;font-weight:700;text-align:center;color:#0f2e21}
-    .meta{font-size:12pt;line-height:1.55;margin-bottom:14pt;padding:10pt 12pt;background:#f4ede0;border-radius:8pt;border:1px solid #e2d9c5}
-    .meta b{color:#0f2e21}
-    table{width:100%;border-collapse:collapse;margin-bottom:10pt}
-    thead th{background:#0f2e21;color:#fffdf7;padding:8pt 6pt;text-align:center;font-size:11pt;font-weight:600}
-    tbody td{padding:7pt 6pt;text-align:right;font-size:11pt;border:1px solid #ccc;font-variant-numeric:tabular-nums}
+    body{font-family:'Sarabun','TH Sarabun New','Angsana New',Arial,sans-serif;padding:26px 30px;color:#000;background:#fff;line-height:1.6;zoom:.75}
+    h1{font-size:18pt;margin-bottom:2pt;font-weight:700;text-align:center;color:#000;letter-spacing:.5pt}
+    .subhead{text-align:center;font-size:11pt;color:#000;margin-bottom:14pt;padding-bottom:10pt;border-bottom:1.5pt solid #000}
+    .meta{font-size:11.5pt;line-height:1.75;margin-bottom:12pt;padding:8pt 10pt;border:1px solid #000}
+    .meta b{color:#000}
+    table{width:100%;border-collapse:collapse;margin-bottom:8pt}
+    thead th{background:#fff;color:#000;padding:6pt;text-align:center;font-size:11pt;font-weight:700;border:1px solid #000}
+    tbody td{padding:5.5pt 6pt;text-align:right;font-size:11pt;border:1px solid #000;font-variant-numeric:tabular-nums}
     tbody td:nth-child(1){text-align:center;font-weight:600}
     tbody td:nth-child(2){text-align:center}
-    tbody tr:nth-child(even){background:#faf6ec}
-    .summary{padding:10pt 12pt;background:#fcf7eb;border:1px solid #e4cfa9;border-radius:6pt;font-size:11.5pt;line-height:1.7}
-    .summary b{color:#0f2e21}
-    .foot{text-align:center;margin-top:14pt;font-size:9pt;color:#888;font-style:italic}
+    .summary{margin-top:10pt;padding:8pt 10pt;border:1px solid #000;font-size:11pt;line-height:1.7}
+    .summary b{color:#000}
+    .foot{text-align:center;margin-top:16pt;font-size:9.5pt;color:#000}
+    .ack{margin-top:16pt;padding:10pt 12pt;border:1px solid #000;page-break-inside:avoid}
+    .ack h2{font-size:12.5pt;color:#000;margin-bottom:6pt;font-weight:700;text-align:center}
+    .ack p{font-size:11.5pt;line-height:1.85;text-indent:2.5em;margin-bottom:4pt}
+    .ack .placedate{font-size:11pt;margin-top:8pt;text-align:right}
+    .sign-wrap{display:flex;flex-wrap:wrap;gap:34pt 20pt;margin-top:30pt;page-break-inside:avoid}
+    .sign-box{flex:1 1 42%;min-width:210pt;text-align:center}
+    .sign-line{border-bottom:1px dotted #000;height:26pt;margin:0 10pt}
+    .sign-cap{font-size:11pt;margin-top:4pt;color:#000}
+    .sign-name{font-size:11pt;color:#000;margin-top:2pt}
+    .sign-id{font-size:10pt;color:#000;margin-top:1pt}
+    .sign-date{font-size:10.5pt;color:#000;margin-top:2pt}
   `;
 
   var html='<style>'+css+'</style>';
-  html+='<h1>📋 ตารางผ่อนชำระเงินกู้</h1>';
+  html+='<h1>ตารางการผ่อนชำระเงินกู้</h1>';
+  html+='<div class="subhead">(เอกสารแนบท้ายสัญญากู้เงิน)</div>';
+  // ── ข้อมูลคู่สัญญาแบบระบุตัวตนครบ (เพื่อให้ใช้อ้างเป็นหลักฐานได้) ──
+  var _place=(typeof gv==='function'?gv('place'):'')||'';
+  var _bList=[]; try{ _bList=readPersons('b'); }catch(e){ _bList=[]; }
+  function _fmtAddr(p){
+    var h=p.addr||'..........';
+    var t=p.tambon||'..........',a=p.amphoe||'..........',pv=p.province||'..........';
+    return h+' '+_subLabel(p.province)+t+' '+_distLabel(p.province)+a+' '+_provLabel(p.province)+pv;
+  }
   html+='<div class="meta">';
-  html+='<div><b>ผู้ให้กู้:</b> '+lender+'</div>';
-  html+='<div><b>ผู้กู้:</b> '+borrowerText+'</div>';
-  html+='<div><b>เงินต้น:</b> '+(parseFloat(amount.replace(/,/g,''))||0).toLocaleString('th-TH')+' บาท · <b>ดอกเบี้ย:</b> '+rate+'% ต่อปี</div>';
+  html+='<div><b>ผู้ให้กู้:</b> '+lender+(_place?(' อยู่ที่ '+_place):'')+'</div>';
+  if(_bList.length){
+    _bList.forEach(function(p){
+      var nm=((p.title||'')+(p.name||'..........')).trim();
+      var idc=p.idcard?(' เลขประจำตัวประชาชน '+p.idcard):' เลขประจำตัวประชาชน ....................';
+      var ageTxt=p.age?(' อายุ '+p.age+' ปี'):'';
+      html+='<div><b>ผู้กู้:</b> '+nm+idc+ageTxt+' อยู่บ้านเลขที่ '+_fmtAddr(p)+'</div>';
+    });
+  }else{
+    html+='<div><b>ผู้กู้:</b> '+borrowerText+'</div>';
+  }
+  html+='<div><b>เงินต้น:</b> '+(parseFloat(amount.replace(/,/g,''))||0).toLocaleString('th-TH')+' บาท · <b>อัตราดอกเบี้ย:</b> '+rate+'% ต่อปี</div>';
   if(contractDate&&dueDate){
-    html+='<div><b>วันทำสัญญา:</b> '+jsDateToShortBE(new Date(contractDate))+' · <b>วันครบกำหนด:</b> '+jsDateToShortBE(new Date(dueDate))+'</div>';
+    html+='<div><b>สัญญากู้เงินลงวันที่:</b> '+jsDateToShortBE(new Date(contractDate))+' · <b>ครบกำหนดชำระ:</b> '+jsDateToShortBE(new Date(dueDate))+'</div>';
   }
   html+='</div>';
   html+=tableEl.innerHTML.replace('<table class="schedule-table">','<table>').replace('class="schedule-table"','');
-  if(sumEl) html+=sumEl.outerHTML.replace('class="schedule-summary"','class="summary"');
-  html+='<div class="foot">เอกสารนี้ใช้ประกอบการพิจารณาเท่านั้น — ไม่ใช่หลักฐานทางกฎหมาย</div>';
+  if(sumEl){var _sh=sumEl.outerHTML.replace('class="schedule-summary"','class="summary"').replace('📊 ','').replace('📊','');html+=_sh;}
+
+  // ─── บันทึกท้ายสัญญา: รับทราบ ยอมรับหนี้ และตกลงตารางการผ่อนชำระ ───
+  var contractDateTxt=contractDate?jsDateToShortBE(new Date(contractDate)):'.......................';
+  var ackP='ตารางการผ่อนชำระข้างต้นนี้ จัดทำขึ้นเป็นเอกสารแนบท้ายและถือเป็นส่วนหนึ่งของสัญญากู้เงินฉบับลงวันที่ '+contractDateTxt+' '+
+    'ข้าพเจ้าผู้กู้ขอรับรองว่าได้รับเงินกู้และเป็นหนี้ตามสัญญาดังกล่าวจริง และได้อ่านเข้าใจรายละเอียดของตารางการผ่อนชำระโดยตลอดแล้ว '+
+    'จึงตกลงยินยอมผูกพันชำระหนี้ตามงวด จำนวนเงิน และกำหนดเวลาที่ระบุไว้ทุกประการ หากผิดนัดชำระงวดหนึ่งงวดใด ให้ถือว่าผิดนัดทั้งหมดและให้เป็นไปตามข้อกำหนดในสัญญากู้เงิน '+
+    'เอกสารนี้ทำขึ้นเป็นสองฉบับมีข้อความตรงกัน ผู้กู้ได้อ่านและเข้าใจโดยตลอดแล้ว จึงลงลายมือชื่อไว้เป็นสำคัญ โดยผู้กู้ได้รับสำเนาไว้หนึ่งฉบับแล้ว';
+
+  function signBox(role,name,idcard,withDate){
+    var nm=name?('( '+name+' )'):'( ................................................ )';
+    var out='<div class="sign-box"><div class="sign-line"></div>'
+      +'<div class="sign-cap">ลงชื่อ/พิมพ์ลายนิ้วมือ '+role+'</div>'
+      +'<div class="sign-name">'+nm+'</div>';
+    if(idcard!==null){ out+='<div class="sign-id">เลขประจำตัวประชาชน '+(idcard||'....................')+'</div>'; }
+    if(withDate){ out+='<div class="sign-date">วันที่ ......../......../........</div>'; }
+    return out+'</div>';
+  }
+  var signHtml='<div class="sign-wrap">';
+  if(_bList.length){
+    _bList.forEach(function(p){ signHtml+=signBox('ผู้กู้',((p.title||'')+(p.name||'')).trim(),p.idcard||'',true); });
+  }else if(borrowers.length){
+    borrowers.forEach(function(b){ signHtml+=signBox('ผู้กู้',b,'',true); });
+  }else{
+    signHtml+=signBox('ผู้กู้','','',true);
+  }
+  signHtml+='</div>';
+
+  html+='<div class="ack"><h2>บันทึกท้ายสัญญา — รับทราบและตกลงตารางการผ่อนชำระ</h2><p>'+ackP+'</p>'
+    +'<div class="placedate">ทำที่ '+(_place?_place:'..............................')+' &nbsp; วันที่ ......../......../........</div></div>';
+  html+=signHtml;
+  html+='<div class="foot">เอกสารฉบับนี้เป็นส่วนหนึ่งของสัญญากู้เงิน และมีผลผูกพันเมื่อผู้กู้ได้ลงลายมือชื่อ</div>';
 
   // พิมพ์ในหน้าเดิม (ไม่เปิดหน้าต่างใหม่) กันปัญหาเบราว์เซอร์มือถือ/แอปในตัวค้าง
   var box=document.getElementById('gv-preview-schedule');

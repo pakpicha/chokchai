@@ -183,8 +183,7 @@ function _autoFillZipFromAddr(addrEl,zipId){
 
 
 function formatAddr(tam,amp,prov){
-  var bkk=(prov==='กรุงเทพมหานคร');
-  var p=[];if(tam)p.push(bkk?'แขวง'+tam:'ต.'+tam);if(amp)p.push(bkk?'เขต'+amp:'อ.'+amp);if(prov)p.push('จ.'+prov);return p.join(' ');
+  var p=[];if(tam)p.push('ต.'+tam);if(amp)p.push('อ.'+amp);if(prov)p.push('จ.'+prov);return p.join(' ');
 }
 </script>
 
@@ -486,8 +485,7 @@ function getRecipients(){
     var tm=(document.getElementById('rcp_tam_'+n)||{value:''}).value.trim();
     var zp=(document.getElementById('rcp_zip_'+n)||{value:''}).value.trim();
     var tl=(document.getElementById('rcp_tel_'+n)||{value:''}).value.trim();
-    var pvbkk=(pv==='กรุงเทพมหานคร');
-    var fa=[a1,tm?(pvbkk?'แขวง'+tm:'ต.'+tm):'',ap?(pvbkk?'เขต'+ap:'อ.'+ap):'',pv?'จ.'+pv:''].filter(Boolean).join(' ');
+    var fa=[a1,tm?'ต.'+tm:'',ap?'อ.'+ap:'',pv?'จ.'+pv:''].filter(Boolean).join(' ');
     if(nm||fa) list.push({name:nm,addr:fa,zip:zp,tel:tl});
   });
   return list;
@@ -537,23 +535,45 @@ function thDate(s){
 }
 
 function toBaht(n){
-  n=parseInt(String(n).replace(/[,\s]/g,''));
-  if(isNaN(n)||n===0)return '';
+  n=parseFloat(String(n).replace(/[,\s]/g,''));
+  if(isNaN(n))return '';
+  n=Math.round(n*100)/100;
+  var baht=Math.floor(n);
+  var satang=Math.round((n-baht)*100);
   var u=['','หนึ่ง','สอง','สาม','สี่','ห้า','หก','เจ็ด','แปด','เก้า'];
-  var p=['','สิบ','ร้อย','พัน','หมื่น','แสน','ล้าน'];
-  function t(n){
-    if(n===0)return'';
-    if(n>=1000000)return t(Math.floor(n/1000000))+'ล้าน'+t(n%1000000);
-    var r='',d=String(n).split('');d.reverse();
-    for(var i=0;i<d.length;i++){
-      if(d[i]==='0')continue;
-      r=u[parseInt(d[i])]+p[i]+r;
-      if(i===1&&d[i]==='1')r='สิบ'+r.slice(2);
-      if(i===1&&d[i]==='2')r='ยี่สิบ'+r.slice(4);
+  var p=['','สิบ','ร้อย','พัน','หมื่น','แสน'];
+  function read(num){
+    if(num===0)return'';
+    var s='';
+    if(num>=1000000){
+      s=read(Math.floor(num/1000000))+'ล้าน';
+      num=num%1000000;
+      if(num===0)return s;
     }
-    return r;
+    var str=String(num),len=str.length;
+    for(var i=0;i<len;i++){
+      var d=parseInt(str.charAt(i));
+      var pos=len-i-1;
+      if(d===0)continue;
+      if(pos===1){
+        s+=(d===1?'':(d===2?'ยี่':u[d]))+'สิบ';
+      }else if(pos===0){
+        s+=(d===1&&(len>1||s!=='')?'เอ็ด':u[d]);
+      }else{
+        s+=u[d]+p[pos];
+      }
+    }
+    return s;
   }
-  return t(n)+'บาทถ้วน';
+  if(baht===0&&satang===0)return '';
+  var out='';
+  if(baht>0)out+=read(baht)+'บาท';
+  if(satang>0){
+    out+=read(satang)+'สตางค์';
+  }else if(baht>0){
+    out+='ถ้วน';
+  }
+  return out;
 }
 
 function fmtNum(s){
@@ -564,7 +584,7 @@ function fmtNum(s){
 function onRedeemChange(){
   var amt=gv('n_redeem_amt').replace(/,/g,'');
   var el=document.getElementById('n_redeem_t');
-  if(el)el.value=amt?toBaht(parseInt(amt)):'';
+  if(el)el.value=amt?toBaht(amt):'';
 }
 
 function onSignerChange(v){
@@ -738,7 +758,7 @@ function addExt(){
       +'<div><label style="font-size:11px;color:#666;display:block;margin-bottom:3px">กำหนด (เดือน)</label>'
         +'<input type="text" id="ext_period_'+n+'" placeholder="เช่น 9" style="width:100%;padding:7px;font-size:14px;border:1px solid #ccc;border-radius:6px;font-family:inherit"></div>'
       +'<div><label style="font-size:11px;color:#666;display:block;margin-bottom:3px">วันที่ฉบับลง</label>'
-        +'<div class="tdp-wrap" id="tdpw_ext_date_'+n+'" onclick="event.stopPropagation()">'+'<input type="hidden" id="ext_date_'+n+'">'+'<input type="text" id="tdpi_ext_date_'+n+'" class="tdp-input" placeholder="วว/ดด/ปปปป" onfocus="tdpFocus(\'ext_date_'+n+'\')" onkeydown="tdpKeydown(\'ext_date_'+n+'\',event)" autocomplete="off">'+'<span class="tdp-icon" onclick="tdpOpen(\'ext_date_'+n+'\')">📅</span>'+'<div class="tdp-drop" id="tdpd_ext_date_'+n+'"></div>'+'</div>'
+        +'<div class="tdp-wrap" id="tdpw_ext_date_'+n+'" onclick="event.stopPropagation()">'+'<input type="hidden" id="ext_date_'+n+'">'+'<input type="text" id="tdpi_ext_date_'+n+'" class="tdp-input" placeholder="วว/ดด/ปปปป" onfocus="tdpFocus(\'ext_date_'+n+'\')" onkeydown="tdpKeydown(\'ext_date_'+n+'\',event)" autocomplete="off">'+'<span class="tdp-icon" onclick="tdpOpen(\'ext_date_'+n+'\')">📅</span>'+'<div class="tdp-drop" id="tdpd_ext_date_'+n+'"><div class="tdp-nav"><button onclick="tdpNav(\'ext_date_'+n+'\',-1,event)">‹</button><span class="tdp-my" onclick="tdpToggleYM(\'ext_date_'+n+'\');event.stopPropagation()">...</span><button onclick="tdpNav(\'ext_date_'+n+'\',1,event)">›</button></div><div class="tdp-ym"></div><div class="tdp-days-hdr"><span>อา</span><span>จ</span><span>อ</span><span>พ</span><span>พฤ</span><span>ศ</span><span>ส</span></div><div class="tdp-days"></div></div>'+'</div>'
     +'</div>';
   wrap.appendChild(div);
   try{tdpInit('ext_date_'+n);_tdpWireEvents('ext_date_'+n);_tdpRender('ext_date_'+n);}catch(e){}
@@ -922,27 +942,36 @@ function tdpNav(did,delta,e){
 }
 
 // ── พิมพ์ในช่องหลักโดยตรง ──
+// keydown เหลือแค่ปิด dropdown ด้วย Tab/Escape ส่วนการพิมพ์เลขจัดการที่ event 'input'
+// (วิธีนี้ปลอดภัยบนคีย์บอร์ดมือถือ ไม่ทำให้เลขเด้งซ้ำ)
 function tdpKeydown(did,e){
+  if(e.key==='Tab'||e.key==='Escape'){tdpClose();}
+}
+// อ่านค่าจริงจากช่อง แล้ว normalize เป็นตัวเลขล้วน จัดรูปแบบ วว/ดด/ปปปป ใหม่ทุกครั้ง
+function tdpInput(did){
   var inp=document.getElementById('tdpi_'+did);
   var wrap=document.getElementById('tdpw_'+did);
   if(!inp||!wrap||!wrap._tdp)return;
   var s=wrap._tdp;
-  var k=e.key;
-  // Backspace
-  if(k==='Backspace'){
-    if(s.typing.length>0){s.typing=s.typing.slice(0,-1);}
-    else{tdpSelect(did,'');inp.value='';inp.classList.remove('ok','er');}
-    _tdpShowTyping(did);
-    e.preventDefault();return;
+  var raw=(inp.value||'').replace(/[^0-9]/g,'').slice(0,8);
+  s.typing=raw;
+  var disp='';
+  if(raw.length>0)disp=raw.slice(0,2);
+  if(raw.length>2)disp+='/'+raw.slice(2,4);
+  if(raw.length>4)disp+='/'+raw.slice(4,8);
+  inp.value=disp;
+  inp.classList.remove('ok','er');
+  if(raw.length===8){
+    var dd=raw.slice(0,2),mm=raw.slice(2,4),be=parseInt(raw.slice(4,8)),ad=be-543;
+    var iso=ad+'-'+mm+'-'+dd;
+    var t=new Date(iso+'T00:00:00');
+    if(!isNaN(t.getTime())&&t.getFullYear()===ad&&t.getMonth()===parseInt(mm,10)-1&&t.getDate()===parseInt(dd,10)){
+      tdpSelect(did,iso);
+      s.typing='';
+    }else{
+      inp.classList.add('er');
+    }
   }
-  // Tab/Escape
-  if(k==='Tab'||k==='Escape'){tdpClose();return;}
-  // เลขอย่างเดียว
-  if(!/^[0-9]$/.test(k)){e.preventDefault();return;}
-  if((s.typing||'').length>=8){e.preventDefault();return;}
-  s.typing=(s.typing||'')+k;
-  _tdpShowTyping(did);
-  e.preventDefault();
 }
 function _tdpShowTyping(did){
   var s=document.getElementById('tdpw_'+did)._tdp;
@@ -1004,8 +1033,10 @@ function _tdpWireEvents(did){
   var icon=inp?inp.parentElement.querySelector('.tdp-icon'):null;
   var drop=document.getElementById('tdpd_'+did);
   if(!inp)return;
+  inp.setAttribute('inputmode','numeric');
   inp.onfocus=function(){tdpFocus(did);};
   inp.onkeydown=function(e){tdpKeydown(did,e);};
+  inp.oninput=function(){tdpInput(did);};
   if(icon) icon.onclick=function(e){e.stopPropagation();tdpOpen(did);};
   if(drop){
     var btns=drop.querySelectorAll('.tdp-nav button');
